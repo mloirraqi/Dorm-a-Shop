@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+@import Parse;
 
 @interface AppDelegate ()
 
@@ -16,7 +17,13 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+
+    ParseClientConfiguration *config = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
+        configuration.applicationId = @"dormAshop";
+        configuration.server = @"https://dorm-a-shop.herokuapp.com/parse";
+    }];
+    
+    [Parse initializeWithConfiguration:config];
     return YES;
 }
 
