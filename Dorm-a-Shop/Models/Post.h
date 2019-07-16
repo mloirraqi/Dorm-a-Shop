@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *watchCount;
 @property (nonatomic, strong) NSNumber *price;
 @property (nonatomic, strong) NSDate *datePosted;
-@property (nonatomic, strong) NSMutableArray *arrayOfUsersWatching;
+//@property (nonatomic, strong) NSMutableArray *arrayOfUsersWatching;
 
 @end
 

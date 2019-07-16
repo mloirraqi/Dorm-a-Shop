@@ -7,10 +7,14 @@
 //
 
 #import <Parse/Parse.h>
+#import "Post.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Watch : PFObject
+@interface Watch : PFObject <PFSubclassing>
+
+@property (nonatomic, strong) Post *post;
+@property (nonatomic, strong) PFUser *user;
 
 @end
 

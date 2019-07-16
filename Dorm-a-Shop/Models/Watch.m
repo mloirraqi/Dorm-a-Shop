@@ -8,6 +8,13 @@
 
 #import "Watch.h"
 
+
 @implementation Watch
+
++ (nonnull NSString *)parseClassName {
+    return @"Post";
+}
+
++ (nonnull )
 
 @end

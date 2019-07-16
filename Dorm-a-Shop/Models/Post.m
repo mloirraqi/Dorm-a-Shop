@@ -9,7 +9,6 @@
 #import "Post.h"
 #import <Parse/Parse.h>
 
-
 @implementation Post
 
 @dynamic postID;
@@ -18,7 +17,7 @@
 @dynamic image;
 @dynamic watchCount;
 @dynamic datePosted;
-@dynamic arrayOfUsersWatching;
+//@dynamic arrayOfUsersWatching;
 @dynamic category;
 @dynamic condition;
 @dynamic price;
@@ -28,7 +27,7 @@
     return @"Post";
 }
 
-+ (void) postListing: ( UIImage * _Nullable )image withCaption: ( NSString * _Nullable )caption withPrice: ( NSNumber * _Nullable )price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion {
++ (void)postListing: ( UIImage * _Nullable )image withCaption: ( NSString * _Nullable )caption withPrice: ( NSNumber * _Nullable )price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     Post *newPost = [Post new];
     newPost.image = [self getPFFileFromImage:image];
     newPost.author = [PFUser currentUser];
@@ -36,7 +35,7 @@
     newPost.condition = condition;
     newPost.title = title;
 
-    newPost.arrayOfUsersWatching = [[NSMutableArray alloc] init];
+    //newPost.arrayOfUsersWatching = [[NSMutableArray alloc] init];
     
     newPost.watchCount = @(0);
     newPost.price = price;
