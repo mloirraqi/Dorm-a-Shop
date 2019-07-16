@@ -26,10 +26,6 @@
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
-    [self.nameButton setTitle:post.author.username  forState:UIControlStateNormal];
-    
-    self.dateLabel.text = [NSString stringWithFormat:@"%@", [post.datePosted shortTimeAgoSinceNow]];
-    
     self.numberWatchingLabel.text = [NSString stringWithFormat:@"%@ watching", post.watchCount];
     
     if ([post.arrayOfUsersWatching containsObject:[PFUser currentUser].objectId]) {
@@ -39,26 +35,11 @@
         [self.watchButton setSelected:NO];
     }
     
-    if ([post.author objectForKey:@"profileImage"]) {
-        [post.author[@"profileImage"] getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-            if (!error) {
-                UIImage *image = [UIImage imageWithData:imageData];
-                image = [self resizeImage:image withSize:CGSizeMake(20, 20)];
-                [self.nameButton setImage:image forState:UIControlStateNormal];
-                self.nameButton.imageView.layer.cornerRadius = self.nameButton.imageView.frame.size.width / 2;
-                self.nameButton.imageView.clipsToBounds = YES;
-            }
-            else {
-                NSLog(@"error");
-            }
-        }];
-    }
-    else {
-        UIImage *defaultImage = [self resizeImage:[UIImage imageNamed:@"emptyprofile"] withSize:CGSizeMake(20, 20)];
-        [self.nameButton setImage:defaultImage forState:UIControlStateNormal];
-    }
+    self.conditionLabel.text = post.condition;
+    self.categoryLabel.text = post.category;
+    self.titleLabel.text = post.title;
     
-    self.captionLabel.text = [NSString stringWithFormat:@"@%@ %@", post.author.username, post.caption];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
 }
 
 - (void)awakeFromNib {
@@ -121,7 +102,7 @@
                 self.numberWatchingLabel.text = [NSString stringWithFormat:@"%@ likes", post.watchCount];
             }
             
-            self.post.arrayOfUsersWatching = post.arrayOfUsersWatching;
+            self.post.arrayOfUsersWatching = post.arrayOfUsersWatching; //set these values locally so we don't have to make a database request to update the view itself
             self.post.watchCount = post.watchCount;
             
             NSLog(@"Post list of users who liked successfully updated!");
