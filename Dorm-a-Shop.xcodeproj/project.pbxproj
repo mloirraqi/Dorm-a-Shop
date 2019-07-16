@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,10 @@
 		47A8A9B422DE3A32005D9520 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9B322DE3A32005D9520 /* main.m */; };
 		47A8A9BE22DE3A32005D9520 /* Dorm_a_ShopTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9BD22DE3A32005D9520 /* Dorm_a_ShopTests.m */; };
 		47A8A9C922DE3A32005D9520 /* Dorm_a_ShopUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9C822DE3A32005D9520 /* Dorm_a_ShopUITests.m */; };
+		47A8A9DB22DE42E5005D9520 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9DA22DE42E5005D9520 /* Post.m */; };
+		4D6E9F6C086D7869B5467E8A /* Pods_Dorm_a_Shop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */; };
+		90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */; };
+		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08E64F22EC47F3B5CBDAC20F /* Pods-Dorm-a-ShopTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopTests.release.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopTests/Pods-Dorm-a-ShopTests.release.xcconfig"; sourceTree = "<group>"; };
+		241F52E5E4F95328E461C4ED /* Pods-Dorm-a-ShopUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.release.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.release.xcconfig"; sourceTree = "<group>"; };
+		263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_Shop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -51,6 +59,13 @@
 		47A8A9C422DE3A32005D9520 /* Dorm-a-ShopUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dorm-a-ShopUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9C822DE3A32005D9520 /* Dorm_a_ShopUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Dorm_a_ShopUITests.m; sourceTree = "<group>"; };
 		47A8A9CA22DE3A32005D9520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		47A8A9D922DE42E5005D9520 /* Post.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
+		47A8A9DA22DE42E5005D9520 /* Post.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
+		4F391BB0A88FF785BA25E839 /* Pods-Dorm-a-Shop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-Shop.release.xcconfig"; path = "Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop.release.xcconfig"; sourceTree = "<group>"; };
+		4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_ShopUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B990968EF4F50E238A28966 /* Pods-Dorm-a-ShopTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopTests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopTests/Pods-Dorm-a-ShopTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_ShopTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAB21EC6927306F350ED2916 /* Pods-Dorm-a-Shop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-Shop.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D6E9F6C086D7869B5467E8A /* Pods_Dorm_a_Shop.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +89,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3EE14F66B74B5CA47A713707 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DAB21EC6927306F350ED2916 /* Pods-Dorm-a-Shop.debug.xcconfig */,
+				4F391BB0A88FF785BA25E839 /* Pods-Dorm-a-Shop.release.xcconfig */,
+				7B990968EF4F50E238A28966 /* Pods-Dorm-a-ShopTests.debug.xcconfig */,
+				08E64F22EC47F3B5CBDAC20F /* Pods-Dorm-a-ShopTests.release.xcconfig */,
+				263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */,
+				241F52E5E4F95328E461C4ED /* Pods-Dorm-a-ShopUITests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		47A8A99822DE3A30005D9520 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +116,8 @@
 				47A8A9BC22DE3A32005D9520 /* Dorm-a-ShopTests */,
 				47A8A9C722DE3A32005D9520 /* Dorm-a-ShopUITests */,
 				47A8A9A222DE3A30005D9520 /* Products */,
+				3EE14F66B74B5CA47A713707 /* Pods */,
+				E96DFB8C6FE65C2CA1921A65 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,6 +137,7 @@
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,
 				47A8A9A722DE3A30005D9520 /* ViewController.h */,
+				47A8A9DD22DE42F9005D9520 /* Models */,
 				47A8A9A822DE3A30005D9520 /* ViewController.m */,
 				47A8A9AA22DE3A30005D9520 /* Main.storyboard */,
 				47A8A9AD22DE3A32005D9520 /* Assets.xcassets */,
@@ -132,6 +166,25 @@
 			path = "Dorm-a-ShopUITests";
 			sourceTree = "<group>";
 		};
+		47A8A9DD22DE42F9005D9520 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				47A8A9D922DE42E5005D9520 /* Post.h */,
+				47A8A9DA22DE42E5005D9520 /* Post.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E96DFB8C6FE65C2CA1921A65 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */,
+				B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */,
+				4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -139,9 +192,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 47A8A9CD22DE3A32005D9520 /* Build configuration list for PBXNativeTarget "Dorm-a-Shop" */;
 			buildPhases = (
+				9CE361FB7B65C3BDF8420748 /* [CP] Check Pods Manifest.lock */,
 				47A8A99D22DE3A30005D9520 /* Sources */,
 				47A8A99E22DE3A30005D9520 /* Frameworks */,
 				47A8A99F22DE3A30005D9520 /* Resources */,
+				679ACD980F6F2F86866DE6EB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -156,6 +211,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 47A8A9D022DE3A32005D9520 /* Build configuration list for PBXNativeTarget "Dorm-a-ShopTests" */;
 			buildPhases = (
+				2118446522C112C3A0873610 /* [CP] Check Pods Manifest.lock */,
 				47A8A9B522DE3A32005D9520 /* Sources */,
 				47A8A9B622DE3A32005D9520 /* Frameworks */,
 				47A8A9B722DE3A32005D9520 /* Resources */,
@@ -174,6 +230,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 47A8A9D322DE3A32005D9520 /* Build configuration list for PBXNativeTarget "Dorm-a-ShopUITests" */;
 			buildPhases = (
+				5647514A8550D70B8F27EB23 /* [CP] Check Pods Manifest.lock */,
 				47A8A9C022DE3A32005D9520 /* Sources */,
 				47A8A9C122DE3A32005D9520 /* Frameworks */,
 				47A8A9C222DE3A32005D9520 /* Resources */,
@@ -257,6 +314,92 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2118446522C112C3A0873610 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Dorm-a-ShopTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5647514A8550D70B8F27EB23 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Dorm-a-ShopUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		679ACD980F6F2F86866DE6EB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9CE361FB7B65C3BDF8420748 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Dorm-a-Shop-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		47A8A99D22DE3A30005D9520 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -265,6 +408,7 @@
 				47A8A9A922DE3A30005D9520 /* ViewController.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
+				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +577,7 @@
 		};
 		47A8A9CE22DE3A32005D9520 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DAB21EC6927306F350ED2916 /* Pods-Dorm-a-Shop.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -450,6 +595,7 @@
 		};
 		47A8A9CF22DE3A32005D9520 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F391BB0A88FF785BA25E839 /* Pods-Dorm-a-Shop.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -467,6 +613,7 @@
 		};
 		47A8A9D122DE3A32005D9520 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7B990968EF4F50E238A28966 /* Pods-Dorm-a-ShopTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -485,6 +632,7 @@
 		};
 		47A8A9D222DE3A32005D9520 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 08E64F22EC47F3B5CBDAC20F /* Pods-Dorm-a-ShopTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -503,6 +651,7 @@
 		};
 		47A8A9D422DE3A32005D9520 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Dorm-a-ShopUITests/Info.plist";
@@ -520,6 +669,7 @@
 		};
 		47A8A9D522DE3A32005D9520 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 241F52E5E4F95328E461C4ED /* Pods-Dorm-a-ShopUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Dorm-a-ShopUITests/Info.plist";
