@@ -24,7 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) Post *post;
 @property (nonatomic, strong) NSIndexPath *indexPath;
-@property (nonatomic, weak) id<PostTableViewCellDelegate> delegate;
 
 @end
 
