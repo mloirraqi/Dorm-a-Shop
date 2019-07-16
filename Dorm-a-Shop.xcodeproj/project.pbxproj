@@ -137,9 +137,9 @@
 		47A8A9A322DE3A30005D9520 /* Dorm-a-Shop */ = {
 			isa = PBXGroup;
 			children = (
-				47A8A9DD22DE42F9005D9520 /* Models */,
-				47A8A9E222DE45BD005D9520 /* Views */,
 				47A8A9E122DE4542005D9520 /* View Controllers */,
+				47A8A9E222DE45BD005D9520 /* Views */,
+				47A8A9DD22DE42F9005D9520 /* Models */,
 				47A8A9AA22DE3A30005D9520 /* Main.storyboard */,
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,

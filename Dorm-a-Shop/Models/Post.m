@@ -16,7 +16,7 @@
 @dynamic author;
 @dynamic caption;
 @dynamic image;
-@dynamic likeCount;
+@dynamic watchCount;
 @dynamic datePosted;
 @dynamic arrayOfUsersWhoWatched;
 @dynamic price;
@@ -31,9 +31,9 @@
     newPost.author = [PFUser currentUser];
     newPost.caption = caption;
 
-    newPost.arrayOfUsersWhoWatched = [[NSMutableArray alloc]init];;
+    newPost.arrayOfUsersWatching = [[NSMutableArray alloc] init];;
     
-    newPost.likeCount = @(0);
+    newPost.watchCount = @(0);
     newPost.price = price;
     newPost.datePosted = [NSDate date];
     
