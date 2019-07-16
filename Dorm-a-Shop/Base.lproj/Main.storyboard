@@ -235,6 +235,9 @@
                                 <rect key="frame" x="302" y="7" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="uploadPic:" destination="taT-74-9c7" eventType="touchUpInside" id="z5T-mI-tVe"/>
+                                </connections>
                             </button>
                         </barButtonItem>
                     </navigationItem>

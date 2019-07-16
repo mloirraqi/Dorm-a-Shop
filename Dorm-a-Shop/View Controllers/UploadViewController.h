@@ -7,10 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Post.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol UploadViewControllerDelegate
+
+- (void)didUpload:(Post *)post;;
+
+@end
+
 @interface UploadViewController : UIViewController
+
+@property (nonatomic, weak) id<UploadViewControllerDelegate> delegate;
 
 @end
 

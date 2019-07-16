@@ -22,8 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PFFileObject *image;
 @property (nonatomic, strong) NSNumber *watchCount;
 @property (nonatomic, strong) NSNumber *price;
-@property (nonatomic, strong) NSDate *datePosted;
-//@property (nonatomic, strong) NSMutableArray *arrayOfUsersWatching;
+
++ (instancetype)postListing: ( UIImage * _Nullable )image withCaption: ( NSString * _Nullable )caption withPrice: ( NSNumber * _Nullable )price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion;
 
 @end
 

@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSArray *categories;
 @property (strong, nonatomic) NSArray *conditions;
 @property (strong, nonatomic) UIImage *postImage;
+@property (weak, nonatomic) NSNumberFormatter *formatter;
 
 @end
 
@@ -42,6 +43,9 @@
     
     self.categories = @[@"Furniture", @"Books", @"Beauty"];
     self.conditions = @[@"New", @"Nearly New", @"Old"];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
 }
 
 - (IBAction)addPicture:(id)sender {
@@ -68,6 +72,19 @@
 
 // save pics to database
 - (IBAction)uploadPic:(id)sender {
+    
+    NSNumber *priceNum = [self.formatter numberFromString:self.itemPrice.text];
+    
+    Post *newPost = [Post postListing:self.postImage withCaption:self.itemDescription.text withPrice:priceNum withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (!succeeded) {
+                NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
+            } else {
+                NSLog(@"😎😎😎 Successfully uploaded picture");
+                [self dismissViewControllerAnimated:true completion:nil];
+            }
+    }];
+    
+    [self.delegate didUpload:newPost];
     
 }
 

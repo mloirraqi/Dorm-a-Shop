@@ -16,8 +16,6 @@
 @dynamic caption;
 @dynamic image;
 @dynamic watchCount;
-@dynamic datePosted;
-//@dynamic arrayOfUsersWatching;
 @dynamic category;
 @dynamic condition;
 @dynamic price;
@@ -27,21 +25,20 @@
     return @"Post";
 }
 
-+ (void)postListing: ( UIImage * _Nullable )image withCaption: ( NSString * _Nullable )caption withPrice: ( NSNumber * _Nullable )price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion {
++ (Post *)postListing: ( UIImage * _Nullable )image withCaption: ( NSString * _Nullable )caption withPrice: ( NSNumber * _Nullable )price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     Post *newPost = [Post new];
     newPost.image = [self getPFFileFromImage:image];
     newPost.author = [PFUser currentUser];
     newPost.caption = caption;
     newPost.condition = condition;
+    newPost.category = category;
     newPost.title = title;
-
-    //newPost.arrayOfUsersWatching = [[NSMutableArray alloc] init];
-    
     newPost.watchCount = @(0);
     newPost.price = price;
-    newPost.datePosted = [NSDate date];
     
     [newPost saveInBackgroundWithBlock: completion];
+    
+    return newPost;
 }
 
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
