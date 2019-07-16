@@ -19,6 +19,7 @@
 		47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9E422DE45EF005D9520 /* PostTableViewCell.m */; };
 		4D6E9F6C086D7869B5467E8A /* Pods_Dorm_a_Shop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */; };
 		90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */; };
+		DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFC22DE7BE900418DE3 /* UploadViewController.m */; };
 		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,8 @@
 		7B990968EF4F50E238A28966 /* Pods-Dorm-a-ShopTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopTests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopTests/Pods-Dorm-a-ShopTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_ShopTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAB21EC6927306F350ED2916 /* Pods-Dorm-a-Shop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-Shop.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop.debug.xcconfig"; sourceTree = "<group>"; };
+		DE307FFB22DE7BE900418DE3 /* UploadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UploadViewController.h; sourceTree = "<group>"; };
+		DE307FFC22DE7BE900418DE3 /* UploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +186,8 @@
 			children = (
 				47A8A9DE22DE453C005D9520 /* HomeScreenViewController.h */,
 				47A8A9DF22DE453C005D9520 /* HomeScreenViewController.m */,
+				DE307FFB22DE7BE900418DE3 /* UploadViewController.h */,
+				DE307FFC22DE7BE900418DE3 /* UploadViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -429,6 +434,7 @@
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
+				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 			);

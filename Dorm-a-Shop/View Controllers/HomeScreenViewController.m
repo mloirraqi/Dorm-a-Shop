@@ -31,19 +31,19 @@
 }
 */
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    PostCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostCell"];
-    
-    Post *post = self.postsArray[indexPath.row];
-    cell.delegate = self;
-    cell.post = post;
-    cell.indexPath = indexPath;
-    
-    return cell;
-}
-
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.postsArray.count;
-}
+//- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+//    PostCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostCell"];
+//    
+//    Post *post = self.postsArray[indexPath.row];
+//    cell.delegate = self;
+//    cell.post = post;
+//    cell.indexPath = indexPath;
+//    
+//    return cell;
+//}
+//
+//- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    return self.postsArray.count;
+//}
 
 @end

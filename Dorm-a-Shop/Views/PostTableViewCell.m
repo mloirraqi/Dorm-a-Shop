@@ -28,6 +28,7 @@
     // Configure the view for the selected state
 }
 
-- 
-
+- (void) didTapLike:(id)sender {
+    
+}
 @end
