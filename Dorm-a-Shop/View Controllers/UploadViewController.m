@@ -46,6 +46,7 @@
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    self.formatter = formatter;
 }
 
 - (IBAction)addPicture:(id)sender {
@@ -72,9 +73,7 @@
 
 // save pics to database
 - (IBAction)uploadPic:(id)sender {
-    
     NSNumber *priceNum = [self.formatter numberFromString:self.itemPrice.text];
-    
     Post *newPost = [Post postListing:self.postImage withCaption:self.itemDescription.text withPrice:priceNum withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (!succeeded) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
@@ -84,20 +83,18 @@
             }
     }];
     [self.delegate didUpload:newPost];
-    
 }
 
 - (IBAction)cancelPost:(id)sender {
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
-
 - (NSInteger)numberOfComponentsInPickerView:(nonnull UIPickerView *)pickerView { 
     return 1;
 }
 
 - (NSInteger)pickerView:(nonnull UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    if(pickerView == self.categoryPickerView) {
+    if (pickerView == self.categoryPickerView) {
         return self.categories.count;
     } else {
         return self.conditions.count;
@@ -105,7 +102,7 @@
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    if(pickerView == self.categoryPickerView) {
+    if (pickerView == self.categoryPickerView) {
         return self.categories[row];
     } else {
         return self.conditions[row];
@@ -113,14 +110,13 @@
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    if(pickerView == self.categoryPickerView) {
+    if (pickerView == self.categoryPickerView) {
         [self.categoryShown setTitle:self.categories[row] forState:UIControlStateNormal];
         self.categoryPickerView.hidden = YES;
     } else {
         [self.conditionShown setTitle:self.conditions[row] forState:UIControlStateNormal];
         self.conditionPickerView.hidden = YES;
     }
-
 }
 
 - (IBAction)changeCategory:(id)sender {
@@ -132,7 +128,5 @@
     self.categoryPickerView.hidden = YES;
     self.conditionPickerView.hidden = NO;
 }
-
-
 
 @end

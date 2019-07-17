@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UploadViewController : UIViewController
 
-
 @property (nonatomic, weak) id<UploadViewControllerDelegate> delegate;
 
 @end

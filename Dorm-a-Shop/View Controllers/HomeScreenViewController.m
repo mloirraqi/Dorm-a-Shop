@@ -72,8 +72,7 @@
     return self.postsArray.count;
 }
 
-
-- (void)didUpload:(nonnull Post *)post {
+- (void)didUpload:(Post *)post {
     [self.postsArray insertObject:post atIndex:0];
     [self.tableView reloadData];
 }
@@ -82,10 +81,10 @@
 
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
      if ([segue.identifier isEqualToString:@"segueToUpload"]) {
-         UploadViewController *uploadViewController = [segue destinationViewController];
+         UINavigationController *uploadViewNavigationController = [segue destinationViewController];
+         UploadViewController *uploadViewController = [uploadViewNavigationController topViewController];
          uploadViewController.delegate = self;
      }
  }
-
 
 @end
