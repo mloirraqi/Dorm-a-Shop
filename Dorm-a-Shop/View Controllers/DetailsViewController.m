@@ -46,13 +46,6 @@
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
-    /*self.watchButton.layer.borderWidth = 1.0f;
-    self.watchButton.layer.borderColor = [UIColor blueColor].CGColor;
-    self.watchButton.layer.cornerRadius = 4.0f;
-    self.watchButton.backgroundColor = [UIColor whiteColor];
-    self.watchButton.textcolor = [UIColor whiteColor];
-    [self.watchButton setTitleColor:[UIColor colorWithRed:36/255.0 green:71/255.0 blue:113/255.0 alpha:1.0] forState:UIControlStateNormal];*/
-    
     [self setWatched:[PFUser currentUser] forPost:post];
     
     self.conditionLabel.text = post.condition;
@@ -86,29 +79,6 @@
 
 - (IBAction)didTapWatch:(id)sender {
     NSLog(@"Tapped watch!");
-    
-    /*if ([[PFUser currentUser] objectForKey:@"Watches"] && [self.post objectForKey:@"Watches"]) {
-        [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded && !error) {
-                NSLog(@"Image deleted from Parse");
-            } else {
-                NSLog(@"error: %@", error);
-            }
-        }];
-    }
-    
-    PFObject *watch = [PFObject objectWithClassName:@"Watches"];
-    watch[@"postID"] = self.post.objectId;
-    watch[@"userID"] = self.post.author.objectId;
-    
-    [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-            NSLog(@"Successfully added to watch class in databse");
-        }
-        else {
-            NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
-        }
-    }];*/
 }
 
 /*

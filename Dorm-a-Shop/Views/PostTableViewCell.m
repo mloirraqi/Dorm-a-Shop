@@ -16,6 +16,8 @@
 - (IBAction)didTapWatch:(id)sender;
 - (IBAction)didTapProfile:(id)sender;
 
+@property (nonatomic, strong) PFObject *watch;
+
 @end
 
 @implementation PostTableViewCell
@@ -48,11 +50,14 @@
         if (error) {
             NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
         }
-        else if (watches) {
-            self.watchButton.titleLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", post.watchCount];
+        else if (watches.count > 0) {
+            self.watch = watches[0];
+            self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", post.watchCount];
+            self.watchButton.selected = YES;
         }
         else {
-            self.watchButton.titleLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", post.watchCount];
+            self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", post.watchCount];
+            self.watchButton.selected = NO;
         }
     }];
 }
@@ -70,20 +75,57 @@
 
 
 - (IBAction)didTapWatch:(id)sender {
-    NSLog(@"Tapped watch!");
-    
-    PFObject *watch = [PFObject objectWithClassName:@"Watches"];
-    watch[@"postID"] = self.post.objectId;
-    watch[@"userID"] = self.post.author.objectId;
-    
-    [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-            NSLog(@"Successfully added to watch class in databse");
-        }
-        else {
-            NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
-        }
-    }];
+    if (self.watchButton.selected) {
+        [self.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (error != nil) {
+                self.watch = nil;
+                self.watchButton.selected = NO;
+                
+                int watchCountInt = [self.post.watchCount intValue];
+                watchCountInt --;
+                self.post.watchCount = [NSNumber numberWithInt:watchCountInt];
+                
+                self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", self.post.watchCount];
+                
+                [self.post setObject:self.post.watchCount forKey:@"watchCount"];
+                [self.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (error != nil) {
+                        NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
+                    }
+                }];
+            } else {
+                NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
+            }
+        }];
+    }
+    else {
+        PFObject *watch = [PFObject objectWithClassName:@"Watches"];
+        watch[@"postID"] = self.post.objectId;
+        watch[@"userID"] = [PFUser currentUser].objectId;
+        
+        [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                self.watch = watch;
+                self.watchButton.selected = YES;
+                
+                int watchCountInt = [self.post.watchCount intValue];
+                watchCountInt ++;
+                self.post.watchCount = [NSNumber numberWithInt:watchCountInt];
+                
+                self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", self.post.watchCount];
+                
+                [self.post setObject:self.post.watchCount forKey:@"watchCount"];
+                [self.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (error != nil) {
+                        NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
+                    }
+                }];
+            }
+            else {
+                NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
+            }
+        }];
+    }
 }
 
 - (IBAction)didTapProfile:(id)sender {
