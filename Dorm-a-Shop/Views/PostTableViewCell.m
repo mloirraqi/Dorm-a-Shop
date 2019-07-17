@@ -64,20 +64,16 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
-
 
 - (IBAction)didTapWatch:(id)sender {
     if (self.watchButton.selected) {
         [self.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (error != nil) {
+            if (succeeded) {
                 self.watch = nil;
                 self.watchButton.selected = NO;
                 
