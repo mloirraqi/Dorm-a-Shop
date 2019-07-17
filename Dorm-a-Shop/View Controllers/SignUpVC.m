@@ -11,6 +11,7 @@
 #import "Utils.h"
 #import "NJOPasswordStrengthEvaluator.h"
 #import <Parse/Parse.h>
+#import "HomeScreenViewController.h"
 
 @interface SignUpVC ()
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
@@ -82,6 +83,7 @@
                         if (!error) {
                             // Hooray! Let them use the app now.
                             [self showAlertView:@"Welcome!"];
+                            [self performSegueWithIdentifier:@"homeScreen" sender:nil];
                         } else {
                             NSString *errorString = [error userInfo][@"error"];
                             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
