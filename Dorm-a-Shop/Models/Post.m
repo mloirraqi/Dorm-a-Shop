@@ -20,6 +20,7 @@
 @dynamic condition;
 @dynamic price;
 @dynamic title;
+@dynamic sold;
 
 + (nonnull NSString *)parseClassName {
     return @"Post";
@@ -34,6 +35,7 @@
     newPost.category = category;
     newPost.title = title;
     newPost.watchCount = @(0);
+    newPost.sold = NO;
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
