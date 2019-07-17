@@ -28,7 +28,7 @@
     
     self.numberWatchingLabel.text = [NSString stringWithFormat:@"%@ watching", post.watchCount];
     
-    [self setWatched:[PFUser currentUser]];
+    [self setWatched:[PFUser currentUser] forPost:post];
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
@@ -37,30 +37,24 @@
     self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
 }
 
-- (void)setWatched:(PFUser *)user {
-    if ([[PFUser currentUser] objectForKey:@"Watches"]) {
-        PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
-        [watchQuery orderByDescending:@"createdAt"];
-        [watchQuery includeKey:@"user"];
-        [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
-        
-        // fetch data asynchronously
-        [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable watches, NSError * _Nullable error) {
-            if (watches) {
-                for (PFObject *watch in watches) {
-                    if ([watch[@"postID"] isEqualToString:self.post.objectId]) {
-                        [self.watchButton setSelected:YES];
-                        return;
-                    }
-                }
-                [self.watchButton setSelected:NO];
-            }
-            else {
-                // handle error
-                NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-            }
-        }];
-    }
+- (void)setWatched:(PFUser *)user forPost:(Post *)post{
+    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+    [watchQuery orderByDescending:@"createdAt"];
+    [watchQuery includeKey:@"user"];
+    [watchQuery whereKey:@"userID" equalTo:user.objectId];
+    [watchQuery whereKey:@"postID" equalTo:post.objectId];
+    
+    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable watches, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+        }
+        else if (watches) {
+            self.watchButton.titleLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", post.watchCount];
+        }
+        else {
+            self.watchButton.titleLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", post.watchCount];
+        }
+    }];
 }
 
 - (void)awakeFromNib {
