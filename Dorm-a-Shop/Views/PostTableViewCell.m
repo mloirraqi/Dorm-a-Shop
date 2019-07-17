@@ -82,7 +82,6 @@
     watch[@"postID"] = self.post.objectId;
     watch[@"userID"] = self.post.author.objectId;
     
-
     [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             NSLog(@"Successfully added to watch class in databse");
