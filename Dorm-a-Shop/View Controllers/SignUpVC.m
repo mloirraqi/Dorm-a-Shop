@@ -63,44 +63,30 @@
     }
     return true;
 }
+
 - (IBAction)signUpButtonTap:(UIButton *)sender {
     if ([self checkFields]){
-        [MBProgressHUD showHUDAddedTo:self.view animated:true];
-        
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
         NSData *imageData = UIImagePNGRepresentation(selectedImage);
         PFFileObject *image = [PFFileObject fileObjectWithName:@"Profileimage.png" data:imageData];
-        [image saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+        PFUser *user = [PFUser user];
+        user.username = self->nameTextField.text;
+        user.password = self->passwordTextField.text;
+        user.email = self->emailTextField.text;
+        user[@"ProfilePic"] = image;
+        
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [hud hideAnimated:YES];
             if (!error) {
-                if (succeeded) {
-                    PFUser *user = [PFUser user];
-                    user.username = self->nameTextField.text;
-                    user.password = self->passwordTextField.text;
-                    user.email = self->emailTextField.text;
-                    user[@"ProfilePic"] = image;
-                    
-                    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                        if (!error) {
-                            // Hooray! Let them use the app now.
-                            [self showAlertView:@"Welcome!"];
-                            [self performSegueWithIdentifier:@"homeScreen" sender:nil];
-                        } else {
-                            NSString *errorString = [error userInfo][@"error"];
-                            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                            [self showAlertView:@"Someything goes wrong, Please try again"];
-                            // Show the errorString somewhere and let the user try again.
-                        }
-                    }];
-                }
+                [self showAlertView:@"Welcome!"];
+                [self performSegueWithIdentifier:@"homeScreen" sender:nil];
             } else {
-                // Handle error
+                [hud hideAnimated:YES];
+                [self showAlertView:@"Someything goes wrong, Please try again"];
+                NSLog(@"😫😫😫, error: %@", error.localizedDescription);
             }
         }];
-        
-        
-        
-        
-        
     }
 }
 

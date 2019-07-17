@@ -19,6 +19,12 @@
     // Do any additional setup after loading the view.
 }
 
+- (IBAction)signIn:(id)sender {
+    
+    [self performSegueWithIdentifier:@"signIn" sender:nil];
+    
+}
+
 /*
 #pragma mark - Navigation
 
