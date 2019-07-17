@@ -9,6 +9,7 @@ target 'Dorm-a-Shop' do
   pod 'Parse'
   pod 'Parse/UI'
   pod 'DateTools'
+pod 'MBProgressHUD', '~> 1.0.0'
 
   target 'Dorm-a-ShopTests' do
     inherit! :search_paths
