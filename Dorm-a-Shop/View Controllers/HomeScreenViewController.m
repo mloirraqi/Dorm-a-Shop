@@ -10,6 +10,7 @@
 #import "PostTableViewCell.h"
 #import "Post.h"
 #import "UploadViewController.h"
+#import "SignInVC.h"
 @import Parse;
 
 @interface HomeScreenViewController () <UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -86,5 +87,15 @@
          uploadViewController.delegate = self;
      }
  }
+
+- (IBAction)clickLogout:(id)sender {
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
+    NSLog(@"User logged out successfully");
+    
+    SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
+    
+    [self presentViewController:signInVC animated:YES completion:nil];
+}
+
 
 @end
