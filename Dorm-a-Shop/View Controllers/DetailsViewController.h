@@ -7,10 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Post.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol DetailsViewControllerDelegate <NSObject>
+
+- (void)didUpdateDetailsData:(UIViewController *)detailsViewController;
+
+@end
+
 @interface DetailsViewController : UIViewController
+
+@property (nonatomic, strong) Post *post;
+@property (nonatomic, weak) id<DetailsViewControllerDelegate> delegate;
 
 @end
 

@@ -7,8 +7,20 @@
 //
 
 #import "DetailsViewController.h"
+#import "Post.h"
+@import Parse;
 
 @interface DetailsViewController ()
+
+@property (weak, nonatomic) IBOutlet UIImageView *postPFImageView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *priceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
+@property (weak, nonatomic) IBOutlet UILabel *conditionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *captionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *sellerButton;
+@property (weak, nonatomic) IBOutlet UIButton *watchButton;
 
 @end
 
@@ -16,8 +28,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setPostDetailContents:self.post];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if ([self isMovingFromParentViewController]) {
+        [self.delegate updateData:self];
+    }
+}
+
+- (void)setPostDetailContents:(Post *)post {
+    _post = post;
     
+    self.postPFImageView.file = post[@"image"];
+    [self.postPFImageView loadInBackground];
+    
+    self.numberWatchingLabel.text = [NSString stringWithFormat:@"%@ watching", post.watchCount];
+    
+    [self setWatched:[PFUser currentUser]];
+    
+    self.conditionLabel.text = post.condition;
+    self.categoryLabel.text = post.category;
+    self.titleLabel.text = post.title;
+    
+    self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
 }
 
 /*

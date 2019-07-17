@@ -416,14 +416,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ff0-XF-9lw">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Condition" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ff0-XF-9lw">
                                 <rect key="frame" x="217" y="368" width="173" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ned-Ur-ikf">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Caption" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ned-Ur-ikf">
                                 <rect key="frame" x="20" y="397" width="374" height="389"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -434,6 +434,17 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="B6B-yl-0zQ"/>
                     </view>
+                    <connections>
+                        <outlet property="captionLabel" destination="ned-Ur-ikf" id="Hdg-Fu-vsu"/>
+                        <outlet property="categoryLabel" destination="TQI-Bw-cII" id="d3P-kK-tPm"/>
+                        <outlet property="conditionLabel" destination="Ff0-XF-9lw" id="tix-pm-hb1"/>
+                        <outlet property="locationLabel" destination="gg7-Vv-pNB" id="24d-UD-SsX"/>
+                        <outlet property="postPFImageView" destination="jct-hS-uqG" id="3YG-Ty-cDo"/>
+                        <outlet property="priceLabel" destination="sZw-7M-84a" id="xFq-aX-sie"/>
+                        <outlet property="sellerButton" destination="O26-WH-s7F" id="qs3-DJ-zzB"/>
+                        <outlet property="titleLabel" destination="S1V-iB-oBF" id="eFN-tY-0nY"/>
+                        <outlet property="watchButton" destination="MA6-l4-BaA" id="Czd-og-5Dh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="82E-Gu-Zeb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -445,6 +456,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="gS1-Y9-nOT" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vaT-gE-lqY">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
