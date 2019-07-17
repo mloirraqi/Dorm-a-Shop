@@ -43,10 +43,6 @@
     
     self.categories = @[@"Furniture", @"Books", @"Beauty"];
     self.conditions = @[@"New", @"Nearly New", @"Old"];
-    
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    self.formatter = formatter;
 }
 
 - (IBAction)addPicture:(id)sender {
@@ -73,7 +69,10 @@
 
 // save pics to database
 - (IBAction)uploadPic:(id)sender {
-    NSNumber *priceNum = [self.formatter numberFromString:self.itemPrice.text];
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *priceNum = [formatter numberFromString:self.itemPrice.text];
+    
     Post *newPost = [Post postListing:self.postImage withCaption:self.itemDescription.text withPrice:priceNum withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (!succeeded) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
