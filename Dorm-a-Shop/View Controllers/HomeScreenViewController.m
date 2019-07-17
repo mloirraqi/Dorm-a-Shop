@@ -9,13 +9,14 @@
 #import "HomeScreenViewController.h"
 #import "PostTableViewCell.h"
 #import "Post.h"
+#import "UploadViewController.h"
 @import Parse;
 
-@interface HomeScreenViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface HomeScreenViewController () <UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-@property (strong, nonatomic) NSArray *postsArray;
+@property (strong, nonatomic) NSMutableArray *postsArray;
 
 @end
 
@@ -41,21 +42,17 @@
 }
 
 - (void)fetchPosts {
-    // construct PFQuery
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
-    postQuery.limit = 20;
     
     // fetch data asynchronously
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
-            // do something with the data fetched
-            self.postsArray = posts;
+            self.postsArray = [NSMutableArray arrayWithArray:posts];
             [self.tableView reloadData];
         }
         else {
-            // handle error
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
         [self.refreshControl endRefreshing];
@@ -74,14 +71,21 @@
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.postsArray.count;
 }
-/*
+
+
+- (void)didUpload:(nonnull Post *)post {
+    [self.postsArray insertObject:post atIndex:0];
+    [self.tableView reloadData];
+}
+
  #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
+
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
+     if ([segue.identifier isEqualToString:@"segueToUpload"]) {
+         UploadViewController *uploadViewController = [segue destinationViewController];
+         uploadViewController.delegate = self;
+     }
  }
- */
+
 
 @end

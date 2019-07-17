@@ -38,27 +38,29 @@
 }
 
 - (void)setWatched:(PFUser *)user {
-    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
-    [watchQuery orderByDescending:@"createdAt"];
-    [watchQuery includeKey:@"user"];
-    [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
-    
-    // fetch data asynchronously
-    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable watches, NSError * _Nullable error) {
-        if (watches) {
-            for (PFObject *watch in watches) {
-                if ([watch[@"postID"] isEqualToString:self.post.objectId]) {
-                    [self.watchButton setSelected:YES];
-                    return;
+    if ([[PFUser currentUser] objectForKey:@"Watches"]) {
+        PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+        [watchQuery orderByDescending:@"createdAt"];
+        [watchQuery includeKey:@"user"];
+        [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+        
+        // fetch data asynchronously
+        [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable watches, NSError * _Nullable error) {
+            if (watches) {
+                for (PFObject *watch in watches) {
+                    if ([watch[@"postID"] isEqualToString:self.post.objectId]) {
+                        [self.watchButton setSelected:YES];
+                        return;
+                    }
                 }
+                [self.watchButton setSelected:NO];
             }
-            [self.watchButton setSelected:NO];
-        }
-        else {
-            // handle error
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-        }
-    }];
+            else {
+                // handle error
+                NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            }
+        }];
+    }
 }
 
 - (void)awakeFromNib {
@@ -75,11 +77,12 @@
 
 - (IBAction)didTapWatch:(id)sender {
     NSLog(@"Tapped watch!");
+    
     PFObject *watch = [PFObject objectWithClassName:@"Watches"];
-
     watch[@"postID"] = self.post.objectId;
     watch[@"userID"] = self.post.author.objectId;
     
+
     [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             NSLog(@"Successfully added to watch class in databse");

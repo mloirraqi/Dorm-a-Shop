@@ -83,7 +83,6 @@
                 [self dismissViewControllerAnimated:true completion:nil];
             }
     }];
-    
     [self.delegate didUpload:newPost];
     
 }
