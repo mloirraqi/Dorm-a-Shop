@@ -7,8 +7,13 @@
 //
 
 #import "SignInVC.h"
+#import "Parse/Parse.h"
+#import "AppDelegate.h"
 
 @interface SignInVC ()
+
+@property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
 
 @end
 
@@ -21,7 +26,21 @@
 
 - (IBAction)signIn:(id)sender {
     
-    [self performSegueWithIdentifier:@"signIn" sender:nil];
+    NSString *email = self.emailField.text;
+    NSString *password = self.passwordField.text;
+    
+    [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser *user, NSError *error) {
+        if (error != nil) {
+            NSLog(@"User log in failed: %@", error.localizedDescription);
+        } else {
+            NSLog(@"User logged in successfully");
+            UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
+            
+            [self presentViewController:tabBarController animated:YES completion:nil];
+        }
+    }];
+    
+//    [self performSegueWithIdentifier:@"signIn" sender:nil];
     
 }
 
