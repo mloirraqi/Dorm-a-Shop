@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *categoryShown;
 @property (weak, nonatomic) IBOutlet UIButton *conditionShown;
 @property (weak, nonatomic) IBOutlet UIPickerView *categoryPickerView;
+@property (weak, nonatomic) IBOutlet UIToolbar *pickerviewToolbar;
 @property (weak, nonatomic) IBOutlet UIPickerView *conditionPickerView;
 @property (weak, nonatomic) IBOutlet UIButton *picButton;
 @property (strong, nonatomic) NSArray *categories;
@@ -31,18 +32,20 @@
     [super viewDidLoad];
     
     self.itemDescription.layer.borderWidth = 1.0f;
-    self.itemDescription.layer.borderColor = [[UIColor grayColor] CGColor];
+    self.itemDescription.layer.borderColor = [[UIColor blueColor] CGColor];
     
+    self.pickerviewToolbar.hidden = YES;
     self.categoryPickerView.delegate = self;
     self.categoryPickerView.dataSource = self;
     self.categoryPickerView.hidden = YES;
-    
     self.conditionPickerView.delegate = self;
     self.conditionPickerView.dataSource = self;
     self.conditionPickerView.hidden = YES;
     
     self.categories = @[@"Furniture", @"Books", @"Beauty"];
     self.conditions = @[@"New", @"Nearly New", @"Old"];
+    
+    [self.itemTitle addTarget:self.itemTitle action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
 }
 
 - (IBAction)addPicture:(id)sender {
@@ -59,7 +62,6 @@
     [self presentViewController:imagePickerVC animated:YES completion:nil];
 }
 
-// save the image pictured and upload button
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
     self.postImage = info[UIImagePickerControllerEditedImage];
@@ -67,17 +69,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-// save pics to database
 - (IBAction)uploadPic:(id)sender {
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    NSNumber *priceNum = [formatter numberFromString:self.itemPrice.text];
-    
-    Post *newPost = [Post postListing:self.postImage withCaption:self.itemDescription.text withPrice:priceNum withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    Post *newPost = [Post postListing:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (!succeeded) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
-                NSLog(@"😎😎😎 Successfully uploaded picture");
                 [self dismissViewControllerAnimated:true completion:nil];
             }
     }];
@@ -111,21 +107,34 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if (pickerView == self.categoryPickerView) {
         [self.categoryShown setTitle:self.categories[row] forState:UIControlStateNormal];
-        self.categoryPickerView.hidden = YES;
     } else {
         [self.conditionShown setTitle:self.conditions[row] forState:UIControlStateNormal];
-        self.conditionPickerView.hidden = YES;
     }
 }
 
 - (IBAction)changeCategory:(id)sender {
     self.conditionPickerView.hidden = YES;
     self.categoryPickerView.hidden = NO;
+    self.pickerviewToolbar.hidden = NO;
 }
 
 - (IBAction)changeCondition:(id)sender {
     self.categoryPickerView.hidden = YES;
     self.conditionPickerView.hidden = NO;
+    self.pickerviewToolbar.hidden = NO;
+}
+
+- (IBAction)onTap:(id)sender {
+    [self.itemPrice endEditing:YES];
+    self.conditionPickerView.hidden = YES;
+    self.categoryPickerView.hidden = YES;
+    self.pickerviewToolbar.hidden = YES;
+}
+
+- (IBAction)donePicking:(id)sender {
+    self.conditionPickerView.hidden = YES;
+    self.categoryPickerView.hidden = YES;
+    self.pickerviewToolbar.hidden = YES;
 }
 
 @end
