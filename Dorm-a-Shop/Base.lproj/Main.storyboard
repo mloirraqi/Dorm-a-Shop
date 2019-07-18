@@ -29,28 +29,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="168.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-<<<<<<< HEAD
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="74z-au-tcV" customClass="PFImageView">
                                                     <rect key="frame" x="0.0" y="0.0" width="127" height="124"/>
-=======
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="74z-au-tcV" customClass="PFImageView">
-                                                    <rect key="frame" x="16" y="16.5" width="111" height="137"/>
->>>>>>> master
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="111" id="LFR-oI-YrY"/>
                                                         <constraint firstAttribute="height" constant="137" id="e8n-km-bPq"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fng-7Z-gqv">
-                                                    <rect key="frame" x="20" y="132" width="44" height="22"/>
-                                                    <state key="normal" title="Watch"/>
-                                                    <state key="selected">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapWatch:" destination="1Hd-d1-bXe" eventType="touchUpInside" id="uG2-Qt-4YR"/>
-                                                    </connections>
-                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Xp-yd-qDU">
                                                     <rect key="frame" x="135" y="16.5" width="67" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -81,27 +66,27 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-<<<<<<< HEAD
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="# watching" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o14-XK-lwW">
-                                                    <rect key="frame" x="126" y="133" width="85" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-=======
->>>>>>> master
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fng-7Z-gqv">
+                                                    <rect key="frame" x="135" y="131" width="44" height="22"/>
+                                                    <state key="normal" title="Watch"/>
+                                                    <state key="selected">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="didTapWatch:" destination="1Hd-d1-bXe" eventType="touchUpInside" id="uG2-Qt-4YR"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="74z-au-tcV" firstAttribute="leading" secondItem="N0L-Jn-c8L" secondAttribute="leading" constant="16" id="2vD-uf-i6C"/>
                                                 <constraint firstItem="x77-Gf-PcM" firstAttribute="top" secondItem="0Xp-yd-qDU" secondAttribute="bottom" constant="8" id="DGg-39-GfM"/>
                                                 <constraint firstItem="0Xp-yd-qDU" firstAttribute="top" secondItem="74z-au-tcV" secondAttribute="top" id="DyJ-3f-twn"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" id="HhF-B1-2Pw"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" constant="29" id="HhF-B1-2Pw"/>
                                                 <constraint firstItem="yCe-z1-a88" firstAttribute="top" secondItem="x77-Gf-PcM" secondAttribute="bottom" constant="8" id="OLd-jP-LD2"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MZi-cJ-56M" secondAttribute="trailing" constant="16" id="PJ3-jF-pSL"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="top" secondItem="yCe-z1-a88" secondAttribute="bottom" constant="37" id="PfP-08-rK0"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="top" secondItem="yCe-z1-a88" secondAttribute="bottom" constant="36" id="PfP-08-rK0"/>
                                                 <constraint firstItem="x77-Gf-PcM" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="Xme-mj-gET"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" constant="-115" id="afu-6D-LDh"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="afu-6D-LDh"/>
                                                 <constraint firstItem="0Xp-yd-qDU" firstAttribute="leading" secondItem="74z-au-tcV" secondAttribute="trailing" constant="8" id="g1E-Ri-W24"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Fng-7Z-gqv" secondAttribute="trailing" constant="16" id="hpk-7s-uPS"/>
                                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="74z-au-tcV" secondAttribute="bottom" constant="16" id="hyT-ir-NOv"/>
@@ -109,7 +94,7 @@
                                                 <constraint firstItem="yCe-z1-a88" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="jrJ-Sa-oT5"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="yCe-z1-a88" secondAttribute="trailing" constant="16" id="mJi-eT-gyR"/>
                                                 <constraint firstItem="74z-au-tcV" firstAttribute="top" secondItem="N0L-Jn-c8L" secondAttribute="top" constant="16" id="tgr-CX-k3T"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" constant="30" id="y3X-Vy-cUF"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" constant="29" id="y3X-Vy-cUF"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1058,9 +1043,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
-<<<<<<< HEAD
-=======
-        <segue reference="inK-qS-1By"/>
->>>>>>> master
+        <segue reference="cnV-vk-Wb5"/>
     </inferredMetricsTieBreakers>
 </document>
