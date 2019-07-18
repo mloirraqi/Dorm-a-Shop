@@ -18,22 +18,35 @@
 @property (nonatomic, strong) NSArray *soldItems;
 @property (nonatomic, strong) NSNumber *selectedSeg;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segControl;
+@property (weak, nonatomic) IBOutlet UIImageView *profilePic;
+@property (weak, nonatomic) IBOutlet UILabel *username;
+@property (weak, nonatomic) IBOutlet UILabel *activeCount;
+@property (weak, nonatomic) IBOutlet UILabel *soldCount;
+
 @end
 
 @implementation ProfileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if(!self.user) {
+        self.user = PFUser.currentUser;
+    }
+    self.username.text = self.user.username;
+    self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
+    self.profilePic.layer.cornerRadius = 40;
+    self.profilePic.layer.masksToBounds = YES;
+    PFFileObject *imageFile = self.user[@"ProfilePic"];
+    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+        if (!error) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            [self.profilePic setImage:image];
+        }
+    }];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     self.selectedSeg = 0;
-
-    
-//    if(!self.user) {
-//        self.user = PFUser.currentUser;
-//    }
-    
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
     layout.minimumLineSpacing = 1;
     layout.minimumInteritemSpacing = 1;
@@ -41,26 +54,22 @@
     CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
     CGFloat itemHeight = itemWidth;
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
-    
     [self fetchProfile];
-
-    
 }
 
-// query for all the posts uploaded by this user
+
 - (void)fetchProfile {
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
-//    [query includeKey:@"author"];
-//    [query whereKey:@"author" equalTo:self.user];
+    [query includeKey:@"author"];
+    [query whereKey:@"author" equalTo:self.user];
     [query orderByDescending:@"createdAt"];
     
-    // fetch all posts by current user asynchronously
     [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
-            NSLog(@"😎😎😎 Successfully fetched posts from user");
             self.activeItems = [NSMutableArray arrayWithArray:posts];
             self.soldItems = [NSMutableArray arrayWithArray:posts];
-//            self.postLabel.text = [NSString stringWithFormat:@"%lu", self.posts.count];;
+            self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+            self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
             [self.collectionView reloadData];
             
         } else {
