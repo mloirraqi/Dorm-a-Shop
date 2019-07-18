@@ -27,13 +27,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [super viewDidLoad];
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveNotification:)
+                                                 name:@"ChangedTabBarDataNotification"
+                                               object:nil];
+    
     [self fetchPosts];
     [self createRefreshControl];
+}
+
+- (void)receiveNotification:(NSNotification *) notification {
+    if ([[notification name] isEqualToString:@"ChangedTabBarDataNotification"]) {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)createRefreshControl {
@@ -46,14 +55,13 @@
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
-//    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
+    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
     
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
             self.postsArray = [NSMutableArray arrayWithArray:posts];
             [self.tableView reloadData];
-        }
-        else {
+        } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
         [self.refreshControl endRefreshing];
@@ -106,14 +114,14 @@
         UINavigationController *uploadViewNavigationController = [segue destinationViewController];
         UploadViewController *uploadViewController = [uploadViewNavigationController topViewController];
         uploadViewController.delegate = self;
-    }
-    else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
+    } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Post *post = self.postsArray[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.post = post;
         detailsViewController.watch = tappedCell.watch;
+        detailsViewController.watchCount = tappedCell.watchCount;
+        [detailsViewController setPost:post];
         detailsViewController.delegate = self;
     }
 }

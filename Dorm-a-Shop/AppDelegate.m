@@ -7,7 +7,10 @@
 //
 
 #import "AppDelegate.h"
-@import Parse;
+#import <GooglePlaces/GooglePlaces.h>
+#import <GooglePlacePicker/GooglePlacePicker.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import <Parse/Parse.h>
 
 @interface AppDelegate ()
 
@@ -17,6 +20,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [GMSServices provideAPIKey:@"AIzaSyCZ98HEzZOeV7-hRjLGNJLpm85wu45B4RY"];
+    [GMSPlacesClient provideAPIKey:@"AIzaSyCZ98HEzZOeV7-hRjLGNJLpm85wu45B4RY"];
 
     ParseClientConfiguration *config = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         configuration.applicationId = @"dormAshop";

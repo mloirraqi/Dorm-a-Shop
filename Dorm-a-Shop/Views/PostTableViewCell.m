@@ -26,7 +26,7 @@
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
-    [self setWatched:[PFUser currentUser] forPost:post];
+    [self setWatchedUser:[PFUser currentUser] Post:post];
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
@@ -35,27 +35,40 @@
     self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
 }
 
-- (void)setWatched:(PFUser *)user forPost:(Post *)post{
+- (void)setWatchedUser:(PFUser *)user Post:(Post *)post{
     PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
     [watchQuery orderByDescending:@"createdAt"];
-    [watchQuery includeKey:@"user"];
-    [watchQuery whereKey:@"userID" equalTo:user.objectId];
     [watchQuery whereKey:@"postID" equalTo:post.objectId];
     
     __weak PostTableViewCell *weakSelf = self;
-    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable watches, NSError * _Nullable error) {
+    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable postWatches, NSError * _Nullable error) {
         if (error) {
             NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
-        }
-        else if (watches.count > 0) {
-            weakSelf.watch = watches[0];
-            weakSelf.watchButton.selected = YES;
-            [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
-        }
-        else {
-            weakSelf.watch = nil;
-            weakSelf.watchButton.selected = NO;
-            [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
+        } else {
+            weakSelf.watchCount = postWatches.count;
+            if (weakSelf.watchCount > 0) {
+                bool watched = NO;
+                for (PFObject *watch in postWatches) {
+                    if ([watch[@"userID"] isEqualToString:user.objectId]) {
+                        weakSelf.watchButton.selected = YES;
+                        [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.watchCount] forState:UIControlStateSelected];
+                        weakSelf.watch = watch;
+                        watched = YES;
+                        break;
+                    }
+                }
+                
+                if (!watched) {
+                    weakSelf.watchButton.selected = NO;
+                    [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.watchCount] forState:UIControlStateNormal];
+                    weakSelf.watch = nil;
+                }
+            }
+            else {
+                weakSelf.watchButton.selected = NO;
+                [weakSelf.watchButton setTitle:@"Watch (0 watching)" forState:UIControlStateNormal];
+                weakSelf.watch = nil;
+            }
         }
     }];
 }
@@ -67,25 +80,13 @@
             if (succeeded) {
                 weakSelf.watch = nil;
                 weakSelf.watchButton.selected = NO;
-                
-                int watchCountInt = [weakSelf.post.watchCount intValue];
-                watchCountInt --;
-                weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
-                
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
-                
-                [weakSelf.post setObject:self.post.watchCount forKey:@"watchCount"];
-                [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (error != nil) {
-                        NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
-                    }
-                }];
+                weakSelf.watchCount --;
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.watchCount] forState:UIControlStateNormal];
             } else {
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
         }];
-    }
-    else {
+    } else {
         PFObject *watch = [PFObject objectWithClassName:@"Watches"];
         watch[@"postID"] = self.post.objectId;
         watch[@"userID"] = [PFUser currentUser].objectId;
@@ -94,21 +95,9 @@
             if (succeeded) {
                 weakSelf.watch = watch;
                 weakSelf.watchButton.selected = YES;
-                
-                int watchCountInt = [weakSelf.post.watchCount intValue];
-                watchCountInt ++;
-                weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
-                
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
-                
-                [weakSelf.post setObject:weakSelf.post.watchCount forKey:@"watchCount"];
-                [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (error != nil) {
-                        NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
-                    }
-                }];
-            }
-            else {
+                weakSelf.watchCount ++;
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.watchCount] forState:UIControlStateNormal];
+            } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }
         }];

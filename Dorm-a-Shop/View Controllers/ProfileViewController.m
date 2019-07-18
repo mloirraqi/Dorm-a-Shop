@@ -63,7 +63,6 @@
     [self fetchProfile];
 }
 
-
 - (void)fetchProfile {
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     [query includeKey:@"author"];
@@ -138,14 +137,18 @@
         PostCollectionViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
         Post *post;
+        
         if ([self.segmentControl selectedSegmentIndex] == 0) {
             post = self.activeItems[indexPath.row];
         } else {
             post = self.soldItems[indexPath.row];
         }
+        
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.post = post;
         detailsViewController.watch = tappedCell.watch;
+        detailsViewController.watchCount = tappedCell.watchCount;
+        NSLog(@"watch count: %lu", detailsViewController.watchCount);
+        detailsViewController.post = post;
         detailsViewController.delegate = self;
     }
 }
