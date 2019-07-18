@@ -10,10 +10,11 @@
 #import "PostTableViewCell.h"
 #import "Post.h"
 #import "UploadViewController.h"
+#import "DetailsViewController.h"
 #import "SignInVC.h"
 @import Parse;
 
-@interface HomeScreenViewController () <UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -38,7 +39,6 @@
 - (void)createRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchPosts) forControlEvents:UIControlEventValueChanged];
-    
     [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
@@ -47,13 +47,11 @@
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
     
-    // fetch data asynchronously
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
             self.postsArray = [NSMutableArray arrayWithArray:posts];
             [self.tableView reloadData];
-        }
-        else {
+        } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
         [self.refreshControl endRefreshing];
@@ -78,16 +76,6 @@
     [self.tableView reloadData];
 }
 
- #pragma mark - Navigation
-
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-     if ([segue.identifier isEqualToString:@"segueToUpload"]) {
-         UINavigationController *uploadViewNavigationController = [segue destinationViewController];
-         UploadViewController *uploadViewController = [uploadViewNavigationController topViewController];
-         uploadViewController.delegate = self;
-     }
- }
-
 - (IBAction)clickLogout:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
     NSLog(@"User logged out successfully");
@@ -97,5 +85,29 @@
     [self presentViewController:signInVC animated:YES completion:nil];
 }
 
+- (void)updateDetailsData:(UIViewController *)viewController {
+    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+    if (detailsViewController.watchStatusChanged) {
+        [self.tableView reloadData];
+    }
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"segueToUpload"]) {
+        UINavigationController *uploadViewNavigationController = [segue destinationViewController];
+        UploadViewController *uploadViewController = [uploadViewNavigationController topViewController];
+        uploadViewController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
+        PostTableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Post *post = self.postsArray[indexPath.row];
+        DetailsViewController *detailsViewController = [segue destinationViewController];
+        detailsViewController.post = post;
+        detailsViewController.watch = tappedCell.watch;
+        detailsViewController.delegate = self;
+    }
+}
 
 @end
