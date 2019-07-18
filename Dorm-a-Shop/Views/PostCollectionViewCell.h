@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) PFObject *watch;
 @property (nonatomic, strong) Post *post;
+@property (nonatomic) NSUInteger watchCount;
 
 @end
 

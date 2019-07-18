@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *category;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) PFFileObject *image;
-@property (nonatomic, strong) NSNumber *watchCount;
+//@property (nonatomic, strong) NSNumber *watchCount;
 @property (nonatomic, strong) NSNumber *price;
 @property (nonatomic, assign) BOOL sold;
 

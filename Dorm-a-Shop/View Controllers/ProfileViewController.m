@@ -142,8 +142,10 @@
         }
         
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.post = post;
         detailsViewController.watch = tappedCell.watch;
+        detailsViewController.watchCount = tappedCell.watchCount;
+        NSLog(@"watch count: %lu", detailsViewController.watchCount);
+        detailsViewController.post = post;
         detailsViewController.delegate = self;
     }
 }
