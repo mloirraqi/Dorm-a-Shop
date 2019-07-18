@@ -66,8 +66,6 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-<<<<<<< HEAD
-=======
                                                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fng-7Z-gqv">
                                                     <rect key="frame" x="135" y="131" width="44" height="22"/>
                                                     <state key="normal" title="Watch"/>
@@ -78,7 +76,6 @@
                                                         <action selector="didTapWatch:" destination="1Hd-d1-bXe" eventType="touchUpInside" id="uG2-Qt-4YR"/>
                                                     </connections>
                                                 </button>
->>>>>>> 03bf8be275d60007f063f3384c76609328a54e8f
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="74z-au-tcV" firstAttribute="leading" secondItem="N0L-Jn-c8L" secondAttribute="leading" constant="16" id="2vD-uf-i6C"/>
