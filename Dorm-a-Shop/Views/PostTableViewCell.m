@@ -16,8 +16,6 @@
 - (IBAction)didTapWatch:(id)sender;
 - (IBAction)didTapProfile:(id)sender;
 
-@property (nonatomic, strong) PFObject *watch;
-
 @end
 
 @implementation PostTableViewCell
@@ -56,35 +54,29 @@
             self.watchButton.selected = YES;
         }
         else {
+            self.watch = nil;
             self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", post.watchCount];
             self.watchButton.selected = NO;
         }
     }];
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-}
-
 - (IBAction)didTapWatch:(id)sender {
+    __weak PostTableViewCell *weakSelf = self;
     if (self.watchButton.selected) {
         [self.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
-                self.watch = nil;
-                self.watchButton.selected = NO;
+                weakSelf.watch = nil;
+                weakSelf.watchButton.selected = NO;
                 
-                int watchCountInt = [self.post.watchCount intValue];
+                int watchCountInt = [weakSelf.post.watchCount intValue];
                 watchCountInt --;
-                self.post.watchCount = [NSNumber numberWithInt:watchCountInt];
+                weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
                 
-                self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", self.post.watchCount];
+                weakSelf.numberWatchingLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount];
                 
-                [self.post setObject:self.post.watchCount forKey:@"watchCount"];
-                [self.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [weakSelf.post setObject:self.post.watchCount forKey:@"watchCount"];
+                [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (error != nil) {
                         NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
                     }
@@ -101,17 +93,17 @@
         
         [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
-                self.watch = watch;
-                self.watchButton.selected = YES;
+                weakSelf.watch = watch;
+                weakSelf.watchButton.selected = YES;
                 
-                int watchCountInt = [self.post.watchCount intValue];
+                int watchCountInt = [weakSelf.post.watchCount intValue];
                 watchCountInt ++;
-                self.post.watchCount = [NSNumber numberWithInt:watchCountInt];
+                weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
                 
-                self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", self.post.watchCount];
+                weakSelf.numberWatchingLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", self.post.watchCount];
                 
-                [self.post setObject:self.post.watchCount forKey:@"watchCount"];
-                [self.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [weakSelf.post setObject:weakSelf.post.watchCount forKey:@"watchCount"];
+                [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (error != nil) {
                         NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
                     }
