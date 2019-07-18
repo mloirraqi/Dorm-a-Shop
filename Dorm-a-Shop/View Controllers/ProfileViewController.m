@@ -70,11 +70,12 @@
     [soldQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool:YES]];
     [soldQuery orderByDescending:@"createdAt"];
     
+    __weak ProfileViewController *weakSelf = self;
     [activeQuery findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
-            self.activeItems = [NSMutableArray arrayWithArray:posts];
-            self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-            [self.collectionView reloadData];
+            weakSelf.activeItems = [NSMutableArray arrayWithArray:posts];
+            weakSelf.activeCount.text = [NSString stringWithFormat:@"%lu", weakSelf.activeItems.count];
+            [weakSelf.collectionView reloadData];
         } else {
             NSLog(@"😫😫😫 couldn't fetch active posts for some reason: %@", error.localizedDescription);
         }
@@ -82,9 +83,9 @@
     
     [soldQuery findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
-            self.soldItems = [NSMutableArray arrayWithArray:posts];
-            self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-            [self.collectionView reloadData];
+            weakSelf.soldItems = [NSMutableArray arrayWithArray:posts];
+            weakSelf.soldCount.text = [NSString stringWithFormat:@"%lu", weakSelf.soldItems.count];
+            [weakSelf.collectionView reloadData];
         } else {
             NSLog(@"😫😫😫 couldn't fetch sold posts for some reason: %@", error.localizedDescription);
         }
