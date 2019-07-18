@@ -8,16 +8,16 @@
 
 #import "ProfileViewController.h"
 #import "PostCollectionViewCell.h"
+#import "DetailsViewController.h"
 #import "Post.h"
-
 @import Parse;
 
-@interface ProfileViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSArray *activeItems;
 @property (nonatomic, strong) NSArray *soldItems;
-@property (nonatomic, strong) NSNumber *selectedSeg;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segControl;
+@property (nonatomic, strong) NSNumber *selectedSegment;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UILabel *activeCount;
@@ -29,7 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if(!self.user) {
+    if (!self.user) {
         self.user = PFUser.currentUser;
     }
     self.username.text = self.user.username;
@@ -46,7 +46,7 @@
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
-    self.selectedSeg = 0;
+    self.selectedSegment = 0;
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
     layout.minimumLineSpacing = 1;
     layout.minimumInteritemSpacing = 1;
@@ -93,12 +93,12 @@
     }];
 }
 
-- (IBAction)changedSeg:(id)sender {
+- (IBAction)changedSegment:(id)sender {
     [self.collectionView reloadData];
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if([self.segControl selectedSegmentIndex] == 0) {
+    if ([self.segmentControl selectedSegmentIndex] == 0) {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"active" forIndexPath:indexPath];
         cell.itemImage.image = nil;
         Post *post = self.activeItems[indexPath.item];
@@ -114,10 +114,36 @@
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if([self.segControl selectedSegmentIndex] == 0) {
+    if ([self.segmentControl selectedSegmentIndex] == 0) {
         return self.activeItems.count;
     } else {
         return self.soldItems.count;
+    }
+}
+
+- (void)updateDetailsData:(UIViewController *)viewController {
+    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+    if (detailsViewController.watchStatusChanged) {
+        [self.collectionView reloadData];
+    }
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"segueToDetails"]) {
+        PostCollectionViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
+        Post *post;
+        if ([self.segmentControl selectedSegmentIndex] == 0) {
+            post = self.activeItems[indexPath.row];
+        } else {
+            post = self.soldItems[indexPath.row];
+        }
+        DetailsViewController *detailsViewController = [segue destinationViewController];
+        detailsViewController.post = post;
+        detailsViewController.watch = tappedCell.watch;
+        detailsViewController.delegate = self;
     }
 }
 
