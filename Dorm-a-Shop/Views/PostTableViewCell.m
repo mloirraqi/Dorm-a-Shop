@@ -23,6 +23,7 @@
 - (void)setPost:(Post *)post {
     _post = post;
     
+    [self.postPFImageView setImage:nil];
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
