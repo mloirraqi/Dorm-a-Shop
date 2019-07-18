@@ -57,10 +57,11 @@
     [postQuery includeKey:@"author"];
     [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
     
+    __weak PostTableViewCell *weakSelf = self;
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
-            self.postsArray = [NSMutableArray arrayWithArray:posts];
-            [self.tableView reloadData];
+            /*weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
+            [weakSelf.tableView reloadData];*/
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }

@@ -8,6 +8,7 @@
 
 #import "PostTableViewCell.h"
 #import "NSDate+DateTools.h"
+#import "WatchListViewController.h"
 #import "Post.h"
 @import Parse;
 
@@ -23,7 +24,7 @@
 - (void)setPost:(Post *)post {
     _post = post;
     
-    [self.postPFImageView setImage:nil];
+    [self.postPFImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
