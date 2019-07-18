@@ -26,8 +26,6 @@
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
-    self.numberWatchingLabel.text = [NSString stringWithFormat:@"%@ watching", post.watchCount];
-    
     [self setWatched:[PFUser currentUser] forPost:post];
     
     self.conditionLabel.text = post.condition;
@@ -44,19 +42,20 @@
     [watchQuery whereKey:@"userID" equalTo:user.objectId];
     [watchQuery whereKey:@"postID" equalTo:post.objectId];
     
+    __weak PostTableViewCell *weakSelf = self;
     [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable watches, NSError * _Nullable error) {
         if (error) {
             NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
         }
         else if (watches.count > 0) {
-            self.watch = watches[0];
-            self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", post.watchCount];
-            self.watchButton.selected = YES;
+            weakSelf.watch = watches[0];
+            weakSelf.watchButton.selected = YES;
+            [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
         }
         else {
-            self.watch = nil;
-            self.numberWatchingLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", post.watchCount];
-            self.watchButton.selected = NO;
+            weakSelf.watch = nil;
+            weakSelf.watchButton.selected = NO;
+            [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
         }
     }];
 }
@@ -73,7 +72,7 @@
                 watchCountInt --;
                 weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
                 
-                weakSelf.numberWatchingLabel.text = [NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount];
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
                 
                 [weakSelf.post setObject:self.post.watchCount forKey:@"watchCount"];
                 [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -100,7 +99,7 @@
                 watchCountInt ++;
                 weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
                 
-                weakSelf.numberWatchingLabel.text = [NSString stringWithFormat:@"Watched (%@ watching)", self.post.watchCount];
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
                 
                 [weakSelf.post setObject:weakSelf.post.watchCount forKey:@"watchCount"];
                 [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

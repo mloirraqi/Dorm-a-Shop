@@ -37,13 +37,10 @@
                                                     </constraints>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fng-7Z-gqv">
-                                                    <rect key="frame" x="135" y="132" width="124" height="22"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="124" id="J0Y-m3-6xe"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="135" y="132" width="44" height="22"/>
                                                     <state key="normal" title="Watch"/>
                                                     <state key="selected">
-                                                        <color key="titleColor" red="1" green="0.0" blue="0.44811556990000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="didTapWatch:" destination="1Hd-d1-bXe" eventType="touchUpInside" id="uG2-Qt-4YR"/>
@@ -79,26 +76,19 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="# watching" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o14-XK-lwW">
-                                                    <rect key="frame" x="267" y="132.5" width="85" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="74z-au-tcV" firstAttribute="leading" secondItem="N0L-Jn-c8L" secondAttribute="leading" constant="16" id="2vD-uf-i6C"/>
                                                 <constraint firstItem="x77-Gf-PcM" firstAttribute="top" secondItem="0Xp-yd-qDU" secondAttribute="bottom" constant="8" id="DGg-39-GfM"/>
                                                 <constraint firstItem="0Xp-yd-qDU" firstAttribute="top" secondItem="74z-au-tcV" secondAttribute="top" id="DyJ-3f-twn"/>
-                                                <constraint firstItem="o14-XK-lwW" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" id="FQk-xv-wXT"/>
                                                 <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" id="HhF-B1-2Pw"/>
-                                                <constraint firstItem="o14-XK-lwW" firstAttribute="leading" secondItem="Fng-7Z-gqv" secondAttribute="trailing" constant="8" id="HyT-n1-fsJ"/>
                                                 <constraint firstItem="yCe-z1-a88" firstAttribute="top" secondItem="x77-Gf-PcM" secondAttribute="bottom" constant="8" id="OLd-jP-LD2"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MZi-cJ-56M" secondAttribute="trailing" constant="16" id="PJ3-jF-pSL"/>
                                                 <constraint firstItem="Fng-7Z-gqv" firstAttribute="top" secondItem="yCe-z1-a88" secondAttribute="bottom" constant="37" id="PfP-08-rK0"/>
                                                 <constraint firstItem="x77-Gf-PcM" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="Xme-mj-gET"/>
                                                 <constraint firstItem="Fng-7Z-gqv" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="afu-6D-LDh"/>
                                                 <constraint firstItem="0Xp-yd-qDU" firstAttribute="leading" secondItem="74z-au-tcV" secondAttribute="trailing" constant="8" id="g1E-Ri-W24"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Fng-7Z-gqv" secondAttribute="trailing" constant="16" id="hpk-7s-uPS"/>
                                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="74z-au-tcV" secondAttribute="bottom" constant="16" id="hyT-ir-NOv"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0Xp-yd-qDU" secondAttribute="trailing" constant="16" id="i1r-xn-2pO"/>
                                                 <constraint firstItem="yCe-z1-a88" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="jrJ-Sa-oT5"/>
@@ -110,7 +100,6 @@
                                         <connections>
                                             <outlet property="categoryLabel" destination="x77-Gf-PcM" id="ItK-67-P92"/>
                                             <outlet property="conditionLabel" destination="MZi-cJ-56M" id="uGX-XT-pjf"/>
-                                            <outlet property="numberWatchingLabel" destination="o14-XK-lwW" id="EkI-Ke-fxE"/>
                                             <outlet property="postPFImageView" destination="74z-au-tcV" id="hRt-92-8MY"/>
                                             <outlet property="priceLabel" destination="yCe-z1-a88" id="yFf-QD-nGa"/>
                                             <outlet property="titleLabel" destination="0Xp-yd-qDU" id="wUH-db-tE5"/>
@@ -610,7 +599,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="82E-Gu-Zeb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2121.739130434783" y="-1052.0089285714284"/>
+            <point key="canvasLocation" x="2899" y="-662"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="fB4-Ac-pjn">
@@ -953,7 +942,6 @@
         <image name="add_pic" width="980" height="980"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="I68-gf-EeP"/>
         <segue reference="ni5-B6-yy2"/>
     </inferredMetricsTieBreakers>
 </document>
