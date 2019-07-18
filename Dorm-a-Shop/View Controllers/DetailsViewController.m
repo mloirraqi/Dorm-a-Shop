@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sellerButton;
 @property (weak, nonatomic) IBOutlet UIButton *watchButton;
+@property (weak, nonatomic) IBOutlet UIButton *statusButton;
 
 @end
 
@@ -30,6 +31,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     self.watchStatusChanged = NO;
+    self.itemStatusChanged = NO;
+    self.statusButton.hidden = YES;
     [self setPostDetailContents:self.post];
 }
 
@@ -42,6 +45,16 @@
 
 - (void)setPostDetailContents:(Post *)post {
     _post = post;
+    
+    if([((PFObject *) post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId] && post[@"sold"] == [NSNumber numberWithBool: NO]) {
+        [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
+        self.statusButton.hidden = NO;
+    }
+    
+    if(post[@"sold"] == [NSNumber numberWithBool: YES]) {
+        self.statusButton.hidden = NO;
+    }
     
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
@@ -120,5 +133,34 @@
         }];
     }
 }
+
+- (IBAction)changeStatus:(id)sender {
+    if([((PFObject *) self.post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId]) {
+        if (self.post.sold == NO) {
+            self.post.sold = YES;
+            [self.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (error != nil) {
+                    NSLog(@"Post status update failed: %@", error.localizedDescription);
+                } else {
+                    [self.statusButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+                    [self.statusButton setTitle:@"sold" forState:UIControlStateNormal];
+                    self.itemStatusChanged = YES;
+                }
+            }];
+        } else {
+            self.post.sold = NO;
+            [self.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (error != nil) {
+                    NSLog(@"Post status update failed: %@", error.localizedDescription);
+                } else {
+                    [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+                    [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
+                    self.itemStatusChanged = YES;
+                }
+            }];
+        }
+    }
+}
+
 
 @end
