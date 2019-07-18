@@ -20,9 +20,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     [GMSServices provideAPIKey:@"AIzaSyCZ98HEzZOeV7-hRjLGNJLpm85wu45B4RY"];
-    [GMSPlacesClient provideAPIKey:@"AIzaSyCZ98HEzZOeV7-hRjLGNJLpm85wu45B4RY"];
+    [GMSPlacesClient provideAPIKey:@"AIzaSyCQq014wwF0Stjx8gfDIUW3TxYfBuXCDD8"];
 
     ParseClientConfiguration *config = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         configuration.applicationId = @"dormAshop";
