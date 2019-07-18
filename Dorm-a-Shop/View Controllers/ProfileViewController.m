@@ -59,20 +59,35 @@
 
 
 - (void)fetchProfile {
-    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
-    [query includeKey:@"author"];
-    [query whereKey:@"author" equalTo:self.user];
-    [query orderByDescending:@"createdAt"];
+    PFQuery *activeQuery = [PFQuery queryWithClassName:@"Post"];
+    [activeQuery includeKey:@"author"];
+    [activeQuery whereKey:@"author" equalTo:self.user];
+    [activeQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool:NO]];
+    [activeQuery orderByDescending:@"createdAt"];
     
-    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+    PFQuery *soldQuery = [PFQuery queryWithClassName:@"Post"];
+    [soldQuery includeKey:@"author"];
+    [soldQuery whereKey:@"author" equalTo:self.user];
+    [soldQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool:YES]];
+    [soldQuery orderByDescending:@"createdAt"];
+    
+    [activeQuery findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
             self.activeItems = [NSMutableArray arrayWithArray:posts];
-            self.soldItems = [NSMutableArray arrayWithArray:posts];
             self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+            [self.collectionView reloadData];
+        } else {
+            NSLog(@"😫😫😫 couldn't fetch active posts for some reason: %@", error.localizedDescription);
+        }
+    }];
+    
+    [soldQuery findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+        if (posts != nil) {
+            self.soldItems = [NSMutableArray arrayWithArray:posts];
             self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
             [self.collectionView reloadData];
         } else {
-            NSLog(@"😫😫😫 couldn't fetch post for some reason: %@", error.localizedDescription);
+            NSLog(@"😫😫😫 couldn't fetch sold posts for some reason: %@", error.localizedDescription);
         }
     }];
 }
