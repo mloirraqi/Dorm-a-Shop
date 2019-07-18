@@ -10,6 +10,7 @@
 #import "PostCollectionViewCell.h"
 #import "DetailsViewController.h"
 #import "Post.h"
+#import "SignInVC.h"
 @import Parse;
 
 @interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -93,15 +94,15 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if ([self.segmentControl selectedSegmentIndex] == 0) {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"active" forIndexPath:indexPath];
-        cell.itemImage.image = nil;
         Post *post = self.activeItems[indexPath.item];
-        [cell setPic:post];
+        cell.post = post;
+        [cell setPost];
         return cell;
     } else {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
-        Post *post = self.soldItems[indexPath.item];
-        cell.itemImage.image = nil;
-        [cell setPic:post];
+        Post *post = self.activeItems[indexPath.item];
+        cell.post = post;
+        [cell setPost];
         return cell;
     }
 }
@@ -152,5 +153,16 @@
         detailsViewController.delegate = self;
     }
 }
+
+- (IBAction)logout:(id)sender {
+
+        [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
+        NSLog(@"User logged out successfully");
+        
+        SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
+        
+        [self presentViewController:signInVC animated:YES completion:nil];
+}
+
 
 @end

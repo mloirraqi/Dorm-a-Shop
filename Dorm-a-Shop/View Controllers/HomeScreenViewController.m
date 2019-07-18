@@ -86,15 +86,6 @@
     [self.tableView reloadData];
 }
 
-- (IBAction)clickLogout:(id)sender {
-    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
-    NSLog(@"User logged out successfully");
-    
-    SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
-    
-    [self presentViewController:signInVC animated:YES completion:nil];
-}
-
 - (void)updateDetailsData:(UIViewController *)viewController {
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.watchStatusChanged) {
