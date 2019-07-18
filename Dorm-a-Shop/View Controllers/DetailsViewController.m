@@ -89,8 +89,7 @@
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
         }];
-    }
-    else {
+    } else {
         PFObject *watch = [PFObject objectWithClassName:@"Watches"];
         watch[@"postID"] = self.post.objectId;
         watch[@"userID"] = [PFUser currentUser].objectId;
@@ -113,8 +112,7 @@
                         NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
                     }
                 }];
-            }
-            else {
+            } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }
         }];

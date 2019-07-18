@@ -51,8 +51,7 @@
             weakSelf.watch = watches[0];
             weakSelf.watchButton.selected = YES;
             [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
-        }
-        else {
+        } else {
             weakSelf.watch = nil;
             weakSelf.watchButton.selected = NO;
             [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
@@ -84,8 +83,7 @@
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
         }];
-    }
-    else {
+    } else {
         PFObject *watch = [PFObject objectWithClassName:@"Watches"];
         watch[@"postID"] = self.post.objectId;
         watch[@"userID"] = [PFUser currentUser].objectId;
@@ -107,8 +105,7 @@
                         NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
                     }
                 }];
-            }
-            else {
+            } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }
         }];

@@ -57,7 +57,6 @@
     [self fetchProfile];
 }
 
-
 - (void)fetchProfile {
     PFQuery *activeQuery = [PFQuery queryWithClassName:@"Post"];
     [activeQuery includeKey:@"author"];
@@ -134,11 +133,13 @@
         PostCollectionViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
         Post *post;
+        
         if ([self.segmentControl selectedSegmentIndex] == 0) {
             post = self.activeItems[indexPath.row];
         } else {
             post = self.soldItems[indexPath.row];
         }
+        
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.post = post;
         detailsViewController.watch = tappedCell.watch;

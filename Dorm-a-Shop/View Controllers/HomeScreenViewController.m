@@ -51,8 +51,7 @@
         if (posts) {
             self.postsArray = [NSMutableArray arrayWithArray:posts];
             [self.tableView reloadData];
-        }
-        else {
+        } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
         [self.refreshControl endRefreshing];
@@ -100,8 +99,7 @@
         UINavigationController *uploadViewNavigationController = [segue destinationViewController];
         UploadViewController *uploadViewController = [uploadViewNavigationController topViewController];
         uploadViewController.delegate = self;
-    }
-    else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
+    } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Post *post = self.postsArray[indexPath.row];
