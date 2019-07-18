@@ -57,6 +57,7 @@
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
+    self.captionLabel.text = post.caption;
     self.titleLabel.text = post.title;
     self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
 }

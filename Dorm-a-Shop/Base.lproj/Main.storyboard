@@ -374,7 +374,7 @@
                                                     <segment title="Sold Items"/>
                                                 </segments>
                                                 <connections>
-                                                    <action selector="changedSeg:" destination="ji6-xS-49q" eventType="valueChanged" id="oNm-GA-2Dg"/>
+                                                    <action selector="changedSegment:" destination="ji6-xS-49q" eventType="valueChanged" id="Uil-Cs-3Tv"/>
                                                 </connections>
                                             </segmentedControl>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h6n-9m-t5P">
@@ -408,6 +408,7 @@
                                                         <size key="customSize" width="185" height="185"/>
                                                         <connections>
                                                             <outlet property="itemImage" destination="yn0-kg-XKH" id="6Dz-MY-JVS"/>
+                                                            <segue destination="rb3-Xc-85n" kind="show" identifier="segueToDetails" id="inK-qS-1By"/>
                                                         </connections>
                                                     </collectionViewCell>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="sold" id="RtR-gi-Xz2" customClass="PostCollectionViewCell">
@@ -426,6 +427,7 @@
                                                         <size key="customSize" width="185" height="185"/>
                                                         <connections>
                                                             <outlet property="itemImage" destination="zui-Zr-epz" id="miR-Ca-QWX"/>
+                                                            <segue destination="rb3-Xc-85n" kind="show" identifier="segueToDetails" id="KLi-YY-IiH"/>
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
@@ -469,7 +471,7 @@
                         <outlet property="activeCount" destination="UtB-uj-P2h" id="A1G-Uv-iu8"/>
                         <outlet property="collectionView" destination="imT-sc-NpR" id="Wdw-Fk-0AT"/>
                         <outlet property="profilePic" destination="h6n-9m-t5P" id="vC8-na-sv2"/>
-                        <outlet property="segControl" destination="GMe-Z3-De9" id="ae6-BT-aJe"/>
+                        <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
                         <outlet property="soldCount" destination="hnD-aV-NDt" id="wou-je-0Gh"/>
                         <outlet property="username" destination="J0d-zI-pQn" id="cJW-5K-Nbz"/>
                     </connections>
@@ -947,5 +949,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
+        <segue reference="inK-qS-1By"/>
     </inferredMetricsTieBreakers>
 </document>

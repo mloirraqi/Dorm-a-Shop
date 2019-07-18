@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *conditionLabel;
 
 @property (nonatomic, strong) Post *post;
-@property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, strong) PFObject *watch;
 
 @end
