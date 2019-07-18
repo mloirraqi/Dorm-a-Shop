@@ -14,15 +14,16 @@
 
 @interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, strong) NSArray *activeItems;
-@property (nonatomic, strong) NSArray *soldItems;
+@property (nonatomic, strong) NSMutableArray *activeItems;
+@property (nonatomic, strong) NSMutableArray *soldItems;
 @property (nonatomic, strong) NSNumber *selectedSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UILabel *activeCount;
 @property (weak, nonatomic) IBOutlet UILabel *soldCount;
-
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
 @implementation ProfileViewController
@@ -54,42 +55,35 @@
     CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
     CGFloat itemHeight = itemWidth;
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchProfile) forControlEvents:UIControlEventValueChanged];
+    [self.scrollView addSubview:self.refreshControl];
+
     [self fetchProfile];
 }
 
 - (void)fetchProfile {
-    PFQuery *activeQuery = [PFQuery queryWithClassName:@"Post"];
-    [activeQuery includeKey:@"author"];
-    [activeQuery whereKey:@"author" equalTo:self.user];
-    [activeQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool:NO]];
-    [activeQuery orderByDescending:@"createdAt"];
-    
-    PFQuery *soldQuery = [PFQuery queryWithClassName:@"Post"];
-    [soldQuery includeKey:@"author"];
-    [soldQuery whereKey:@"author" equalTo:self.user];
-    [soldQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool:YES]];
-    [soldQuery orderByDescending:@"createdAt"];
+    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+    [query includeKey:@"author"];
+    [query whereKey:@"author" equalTo:self.user];
+    [query orderByDescending:@"updatedAt"];
     
     __weak ProfileViewController *weakSelf = self;
-    [activeQuery findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
-            weakSelf.activeItems = [NSMutableArray arrayWithArray:posts];
+            NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            weakSelf.activeItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:aPredicate]];
             weakSelf.activeCount.text = [NSString stringWithFormat:@"%lu", weakSelf.activeItems.count];
-            [weakSelf.collectionView reloadData];
-        } else {
-            NSLog(@"😫😫😫 couldn't fetch active posts for some reason: %@", error.localizedDescription);
-        }
-    }];
-    
-    [soldQuery findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
-        if (posts != nil) {
-            weakSelf.soldItems = [NSMutableArray arrayWithArray:posts];
+            NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+            weakSelf.soldItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:sPredicate]];
             weakSelf.soldCount.text = [NSString stringWithFormat:@"%lu", weakSelf.soldItems.count];
             [weakSelf.collectionView reloadData];
         } else {
-            NSLog(@"😫😫😫 couldn't fetch sold posts for some reason: %@", error.localizedDescription);
+            NSLog(@"😫😫😫 couldn't fetch user's posts for some reason: %@", error.localizedDescription);
         }
     }];
+    [self.refreshControl endRefreshing];
 }
 
 - (IBAction)changedSegment:(id)sender {
@@ -124,10 +118,19 @@
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.watchStatusChanged) {
         [self.collectionView reloadData];
+    } else if (detailsViewController.itemStatusChanged) {
+        if (detailsViewController.post.sold == NO) {
+            [self.activeItems insertObject:detailsViewController.post atIndex:0];
+            [self.soldItems removeObject:detailsViewController.post];
+        } else {
+            [self.soldItems  insertObject:detailsViewController.post atIndex:0];
+            [self.activeItems removeObject:detailsViewController.post];
+        }
+        [self.collectionView reloadData];
+        self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+        self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
     }
 }
-
-#pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToDetails"]) {
@@ -149,6 +152,5 @@
         detailsViewController.delegate = self;
     }
 }
-
 
 @end

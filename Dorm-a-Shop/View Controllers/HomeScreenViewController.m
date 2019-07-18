@@ -55,6 +55,7 @@
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
+    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
     
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
@@ -98,6 +99,11 @@
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.watchStatusChanged) {
         [self.tableView reloadData];
+    } else if (detailsViewController.itemStatusChanged) {
+        if (detailsViewController.post.sold == YES) {
+            [self.postsArray removeObject:detailsViewController.post];
+            [self.tableView reloadData];
+        }
     }
 }
 
