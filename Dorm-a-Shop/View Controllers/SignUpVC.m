@@ -230,7 +230,7 @@
 - (void)placePicker:(GMSPlacePickerViewController *)viewcontroller didPickPlace:(GMSPlace *)place {
     
     // Dismiss the place picker, as it cannot dismiss itself.
-//    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
     NSLog(@"Place name is %@", place.name);
     NSLog(@"Place address is %@", place.formattedAddress);
