@@ -1,6 +1,16 @@
 PODS:
   - Bolts/Tasks (1.9.0)
   - DateTools (2.0.0)
+  - GoogleMaps (3.1.0):
+    - GoogleMaps/Maps (= 3.1.0)
+  - GoogleMaps/Base (3.1.0)
+  - GoogleMaps/Maps (3.1.0):
+    - GoogleMaps/Base
+  - GooglePlacePicker (3.1.0):
+    - GoogleMaps (= 3.1.0)
+    - GooglePlaces (= 3.1.0)
+  - GooglePlaces (3.1.0):
+    - GoogleMaps/Base (= 3.1.0)
   - MBProgressHUD (1.0.0)
   - Parse (1.17.2):
     - Parse/Core (= 1.17.2)
@@ -11,6 +21,9 @@ PODS:
 
 DEPENDENCIES:
   - DateTools
+  - GoogleMaps
+  - GooglePlacePicker
+  - GooglePlaces
   - MBProgressHUD (~> 1.0.0)
   - Parse
   - Parse/UI
@@ -19,15 +32,25 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Bolts
     - DateTools
+    - GoogleMaps
+    - GooglePlacePicker
+    - GooglePlaces
     - MBProgressHUD
     - Parse
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
+  GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
+  GooglePlacePicker: 1c60c2a26e9d1e73bcb0c6f89609db8d777d13c1
+  GooglePlaces: e874db179f2675c4f3eeda0b686b540273a578b0
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   Parse: 3b31a3dd1777b07ee7f0caee32fafbff544483a5
 
+<<<<<<< HEAD
+PODFILE CHECKSUM: 27112a033f47a104d1c25ac78ff77a8e86f68615
+=======
 PODFILE CHECKSUM: 9ac9143c22e86ad20fa21f167ae69fa7625e6740
+>>>>>>> master
 
 COCOAPODS: 1.7.2

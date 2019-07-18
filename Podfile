@@ -10,6 +10,9 @@ target 'Dorm-a-Shop' do
   pod 'Parse/UI'
   pod 'DateTools'
   pod 'MBProgressHUD', '~> 1.0.0'
+  pod 'GoogleMaps'
+  pod 'GooglePlacePicker'
+  pod 'GooglePlaces'
 
   target 'Dorm-a-ShopTests' do
     inherit! :search_paths
