@@ -12,7 +12,7 @@
 #import "Post.h"
 @import Parse;
 
-@interface ProfileViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSArray *activeItems;
 @property (nonatomic, strong) NSArray *soldItems;
@@ -119,6 +119,15 @@
         return self.soldItems.count;
     }
 }
+
+- (void)updateDetailsData:(UIViewController *)viewController {
+    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+    if (detailsViewController.watchStatusChanged) {
+        [self.collectionView reloadData];
+    }
+}
+
+#pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToDetails"]) {
