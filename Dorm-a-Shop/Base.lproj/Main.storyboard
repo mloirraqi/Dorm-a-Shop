@@ -36,16 +36,6 @@
                                                         <constraint firstAttribute="height" constant="137" id="e8n-km-bPq"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fng-7Z-gqv">
-                                                    <rect key="frame" x="20" y="132" width="44" height="22"/>
-                                                    <state key="normal" title="Watch"/>
-                                                    <state key="selected">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapWatch:" destination="1Hd-d1-bXe" eventType="touchUpInside" id="uG2-Qt-4YR"/>
-                                                    </connections>
-                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Xp-yd-qDU">
                                                     <rect key="frame" x="135" y="16.5" width="67" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -76,17 +66,30 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+<<<<<<< HEAD
+=======
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fng-7Z-gqv">
+                                                    <rect key="frame" x="135" y="131" width="44" height="22"/>
+                                                    <state key="normal" title="Watch"/>
+                                                    <state key="selected">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="didTapWatch:" destination="1Hd-d1-bXe" eventType="touchUpInside" id="uG2-Qt-4YR"/>
+                                                    </connections>
+                                                </button>
+>>>>>>> 03bf8be275d60007f063f3384c76609328a54e8f
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="74z-au-tcV" firstAttribute="leading" secondItem="N0L-Jn-c8L" secondAttribute="leading" constant="16" id="2vD-uf-i6C"/>
                                                 <constraint firstItem="x77-Gf-PcM" firstAttribute="top" secondItem="0Xp-yd-qDU" secondAttribute="bottom" constant="8" id="DGg-39-GfM"/>
                                                 <constraint firstItem="0Xp-yd-qDU" firstAttribute="top" secondItem="74z-au-tcV" secondAttribute="top" id="DyJ-3f-twn"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" id="HhF-B1-2Pw"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" constant="29" id="HhF-B1-2Pw"/>
                                                 <constraint firstItem="yCe-z1-a88" firstAttribute="top" secondItem="x77-Gf-PcM" secondAttribute="bottom" constant="8" id="OLd-jP-LD2"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MZi-cJ-56M" secondAttribute="trailing" constant="16" id="PJ3-jF-pSL"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="top" secondItem="yCe-z1-a88" secondAttribute="bottom" constant="37" id="PfP-08-rK0"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="top" secondItem="yCe-z1-a88" secondAttribute="bottom" constant="36" id="PfP-08-rK0"/>
                                                 <constraint firstItem="x77-Gf-PcM" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="Xme-mj-gET"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" constant="-115" id="afu-6D-LDh"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="afu-6D-LDh"/>
                                                 <constraint firstItem="0Xp-yd-qDU" firstAttribute="leading" secondItem="74z-au-tcV" secondAttribute="trailing" constant="8" id="g1E-Ri-W24"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Fng-7Z-gqv" secondAttribute="trailing" constant="16" id="hpk-7s-uPS"/>
                                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="74z-au-tcV" secondAttribute="bottom" constant="16" id="hyT-ir-NOv"/>
@@ -94,7 +97,7 @@
                                                 <constraint firstItem="yCe-z1-a88" firstAttribute="leading" secondItem="0Xp-yd-qDU" secondAttribute="leading" id="jrJ-Sa-oT5"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="yCe-z1-a88" secondAttribute="trailing" constant="16" id="mJi-eT-gyR"/>
                                                 <constraint firstItem="74z-au-tcV" firstAttribute="top" secondItem="N0L-Jn-c8L" secondAttribute="top" constant="16" id="tgr-CX-k3T"/>
-                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" constant="30" id="y3X-Vy-cUF"/>
+                                                <constraint firstItem="Fng-7Z-gqv" firstAttribute="bottom" secondItem="74z-au-tcV" secondAttribute="bottom" constant="29" id="y3X-Vy-cUF"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -180,7 +183,7 @@
                                     <action selector="itemTitle:" destination="ghp-Fd-co0" eventType="editingDidEnd" id="fKf-ka-kuM"/>
                                 </connections>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description: " textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="uHb-xb-LRs">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="uHb-xb-LRs">
                                 <rect key="frame" x="30" y="448" width="344" height="83"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -283,7 +286,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Add"/>
                                 <connections>
-                                    <action selector="uploadPic:" destination="taT-74-9c7" eventType="touchUpInside" id="z5T-mI-tVe"/>
+                                    <action selector="uploadPost:" destination="taT-74-9c7" eventType="touchUpInside" id="5Fy-WZ-Mcx"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -471,6 +474,7 @@
                         <outlet property="activeCount" destination="UtB-uj-P2h" id="A1G-Uv-iu8"/>
                         <outlet property="collectionView" destination="imT-sc-NpR" id="Wdw-Fk-0AT"/>
                         <outlet property="profilePic" destination="h6n-9m-t5P" id="vC8-na-sv2"/>
+                        <outlet property="scrollView" destination="iAM-p9-Pa1" id="l4i-uo-GNV"/>
                         <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
                         <outlet property="soldCount" destination="hnD-aV-NDt" id="wou-je-0Gh"/>
                         <outlet property="username" destination="J0d-zI-pQn" id="cJW-5K-Nbz"/>
@@ -570,7 +574,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jct-hS-uqG" customClass="PFImageView">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jct-hS-uqG" customClass="PFImageView">
                                 <rect key="frame" x="-2" y="88" width="414" height="224"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -630,12 +634,23 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S1V-iB-oBF">
-                                <rect key="frame" x="20" y="320" width="374" height="51"/>
+                                <rect key="frame" x="20" y="320" width="296" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RXI-vr-Zjq">
+                                <rect key="frame" x="308" y="329" width="80" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Sold">
+                                    <color key="titleColor" red="1" green="0.1048109495731665" blue="0.18434572798984983" alpha="0.84705882352941175" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeStatus:" destination="rb3-Xc-85n" eventType="touchUpInside" id="dk0-kK-G3h"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="B6B-yl-0zQ"/>
@@ -648,13 +663,14 @@
                         <outlet property="postPFImageView" destination="jct-hS-uqG" id="1xX-hf-FUf"/>
                         <outlet property="priceLabel" destination="sZw-7M-84a" id="xFq-aX-sie"/>
                         <outlet property="sellerButton" destination="O26-WH-s7F" id="qs3-DJ-zzB"/>
+                        <outlet property="statusButton" destination="RXI-vr-Zjq" id="H3A-nu-lS6"/>
                         <outlet property="titleLabel" destination="S1V-iB-oBF" id="eFN-tY-0nY"/>
                         <outlet property="watchButton" destination="MA6-l4-BaA" id="Czd-og-5Dh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="82E-Gu-Zeb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2899" y="-662"/>
+            <point key="canvasLocation" x="2898.5507246376815" y="-662.27678571428567"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="fB4-Ac-pjn">

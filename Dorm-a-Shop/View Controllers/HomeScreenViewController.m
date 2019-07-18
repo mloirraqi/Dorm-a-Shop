@@ -27,13 +27,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [super viewDidLoad];
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveNotification:)
+                                                 name:@"ChangedTabBarDataNotification"
+                                               object:nil];
+    
     [self fetchPosts];
     [self createRefreshControl];
+}
+
+- (void)receiveNotification:(NSNotification *) notification {
+    if ([[notification name] isEqualToString:@"ChangedTabBarDataNotification"]) {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)createRefreshControl {
@@ -46,6 +55,7 @@
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
+    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
     
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
@@ -89,6 +99,11 @@
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.watchStatusChanged) {
         [self.tableView reloadData];
+    } else if (detailsViewController.itemStatusChanged) {
+        if (detailsViewController.post.sold == YES) {
+            [self.postsArray removeObject:detailsViewController.post];
+            [self.tableView reloadData];
+        }
     }
 }
 
@@ -104,8 +119,9 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Post *post = self.postsArray[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.post = post;
         detailsViewController.watch = tappedCell.watch;
+        detailsViewController.watchCount = tappedCell.watchCount;
+        [detailsViewController setPost:post];
         detailsViewController.delegate = self;
     }
 }
