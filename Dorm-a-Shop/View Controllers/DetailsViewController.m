@@ -85,19 +85,8 @@
             if (succeeded) {
                 weakSelf.watch = nil;
                 weakSelf.watchButton.selected = NO;
-                
-                //                int watchCountInt = [weakSelf.post.watchCount intValue];
-                //                watchCountInt --;
-                //                weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
                 weakSelf.watchCount --;
                 [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.watchCount] forState:UIControlStateNormal];
-                
-                /*[weakSelf.post setObject:self.post.watchCount forKey:@"watchCount"];
-                 [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                 if (error != nil) {
-                 NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
-                 }
-                 }];*/
             } else {
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
@@ -111,19 +100,8 @@
             if (succeeded) {
                 weakSelf.watch = watch;
                 weakSelf.watchButton.selected = YES;
-                
-                //                int watchCountInt = [weakSelf.post.watchCount intValue];
-                //                watchCountInt ++;
-                //                weakSelf.post.watchCount = [NSNumber numberWithInt:watchCountInt];
                 weakSelf.watchCount ++;
                 [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.watchCount] forState:UIControlStateNormal];
-                
-                //                [weakSelf.post setObject:weakSelf.post.watchCount forKey:@"watchCount"];
-                //                [weakSelf.post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                //                    if (error != nil) {
-                //                        NSLog(@"Post watchCount update failed: %@", error.localizedDescription);
-                //                    }
-                //                }];
             } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }
