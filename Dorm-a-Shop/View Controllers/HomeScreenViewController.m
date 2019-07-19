@@ -14,11 +14,13 @@
 #import "SignInVC.h"
 @import Parse;
 
-@interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSMutableArray *postsArray;
+@property (strong, nonatomic) NSMutableArray *filteredPosts;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
 
@@ -29,6 +31,7 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.searchBar.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveNotification:)
@@ -61,6 +64,7 @@
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
             weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
+            [weakSelf filterPosts];
             [weakSelf.tableView reloadData];
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
@@ -72,19 +76,19 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
     
-    Post *post = self.postsArray[indexPath.row];
+    Post *post = self.filteredPosts[indexPath.row];
     cell.post = post;
     
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.postsArray.count;
+    return self.filteredPosts.count;
 }
 
 - (void)didUpload:(Post *)post {
     [self.postsArray insertObject:post atIndex:0];
-    [self.tableView reloadData];
+    [self filterPosts];
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
@@ -94,7 +98,7 @@
     } else if (detailsViewController.itemStatusChanged) {
         if (detailsViewController.post.sold == YES) {
             [self.postsArray removeObject:detailsViewController.post];
-            [self.tableView reloadData];
+            [self filterPosts];
         }
     }
 }
@@ -104,18 +108,46 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToUpload"]) {
         UINavigationController *uploadViewNavigationController = [segue destinationViewController];
-        UploadViewController *uploadViewController = (UploadViewController *) [uploadViewNavigationController topViewController];
+        UploadViewController *uploadViewController = (UploadViewController *) uploadViewNavigationController.topViewController;
         uploadViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
-        Post *post = self.postsArray[indexPath.row];
+        Post *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.watch = tappedCell.watch;
         detailsViewController.watchCount = tappedCell.watchCount;
         [detailsViewController setPost:post];
         detailsViewController.delegate = self;
     }
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self filterPosts];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = NO;
+    self.searchBar.text = @"";
+    [self.searchBar resignFirstResponder];
+    self.filteredPosts = self.postsArray;
+    [self.tableView reloadData];
+}
+
+- (void)filterPosts {
+    if (self.searchBar.text.length != 0) {
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+            return ([post.title localizedCaseInsensitiveContainsString:self.searchBar.text] || [post.caption localizedCaseInsensitiveContainsString:self.searchBar.text]);
+        }];
+        self.filteredPosts = [NSMutableArray arrayWithArray:[self.postsArray filteredArrayUsingPredicate:predicate]];
+    } else {
+        self.filteredPosts = self.postsArray;
+    }
+    [self.tableView reloadData];
 }
 
 @end
