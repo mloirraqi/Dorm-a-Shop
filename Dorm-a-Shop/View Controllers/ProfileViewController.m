@@ -36,17 +36,6 @@
     if (!self.user) {
         self.user = PFUser.currentUser;
     }
-    self.username.text = self.user.username;
-    self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
-    self.profilePic.layer.cornerRadius = 40;
-    self.profilePic.layer.masksToBounds = YES;
-    PFFileObject *imageFile = self.user[@"ProfilePic"];
-    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [self.profilePic setImage:image];
-        }
-    }];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -67,6 +56,19 @@
 }
 
 - (void)fetchProfile {
+    
+    self.username.text = self.user.username;
+    self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
+    self.profilePic.layer.cornerRadius = 40;
+    self.profilePic.layer.masksToBounds = YES;
+    PFFileObject *imageFile = self.user[@"ProfilePic"];
+    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+        if (!error) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            [self.profilePic setImage:image];
+        }
+    }];
+    
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     [query includeKey:@"author"];
     [query whereKey:@"author" equalTo:self.user];
