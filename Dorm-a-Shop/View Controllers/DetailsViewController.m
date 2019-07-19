@@ -34,6 +34,12 @@
     self.watchStatusChanged = NO;
     self.itemStatusChanged = NO;
     self.statusButton.hidden = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveNotification:)
+                                                 name:@"ChangedWatchNotification"
+                                               object:nil];
+    
     [self setDetailsPost:self.post];
 }
 
@@ -41,6 +47,21 @@
     [super viewWillDisappear:animated];
     if ([self isMovingFromParentViewController]) {
         [self.delegate updateDetailsData:self];
+    }
+}
+
+- (void)receiveNotification:(NSNotification *) notification {
+    if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
+        BOOL isWatched = [[notification userInfo] objectForKey:@"watchState"];
+        if (isWatched) {
+            self.watchButton.selected = YES;
+            self.watchCount ++;
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.watchCount] forState:UIControlStateSelected];
+        } else {
+            self.watchButton.selected = NO;
+            self.watchCount --;
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.watchCount] forState:UIControlStateNormal];
+        }
     }
 }
 
@@ -93,8 +114,8 @@
         }];
     } else {
         PFObject *watch = [PFObject objectWithClassName:@"Watches"];
-        watch[@"postID"] = self.post.objectId;
-        watch[@"userID"] = [PFUser currentUser].objectId;
+        watch[@"post"] = self.post;
+        watch[@"user"] = [PFUser currentUser];
         
         [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
