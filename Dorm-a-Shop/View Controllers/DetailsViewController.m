@@ -47,7 +47,7 @@
 - (void)setDetailsPost:(Post *)post {
     _post = post;
     
-    if([((PFObject *) post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId] && post[@"sold"] == [NSNumber numberWithBool: NO]) {
+    if([((PFObject *)post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId] && post[@"sold"] == [NSNumber numberWithBool: NO]) {
         [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
         [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
         self.statusButton.hidden = NO;

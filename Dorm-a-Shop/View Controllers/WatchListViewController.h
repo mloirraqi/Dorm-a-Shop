@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WatchListViewController : UIViewController
 
+@property (strong, nonatomic) NSMutableArray *postsArray;
+
 @end
 
 NS_ASSUME_NONNULL_END
