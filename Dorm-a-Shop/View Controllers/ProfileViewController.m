@@ -14,6 +14,7 @@
 @import Parse;
 
 @interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *activeItems;
 @property (nonatomic, strong) NSMutableArray *soldItems;
@@ -25,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *soldCount;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @end
 
 @implementation ProfileViewController
@@ -146,10 +148,8 @@
         }
         
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.watch = tappedCell.watch;
-        detailsViewController.watchCount = tappedCell.watchCount;
-        detailsViewController.post = post;
         detailsViewController.delegate = self;
+        detailsViewController.post = post;
     }
 }
 

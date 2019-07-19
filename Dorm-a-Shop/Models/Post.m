@@ -34,7 +34,6 @@
     newPost.condition = condition;
     newPost.category = category;
     newPost.title = title;
-//    newPost.watchCount = @(0);
     newPost.sold = NO;
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];

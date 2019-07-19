@@ -576,7 +576,7 @@
                                             <outlet property="priceLabel" destination="d6V-MC-i6d" id="M5R-du-EVf"/>
                                             <outlet property="titleLabel" destination="XJ9-uo-RD8" id="ZrP-WE-FCV"/>
                                             <outlet property="watchButton" destination="MT8-hU-OqA" id="hc1-7L-Neg"/>
-                                            <segue destination="rb3-Xc-85n" kind="show" id="T5c-ri-LSw"/>
+                                            <segue destination="rb3-Xc-85n" kind="show" identifier="segueToDetails" id="T5c-ri-LSw"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

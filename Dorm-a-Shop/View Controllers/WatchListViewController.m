@@ -30,9 +30,9 @@
     self.tableView.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveNotification:)
-                                                 name:@"ChangedWatchNotification"
-                                               object:nil];
+                                          selector:@selector(receiveNotification:)
+                                          name:@"ChangedWatchNotification"
+                                          object:nil];
     
     [self fetchPosts];
     [self createRefreshControl];
@@ -104,9 +104,8 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Post *post = self.postsArray[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.watch = tappedCell.watch;
-        detailsViewController.watchCount = tappedCell.watchCount;
-        [detailsViewController setPost:post];
+        detailsViewController.post = post;
+        NSLog(@"details watch from watch: %@", detailsViewController.post.watch);
         detailsViewController.delegate = self;
     }
 }
