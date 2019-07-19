@@ -13,10 +13,11 @@
 #import "DetailsViewController.h"
 @import Parse;
 
-@interface WatchListViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface WatchListViewController () <DetailsViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) NSMutableArray *postsArray;
 
 @end
 
@@ -30,7 +31,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveNotification:)
-                                                 name:@"ChangedTabBarDataNotification"
+                                                 name:@"ChangedWatchNotification"
                                                object:nil];
     
     [self fetchPosts];
@@ -38,7 +39,7 @@
 }
 
 - (void)receiveNotification:(NSNotification *) notification {
-    if ([[notification name] isEqualToString:@"ChangedTabBarDataNotification"]) {
+    if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         [self.tableView reloadData];
     }
 }
@@ -50,18 +51,21 @@
 }
 
 - (void)fetchPosts {
-    PFQuery *postQuery = [Post query];
-    [postQuery orderByDescending:@"createdAt"];
-    [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
+    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+    [watchQuery orderByDescending:@"createdAt"];
+    [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [watchQuery includeKey:@"post"];
     
     __weak WatchListViewController *weakSelf = self;
-    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
-        if (posts) {
-            weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
-            [weakSelf.tableView reloadData];
+    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable userWatches, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
         } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            weakSelf.postsArray = [[NSMutableArray alloc] init];
+            for (PFObject *watch in userWatches) {
+                [weakSelf.postsArray addObject:watch[@"post"]];
+            }
+            [weakSelf.tableView reloadData];
         }
         [self.refreshControl endRefreshing];
     }];

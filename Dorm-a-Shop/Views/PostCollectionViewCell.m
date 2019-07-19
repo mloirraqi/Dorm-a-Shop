@@ -10,8 +10,6 @@
 
 @implementation PostCollectionViewCell
 
-
-
 - (void)setPost {
     [self setWatchedUser:[PFUser currentUser] Post:self.post];
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
@@ -29,7 +27,7 @@
 - (void)setWatchedUser:(PFUser *)user Post:(Post *)post{
     PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
     [watchQuery orderByDescending:@"createdAt"];
-    [watchQuery whereKey:@"postID" equalTo:post.objectId];
+    [watchQuery whereKey:@"post" equalTo:post];
     
     __weak PostCollectionViewCell *weakSelf = self;
     [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable postWatches, NSError * _Nullable error) {
@@ -40,7 +38,7 @@
             if (weakSelf.watchCount > 0) {
                 bool watched = NO;
                 for (PFObject *watch in postWatches) {
-                    if ([watch[@"userID"] isEqualToString:user.objectId]) {
+                    if ([((PFObject *)watch[@"user"]).objectId isEqualToString:user.objectId]) {
                         weakSelf.watch = watch;
                         watched = YES;
                         break;

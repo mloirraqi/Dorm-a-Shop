@@ -148,21 +148,17 @@
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.watch = tappedCell.watch;
         detailsViewController.watchCount = tappedCell.watchCount;
-        NSLog(@"watch count: %lu", detailsViewController.watchCount);
         detailsViewController.post = post;
         detailsViewController.delegate = self;
     }
 }
 
 - (IBAction)logout:(id)sender {
-
-        [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
-        NSLog(@"User logged out successfully");
-        
-        SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
-        
-        [self presentViewController:signInVC animated:YES completion:nil];
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
+    
+    SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
+    
+    [self presentViewController:signInVC animated:YES completion:nil];
 }
-
 
 @end
