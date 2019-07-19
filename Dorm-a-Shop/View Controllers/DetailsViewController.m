@@ -51,7 +51,7 @@
 }
 
 - (void)receiveNotification:(NSNotification *) notification {
-    /*if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
+    if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         BOOL isWatched = [[notification userInfo] objectForKey:@"watchState"];
         if (isWatched) {
             self.watchButton.selected = YES;
@@ -62,7 +62,7 @@
             self.post.watchCount --;
             [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.post.watchCount] forState:UIControlStateNormal];
         }
-    }*/
+    }
 }
 
 - (void)setDetailsPost:(Post *)post {
