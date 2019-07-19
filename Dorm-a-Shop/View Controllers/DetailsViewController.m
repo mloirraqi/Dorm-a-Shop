@@ -55,12 +55,12 @@
         BOOL isWatched = [[notification userInfo] objectForKey:@"watchState"];
         if (isWatched) {
             self.watchButton.selected = YES;
-            self.watchCount ++;
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.watchCount] forState:UIControlStateSelected];
+            self.post.watchCount ++;
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.post.watchCount] forState:UIControlStateSelected];
         } else {
             self.watchButton.selected = NO;
-            self.watchCount --;
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.watchCount] forState:UIControlStateNormal];
+            self.post.watchCount --;
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.post.watchCount] forState:UIControlStateNormal];
         }
     }
 }
@@ -81,13 +81,13 @@
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
-    if (self.watch != nil) {
+    if (self.post.watch != nil) {
         [self.watchButton setSelected:YES];
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.watchCount] forState:UIControlStateNormal];
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.post.watchCount] forState:UIControlStateSelected];
     }
     else {
         [self.watchButton setSelected:NO];
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.watchCount] forState:UIControlStateNormal];
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.post.watchCount] forState:UIControlStateNormal];
     }
     
     self.conditionLabel.text = post.condition;
@@ -102,12 +102,15 @@
     
     __weak DetailsViewController *weakSelf = self;
     if (self.watchButton.selected) {
-        [self.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        [self.post.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
-                weakSelf.watch = nil;
+                weakSelf.post.watch = nil;
                 weakSelf.watchButton.selected = NO;
-                weakSelf.watchCount --;
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.watchCount] forState:UIControlStateNormal];
+                weakSelf.post.watchCount --;
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
+                
+                NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:@NO, @"watchStatus", weakSelf.post, @"post", weakSelf.post.watch, @"watch", weakSelf.indexPath, @"indexPath", nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:self userInfo:watchInfoDict];
             } else {
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
@@ -119,10 +122,10 @@
         
         [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
-                weakSelf.watch = watch;
+                weakSelf.post.watch = watch;
                 weakSelf.watchButton.selected = YES;
-                weakSelf.watchCount ++;
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.watchCount] forState:UIControlStateNormal];
+                weakSelf.post.watchCount ++;
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
             } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }

@@ -65,16 +65,16 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveNotification:)
-                                                 name:@"ChangedTabBarDataNotification"
+                                                 name:@"ChangedWatchNotification"
                                                object:nil];
     
     [self fetchPosts];
     [self createRefreshControl];
 }
 
+
 - (void)receiveNotification:(NSNotification *) notification {
-    if ([[notification name] isEqualToString:@"ChangedTabBarDataNotification"]) {
-        [self.tableView reloadData];
+    if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
     }
 }
 
@@ -175,10 +175,9 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Post *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.watch = tappedCell.watch;
-        detailsViewController.watchCount = tappedCell.watchCount;
-        [detailsViewController setPost:post];
+        detailsViewController.indexPath = indexPath;
         detailsViewController.delegate = self;
+        detailsViewController.post = post;
     }
 }
 
