@@ -476,6 +476,7 @@
                     <connections>
                         <outlet property="activeCount" destination="UtB-uj-P2h" id="A1G-Uv-iu8"/>
                         <outlet property="collectionView" destination="imT-sc-NpR" id="Wdw-Fk-0AT"/>
+                        <outlet property="locationLabel" destination="u3h-8c-UIn" id="6wu-nD-ybY"/>
                         <outlet property="profilePic" destination="h6n-9m-t5P" id="vC8-na-sv2"/>
                         <outlet property="scrollView" destination="iAM-p9-Pa1" id="l4i-uo-GNV"/>
                         <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
@@ -864,7 +865,7 @@
                     <connections>
                         <segue destination="huz-Vy-fBK" kind="relationship" relationship="viewControllers" id="jZd-Ke-rOh"/>
                         <segue destination="DJx-3h-Trp" kind="relationship" relationship="viewControllers" id="vDR-6b-RlU"/>
-                        <segue destination="oXO-JU-K28" kind="relationship" relationship="viewControllers" id="8KQ-WB-rgv"/>
+                        <segue destination="oXO-JU-K28" kind="relationship" relationship="viewControllers" id="wbs-vl-Xvx"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Yl-W5-2kn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1246,10 +1247,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
-<<<<<<< HEAD
         <segue reference="inK-qS-1By"/>
-=======
-        <segue reference="cnV-vk-Wb5"/>
->>>>>>> 702ab53768eee205bff9f0650948e67187166928
     </inferredMetricsTieBreakers>
 </document>
