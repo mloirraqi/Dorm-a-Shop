@@ -21,9 +21,14 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SRH-BO-TuC">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" id="BsX-gJ-qHi">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </searchBar>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostTableViewCell" rowHeight="169" id="1Hd-d1-bXe" customClass="PostTableViewCell">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="169"/>
+                                        <rect key="frame" x="0.0" y="72" width="414" height="169"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1Hd-d1-bXe" id="N0L-Jn-c8L">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="168.5"/>
@@ -132,6 +137,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="searchBar" destination="BsX-gJ-qHi" id="rrH-dU-XZ5"/>
                         <outlet property="tableView" destination="SRH-BO-TuC" id="ymD-0G-MKX"/>
                     </connections>
                 </viewController>
@@ -1240,6 +1246,10 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
+<<<<<<< HEAD
         <segue reference="inK-qS-1By"/>
+=======
+        <segue reference="cnV-vk-Wb5"/>
+>>>>>>> 702ab53768eee205bff9f0650948e67187166928
     </inferredMetricsTieBreakers>
 </document>
