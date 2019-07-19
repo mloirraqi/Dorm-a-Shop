@@ -1246,10 +1246,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
-<<<<<<< HEAD
-        <segue reference="inK-qS-1By"/>
-=======
         <segue reference="cnV-vk-Wb5"/>
->>>>>>> 702ab53768eee205bff9f0650948e67187166928
     </inferredMetricsTieBreakers>
 </document>
