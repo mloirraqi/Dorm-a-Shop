@@ -39,6 +39,7 @@
     [self createRefreshControl];
 }
 
+
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedTabBarDataNotification"]) {
         [self.tableView reloadData];
