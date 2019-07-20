@@ -11,6 +11,7 @@
 #import "DetailsViewController.h"
 #import "Post.h"
 #import "SignInVC.h"
+#import "PostManager.h"
 @import Parse;
 
 @interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -79,20 +80,29 @@
     [query whereKey:@"author" equalTo:self.user];
     [query orderByDescending:@"updatedAt"];
     
-    __weak ProfileViewController *weakSelf = self;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
-        if (posts != nil) {
-            NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            weakSelf.activeItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:aPredicate]];
-            weakSelf.activeCount.text = [NSString stringWithFormat:@"%lu", weakSelf.activeItems.count];
-            NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
-            weakSelf.soldItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:sPredicate]];
-            weakSelf.soldCount.text = [NSString stringWithFormat:@"%lu", weakSelf.soldItems.count];
-            [weakSelf.collectionView reloadData];
-        } else {
-            NSLog(@"😫😫😫 couldn't fetch user's posts for some reason: %@", error.localizedDescription);
-        }
-    }];
+//    __weak ProfileViewController *weakSelf = self;
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+//        if (posts != nil) {
+//            NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+//            weakSelf.activeItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:aPredicate]];
+//            weakSelf.activeCount.text = [NSString stringWithFormat:@"%lu", weakSelf.activeItems.count];
+//            NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+//            weakSelf.soldItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:sPredicate]];
+//            weakSelf.soldCount.text = [NSString stringWithFormat:@"%lu", weakSelf.soldItems.count];
+//            [weakSelf.collectionView reloadData];
+//        } else {
+//            NSLog(@"😫😫😫 couldn't fetch user's posts for some reason: %@", error.localizedDescription);
+//        }
+//    }];
+    NSMutableArray *posts = [[PostManager shared] getProfilePosts:self.user];
+    NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+    self.activeItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:aPredicate]];
+    self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+    NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+    self.soldItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:sPredicate]];
+    self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+    [self.collectionView reloadData];
+    
     [self.refreshControl endRefreshing];
 }
 

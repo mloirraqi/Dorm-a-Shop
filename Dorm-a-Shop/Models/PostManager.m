@@ -45,4 +45,11 @@
     return self;
 }
 
+- (NSMutableArray *)getProfilePosts:(PFUser *)user {
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+        return [((PFObject *)post[@"author"]).objectId isEqualToString:user.objectId];
+    }];
+    return [NSMutableArray arrayWithArray:[self.allPostsArray filteredArrayUsingPredicate:predicate]];
+}
+
 @end

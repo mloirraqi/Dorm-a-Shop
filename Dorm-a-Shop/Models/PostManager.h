@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSMutableArray *allPostsArray;
 
 + (id)shared;
+
+- (NSMutableArray *)getProfilePosts:(PFUser *)user;
 
 @end
 
