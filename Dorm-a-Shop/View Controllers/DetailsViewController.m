@@ -52,8 +52,8 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        Post *ditvjnvbuvgkrtrnijrrfghlhevntiucisWatched = [[notification userInfo] objectForKey:@"watchState"];
-        if (isWatched) {
+        Post *newPost = [[notification userInfo] objectForKey:@"post"];
+        if (newPost) {
             self.watchButton.selected = YES;
             self.post.watchCount ++;
             [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.post.watchCount] forState:UIControlStateSelected];

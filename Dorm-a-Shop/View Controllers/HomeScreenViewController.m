@@ -85,9 +85,7 @@
                 if ([post.objectId isEqualToString:notificationPost.objectId]) {
                     [self.postsArray replaceObjectAtIndex:index withObject:notificationPost];
                     PostTableViewCell *cellToUpdate = self.postsArray[index];
-                    self.watchButton.selected = NO;
-                    self.post.watchCount --;
-                    [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.post.watchCount] forState:UIControlStateNormal];
+                    return;
                 }
                 index ++;
             }

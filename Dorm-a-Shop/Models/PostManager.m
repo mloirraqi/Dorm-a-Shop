@@ -6,16 +6,18 @@
 //  Copyright © 2019 ilanashapiro. All rights reserved.
 //
 
-#import "PostsManager.h"
+#import "PostManager.h"
+#import "Post.h"
+@import Parse;
 
-@implementation PostsManager
+@implementation PostManager
 
 @synthesize allPostsArray;
 
 #pragma mark Singleton Methods
 
 + (instancetype)shared {
-    static PostsManager *sharedPostsManager = nil;
+    static PostManager *sharedPostsManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedPostsManager = [[self alloc] init];
@@ -26,15 +28,19 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        allPostsArray = [[NSArray alloc] init];
-    }
-    return self;
-}
-
-- (instancetype)initWithArray:(NSArray *)array {
-    self = [super init];
-    if (self) {
-        allPostsArray = array;
+        PFQuery *postQuery = [Post query];
+        [postQuery orderByDescending:@"createdAt"];
+        [postQuery includeKey:@"author"];
+        [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
+        
+        __weak PostManager *weakSelf = self;
+        [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
+            if (posts) {
+                weakSelf.allPostsArray = [NSMutableArray arrayWithArray:posts];
+            } else {
+                NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
+            }
+        }];
     }
     return self;
 }

@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PostsManager : NSObject {
+@interface PostManager : NSObject {
     NSString *someProperty;
 }
 
-@property (nonatomic, retain) NSArray *allPostsArray;
+@property (nonatomic, retain) NSMutableArray *allPostsArray;
 
 + (id)shared;
 
