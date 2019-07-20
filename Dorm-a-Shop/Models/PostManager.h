@@ -1,5 +1,5 @@
 //
-//  PostsManager.h
+//  PostManager.h
 //  Dorm-a-Shop
 //
 //  Created by ilanashapiro on 7/19/19.

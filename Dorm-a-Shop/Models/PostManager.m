@@ -1,5 +1,5 @@
 //
-//  PostsManager.m
+//  PostManager.m
 //  Dorm-a-Shop
 //
 //  Created by ilanashapiro on 7/19/19.
@@ -17,12 +17,12 @@
 #pragma mark Singleton Methods
 
 + (instancetype)shared {
-    static PostManager *sharedPostsManager = nil;
+    static PostManager *sharedPostManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedPostsManager = [[self alloc] init];
+        sharedPostManager = [[self alloc] init];
     });
-    return sharedPostsManager;
+    return sharedPostManager;
 }
 
 - (instancetype)init {
