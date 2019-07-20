@@ -1,5 +1,5 @@
 //
-//  PostsManager.h
+//  PostManager.h
 //  Dorm-a-Shop
 //
 //  Created by ilanashapiro on 7/19/19.
@@ -10,9 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PostManager : NSObject {
-    NSString *someProperty;
-}
+@interface PostManager : NSObject
 
 @property (nonatomic, retain) NSMutableArray *allPostsArray;
 
