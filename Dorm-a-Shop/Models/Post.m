@@ -15,12 +15,13 @@
 @dynamic author;
 @dynamic caption;
 @dynamic image;
-//@dynamic watchCount;
 @dynamic category;
 @dynamic condition;
 @dynamic price;
 @dynamic title;
 @dynamic sold;
+@dynamic watch;
+@dynamic watchCount;
 
 + (nonnull NSString *)parseClassName {
     return @"Post";

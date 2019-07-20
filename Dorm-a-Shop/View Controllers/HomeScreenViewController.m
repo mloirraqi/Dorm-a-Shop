@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSMutableArray *postsArray;
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong, nonatomic) NSString *className;
 
 @end
 
@@ -28,6 +29,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.className = @"HomeScreenViewController";
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -42,9 +45,23 @@
     [self createRefreshControl];
 }
 
-
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
+        NSString *postOwnerClassName = [[notification userInfo] objectForKey:@"postOwnerClassName"];
+        if (![postOwnerClassName isEqualToString:self.className]) {
+            Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
+            int index = 0;
+            for (Post *post in self.postsArray) {
+                if ([post.objectId isEqualToString:notificationPost.objectId]) {
+                    [self.postsArray replaceObjectAtIndex:index withObject:notificationPost];
+                    PostTableViewCell *cellToUpdate = self.postsArray[index];
+                    self.watchButton.selected = NO;
+                    self.post.watchCount --;
+                    [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.post.watchCount] forState:UIControlStateNormal];
+                }
+                index ++;
+            }
+        }
     }
 }
 
@@ -117,6 +134,7 @@
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.delegate = self;
+        detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
     }
 }

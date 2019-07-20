@@ -26,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *soldCount;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) NSString *className;
+
 
 @end
 
@@ -33,6 +35,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.className = @"ProfileViewController";
+    
     if (!self.user) {
         self.user = PFUser.currentUser;
     }
@@ -151,6 +156,7 @@
         
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.delegate = self;
+        detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
     }
 }
