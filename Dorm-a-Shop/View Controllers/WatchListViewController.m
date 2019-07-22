@@ -11,6 +11,7 @@
 #import "Post.h"
 #import "UploadViewController.h"
 #import "DetailsViewController.h"
+#import "PostManager.h"
 @import Parse;
 
 @interface WatchListViewController () <DetailsViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -51,24 +52,39 @@
 }
 
 - (void)fetchPosts {
-    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
-    [watchQuery orderByDescending:@"createdAt"];
-    [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
-    [watchQuery includeKey:@"post"];
-    
-    __weak WatchListViewController *weakSelf = self;
-    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable userWatches, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
-        } else {
-            weakSelf.postsArray = [[NSMutableArray alloc] init];
-            for (PFObject *watch in userWatches) {
-                [weakSelf.postsArray addObject:watch[@"post"]];
+//    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+//    [watchQuery orderByDescending:@"createdAt"];
+//    [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+//    [watchQuery includeKey:@"post"];
+//
+//    __weak WatchListViewController *weakSelf = self;
+//    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable userWatches, NSError * _Nullable error) {
+//        if (error) {
+//            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+//        } else {
+//            weakSelf.postsArray = [[NSMutableArray alloc] init];
+//            for (PFObject *watch in userWatches) {
+//                [weakSelf.postsArray addObject:watch[@"post"]];
+//            }
+//            [weakSelf.tableView reloadData];
+//        }
+//        [self.refreshControl endRefreshing];
+//    }];
+    if (((PostManager *)[PostManager shared]).watchedPostsArray == nil) {
+        [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+            if (postsArray) {
+                self.postsArray = postsArray;
+                NSLog(@"%@", postsArray);
+                [self.tableView reloadData];
+            } else {
+                NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
             }
-            [weakSelf.tableView reloadData];
-        }
+            [self.refreshControl endRefreshing];
+        }];
+    } else {
+        [self.tableView reloadData];
         [self.refreshControl endRefreshing];
-    }];
+    }
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {

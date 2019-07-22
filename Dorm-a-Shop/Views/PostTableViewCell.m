@@ -10,10 +10,11 @@
 #import "NSDate+DateTools.h"
 #import "WatchListViewController.h"
 #import "Post.h"
+#import "PostManager.h"
 @import Parse;
 
 @interface PostTableViewCell()
-
+//isInialReload not working, gets set YES thru prepare for reuse when watch button is clicked
 @property (nonatomic) BOOL isInitialReload;
 
 - (IBAction)didTapWatch:(id)sender;
@@ -41,7 +42,7 @@
     [self.postPFImageView loadInBackground];
     
     if (self.isInitialReload) {
-        [self setWatchedUser:[PFUser currentUser] Post:post];
+        [self setUIWatchedForUser:[PFUser currentUser] Post:post];
         self.isInitialReload = NO;
     } else if (self.post.watch != nil) {
         self.watchButton.selected = YES;
@@ -74,8 +75,8 @@
     }
 }
 
-- (void)setWatchedUser:(PFUser *)user Post:(Post *)post{
-    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+- (void)setUIWatchedForUser:(PFUser *)user Post:(Post *)post{
+    /*PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
     [watchQuery orderByDescending:@"createdAt"];
     [watchQuery whereKey:@"post" equalTo:post];
     
@@ -107,38 +108,71 @@
                 weakSelf.post.watch = nil;
             }
         }
-    }];
+    }];*/
+    
+    /*__weak PostTableViewCell *weakSelf = self;
+    [[PostManager shared] getCurrentUserWatchStatusForPost:post withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+        } else {
+            if (post.watch != nil) {
+                weakSelf.watchButton.selected = YES;
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateSelected];
+            } else {
+                weakSelf.watchButton.selected = NO;
+                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
+            }
+        }
+    }];*/
+    NSMutableArray *watchedPosts;
+    if (((PostManager *)[PostManager shared]).watchedPostsArray != nil) {
+        watchedPosts = ((PostManager *)[PostManager shared]).watchedPostsArray;
+        if ([watchedPosts containsObject:post]) {
+            self.watchButton.selected = YES;
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.post.watchCount] forState:UIControlStateSelected];
+        } else {
+            self.watchButton.selected = NO;
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.post.watchCount] forState:UIControlStateNormal];
+        }
+    } else {
+        [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+            } else {
+                if ([watchedPostsArray containsObject:post]) {
+                    self.watchButton.selected = YES;
+                    [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", self.post.watchCount] forState:UIControlStateSelected];
+                } else {
+                    self.watchButton.selected = NO;
+                    [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", self.post.watchCount] forState:UIControlStateNormal];
+                }
+            }
+        }];
+    }
 }
 
 - (IBAction)didTapWatch:(id)sender {
     __weak PostTableViewCell *weakSelf = self;
     if (self.watchButton.selected) {
-        [self.post.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                weakSelf.post.watch = nil;
-                weakSelf.watchButton.selected = NO;
-                weakSelf.post.watchCount --;
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
+        [[PostManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
+            if (!error) {
+//                weakSelf.watchButton.selected = NO;
+//                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
                 
-                NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:@NO,@"watch", weakSelf.post, @"post", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:self userInfo:watchInfoDict];
+                NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
         }];
     } else {
-        PFObject *watch = [PFObject objectWithClassName:@"Watches"];
-        watch[@"post"] = self.post;
-        watch[@"user"] = [PFUser currentUser];
-        
-        [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            if (succeeded) {
-                weakSelf.post.watch = watch;
-                weakSelf.watchButton.selected = YES;
-                weakSelf.post.watchCount ++;
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
-                NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:@YES,@"watchState", weakSelf.post, @"post", weakSelf.post.watch, @"watch", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:self userInfo:watchInfoDict];
+        [[PostManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
+            if (!error) {
+//                weakSelf.watchButton.selected = YES;
+//                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lu watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
+                
+                NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }

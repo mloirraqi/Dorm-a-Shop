@@ -7,17 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Post.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PostManager : NSObject
 
-@property (nonatomic, retain) NSMutableArray *allPostsArray;
-
 + (id)shared;
 
-- (NSMutableArray *)getProfilePosts:(PFUser *)user;
+@property (nonatomic, strong) NSMutableArray *allPostsArray;
+@property (nonatomic, strong) NSMutableArray *watchedPostsArray;
+
+- (NSMutableArray *)getProfilePostsForUser:(PFUser *)user;
+- (void)getWatchedPostsForCurrentUserWithCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+- (void)getAllPostsWithCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+- (void)unwatchPost:(Post *)post withCompletion:(void (^)(NSError *))completion;
+- (void)watchPost:(Post *)post withCompletion:(void (^)(NSError *))completion;
+- (void)setPost:(Post *)post sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion;
+
+//- (void)getCurrentUserWatchStatusForPost:(Post *)post withCompletion:(void (^)(Post *, NSError *))completion;
 
 @end
 

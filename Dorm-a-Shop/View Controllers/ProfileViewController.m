@@ -62,7 +62,6 @@
 }
 
 - (void)fetchProfile {
-    
     self.username.text = self.user.username;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
@@ -75,11 +74,11 @@
         }
     }];
     
-    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
-    [query includeKey:@"author"];
-    [query whereKey:@"author" equalTo:self.user];
-    [query orderByDescending:@"updatedAt"];
-    
+//    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+//    [query includeKey:@"author"];
+//    [query whereKey:@"author" equalTo:self.user];
+//    [query orderByDescending:@"updatedAt"];
+//
 //    __weak ProfileViewController *weakSelf = self;
 //    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
 //        if (posts != nil) {
@@ -94,7 +93,9 @@
 //            NSLog(@"😫😫😫 couldn't fetch user's posts for some reason: %@", error.localizedDescription);
 //        }
 //    }];
-    NSMutableArray *posts = [[PostManager shared] getProfilePosts:self.user];
+    
+    
+    /*NSMutableArray *posts = [[PostManager shared] getProfilePosts:self.user];
     NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
     self.activeItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:aPredicate]];
     self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
@@ -103,7 +104,46 @@
     self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
     [self.collectionView reloadData];
     
-    [self.refreshControl endRefreshing];
+    [self.refreshControl endRefreshing];*/
+    NSMutableArray *postsManagerPosts = ((PostManager *)[PostManager shared]).allPostsArray;
+    if (postsManagerPosts != nil) {
+        NSLog(@"posts array 0: %@", postsManagerPosts[0]);
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+            return [((PFObject *)post[@"author"]).objectId isEqualToString:[PFUser currentUser].objectId];
+        }];
+        NSArray *profilePostsArray = [postsManagerPosts filteredArrayUsingPredicate:predicate];
+        NSLog(@"profile posts array %@", profilePostsArray);
+        
+        NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+        self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
+        self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+        NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+        self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
+        self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+        [self.collectionView reloadData];
+        [self.refreshControl endRefreshing];
+    } else {
+        [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+            if (postsArray) {
+                NSLog(@"posts array 0: %@", postsArray[0]);
+                NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+                    return [((PFObject *)post[@"author"]).objectId isEqualToString:[PFUser currentUser].objectId];
+                }];
+                NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
+                
+                NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+                self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
+                self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+                NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+                self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
+                self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+                [self.collectionView reloadData];
+            } else {
+                NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
+            }
+            [self.refreshControl endRefreshing];
+        }];
+    }
 }
 
 - (IBAction)changedSegment:(id)sender {
@@ -136,9 +176,10 @@
 
 - (void)updateDetailsData:(UIViewController *)viewController {
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-    if (detailsViewController.watchStatusChanged) {
-        [self.collectionView reloadData];
-    } else if (detailsViewController.itemStatusChanged) {
+//    if (detailsViewController.watchStatusChanged) {
+//        [self.collectionView reloadData];
+//    } else
+    if (detailsViewController.itemStatusChanged) {
         if (detailsViewController.post.sold == NO) {
             [self.activeItems insertObject:detailsViewController.post atIndex:0];
             [self.soldItems removeObject:detailsViewController.post];
@@ -168,6 +209,7 @@
         detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
+        NSLog(@"profile details post %@", detailsViewController.post);
     }
 }
 

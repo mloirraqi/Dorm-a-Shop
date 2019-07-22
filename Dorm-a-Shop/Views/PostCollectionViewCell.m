@@ -7,6 +7,7 @@
 //
 
 #import "PostCollectionViewCell.h"
+#import "PostManager.h"
 
 @interface PostCollectionViewCell()
 
@@ -28,7 +29,7 @@
 
 - (void)setPost {
     if (self.isInitialReload) {
-        [self setWatchedUser:[PFUser currentUser] Post:self.post];
+        [self setUIWatchedForCurrentUserForPost:self.post];
     }
     
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
@@ -42,8 +43,8 @@
     }];
 }
 
-- (void)setWatchedUser:(PFUser *)user Post:(Post *)post{
-    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+- (void)setUIWatchedForCurrentUserForPost:(Post *)post{
+    /*PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
     [watchQuery orderByDescending:@"createdAt"];
     [watchQuery whereKey:@"post" equalTo:post];
     
@@ -70,7 +71,15 @@
                 weakSelf.post.watch = nil;
             }
         }
-    }];
+    }];*/
+    
+    if (((PostManager *)[PostManager shared]).watchedPostsArray == nil) {
+        [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+            }
+        }];
+    }
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "UploadViewController.h"
 #import "DetailsViewController.h"
 #import "SignInVC.h"
+#import "PostManager.h"
 @import Parse;
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
@@ -35,7 +36,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
 @property (weak, nonatomic) IBOutlet UIButton *timesButton;
 @property (weak, nonatomic) IBOutlet UIButton *distanceButton;
-
 
 @end
 
@@ -77,7 +77,7 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        NSString *postOwnerClassName = [[notification userInfo] objectForKey:@"postOwnerClassName"];
+        /*NSString *postOwnerClassName = [[notification userInfo] objectForKey:@"postOwnerClassName"];
         if (![postOwnerClassName isEqualToString:self.className]) {
             Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
             int index = 0;
@@ -89,7 +89,15 @@
                 }
                 index ++;
             }
-        }
+        }*/
+        Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        NSUInteger postIndexRow = [self.postsArray indexOfObject:notificationPost];
+        NSIndexPath *postIndexPath = [NSIndexPath indexPathForRow:postIndexRow inSection:0];
+        NSLog(@"index path: %@", postIndexPath);
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+        
     }
 }
 
@@ -100,33 +108,51 @@
 }
 
 - (void)fetchPosts {
-    PFQuery *postQuery = [Post query];
-    [postQuery orderByDescending:@"createdAt"];
-    [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
-    
-    __weak HomeScreenViewController *weakSelf = self;
-    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
-        if (posts) {
-            weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
-            [weakSelf filterPosts];
-            [weakSelf.tableView reloadData];
-        } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-        }
+//    PFQuery *postQuery = [Post query];
+//    [postQuery orderByDescending:@"createdAt"];
+//    [postQuery includeKey:@"author"];
+//    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
+//
+//    __weak HomeScreenViewController *weakSelf = self;
+//    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
+//        if (posts) {
+//            weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
+//            [weakSelf filterPosts];
+//            [weakSelf.tableView reloadData];
+//        } else {
+//            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+//        }
+//        [self.refreshControl endRefreshing];
+//    }];
+    NSMutableArray *postsManagerPosts = ((PostManager *)[PostManager shared]).allPostsArray;
+    if (postsManagerPosts != nil) {
+        NSLog(@"posts array 0: %@", postsManagerPosts[0]);
+        self.postsArray = postsManagerPosts;
+        [self.tableView reloadData];
         [self.refreshControl endRefreshing];
-    }];
+    } else {
+        [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+            if (postsArray) {
+                NSLog(@"posts array 0: %@", postsArray[0]);
+                self.postsArray = postsArray;
+                [self.tableView reloadData];
+            } else {
+                NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
+            }
+            [self.refreshControl endRefreshing];
+        }];
+    }
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if (tableView == self.tableView) {
+    //if (tableView == self.tableView) {
         PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-        
-        Post *post = self.filteredPosts[indexPath.row];
+    
+        Post *post = self.postsArray[indexPath.row]; //formerly self.filteredPosts
         cell.post = post;
         
         return cell;
-    } else if (tableView == self.categoryTable) {
+    /*} else if (tableView == self.categoryTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         cell.textLabel.text = self.categories[indexPath.row];
         return cell;
@@ -145,20 +171,21 @@
         [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
         return cell;
     }
+     */
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView == self.tableView) {
-        return self.filteredPosts.count;
-    } else if (tableView == self.categoryTable) {
-        return self.categories.count;
-    } else if (tableView == self.conditionTable) {
-        return self.conditions.count;
-    } else if (tableView == self.timesTable) {
-        return self.times.count;
-    } else {
-        return self.distances.count;
-    }
+//    if (tableView == self.tableView) {
+        return self.postsArray.count;  //formerly self.filteredPosts
+//    } else if (tableView == self.categoryTable) {
+//        return self.categories.count;
+//    } else if (tableView == self.conditionTable) {
+//        return self.conditions.count;
+//    } else if (tableView == self.timesTable) {
+//        return self.times.count;
+//    } else {
+//        return self.distances.count;
+//    }
 }
 
 - (void)didUpload:(Post *)post {
@@ -167,7 +194,7 @@
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+    /*DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.watchStatusChanged) {
         [self.tableView reloadData];
     } else if (detailsViewController.itemStatusChanged) {
@@ -175,7 +202,7 @@
             [self.postsArray removeObject:detailsViewController.post];
             [self filterPosts];
         }
-    }
+    }*/
 }
 
 #pragma mark - Navigation
@@ -188,12 +215,14 @@
     } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
-        Post *post = self.filteredPosts[indexPath.row];
+        //Post *post = self.filteredPosts[indexPath.row];
+        Post *post = self.postsArray[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
+        NSLog(@"home details post: %@", detailsViewController.post);
     }
 }
 
