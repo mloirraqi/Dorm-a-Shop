@@ -11,6 +11,7 @@
 #import <GooglePlaces/GooglePlaces.h>
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import "Utils.h"
+#import "SignInVC.h"
 
 @interface EditProfileVC ()
 
@@ -35,6 +36,8 @@
         UIImage *originalImage = [UIImage imageWithData:data];
         [addPictureButton setImage:originalImage forState:UIControlStateNormal];
     }];
+    confirmPasswordTextField.hidden = YES;
+    passwordTextField.hidden = YES;
     }
 
 - (BOOL)checkFields{
@@ -44,6 +47,15 @@
     }
     if (!emailTextField.text || emailTextField.text.length == 0){
         [self showAlertView:@"Please add Email First"];
+        return false;
+    }
+    if(passwordTextField.text.length == 0){
+        [self showAlertView:@"Please add Password First"];
+        return false;
+    }
+    
+    if (passwordTextField.text != confirmPasswordTextField.text){
+        [self showAlertView:@"Passwords Don't Match"];
         return false;
     }
     
@@ -67,15 +79,24 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    
 }
+
+- (IBAction)changePasswordShow:(id)sender {
+    passwordTextField.hidden = NO;
+    confirmPasswordTextField.hidden = NO;
+}
+
 
 - (IBAction)editProfileButtonAction:(UIButton *)sender {
     if ([self checkFields]){
-        
         PFUser *currentUser = [PFUser currentUser];
-        currentUser.username = self->nameTextField.text;
-        currentUser.email = self->emailTextField.text;
+        currentUser.username = nameTextField.text;
+        currentUser.email = emailTextField.text;
+        
+        //        if(passwordTextField.text == @""){
+        //        currentUser.password = passwordField.text;
+        //        }
+        //        else currentUser.password = passwordTextField.text;
         
         if (selectedImage != nil)
         {
@@ -160,6 +181,7 @@
     
 }
 
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     selectedImage = info[UIImagePickerControllerEditedImage];
@@ -182,7 +204,7 @@
     NSLog(@"Place address %@", place.formattedAddress);
     NSLog(@"Place attributions %@", place.attributions.string);
     
-    [addLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
+    [updateLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
     locationSelected = YES;
     selectedLocationPoint = [PFGeoPoint geoPointWithLatitude:place.coordinate.latitude longitude:place.coordinate.longitude];
 }

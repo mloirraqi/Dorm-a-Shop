@@ -16,8 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 {
     __weak IBOutlet UITextField *emailTextField;
     __weak IBOutlet UITextField *nameTextField;
+    __weak IBOutlet UITextField *passwordTextField;
+    __weak IBOutlet UITextField *confirmPasswordTextField;
     __weak IBOutlet UIButton *addPictureButton;
-    __weak IBOutlet UIButton *addLocationButton;
+    __weak IBOutlet UIButton *updateLocationButton;
+    __weak IBOutlet UIButton *changePasswordStartButton;
+    
     
     UIImage * selectedImage;
     BOOL locationSelected;

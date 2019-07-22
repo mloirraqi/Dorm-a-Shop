@@ -29,7 +29,6 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *className;
 
-
 @end
 
 @implementation ProfileViewController
@@ -41,6 +40,10 @@
     
     if (!self.user) {
         self.user = PFUser.currentUser;
+    } else {
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
+        self.navigationItem.leftItemsSupplementBackButton = true;
     }
     
     self.collectionView.dataSource = self;
@@ -105,6 +108,7 @@
     [self.collectionView reloadData];
     
     [self.refreshControl endRefreshing];*/
+
     [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSLog(@"posts array 0: %@", postsArray[0]);

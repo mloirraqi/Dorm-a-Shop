@@ -12,9 +12,6 @@
 
 @interface SignInVC ()
 
-@property (weak, nonatomic) IBOutlet UITextField *emailField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
-
 @end
 
 @implementation SignInVC
@@ -24,6 +21,16 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)showAlertView:(NSString*)message{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop"
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    
+}
+
 - (IBAction)signIn:(id)sender {
     
     NSString *email = self.emailField.text;
@@ -31,7 +38,7 @@
     
     [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser *user, NSError *error) {
         if (error != nil) {
-            NSLog(@"User log in failed: %@", error.localizedDescription);
+            [self showAlertView:@"Unable to Sign in"];
         } else {
             NSLog(@"User logged in successfully");
             UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];

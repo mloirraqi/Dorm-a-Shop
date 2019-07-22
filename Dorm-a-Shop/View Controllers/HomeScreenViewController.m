@@ -75,6 +75,11 @@
     [self createRefreshControl];
 }
 
+- (IBAction)chatButton:(id)sender {
+   [self performSegueWithIdentifier:@"chatBox" sender:nil];
+}
+
+
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         /*NSString *postOwnerClassName = [[notification userInfo] objectForKey:@"postOwnerClassName"];
@@ -131,6 +136,7 @@
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             self.postsArray = activePosts;
+            self.filteredPosts = self.postsArray; //new
             [self.tableView reloadData];
         } else {
             NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
@@ -140,14 +146,14 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    //if (tableView == self.tableView) {
+    if (tableView == self.tableView) {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
     NSLog(@"table view: %@, cell: %@", tableView, cell);
-        Post *post = self.postsArray[indexPath.row]; //formerly self.filteredPosts
+        Post *post = self.filteredPosts[indexPath.row]; //formerly self.filteredPosts
         cell.post = post;
         
         return cell;
-    /*} else if (tableView == self.categoryTable) {
+    } else if (tableView == self.categoryTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         cell.textLabel.text = self.categories[indexPath.row];
         return cell;
@@ -166,12 +172,11 @@
         [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
         return cell;
     }
-     */
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //    if (tableView == self.tableView) {
-        return self.postsArray.count;  //formerly self.filteredPosts
+        return self.filteredPosts.count;  //formerly self.filteredPosts
 //    } else if (tableView == self.categoryTable) {
 //        return self.categories.count;
 //    } else if (tableView == self.conditionTable) {
@@ -185,8 +190,8 @@
 
 - (void)didUpload:(Post *)post {
     [self.postsArray insertObject:post atIndex:0];
-    [self.tableView reloadData]; //new
-//    [self filterPosts];
+//    [self.tableView reloadData]; //new
+    [self filterPosts];
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
@@ -199,6 +204,13 @@
             [self filterPosts];
         }
     }*/
+    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+    if (detailsViewController.itemStatusChanged) {
+        if (detailsViewController.post.sold == YES) {
+            [self.postsArray removeObject:detailsViewController.post];
+            [self filterPosts];
+        }
+    }
 }
 
 #pragma mark - Navigation
@@ -212,7 +224,7 @@
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         //Post *post = self.filteredPosts[indexPath.row];
-        Post *post = self.postsArray[indexPath.row];
+        Post *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.delegate = self;
