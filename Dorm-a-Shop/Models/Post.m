@@ -7,6 +7,7 @@
 //
 
 #import "Post.h"
+#import "PostManager.h"
 #import <Parse/Parse.h>
 
 @implementation Post
@@ -27,7 +28,7 @@
     return @"Post";
 }
 
-+ (Post *)postListing: (UIImage * _Nullable)image withCaption: (NSString * _Nullable)caption withPrice: (NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion {
++ (void)postListing: (UIImage * _Nullable)image withCaption: (NSString * _Nullable)caption withPrice: (NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     Post *newPost = [Post new];
     newPost.image = [self getPFFileFromImage:image];
     newPost.author = [PFUser currentUser];
@@ -42,8 +43,13 @@
     NSNumber *priceNum = [formatter numberFromString:price];
     newPost.price = priceNum;
     
-    [newPost saveInBackgroundWithBlock: completion];
-    return newPost;
+    [[PostManager shared] submitNewPost:newPost withCompletion:^(NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+        }
+    }];
+    //[newPost saveInBackgroundWithBlock: completion];
+    //return newPost;
 }
 
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {

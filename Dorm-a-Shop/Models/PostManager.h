@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)unwatchPost:(Post *)post withCompletion:(void (^)(NSError *))completion;
 - (void)watchPost:(Post *)post withCompletion:(void (^)(NSError *))completion;
 - (void)setPost:(Post *)post sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion;
+- (void)submitNewPost:(Post *)post withCompletion:(void (^)(NSError *))completion
 
 //- (void)getCurrentUserWatchStatusForPost:(Post *)post withCompletion:(void (^)(Post *, NSError *))completion;
 

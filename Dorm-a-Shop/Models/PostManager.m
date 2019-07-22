@@ -155,4 +155,16 @@
     }];
 }
 
+- (void)submitNewPost:(Post *)post withCompletion:(void (^)(NSError *))completion {
+    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error != nil) {
+            NSLog(@"Post status update failed: %@", error.localizedDescription);
+            [self.allPostsArray insertObject:post atIndex:0];
+            completion(error);
+        } else {
+            completion(nil);
+        }
+    }];
+}
+
 @end
