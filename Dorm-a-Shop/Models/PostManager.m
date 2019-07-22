@@ -167,4 +167,41 @@
     }];
 }
 
+- (void)postListing: (UIImage * _Nullable)image withCaption: (NSString * _Nullable)caption withPrice: (NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion:(void (^)(Post *, NSError *))completion {
+    Post *newPost = [Post new];
+    newPost.image = [self getPFFileFromImage:image];
+    newPost.author = [PFUser currentUser];
+    newPost.caption = caption;
+    newPost.condition = condition;
+    newPost.category = category;
+    newPost.title = title;
+    newPost.sold = NO;
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *priceNum = [formatter numberFromString:price];
+    newPost.price = priceNum;
+    
+    [newPost saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {
+        if (error != nil) {
+            NSLog(@"Post status update failed: %@", error.localizedDescription);
+            [self.allPostsArray insertObject:newPost atIndex:0];
+            completion(nil, error);
+        } else {
+            completion(newPost, nil);
+        }
+    }];
+}
+
+- (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
+    if (!image) {
+        return nil;
+    }
+    NSData *imageData = UIImagePNGRepresentation(image);
+    if (!imageData) {
+        return nil;
+    }
+    return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
+}
+
 @end
