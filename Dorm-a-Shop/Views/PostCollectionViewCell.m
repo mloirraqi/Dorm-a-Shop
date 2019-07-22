@@ -28,9 +28,11 @@
 }
 
 - (void)setPost {
-    if (self.isInitialReload) {
-        [self setUIWatchedForCurrentUserForPost:self.post];
-    }
+    [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+        }
+    }];
     
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
     PFFileObject *imageFile = self.post.image;
@@ -73,13 +75,11 @@
         }
     }];*/
     
-    if (((PostManager *)[PostManager shared]).watchedPostsArray == nil) {
-        [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
-            if (error) {
-                NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
-            }
-        }];
-    }
+//        [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
+//            if (error) {
+//                NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+//            }
+//        }];
 }
 
 @end

@@ -141,8 +141,8 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     //if (tableView == self.tableView) {
-        PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-    
+    PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
+    NSLog(@"table view: %@, cell: %@", tableView, cell);
         Post *post = self.postsArray[indexPath.row]; //formerly self.filteredPosts
         cell.post = post;
         
