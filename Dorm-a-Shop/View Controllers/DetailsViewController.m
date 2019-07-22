@@ -153,7 +153,7 @@
         if (self.post.sold == NO) {
             [[PostManager shared] setPost:self.post sold:YES withCompletion:^(NSError * _Nonnull error) {
                 if (error != nil) {
-                    NSLog(@"Post status update failed: %@", error.localizedDescription);
+                    NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
                     [self.statusButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
                     [self.statusButton setTitle:@"sold" forState:UIControlStateNormal];
@@ -163,10 +163,10 @@
         } else {
             [[PostManager shared] setPost:self.post sold:NO withCompletion:^(NSError * _Nonnull error) {
                 if (error != nil) {
-                    NSLog(@"Post status update failed: %@", error.localizedDescription);
+                    NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    [self.statusButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-                    [self.statusButton setTitle:@"sold" forState:UIControlStateNormal];
+                    [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+                    [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
                     self.itemStatusChanged = YES;
                 }
             }];
