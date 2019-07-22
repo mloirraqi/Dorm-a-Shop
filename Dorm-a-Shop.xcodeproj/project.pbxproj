@@ -25,10 +25,11 @@
 		DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFC22DE7BE900418DE3 /* UploadViewController.m */; };
 		DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFF22DFD20500418DE3 /* ProfileViewController.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
-		EA03725B22E64E1F00354DA2 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725A22E64E1F00354DA2 /* ChatViewController.m */; };
-		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
+		EA03725B22E64E1F00354DA2 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725A22E64E1F00354DA2 /* ChatViewController.m */; };
+		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
+		EA03726122E67A1200354DA2 /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03726022E67A1200354DA2 /* EditProfileVC.m */; };
 		EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732DD22DF931C004E362F /* SignUpVC.m */; };
 		EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E722DF95E0004E362F /* NJOPasswordStrengthEvaluator.m */; };
 		EA6732ED22DF95F5004E362F /* QAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E922DF95F5004E362F /* QAButton.m */; };
@@ -97,14 +98,16 @@
 		DE307FFF22DFD20500418DE3 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		DED744F622DFE0A400394748 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		DED744F722DFE0A400394748 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
-		EA03725922E64E1F00354DA2 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.h"; sourceTree = "<absolute>"; };
-		EA03725A22E64E1F00354DA2 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.m"; sourceTree = "<absolute>"; };
-		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
-		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		DEFE7C8722E640DF006E3096 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		DEFE7C8822E640DF006E3096 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		DEFE7C8A22E64347006E3096 /* UserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserCell.h; sourceTree = "<group>"; };
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
+		EA03725922E64E1F00354DA2 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.h"; sourceTree = "<absolute>"; };
+		EA03725A22E64E1F00354DA2 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.m"; sourceTree = "<absolute>"; };
+		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
+		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		EA03725F22E67A1200354DA2 /* EditProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditProfileVC.h; path = "../../../Dorm- copy 2/Dorm-a-Shop/View Controllers/EditProfileVC.h"; sourceTree = "<group>"; };
+		EA03726022E67A1200354DA2 /* EditProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditProfileVC.m; path = "../../../Dorm- copy 2/Dorm-a-Shop/View Controllers/EditProfileVC.m"; sourceTree = "<group>"; };
 		EA6732DC22DF931C004E362F /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
 		EA6732DD22DF931C004E362F /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		EA6732E622DF95E0004E362F /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
@@ -237,10 +240,10 @@
 		47A8A9E122DE4542005D9520 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EA03725F22E67A1200354DA2 /* EditProfileVC.h */,
+				EA03726022E67A1200354DA2 /* EditProfileVC.m */,
 				EA03725922E64E1F00354DA2 /* ChatViewController.h */,
 				EA03725A22E64E1F00354DA2 /* ChatViewController.m */,
-				EAEE4CC922E2446200278234 /* EditProfileVC.h */,
-				EAEE4CCA22E2446200278234 /* EditProfileVC.m */,
 				EA6732DC22DF931C004E362F /* SignUpVC.h */,
 				EA6732DD22DF931C004E362F /* SignUpVC.m */,
 				EA6732F522DFAB25004E362F /* SignInVC.h */,
@@ -566,6 +569,7 @@
 				EA03725B22E64E1F00354DA2 /* ChatViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
+				EA03726122E67A1200354DA2 /* EditProfileVC.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
 				47A8A9F722E291F1005D9520 /* PostManager.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
