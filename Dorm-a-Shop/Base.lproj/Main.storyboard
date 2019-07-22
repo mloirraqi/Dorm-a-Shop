@@ -213,7 +213,7 @@
                         <outlet property="distanceButton" destination="gej-ih-dYz" id="OdP-sS-IeF"/>
                         <outlet property="distanceTable" destination="r77-WC-Qlj" id="Mtv-Zv-aF6"/>
                         <outlet property="searchBar" destination="BsX-gJ-qHi" id="rrH-dU-XZ5"/>
-                        <outlet property="tableView" destination="SRH-BO-TuC" id="ymD-0G-MKX"/>
+                        <outlet property="tableView" destination="SRH-BO-TuC" id="ZfJ-49-H1P"/>
                         <outlet property="timesButton" destination="JZN-Kn-cdI" id="8VC-H2-zKs"/>
                         <outlet property="timesTable" destination="0Am-37-PW9" id="CJv-al-k4a"/>
                     </connections>

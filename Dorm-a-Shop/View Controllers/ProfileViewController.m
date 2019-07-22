@@ -108,45 +108,27 @@
     [self.collectionView reloadData];
     
     [self.refreshControl endRefreshing];*/
-    NSMutableArray *postsManagerPosts = ((PostManager *)[PostManager shared]).allPostsArray;
-    if (postsManagerPosts != nil) {
-        NSLog(@"posts array 0: %@", postsManagerPosts[0]);
-        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-            return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
-        }];
-        NSArray *profilePostsArray = [postsManagerPosts filteredArrayUsingPredicate:predicate];
-        NSLog(@"profile posts array %@", profilePostsArray);
-        
-        NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-        self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
-        self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-        NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
-        self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
-        self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-        [self.collectionView reloadData];
+
+    [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+        if (postsArray) {
+            NSLog(@"posts array 0: %@", postsArray[0]);
+            NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+                return [((PFObject *)post[@"author"]).objectId isEqualToString:[PFUser currentUser].objectId];
+            }];
+            NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
+            
+            NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
+            self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+            NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+            self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
+            self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+            [self.collectionView reloadData];
+        } else {
+            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
+        }
         [self.refreshControl endRefreshing];
-    } else {
-        [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-            if (postsArray) {
-                NSLog(@"posts array 0: %@", postsArray[0]);
-                NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-                    return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
-                }];
-                NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
-                
-                NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-                self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
-                self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-                NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
-                self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
-                self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-                [self.collectionView reloadData];
-            } else {
-                NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
-            }
-            [self.refreshControl endRefreshing];
-        }];
-    }
+    }];
 }
 
 - (IBAction)changedSegment:(id)sender {
@@ -162,7 +144,7 @@
         return cell;
     } else {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
-        Post *post = self.activeItems[indexPath.item];
+        Post *post = self.soldItems[indexPath.item];
         cell.post = post;
         [cell setPost];
         return cell;
