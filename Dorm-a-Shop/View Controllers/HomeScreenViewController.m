@@ -124,24 +124,19 @@
 //        }
 //        [self.refreshControl endRefreshing];
 //    }];
-    NSMutableArray *postsManagerPosts = ((PostManager *)[PostManager shared]).allPostsArray;
-    if (postsManagerPosts != nil) {
-        NSLog(@"posts array 0: %@", postsManagerPosts[0]);
-        self.postsArray = postsManagerPosts;
-        [self.tableView reloadData];
+
+    [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+        if (postsArray) {
+            NSLog(@"posts array 0: %@", postsArray[0]);
+            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+            self.postsArray = activePosts;
+            [self.tableView reloadData];
+        } else {
+            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
+        }
         [self.refreshControl endRefreshing];
-    } else {
-        [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-            if (postsArray) {
-                NSLog(@"posts array 0: %@", postsArray[0]);
-                self.postsArray = postsArray;
-                [self.tableView reloadData];
-            } else {
-                NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
-            }
-            [self.refreshControl endRefreshing];
-        }];
-    }
+    }];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -190,7 +185,8 @@
 
 - (void)didUpload:(Post *)post {
     [self.postsArray insertObject:post atIndex:0];
-    [self filterPosts];
+    [self.tableView reloadData]; //new
+//    [self filterPosts];
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
