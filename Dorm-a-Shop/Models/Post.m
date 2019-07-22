@@ -15,12 +15,13 @@
 @dynamic author;
 @dynamic caption;
 @dynamic image;
-//@dynamic watchCount;
 @dynamic category;
 @dynamic condition;
 @dynamic price;
 @dynamic title;
 @dynamic sold;
+@dynamic watch;
+@dynamic watchCount;
 
 + (nonnull NSString *)parseClassName {
     return @"Post";
@@ -34,7 +35,6 @@
     newPost.condition = condition;
     newPost.category = category;
     newPost.title = title;
-//    newPost.watchCount = @(0);
     newPost.sold = NO;
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];

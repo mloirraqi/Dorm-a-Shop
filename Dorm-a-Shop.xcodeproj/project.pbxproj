@@ -19,6 +19,7 @@
 		47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9E422DE45EF005D9520 /* PostTableViewCell.m */; };
 		47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9EA22DE7B2B005D9520 /* DetailsViewController.m */; };
 		47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9F022E12528005D9520 /* WatchListViewController.m */; };
+		47A8A9F722E291F1005D9520 /* PostManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9F622E291F1005D9520 /* PostManager.m */; };
 		4D6E9F6C086D7869B5467E8A /* Pods_Dorm_a_Shop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */; };
 		90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */; };
 		DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFC22DE7BE900418DE3 /* UploadViewController.m */; };
@@ -26,13 +27,14 @@
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
 		EA03725B22E64E1F00354DA2 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725A22E64E1F00354DA2 /* ChatViewController.m */; };
 		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
+		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
+		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
 		EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732DD22DF931C004E362F /* SignUpVC.m */; };
 		EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E722DF95E0004E362F /* NJOPasswordStrengthEvaluator.m */; };
 		EA6732ED22DF95F5004E362F /* QAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E922DF95F5004E362F /* QAButton.m */; };
 		EA6732EE22DF95F5004E362F /* QAView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732EB22DF95F5004E362F /* QAView.m */; };
 		EA6732F422DF96DE004E362F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F322DF96DE004E362F /* Utils.m */; };
 		EA6732F722DFAB25004E362F /* SignInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F622DFAB25004E362F /* SignInVC.m */; };
-		EAEE4CCB22E2446A00278234 /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEE4CCA22E2446200278234 /* EditProfileVC.m */; };
 		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +84,8 @@
 		47A8A9EA22DE7B2B005D9520 /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		47A8A9EF22E12528005D9520 /* WatchListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WatchListViewController.h; sourceTree = "<group>"; };
 		47A8A9F022E12528005D9520 /* WatchListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
+		47A8A9F522E291F1005D9520 /* PostManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostManager.h; sourceTree = "<group>"; };
+		47A8A9F622E291F1005D9520 /* PostManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostManager.m; sourceTree = "<group>"; };
 		4F391BB0A88FF785BA25E839 /* Pods-Dorm-a-Shop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-Shop.release.xcconfig"; path = "Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop.release.xcconfig"; sourceTree = "<group>"; };
 		4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_ShopUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B990968EF4F50E238A28966 /* Pods-Dorm-a-ShopTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopTests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopTests/Pods-Dorm-a-ShopTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -97,6 +101,10 @@
 		EA03725A22E64E1F00354DA2 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.m"; sourceTree = "<absolute>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		DEFE7C8722E640DF006E3096 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		DEFE7C8822E640DF006E3096 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		DEFE7C8A22E64347006E3096 /* UserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserCell.h; sourceTree = "<group>"; };
+		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
 		EA6732DC22DF931C004E362F /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
 		EA6732DD22DF931C004E362F /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		EA6732E622DF95E0004E362F /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
@@ -109,8 +117,6 @@
 		EA6732F322DF96DE004E362F /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		EA6732F522DFAB25004E362F /* SignInVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInVC.h; sourceTree = "<group>"; };
 		EA6732F622DFAB25004E362F /* SignInVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInVC.m; sourceTree = "<group>"; };
-		EAEE4CC922E2446200278234 /* EditProfileVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditProfileVC.h; sourceTree = "<group>"; };
-		EAEE4CCA22E2446200278234 /* EditProfileVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditProfileVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +228,8 @@
 			children = (
 				47A8A9D922DE42E5005D9520 /* Post.h */,
 				47A8A9DA22DE42E5005D9520 /* Post.m */,
+				47A8A9F522E291F1005D9520 /* PostManager.h */,
+				47A8A9F622E291F1005D9520 /* PostManager.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -247,6 +255,8 @@
 				DE307FFF22DFD20500418DE3 /* ProfileViewController.m */,
 				47A8A9EF22E12528005D9520 /* WatchListViewController.h */,
 				47A8A9F022E12528005D9520 /* WatchListViewController.m */,
+				DEFE7C8722E640DF006E3096 /* SearchViewController.h */,
+				DEFE7C8822E640DF006E3096 /* SearchViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -260,6 +270,8 @@
 				47A8A9E422DE45EF005D9520 /* PostTableViewCell.m */,
 				DED744F622DFE0A400394748 /* PostCollectionViewCell.h */,
 				DED744F722DFE0A400394748 /* PostCollectionViewCell.m */,
+				DEFE7C8A22E64347006E3096 /* UserCell.h */,
+				DEFE7C8B22E64347006E3096 /* UserCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -314,7 +326,6 @@
 				47A8A99E22DE3A30005D9520 /* Frameworks */,
 				47A8A99F22DE3A30005D9520 /* Resources */,
 				679ACD980F6F2F86866DE6EB /* [CP] Embed Pods Frameworks */,
-				40D11E25394204A03A52A7D5 /* [CP] Copy Pods Resources */,
 				5C86AEE08493B4AFE05CC9A1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -456,23 +467,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		40D11E25394204A03A52A7D5 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5647514A8550D70B8F27EB23 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -559,10 +553,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
+				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
+				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,
@@ -570,8 +566,8 @@
 				EA03725B22E64E1F00354DA2 /* ChatViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
-				EAEE4CCB22E2446A00278234 /* EditProfileVC.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
+				47A8A9F722E291F1005D9520 /* PostManager.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,

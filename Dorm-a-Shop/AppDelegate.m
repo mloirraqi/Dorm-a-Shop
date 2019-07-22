@@ -11,6 +11,7 @@
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <Parse/Parse.h>
+#import "PostManager.h"
 
 @interface AppDelegate ()
 

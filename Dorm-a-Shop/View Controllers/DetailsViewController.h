@@ -21,8 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DetailsViewController : UIViewController
 
 @property (nonatomic, strong) Post *post;
-@property (nonatomic, strong) PFObject *watch;
-@property (nonatomic) NSUInteger watchCount;
+@property (nonatomic, strong) NSIndexPath *indexPath;
+@property (strong, nonatomic) NSString *senderClassName;
 @property (nonatomic) BOOL watchStatusChanged;
 @property (nonatomic) BOOL itemStatusChanged;
 @property (nonatomic, weak) id<DetailsViewControllerDelegate> delegate;

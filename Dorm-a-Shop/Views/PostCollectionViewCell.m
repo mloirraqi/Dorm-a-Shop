@@ -7,13 +7,32 @@
 //
 
 #import "PostCollectionViewCell.h"
+#import "PostManager.h"
+
+@interface PostCollectionViewCell()
+
+@property (nonatomic) BOOL isInitialReload;
+
+@end
 
 @implementation PostCollectionViewCell
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    self.isInitialReload = YES;
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.isInitialReload = YES;
+}
+
 - (void)setPost {
-    [self setWatchedUser:[PFUser currentUser] Post:self.post];
-    [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
+    if (self.isInitialReload) {
+        [self setUIWatchedForCurrentUserForPost:self.post];
+    }
     
+    [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
     PFFileObject *imageFile = self.post.image;
     
     [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
@@ -24,8 +43,8 @@
     }];
 }
 
-- (void)setWatchedUser:(PFUser *)user Post:(Post *)post{
-    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+- (void)setUIWatchedForCurrentUserForPost:(Post *)post{
+    /*PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
     [watchQuery orderByDescending:@"createdAt"];
     [watchQuery whereKey:@"post" equalTo:post];
     
@@ -34,24 +53,33 @@
         if (error) {
             NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
         } else {
-            weakSelf.watchCount = postWatches.count;
-            if (weakSelf.watchCount > 0) {
+            self.isInitialReload = NO;
+            weakSelf.post.watchCount = postWatches.count;
+            if (weakSelf.post.watchCount > 0) {
                 bool watched = NO;
                 for (PFObject *watch in postWatches) {
                     if ([((PFObject *)watch[@"user"]).objectId isEqualToString:user.objectId]) {
-                        weakSelf.watch = watch;
+                        weakSelf.post.watch = watch;
                         watched = YES;
                         break;
                     }
                 }
                 if (!watched) {
-                    weakSelf.watch = nil;
+                    weakSelf.post.watch = nil;
                 }
             } else {
-                weakSelf.watch = nil;
+                weakSelf.post.watch = nil;
             }
         }
-    }];
+    }];*/
+    
+    if (((PostManager *)[PostManager shared]).watchedPostsArray == nil) {
+        [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+            }
+        }];
+    }
 }
 
 @end
