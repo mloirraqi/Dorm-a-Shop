@@ -42,6 +42,9 @@
     [self createRefreshControl];
 }
 
+- (IBAction)chatButton:(id)sender {
+   [self performSegueWithIdentifier:@"chatBox" sender:nil];
+}
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedTabBarDataNotification"]) {

@@ -57,7 +57,6 @@
     
     self.username.text = self.user.username;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
-    
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;
     PFFileObject *imageFile = self.user[@"ProfilePic"];

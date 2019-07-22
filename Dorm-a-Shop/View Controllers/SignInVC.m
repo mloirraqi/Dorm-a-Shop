@@ -12,9 +12,6 @@
 
 @interface SignInVC ()
 
-@property (weak, nonatomic) IBOutlet UITextField *emailField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
-
 @end
 
 @implementation SignInVC
