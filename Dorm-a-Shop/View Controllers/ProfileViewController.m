@@ -29,7 +29,6 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *className;
 
-
 @end
 
 @implementation ProfileViewController
@@ -41,6 +40,10 @@
     
     if (!self.user) {
         self.user = PFUser.currentUser;
+    } else {
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
+        self.navigationItem.leftItemsSupplementBackButton = true;
     }
     
     self.collectionView.dataSource = self;
@@ -109,7 +112,7 @@
     if (postsManagerPosts != nil) {
         NSLog(@"posts array 0: %@", postsManagerPosts[0]);
         NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-            return [((PFObject *)post[@"author"]).objectId isEqualToString:[PFUser currentUser].objectId];
+            return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
         }];
         NSArray *profilePostsArray = [postsManagerPosts filteredArrayUsingPredicate:predicate];
         NSLog(@"profile posts array %@", profilePostsArray);
@@ -127,7 +130,7 @@
             if (postsArray) {
                 NSLog(@"posts array 0: %@", postsArray[0]);
                 NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-                    return [((PFObject *)post[@"author"]).objectId isEqualToString:[PFUser currentUser].objectId];
+                    return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
                 }];
                 NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
                 

@@ -1303,7 +1303,7 @@
             </objects>
             <point key="canvasLocation" x="1141" y="1631"/>
         </scene>
-        <!--Search View Controller-->
+        <!--Search-->
         <scene sceneID="hIe-vj-KNL">
             <objects>
                 <viewController id="hoC-Uw-hNx" customClass="SearchViewController" sceneMemberID="viewController">
@@ -1381,7 +1381,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="lre-w2-kQ4"/>
                     </view>
-                    <navigationItem key="navigationItem" id="z69-qG-qbh"/>
+                    <navigationItem key="navigationItem" title="Search" id="z69-qG-qbh"/>
                     <connections>
                         <outlet property="searchBar" destination="4nu-E0-9J7" id="psT-v0-Vus"/>
                         <outlet property="tableView" destination="eLp-J3-m4G" id="T5b-o0-FIh"/>
@@ -1418,7 +1418,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
-        <segue reference="cnV-vk-Wb5"/>
+        <segue reference="KLi-YY-IiH"/>
         <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
 </document>
