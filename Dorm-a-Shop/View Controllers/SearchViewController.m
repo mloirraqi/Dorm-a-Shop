@@ -8,14 +8,15 @@
 
 #import "SearchViewController.h"
 #import "UserCell.h"
+#import "ProfileViewController.h"
 @import Parse;
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (strong, nonatomic) NSArray *users;
-
+@property (strong, nonatomic) NSMutableArray *users;
+@property (strong, nonatomic) NSMutableArray *filteredUsers;
 @end
 
 @implementation SearchViewController
@@ -46,29 +47,50 @@
 }
 
 - (void)filterUsers {
+    self.filteredUsers = self.users;
+    if (self.searchBar.text.length != 0) {
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PFObject *user, NSDictionary *bindings) {
+            return ([user[@"username"] localizedCaseInsensitiveContainsString:self.searchBar.text]);
+        }];
+        self.filteredUsers = [NSMutableArray arrayWithArray:[self.filteredUsers filteredArrayUsingPredicate:predicate]];
+    }
+    [self.tableView reloadData];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
-    PFObject *user = self.users[indexPath.row];
+    PFObject *user = self.filteredUsers[indexPath.row];
     cell.user = user;
     [cell setUser];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.users.count;
+    return self.filteredUsers.count;
 }
-    
 
-/*
-#pragma mark - Navigation
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self filterUsers];
+}
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = NO;
+    self.searchBar.text = @"";
+    [self.searchBar resignFirstResponder];
+    self.filteredUsers = self.users;
+    [self.tableView reloadData];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"userDeets"]) {
+        UserCell *tappedCell = sender;
+        ProfileViewController *profileViewController = [segue destinationViewController];
+        profileViewController.user = (PFUser *) tappedCell.user;
+    }
 }
-*/
 
 @end

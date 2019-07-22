@@ -1372,6 +1372,7 @@
                                             <outlet property="locationLabel" destination="Z3g-IL-d9o" id="PcO-dB-G4X"/>
                                             <outlet property="profilePic" destination="dP1-Dh-n4Q" id="ld5-E8-taI"/>
                                             <outlet property="username" destination="Usr-UO-xtm" id="cDE-Us-tCa"/>
+                                            <segue destination="ji6-xS-49q" kind="show" identifier="userDeets" id="ch5-tg-CXn"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1418,5 +1419,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
         <segue reference="cnV-vk-Wb5"/>
+        <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
 </document>
