@@ -44,24 +44,28 @@
 }
 
 - (void)getWatchedPostsForCurrentUserWithCompletion:(void (^)(NSMutableArray *, NSError *))completion{
-    PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
-    [watchQuery orderByDescending:@"createdAt"];
-    [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
-    [watchQuery includeKey:@"post"];
-    
-    __weak PostManager *weakSelf = self;
-    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable userWatches, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
-            completion(nil, error);
-        } else {
-            weakSelf.watchedPostsArray = [[NSMutableArray alloc] init];
-            for (PFObject *watch in userWatches) {
-                [weakSelf.watchedPostsArray addObject:watch[@"post"]];
+    if (self.watchedPostsArray != nil) {
+        completion(self.watchedPostsArray, nil);
+    } else {
+        PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+        [watchQuery orderByDescending:@"createdAt"];
+        [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+        [watchQuery includeKey:@"post"];
+        
+        __weak PostManager *weakSelf = self;
+        [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable userWatches, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
+                completion(nil, error);
+            } else {
+                weakSelf.watchedPostsArray = [[NSMutableArray alloc] init];
+                for (PFObject *watch in userWatches) {
+                    [weakSelf.watchedPostsArray addObject:watch[@"post"]];
+                }
+                completion(weakSelf.watchedPostsArray, nil);
             }
-            completion(self.watchedPostsArray, nil);
-        }
-    }];
+        }];
+    }
 }
 
 //- (void)getCurrentUserWatchStatusForPost:(Post *)post withCompletion:(void (^)(Post *, NSError *))completion {
@@ -95,29 +99,34 @@
 //}
 
 - (void)getAllPostsWithCompletion:(void (^)(NSMutableArray *, NSError *))completion {
-    PFQuery *postQuery = [Post query];
-    [postQuery orderByDescending:@"createdAt"];
-    [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
-    
-    __weak PostManager *weakSelf = self;
-    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
-        if (posts) {
-            weakSelf.allPostsArray = [NSMutableArray arrayWithArray:posts];
-            completion(weakSelf.allPostsArray, nil);
-        } else {
-            NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
-            completion(nil, error);
-        }
-    }];
+    if (self.allPostsArray != nil) {
+        completion(self.allPostsArray, nil);
+    } else {
+        PFQuery *postQuery = [Post query];
+        [postQuery orderByDescending:@"createdAt"];
+        [postQuery includeKey:@"author"];
+        
+        __weak PostManager *weakSelf = self;
+        [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
+            if (posts) {
+                weakSelf.allPostsArray = [NSMutableArray arrayWithArray:posts];
+                NSLog(@"all posts array: %@", weakSelf.allPostsArray);
+                completion(weakSelf.allPostsArray, nil);
+            } else {
+                NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
+                completion(nil, error);
+            }
+        }];
+    }
 }
 
 - (void)unwatchPost:(Post *)post withCompletion:(void (^)(NSError *))completion {
+    __weak PostManager *weakSelf = self;
     [post.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             post.watch = nil;
             post.watchCount --;
-            [self.watchedPostsArray removeObject:post];
+            [weakSelf.watchedPostsArray removeObject:post];
             completion(nil);
         } else {
             completion(error);
@@ -130,11 +139,12 @@
     watch[@"post"] = post;
     watch[@"user"] = [PFUser currentUser];
     
+    __weak PostManager *weakSelf = self;
     [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             post.watch = watch;
             post.watchCount ++;
-            [self.watchedPostsArray addObject:post];
+            [weakSelf.watchedPostsArray addObject:post];
             completion(nil);
         } else {
             completion(error);
@@ -156,10 +166,11 @@
 }
 
 - (void)submitNewPost:(Post *)post withCompletion:(void (^)(NSError *))completion {
+    __weak PostManager *weakSelf = self;
     [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error != nil) {
             NSLog(@"Post status update failed: %@", error.localizedDescription);
-            [self.allPostsArray insertObject:post atIndex:0];
+            [weakSelf.allPostsArray insertObject:post atIndex:0];
             completion(error);
         } else {
             completion(nil);
@@ -167,7 +178,7 @@
     }];
 }
 
-- (void)postListing: (UIImage * _Nullable)image withCaption: (NSString * _Nullable)caption withPrice: (NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion:(void (^)(Post *, NSError *))completion {
+- (void)postListing:(UIImage * _Nullable)image withCaption:(NSString * _Nullable)caption withPrice:(NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion:(void (^)(Post *, NSError *))completion {
     Post *newPost = [Post new];
     newPost.image = [self getPFFileFromImage:image];
     newPost.author = [PFUser currentUser];
@@ -182,12 +193,12 @@
     NSNumber *priceNum = [formatter numberFromString:price];
     newPost.price = priceNum;
     
+    __weak PostManager *weakSelf = self;
     [newPost saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {
         if (error != nil) {
-            NSLog(@"Post status update failed: %@", error.localizedDescription);
-            [self.allPostsArray insertObject:newPost atIndex:0];
             completion(nil, error);
         } else {
+            [weakSelf.allPostsArray insertObject:newPost atIndex:0];
             completion(newPost, nil);
         }
     }];
