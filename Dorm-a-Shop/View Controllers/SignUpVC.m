@@ -12,9 +12,7 @@
 #import "NJOPasswordStrengthEvaluator.h"
 #import <Parse/Parse.h>
 #import "HomeScreenViewController.h"
-#import <GooglePlaces/GooglePlaces.h>
-#import <GooglePlacePicker/GooglePlacePicker.h>
-
+#import "LocationManager.h"
 
 
 @interface SignUpVC ()
@@ -35,7 +33,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    locationSelected = NO;
+    locationManager = [[LocationManager alloc]init];
     // Do any additional setup after loading the view.
     
     self.lenientValidator = [NJOPasswordValidator standardValidator];
@@ -68,11 +66,14 @@
         [self showAlertView:@"Please Add a Valid .edu Email"];
         return false;
     }
-    if (!locationSelected) {
-        [self showAlertView:@"Please Select a Location First"];
+    CLLocation *currentLocation = [locationManager currentLocation];
+    if (currentLocation == nil) {
+        [self showAlertView:@"Please Enable Location From Settings"];
         return false;
     }
+    
     return true;
+    
 }
 
 
@@ -82,11 +83,15 @@
         NSData *imageData = UIImagePNGRepresentation(selectedImage);
         PFFileObject *image = [PFFileObject fileObjectWithName:@"Profileimage.png" data:imageData];
         
+        CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
+        PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
+        
         PFUser *user = [PFUser user];
         user.username = self->nameTextField.text;
         user.password = self->passwordTextField.text;
         user.email = self->emailTextField.text;
         user[@"ProfilePic"] = image;
+        user[@"Location"] = location;
         
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [hud hideAnimated:YES];
@@ -150,15 +155,6 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 
-}
-
-- (IBAction)locationButtonTap:(UIButton *)sender {
-    GMSPlacePickerConfig *config = [[GMSPlacePickerConfig alloc] initWithViewport:nil];
-    GMSPlacePickerViewController *placePicker =
-    [[GMSPlacePickerViewController alloc] initWithConfig:config];
-    placePicker.delegate = self;
-    
-    [self presentViewController:placePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -228,27 +224,5 @@
         }
     }
 }
-
-- (void)placePicker:(GMSPlacePickerViewController *)viewcontroller didPickPlace:(GMSPlace *)place {
-    
-    // Dismiss the place picker, as it cannot dismiss itself.
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    NSLog(@"Place name is %@", place.name);
-    NSLog(@"Place address is %@", place.formattedAddress);
-    NSLog(@"Place attribute is %@", place.attributions.string);
-
-    [addLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
-    locationSelected = YES;
-    selectedLocationPoint = [PFGeoPoint geoPointWithLatitude:place.coordinate.latitude longitude:place.coordinate.longitude];
-}
-
-- (void)placePickerDidCancel:(GMSPlacePickerViewController *)viewController {
-    // Dismiss the place picker, as it cannot dismiss itself.
-    [viewController dismissViewControllerAnimated:YES completion:nil];
-    
-    NSLog(@"No place selected");
-}
-
 
 @end
