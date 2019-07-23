@@ -154,7 +154,6 @@
     [alertController addAction:actionCancel];
     
     [self presentViewController:alertController animated:YES completion:nil];
-
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {

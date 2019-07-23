@@ -18,15 +18,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
 -(void)showAlertView:(NSString*)message{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop"
-                                                    message:message
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
     
 }
@@ -46,19 +41,6 @@
             [self presentViewController:tabBarController animated:YES completion:nil];
         }
     }];
-    
-//    [self performSegueWithIdentifier:@"signIn" sender:nil];
-    
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
