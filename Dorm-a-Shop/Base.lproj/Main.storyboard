@@ -1171,23 +1171,11 @@
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="bYS-Yk-txu" userLabel="Strength Meter">
                                 <rect key="frame" x="87" y="532" width="240" height="2"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="Q6q-tw-jDF"/>
                                     <constraint firstAttribute="height" constant="2" id="mpa-eH-TIS"/>
+                                    <constraint firstAttribute="width" constant="240" id="qgf-Fd-PaX"/>
                                 </constraints>
                                 <color key="trackTintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             </progressView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OmG-oq-3jY">
-                                <rect key="frame" x="28" y="567" width="359" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="6C4-cY-22Q"/>
-                                </constraints>
-                                <state key="normal" title="Add Location">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="locationButtonTap:" destination="1hK-nR-NGd" eventType="touchUpInside" id="9iX-88-3ex"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kY3-8J-3pC">
                                 <rect key="frame" x="77.5" y="462" width="259" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1208,17 +1196,15 @@
                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="OmG-oq-3jY" firstAttribute="top" secondItem="bYS-Yk-txu" secondAttribute="bottom" constant="33" id="2Yp-3X-UiH"/>
                             <constraint firstItem="7D9-jz-5QM" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="3dR-TR-RLB"/>
                             <constraint firstItem="eC5-Ec-L8i" firstAttribute="top" secondItem="Ju9-bw-wmb" secondAttribute="bottom" constant="8" id="3lh-zf-tT7"/>
-                            <constraint firstItem="THo-fR-Lw6" firstAttribute="top" secondItem="OmG-oq-3jY" secondAttribute="bottom" constant="8" id="81b-3N-fP5"/>
                             <constraint firstItem="9V9-D0-BTQ" firstAttribute="top" secondItem="1fj-Td-Sqv" secondAttribute="top" constant="50" id="Dcm-ZX-7FW"/>
                             <constraint firstItem="Ju9-bw-wmb" firstAttribute="top" secondItem="CBY-BS-g2w" secondAttribute="bottom" constant="25" id="EvP-TW-NYd"/>
                             <constraint firstItem="ZpI-Cc-8fe" firstAttribute="leading" secondItem="bYS-Yk-txu" secondAttribute="leading" id="G0W-1R-dy9"/>
                             <constraint firstItem="HbU-V6-35q" firstAttribute="centerY" secondItem="s8b-iE-Fjy" secondAttribute="centerY" id="JzB-Un-k2K"/>
                             <constraint firstItem="CBY-BS-g2w" firstAttribute="top" secondItem="7D9-jz-5QM" secondAttribute="bottom" constant="8" id="Jzo-i5-btY"/>
                             <constraint firstItem="THo-fR-Lw6" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="MAU-Ky-es8"/>
-                            <constraint firstItem="OmG-oq-3jY" firstAttribute="top" secondItem="bYS-Yk-txu" secondAttribute="bottom" constant="33" id="Rhp-cQ-4Jn"/>
+                            <constraint firstItem="bYS-Yk-txu" firstAttribute="top" secondItem="1fj-Td-Sqv" secondAttribute="top" constant="488" id="Pfz-42-5wM"/>
                             <constraint firstItem="bYS-Yk-txu" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="STV-GS-gbD"/>
                             <constraint firstItem="CBY-BS-g2w" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="Tx3-WB-Yqg"/>
                             <constraint firstItem="s8b-iE-Fjy" firstAttribute="leading" secondItem="HbU-V6-35q" secondAttribute="trailing" constant="10" id="WdS-XT-ZaC"/>
@@ -1226,14 +1212,11 @@
                             <constraint firstItem="kY3-8J-3pC" firstAttribute="top" secondItem="eC5-Ec-L8i" secondAttribute="bottom" constant="25" id="Yjt-ub-vBZ"/>
                             <constraint firstItem="eC5-Ec-L8i" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="aTq-Kr-037"/>
                             <constraint firstItem="9V9-D0-BTQ" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="eLZ-46-blG"/>
-                            <constraint firstItem="THo-fR-Lw6" firstAttribute="top" secondItem="OmG-oq-3jY" secondAttribute="bottom" constant="8" id="ebw-yu-Pra"/>
                             <constraint firstItem="ZpI-Cc-8fe" firstAttribute="top" secondItem="kY3-8J-3pC" secondAttribute="bottom" constant="8" symbolic="YES" id="lWb-rU-8Bl"/>
                             <constraint firstItem="s8b-iE-Fjy" firstAttribute="top" secondItem="9V9-D0-BTQ" secondAttribute="bottom" constant="60" id="nKu-rw-j7x"/>
-                            <constraint firstItem="1fj-Td-Sqv" firstAttribute="trailing" secondItem="OmG-oq-3jY" secondAttribute="trailing" constant="27" id="o93-DC-3XS"/>
-                            <constraint firstItem="OmG-oq-3jY" firstAttribute="leading" secondItem="1fj-Td-Sqv" secondAttribute="leading" constant="28" id="qbN-9k-Vt8"/>
                             <constraint firstItem="7D9-jz-5QM" firstAttribute="top" secondItem="HbU-V6-35q" secondAttribute="bottom" constant="50" id="tap-X9-CXr"/>
                             <constraint firstItem="Ju9-bw-wmb" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="u9L-8P-PiX"/>
-                            <constraint firstItem="OmG-oq-3jY" firstAttribute="top" secondItem="kY3-8J-3pC" secondAttribute="bottom" constant="75" id="yL2-TH-rVH"/>
+                            <constraint firstItem="THo-fR-Lw6" firstAttribute="top" secondItem="bYS-Yk-txu" secondAttribute="bottom" constant="71" id="zTC-FZ-CA1"/>
                             <constraint firstItem="s8b-iE-Fjy" firstAttribute="centerX" secondItem="7pQ-uV-a5f" secondAttribute="centerX" id="zW8-CR-s6K"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1fj-Td-Sqv"/>
@@ -1243,7 +1226,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="zn8-qR-GEB"/>
                     <connections>
-                        <outlet property="addLocationButton" destination="OmG-oq-3jY" id="roT-G5-AU1"/>
                         <outlet property="addPictureButton" destination="9V9-D0-BTQ" id="L6e-Br-6FK"/>
                         <outlet property="emailTextField" destination="Ju9-bw-wmb" id="WyQ-7S-QJO"/>
                         <outlet property="nameTextField" destination="7D9-jz-5QM" id="NdC-Hh-Snk"/>
@@ -1674,7 +1656,10 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Ob4-g7-kRL"/>
+=======
         <segue reference="ni5-B6-yy2"/>
+>>>>>>> 34a3721769c2bdb2af3ccc5f53f71ea5febf6fac
         <segue reference="KLi-YY-IiH"/>
         <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>
