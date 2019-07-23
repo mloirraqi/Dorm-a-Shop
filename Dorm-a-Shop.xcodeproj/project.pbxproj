@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4715CD9122E6720D00E2E916 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4715CD8F22E6720D00E2E916 /* ChatViewController.m */; };
 		4715CDDB22E7942F00E2E916 /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4715CDD922E7942F00E2E916 /* DormAShop.xcdatamodeld */; };
+		4715CDF322E7C21100E2E916 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4715CDF222E7C21100E2E916 /* LocationManager.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
@@ -33,7 +33,6 @@
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
 		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
-		EA2844B822E7818000927F91 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2844B722E7817F00927F91 /* LocationManager.m */; };
 		EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732DD22DF931C004E362F /* SignUpVC.m */; };
 		EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E722DF95E0004E362F /* NJOPasswordStrengthEvaluator.m */; };
 		EA6732ED22DF95F5004E362F /* QAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E922DF95F5004E362F /* QAButton.m */; };
@@ -65,9 +64,10 @@
 		241F52E5E4F95328E461C4ED /* Pods-Dorm-a-ShopUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.release.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.release.xcconfig"; sourceTree = "<group>"; };
 		263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_Shop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4715CD8F22E6720D00E2E916 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
+		4715CDF122E7C21100E2E916 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
+		4715CDF222E7C21100E2E916 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -117,8 +117,6 @@
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
-		EA2844B622E7817F00927F91 /* LocationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocationManager.h; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/LocationManager.h"; sourceTree = "<absolute>"; };
-		EA2844B722E7817F00927F91 /* LocationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LocationManager.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/LocationManager.m"; sourceTree = "<absolute>"; };
 		EA6732DC22DF931C004E362F /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
 		EA6732DD22DF931C004E362F /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		EA6732E622DF95E0004E362F /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
@@ -177,6 +175,8 @@
 		47A8A99822DE3A30005D9520 = {
 			isa = PBXGroup;
 			children = (
+				4715CDF122E7C21100E2E916 /* LocationManager.h */,
+				4715CDF222E7C21100E2E916 /* LocationManager.m */,
 				47A8A9A322DE3A30005D9520 /* Dorm-a-Shop */,
 				47A8A9BC22DE3A32005D9520 /* Dorm-a-ShopTests */,
 				47A8A9C722DE3A32005D9520 /* Dorm-a-ShopUITests */,
@@ -199,8 +199,6 @@
 		47A8A9A322DE3A30005D9520 /* Dorm-a-Shop */ = {
 			isa = PBXGroup;
 			children = (
-				EA2844B622E7817F00927F91 /* LocationManager.h */,
-				EA2844B722E7817F00927F91 /* LocationManager.m */,
 				EA6732E422DF959A004E362F /* HelperFIles */,
 				EA6732EC22DF95F5004E362F /* QAButton.h */,
 				EA6732E922DF95F5004E362F /* QAButton.m */,
@@ -260,7 +258,6 @@
 				EA6732DD22DF931C004E362F /* SignUpVC.m */,
 				EA6732F522DFAB25004E362F /* SignInVC.h */,
 				EA6732F622DFAB25004E362F /* SignInVC.m */,
-				4715CD8F22E6720D00E2E916 /* ChatViewController.m */,
 				47A8A9DE22DE453C005D9520 /* HomeScreenViewController.h */,
 				47A8A9DF22DE453C005D9520 /* HomeScreenViewController.m */,
 				DE307FFB22DE7BE900418DE3 /* UploadViewController.h */,
@@ -573,7 +570,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA2844B822E7818000927F91 /* LocationManager.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
@@ -583,7 +579,6 @@
 				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
 				4715CDDB22E7942F00E2E916 /* DormAShop.xcdatamodeld in Sources */,
-				4715CD9122E6720D00E2E916 /* ChatViewController.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
@@ -596,6 +591,7 @@
 				47A8A9F722E291F1005D9520 /* PostManager.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
+				4715CDF322E7C21100E2E916 /* LocationManager.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
@@ -708,6 +704,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -760,6 +757,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
