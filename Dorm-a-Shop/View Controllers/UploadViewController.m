@@ -96,14 +96,6 @@
         [self presentViewController:self.descriptionEmpty animated:YES completion:^{
         }];
     } else {
-        /*Post *newPost = [Post postListing:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-            if (!succeeded) {
-                NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
-            } else {
-                [self dismissViewControllerAnimated:true completion:nil];
-            }
-        }];
-        [self.delegate didUpload:newPost];*/
         [[PostManager shared] postListing:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post *newPost, NSError * _Nullable error) {
             if (error) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);

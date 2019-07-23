@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4715CD9122E6720D00E2E916 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4715CD8F22E6720D00E2E916 /* ChatViewController.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
@@ -63,6 +64,8 @@
 		241F52E5E4F95328E461C4ED /* Pods-Dorm-a-ShopUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.release.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.release.xcconfig"; sourceTree = "<group>"; };
 		263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_Shop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4715CD8F22E6720D00E2E916 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		4715CD9222E6DBFF00E2E916 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -110,7 +113,6 @@
 		DEFE7C8822E640DF006E3096 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		DEFE7C8A22E64347006E3096 /* UserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserCell.h; sourceTree = "<group>"; };
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
-		EA03725922E64E1F00354DA2 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.h"; sourceTree = "<absolute>"; };
 		EA03725A22E64E1F00354DA2 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.m"; sourceTree = "<absolute>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
@@ -250,7 +252,7 @@
 		47A8A9E122DE4542005D9520 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				EA03725922E64E1F00354DA2 /* ChatViewController.h */,
+				4715CD9222E6DBFF00E2E916 /* ChatViewController.h */,
 				EA03725A22E64E1F00354DA2 /* ChatViewController.m */,
 				DE4FCFD822E686DE00B1311F /* EditProfileVC.h */,
 				DE4FCFD922E686DE00B1311F /* EditProfileVC.m */,
@@ -258,6 +260,7 @@
 				EA6732DD22DF931C004E362F /* SignUpVC.m */,
 				EA6732F522DFAB25004E362F /* SignInVC.h */,
 				EA6732F622DFAB25004E362F /* SignInVC.m */,
+				4715CD8F22E6720D00E2E916 /* ChatViewController.m */,
 				47A8A9DE22DE453C005D9520 /* HomeScreenViewController.h */,
 				47A8A9DF22DE453C005D9520 /* HomeScreenViewController.m */,
 				DE307FFB22DE7BE900418DE3 /* UploadViewController.h */,
@@ -578,6 +581,7 @@
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
 				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
+				4715CD9122E6720D00E2E916 /* ChatViewController.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
