@@ -24,17 +24,22 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    self.navigationItem.title = [@"@" stringByAppendingString:self.receiver.username];
+
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 }
 
 - (void)onTimer {
-    PFQuery *query = [PFQuery queryWithClassName:@"Messages"];
-    [query orderByDescending:@"createdAt"];
-    [query includeKey:@"receiver"];
-    [query includeKey:@"sender"];
-    [query whereKey:@"receiver" equalTo:self.receiver];
-    [query whereKey:@"sender" equalTo:[PFUser currentUser]];
+    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
+    [sentQuery whereKey:@"receiver" equalTo:self.receiver];
+    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+    [recQuery whereKey:@"sender" equalTo:self.receiver];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
         if (chats != nil) {
@@ -69,24 +74,17 @@
     ChatCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChatCell"];
     PFObject *chat = self.messages[indexPath.row];
     cell.chat = chat;
+    if ([((PFUser *)chat[@"sender"]).objectId isEqualToString:[PFUser currentUser].objectId]) {
+        cell.sender = [PFUser currentUser];
+    } else {
+        cell.sender = self.receiver;
+    }
     [cell showMsg];
     return cell;
-    return cell;
-    
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.messages.count;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
