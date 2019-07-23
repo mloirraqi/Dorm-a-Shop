@@ -1243,7 +1243,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="zn8-qR-GEB"/>
                     <connections>
-                        <outlet property="addLocationButton" destination="OmG-oq-3jY" id="4DU-zm-D54"/>
+                        <outlet property="addLocationButton" destination="OmG-oq-3jY" id="roT-G5-AU1"/>
                         <outlet property="addPictureButton" destination="9V9-D0-BTQ" id="L6e-Br-6FK"/>
                         <outlet property="emailTextField" destination="Ju9-bw-wmb" id="WyQ-7S-QJO"/>
                         <outlet property="nameTextField" destination="7D9-jz-5QM" id="NdC-Hh-Snk"/>
@@ -1675,11 +1675,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Ob4-g7-kRL"/>
-        <segue reference="cnV-vk-Wb5"/>
-        <segue reference="ch5-tg-CXn"/>
-=======
         <segue reference="KLi-YY-IiH"/>
         <segue reference="ufI-em-euD"/>
->>>>>>> 8a11accea88b3a6273b3294d8b921e60f1472304
     </inferredMetricsTieBreakers>
 </document>

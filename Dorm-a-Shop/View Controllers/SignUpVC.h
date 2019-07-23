@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@import Parse;
+#import "Parse/Parse.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,10 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
     __weak IBOutlet UIButton *addPictureButton;
     __weak IBOutlet UIButton *addLocationButton;
     
-    
     BOOL locationSelected;
     PFGeoPoint *selectedLocationPoint;
     UIImage * selectedImage;
+    
 }
 @property (nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
 

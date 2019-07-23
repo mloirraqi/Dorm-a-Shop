@@ -35,8 +35,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     locationSelected = NO;
+    // Do any additional setup after loading the view.
     
     self.lenientValidator = [NJOPasswordValidator standardValidator];
     [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:passwordTextField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
