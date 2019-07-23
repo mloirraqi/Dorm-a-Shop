@@ -149,7 +149,7 @@
             watchCountInt ++;
             post.watchCount = [NSNumber numberWithInt:watchCountInt];
             NSLog(@"%@", post.watchCount);
-            [weakSelf.watchedPostsArray addObject:post];
+            [weakSelf.watchedPostsArray insertObject:post atIndex:0];
             completion(nil);
         } else {
             completion(error);

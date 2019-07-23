@@ -51,9 +51,9 @@
     
     PFUser *user = msg[@"user"];
     if (user != nil) {
-        cell.user.text = user.username;
+        //cell.user.text = user.username;
     } else {
-        cell.user.text = @"🤖";
+        //cell.user.text = @"🤖";
     }
     return cell;
     

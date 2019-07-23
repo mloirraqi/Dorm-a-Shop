@@ -66,10 +66,8 @@
     self.timesTable.hidden = YES;
     self.distanceTable.hidden = YES;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveNotification:)
-                                                 name:@"ChangedWatchNotification"
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
     [self fetchPosts];
     [self createRefreshControl];
@@ -88,7 +86,8 @@
         [self.tableView beginUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView endUpdates];
-        
+    } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
+        [self fetchPosts];
     }
 }
 
@@ -101,11 +100,9 @@
 - (void)fetchPosts {
     [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
-            NSLog(@"posts array 0: %@", postsArray[0]);
-            //NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            //NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-            //NSLog(@"filtered posts array 0: %@", activePosts[0]);
-            self.postsArray = postsArray;
+            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+            self.postsArray = activePosts;
             self.filteredPosts = self.postsArray; //new
             [self.tableView reloadData];
         } else {
@@ -162,13 +159,14 @@
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+    /*DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.itemStatusChanged) {
         if (detailsViewController.post.sold == YES) {
             [self.postsArray removeObject:detailsViewController.post];
             [self filterPosts];
         }
-    }
+    }*/
+    [self filterPosts];
 }
 
 #pragma mark - Navigation

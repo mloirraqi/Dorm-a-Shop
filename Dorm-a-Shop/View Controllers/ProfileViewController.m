@@ -159,7 +159,6 @@
         detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
-        NSLog(@"profile details post %@", detailsViewController.post);
     }
 }
 

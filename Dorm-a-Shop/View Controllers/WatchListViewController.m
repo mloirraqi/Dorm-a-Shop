@@ -30,10 +30,8 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                          selector:@selector(receiveNotification:)
-                                          name:@"ChangedWatchNotification"
-                                          object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
     [self fetchPosts];
     [self createRefreshControl];
@@ -42,6 +40,8 @@
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         [self.tableView reloadData];
+    } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
+        [self fetchPosts];
     }
 }
 
@@ -54,8 +54,9 @@
 - (void)fetchPosts {
     [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
-            self.postsArray = postsArray;
-            NSLog(@"%@", postsArray);
+            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            NSMutableArray *activeWatchPosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+            self.postsArray = activeWatchPosts;
             [self.tableView reloadData];
         } else {
             NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);

@@ -36,10 +36,8 @@
     self.itemStatusChanged = NO;
     self.statusButton.hidden = YES;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveNotification:)
-                                                 name:@"ChangedWatchNotification"
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
     [self setDetailsPost:self.post];
 }
@@ -59,6 +57,17 @@
         } else {
             self.watchButton.selected = NO;
             [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", self.post.watchCount] forState:UIControlStateNormal];
+        }
+    } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
+        NSNumber *soldNumVal = [[notification userInfo] objectForKey:@"sold"];
+        BOOL sold = [soldNumVal boolValue];
+       
+        if (sold) {
+            [self.statusButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [self.statusButton setTitle:@"sold" forState:UIControlStateNormal];
+        } else {
+            [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+            [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
         }
     }
 }
@@ -102,7 +111,7 @@
         [[PostManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post,@"post", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:self userInfo:watchInfoDict];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
@@ -111,7 +120,7 @@
         [[PostManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post,@"post", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:self userInfo:watchInfoDict];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }
@@ -120,15 +129,16 @@
 }
 
 - (IBAction)changeStatus:(id)sender {
+    __weak DetailsViewController *weakSelf = self;
     if([((PFObject *) self.post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId]) {
-        if (self.post.sold == NO) {
-            [[PostManager shared] setPost:self.post sold:YES withCompletion:^(NSError * _Nonnull error) {
+        if (weakSelf.post.sold == NO) {
+            [[PostManager shared] setPost:weakSelf.post sold:YES withCompletion:^(NSError * _Nonnull error) {
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    [self.statusButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-                    [self.statusButton setTitle:@"sold" forState:UIControlStateNormal];
-                    self.itemStatusChanged = YES;
+                    weakSelf.itemStatusChanged = YES;
+                    NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"sold", nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
             }];
         } else {
@@ -136,9 +146,9 @@
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-                    [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
                     self.itemStatusChanged = YES;
+                    NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"sold", nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
             }];
         }
