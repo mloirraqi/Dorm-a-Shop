@@ -21,8 +21,8 @@
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profilePic" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="likedUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Watch" syncable="YES"/>
         <relationship name="posts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Post" syncable="YES"/>
+        <relationship name="userWatching" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Watch" syncable="YES"/>
     </entity>
     <entity name="Watch" representedClassName="Watch" syncable="YES" codeGenerationType="class">
         <relationship name="post" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" syncable="YES"/>
