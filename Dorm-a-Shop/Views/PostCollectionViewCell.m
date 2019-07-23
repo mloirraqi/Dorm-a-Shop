@@ -27,8 +27,9 @@
     self.isInitialReload = YES;
 }
 
-- (void)setPost {
-    [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
+- (void)setPost:(Post *)post {
+    _post = post;
+    [[PostManager shared] getCurrentUserWatchStatusForPost:post withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
         }
@@ -43,43 +44,6 @@
             [self.itemImage setImage:image];
         }
     }];
-}
-
-- (void)setUIWatchedForCurrentUserForPost:(Post *)post{
-    /*PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
-    [watchQuery orderByDescending:@"createdAt"];
-    [watchQuery whereKey:@"post" equalTo:post];
-    
-    __weak PostCollectionViewCell *weakSelf = self;
-    [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable postWatches, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
-        } else {
-            self.isInitialReload = NO;
-            weakSelf.post.watchCount = postWatches.count;
-            if (weakSelf.post.watchCount > 0) {
-                bool watched = NO;
-                for (PFObject *watch in postWatches) {
-                    if ([((PFObject *)watch[@"user"]).objectId isEqualToString:user.objectId]) {
-                        weakSelf.post.watch = watch;
-                        watched = YES;
-                        break;
-                    }
-                }
-                if (!watched) {
-                    weakSelf.post.watch = nil;
-                }
-            } else {
-                weakSelf.post.watch = nil;
-            }
-        }
-    }];*/
-    
-//        [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull watchedPostsArray, NSError * _Nonnull error) {
-//            if (error) {
-//                NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
-//            }
-//        }];
 }
 
 @end

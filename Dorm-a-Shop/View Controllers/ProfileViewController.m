@@ -76,44 +76,12 @@
             [self.profilePic setImage:image];
         }
     }];
-    
-//    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
-//    [query includeKey:@"author"];
-//    [query whereKey:@"author" equalTo:self.user];
-//    [query orderByDescending:@"updatedAt"];
-//
-//    __weak ProfileViewController *weakSelf = self;
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
-//        if (posts != nil) {
-//            NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-//            weakSelf.activeItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:aPredicate]];
-//            weakSelf.activeCount.text = [NSString stringWithFormat:@"%lu", weakSelf.activeItems.count];
-//            NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
-//            weakSelf.soldItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:sPredicate]];
-//            weakSelf.soldCount.text = [NSString stringWithFormat:@"%lu", weakSelf.soldItems.count];
-//            [weakSelf.collectionView reloadData];
-//        } else {
-//            NSLog(@"😫😫😫 couldn't fetch user's posts for some reason: %@", error.localizedDescription);
-//        }
-//    }];
-    
-    
-    /*NSMutableArray *posts = [[PostManager shared] getProfilePosts:self.user];
-    NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-    self.activeItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:aPredicate]];
-    self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-    NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
-    self.soldItems = [NSMutableArray arrayWithArray:[posts filteredArrayUsingPredicate:sPredicate]];
-    self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-    [self.collectionView reloadData];
-    
-    [self.refreshControl endRefreshing];*/
 
     [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSLog(@"posts array 0: %@", postsArray[0]);
             NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-                return [((PFObject *)post[@"author"]).objectId isEqualToString:[PFUser currentUser].objectId];
+                return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
             }];
             NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
             
@@ -140,13 +108,11 @@
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"active" forIndexPath:indexPath];
         Post *post = self.activeItems[indexPath.item];
         cell.post = post;
-        [cell setPost];
         return cell;
     } else {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
         Post *post = self.soldItems[indexPath.item];
         cell.post = post;
-        [cell setPost];
         return cell;
     }
 }
@@ -161,9 +127,7 @@
 
 - (void)updateDetailsData:(UIViewController *)viewController {
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-//    if (detailsViewController.watchStatusChanged) {
-//        [self.collectionView reloadData];
-//    } else
+    
     if (detailsViewController.itemStatusChanged) {
         if (detailsViewController.post.sold == NO) {
             [self.activeItems insertObject:detailsViewController.post atIndex:0];
@@ -172,6 +136,7 @@
             [self.soldItems  insertObject:detailsViewController.post atIndex:0];
             [self.activeItems removeObject:detailsViewController.post];
         }
+        
         [self.collectionView reloadData];
         self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
         self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];

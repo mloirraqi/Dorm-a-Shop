@@ -82,23 +82,9 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        /*NSString *postOwnerClassName = [[notification userInfo] objectForKey:@"postOwnerClassName"];
-        if (![postOwnerClassName isEqualToString:self.className]) {
-            Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
-            int index = 0;
-            for (Post *post in self.postsArray) {
-                if ([post.objectId isEqualToString:notificationPost.objectId]) {
-                    [self.postsArray replaceObjectAtIndex:index withObject:notificationPost];
-                    PostTableViewCell *cellToUpdate = self.postsArray[index];
-                    return;
-                }
-                index ++;
-            }
-        }*/
         Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
         NSUInteger postIndexRow = [self.postsArray indexOfObject:notificationPost];
         NSIndexPath *postIndexPath = [NSIndexPath indexPathForRow:postIndexRow inSection:0];
-        NSLog(@"index path: %@", postIndexPath);
         [self.tableView beginUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView endUpdates];
@@ -113,29 +99,13 @@
 }
 
 - (void)fetchPosts {
-//    PFQuery *postQuery = [Post query];
-//    [postQuery orderByDescending:@"createdAt"];
-//    [postQuery includeKey:@"author"];
-//    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
-//
-//    __weak HomeScreenViewController *weakSelf = self;
-//    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
-//        if (posts) {
-//            weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
-//            [weakSelf filterPosts];
-//            [weakSelf.tableView reloadData];
-//        } else {
-//            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-//        }
-//        [self.refreshControl endRefreshing];
-//    }];
-
     [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSLog(@"posts array 0: %@", postsArray[0]);
-            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-            self.postsArray = activePosts;
+            //NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            //NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+            //NSLog(@"filtered posts array 0: %@", activePosts[0]);
+            self.postsArray = postsArray;
             self.filteredPosts = self.postsArray; //new
             [self.tableView reloadData];
         } else {
@@ -148,10 +118,8 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (tableView == self.tableView) {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-    NSLog(@"table view: %@, cell: %@", tableView, cell);
-        Post *post = self.filteredPosts[indexPath.row]; //formerly self.filteredPosts
+        Post *post = self.filteredPosts[indexPath.row];
         cell.post = post;
-        
         return cell;
     } else if (tableView == self.categoryTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
@@ -175,35 +143,25 @@
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    if (tableView == self.tableView) {
-        return self.filteredPosts.count;  //formerly self.filteredPosts
-//    } else if (tableView == self.categoryTable) {
-//        return self.categories.count;
-//    } else if (tableView == self.conditionTable) {
-//        return self.conditions.count;
-//    } else if (tableView == self.timesTable) {
-//        return self.times.count;
-//    } else {
-//        return self.distances.count;
-//    }
+    if (tableView == self.tableView) {
+        return self.filteredPosts.count;
+    } else if (tableView == self.categoryTable) {
+        return self.categories.count;
+    } else if (tableView == self.conditionTable) {
+        return self.conditions.count;
+    } else if (tableView == self.timesTable) {
+        return self.times.count;
+    } else {
+        return self.distances.count;
+    }
 }
 
 - (void)didUpload:(Post *)post {
     [self.postsArray insertObject:post atIndex:0];
-//    [self.tableView reloadData]; //new
     [self filterPosts];
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    /*DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-    if (detailsViewController.watchStatusChanged) {
-        [self.tableView reloadData];
-    } else if (detailsViewController.itemStatusChanged) {
-        if (detailsViewController.post.sold == YES) {
-            [self.postsArray removeObject:detailsViewController.post];
-            [self filterPosts];
-        }
-    }*/
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.itemStatusChanged) {
         if (detailsViewController.post.sold == YES) {
@@ -223,14 +181,12 @@
     } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
-        //Post *post = self.filteredPosts[indexPath.row];
         Post *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
-        NSLog(@"home details post: %@", detailsViewController.post);
     }
 }
 
