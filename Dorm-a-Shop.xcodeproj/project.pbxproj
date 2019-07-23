@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4715CD9122E6720D00E2E916 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4715CD8F22E6720D00E2E916 /* ChatViewController.m */; };
+		4715CDDB22E7942F00E2E916 /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4715CDD922E7942F00E2E916 /* DormAShop.xcdatamodeld */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
@@ -66,6 +67,8 @@
 		4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_Shop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4715CD8F22E6720D00E2E916 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		4715CD9222E6DBFF00E2E916 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -212,6 +215,7 @@
 				47A8A9AA22DE3A30005D9520 /* Main.storyboard */,
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,
+				4715CDD922E7942F00E2E916 /* DormAShop.xcdatamodeld */,
 				47A8A9AD22DE3A32005D9520 /* Assets.xcassets */,
 				47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */,
 				47A8A9B222DE3A32005D9520 /* Info.plist */,
@@ -299,6 +303,7 @@
 		E96DFB8C6FE65C2CA1921A65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4715CD9322E7914800E2E916 /* CoreData.framework */,
 				4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */,
 				B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */,
 				4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */,
@@ -581,6 +586,7 @@
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
 				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
+				4715CDDB22E7942F00E2E916 /* DormAShop.xcdatamodeld in Sources */,
 				4715CD9122E6720D00E2E916 /* ChatViewController.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
@@ -913,6 +919,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4715CDD922E7942F00E2E916 /* DormAShop.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */,
+			);
+			currentVersion = 4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */;
+			path = DormAShop.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 47A8A99922DE3A30005D9520 /* Project object */;
 }

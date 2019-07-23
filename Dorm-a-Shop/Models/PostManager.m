@@ -56,7 +56,6 @@
                     Post *watchedPost = watch[@"post"];
                     [weakSelf.watchedPostsArray addObject:watchedPost];
                 }
-                
                 completion(weakSelf.watchedPostsArray, nil);
             }
         }];
