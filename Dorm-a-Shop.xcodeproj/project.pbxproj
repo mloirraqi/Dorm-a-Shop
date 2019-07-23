@@ -26,6 +26,7 @@
 		DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFF22DFD20500418DE3 /* ProfileViewController.m */; };
 		DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD322E66FE500B1311F /* InboxViewController.m */; };
 		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
+		DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD922E686DE00B1311F /* EditProfileVC.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
@@ -100,12 +101,16 @@
 		DE4FCFD322E66FE500B1311F /* InboxViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InboxViewController.m; sourceTree = "<group>"; };
 		DE4FCFD522E6744100B1311F /* MessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		DE4FCFD622E6744100B1311F /* MessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		DE4FCFD822E686DE00B1311F /* EditProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileVC.h; sourceTree = "<group>"; };
+		DE4FCFD922E686DE00B1311F /* EditProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileVC.m; sourceTree = "<group>"; };
 		DED744F622DFE0A400394748 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		DED744F722DFE0A400394748 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		DEFE7C8722E640DF006E3096 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		DEFE7C8822E640DF006E3096 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		DEFE7C8A22E64347006E3096 /* UserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserCell.h; sourceTree = "<group>"; };
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
+		EA03725922E64E1F00354DA2 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.h"; sourceTree = "<absolute>"; };
+		EA03725A22E64E1F00354DA2 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.m"; sourceTree = "<absolute>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		EA6732DC22DF931C004E362F /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
@@ -240,6 +245,10 @@
 		47A8A9E122DE4542005D9520 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EA03725922E64E1F00354DA2 /* ChatViewController.h */,
+				EA03725A22E64E1F00354DA2 /* ChatViewController.m */,
+				DE4FCFD822E686DE00B1311F /* EditProfileVC.h */,
+				DE4FCFD922E686DE00B1311F /* EditProfileVC.m */,
 				EA6732DC22DF931C004E362F /* SignUpVC.h */,
 				EA6732DD22DF931C004E362F /* SignUpVC.m */,
 				EA6732F522DFAB25004E362F /* SignInVC.h */,
@@ -556,6 +565,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
+				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
 				DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */,
