@@ -66,7 +66,6 @@
 		263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_Shop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4715CD8F22E6720D00E2E916 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
-		4715CD9222E6DBFF00E2E916 /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,7 +115,6 @@
 		DEFE7C8822E640DF006E3096 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		DEFE7C8A22E64347006E3096 /* UserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserCell.h; sourceTree = "<group>"; };
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
-		EA03725A22E64E1F00354DA2 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.m"; sourceTree = "<absolute>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		EA2844B622E7817F00927F91 /* LocationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocationManager.h; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/LocationManager.h"; sourceTree = "<absolute>"; };
@@ -256,8 +254,6 @@
 		47A8A9E122DE4542005D9520 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4715CD9222E6DBFF00E2E916 /* ChatViewController.h */,
-				EA03725A22E64E1F00354DA2 /* ChatViewController.m */,
 				DE4FCFD822E686DE00B1311F /* EditProfileVC.h */,
 				DE4FCFD922E686DE00B1311F /* EditProfileVC.m */,
 				EA6732DC22DF931C004E362F /* SignUpVC.h */,
