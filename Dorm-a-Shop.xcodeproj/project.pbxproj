@@ -24,8 +24,8 @@
 		90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */; };
 		DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFC22DE7BE900418DE3 /* UploadViewController.m */; };
 		DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFF22DFD20500418DE3 /* ProfileViewController.m */; };
-		DE4FCFD122E6655400B1311F /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD022E6655400B1311F /* ChatViewController.m */; };
 		DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD322E66FE500B1311F /* InboxViewController.m */; };
+		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
@@ -96,10 +96,10 @@
 		DE307FFC22DE7BE900418DE3 /* UploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadViewController.m; sourceTree = "<group>"; };
 		DE307FFE22DFD20500418DE3 /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		DE307FFF22DFD20500418DE3 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		DE4FCFCF22E6655400B1311F /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
-		DE4FCFD022E6655400B1311F /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		DE4FCFD222E66FE500B1311F /* InboxViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InboxViewController.h; sourceTree = "<group>"; };
 		DE4FCFD322E66FE500B1311F /* InboxViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InboxViewController.m; sourceTree = "<group>"; };
+		DE4FCFD522E6744100B1311F /* MessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
+		DE4FCFD622E6744100B1311F /* MessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		DED744F622DFE0A400394748 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		DED744F722DFE0A400394748 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		DEFE7C8722E640DF006E3096 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -240,8 +240,6 @@
 		47A8A9E122DE4542005D9520 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				DE4FCFCF22E6655400B1311F /* ChatViewController.h */,
-				DE4FCFD022E6655400B1311F /* ChatViewController.m */,
 				EA6732DC22DF931C004E362F /* SignUpVC.h */,
 				EA6732DD22DF931C004E362F /* SignUpVC.m */,
 				EA6732F522DFAB25004E362F /* SignInVC.h */,
@@ -260,6 +258,8 @@
 				DEFE7C8822E640DF006E3096 /* SearchViewController.m */,
 				DE4FCFD222E66FE500B1311F /* InboxViewController.h */,
 				DE4FCFD322E66FE500B1311F /* InboxViewController.m */,
+				DE4FCFD522E6744100B1311F /* MessageViewController.h */,
+				DE4FCFD622E6744100B1311F /* MessageViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -560,7 +560,7 @@
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
 				DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */,
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
-				DE4FCFD122E6655400B1311F /* ChatViewController.m in Sources */,
+				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,

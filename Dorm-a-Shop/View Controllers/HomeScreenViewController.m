@@ -175,17 +175,17 @@
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    if (tableView == self.tableView) {
+    if (tableView == self.tableView) {
         return self.filteredPosts.count;  //formerly self.filteredPosts
-//    } else if (tableView == self.categoryTable) {
-//        return self.categories.count;
-//    } else if (tableView == self.conditionTable) {
-//        return self.conditions.count;
-//    } else if (tableView == self.timesTable) {
-//        return self.times.count;
-//    } else {
-//        return self.distances.count;
-//    }
+    } else if (tableView == self.categoryTable) {
+        return self.categories.count;
+    } else if (tableView == self.conditionTable) {
+        return self.conditions.count;
+    } else if (tableView == self.timesTable) {
+        return self.times.count;
+    } else {
+        return self.distances.count;
+    }
 }
 
 - (void)didUpload:(Post *)post {
@@ -262,14 +262,14 @@
     
     if (![[self.categoryButton currentTitle] isEqual: @"Category: All"]) {
         NSPredicate *caPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-            return ([post.category containsString:[self.categoryButton currentTitle]]);
+            return ([post.category isEqualToString:[self.categoryButton currentTitle]]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:caPredicate]];
     }
     
     if (![[self.conditionButton currentTitle] isEqual: @"Condition: All"]) {
         NSPredicate *coPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-            return ([post.condition containsString:[self.conditionButton currentTitle]]);
+            return ([post.condition isEqualToString:[self.conditionButton currentTitle]]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:coPredicate]];
     }

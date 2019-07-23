@@ -113,7 +113,7 @@
         if (postsArray) {
             NSLog(@"posts array 0: %@", postsArray[0]);
             NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-                return [((PFObject *)post[@"author"]).objectId isEqualToString:[PFUser currentUser].objectId];
+                return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
             }];
             NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
             

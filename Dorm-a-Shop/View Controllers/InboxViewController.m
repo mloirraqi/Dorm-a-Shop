@@ -7,8 +7,14 @@
 //
 
 #import "InboxViewController.h"
+#import "UserCell.h"
+#import "MessageViewController.h"
+@import Parse;
 
-@interface InboxViewController ()
+@interface InboxViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) NSMutableArray *users;
 
 @end
 
@@ -16,7 +22,47 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self fetchUsers];
+}
+
+- (void)fetchUsers {
+    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
+    [userQuery orderByAscending:@"username"];
+    
+    __weak InboxViewController *weakSelf = self;
+    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
+        if (users) {
+            weakSelf.users = [NSMutableArray arrayWithArray:users];
+            [weakSelf.tableView reloadData];
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+    }];
+}
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
+    PFObject *user = self.users[indexPath.row];
+    cell.user = user;
+    [cell setUser];
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.users.count;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"sendMsg"]) {
+        UserCell *tappedCell = sender;
+        MessageViewController *profileViewController = [segue destinationViewController];
+        profileViewController.receiver = (PFUser *) tappedCell.user;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
 }
 
 /*

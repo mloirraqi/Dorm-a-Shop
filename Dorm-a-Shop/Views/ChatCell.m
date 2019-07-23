@@ -12,13 +12,23 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+}
 
-    // Configure the view for the selected state
+- (void)showMsg {
+    self.profilePic.layer.cornerRadius = 20;
+    self.profilePic.layer.masksToBounds = YES;
+    PFFileObject *imageFile = (self.chat[@"sender"])[@"ProfilePic"];
+    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+        if (!error) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            [self.profilePic setImage:image];
+        }
+    }];
+    self.messageLabel.text = self.chat[@"text"];
 }
 
 @end
