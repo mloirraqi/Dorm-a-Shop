@@ -49,10 +49,10 @@
         [self showAlertView:@"Please add Email First"];
         return false;
     }
-    if(passwordTextField.text.length == 0){
-        [self showAlertView:@"Please add Password First"];
-        return false;
-    }
+//    if(passwordTextField.text.length == 0){
+//        [self showAlertView:@"Please add Password First"];
+//        return false;
+//    }
     
     if (passwordTextField.text != confirmPasswordTextField.text){
         [self showAlertView:@"Passwords Don't Match"];
@@ -115,6 +115,7 @@
             [MBProgressHUD hideHUDForView:self.view animated:true];
             if (!error) {
                 // Hooray! Let them use the app now.
+                [self setUpView];
                 [self showAlertView:@"Updated Successfully"];
             } else {
                 NSString *errorString = [error userInfo][@"error"];

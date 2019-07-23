@@ -33,6 +33,7 @@
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
 		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
+		EA2844B822E7818000927F91 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2844B722E7817F00927F91 /* LocationManager.m */; };
 		EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732DD22DF931C004E362F /* SignUpVC.m */; };
 		EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E722DF95E0004E362F /* NJOPasswordStrengthEvaluator.m */; };
 		EA6732ED22DF95F5004E362F /* QAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E922DF95F5004E362F /* QAButton.m */; };
@@ -118,6 +119,8 @@
 		EA03725A22E64E1F00354DA2 /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ChatViewController.m"; sourceTree = "<absolute>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		EA2844B622E7817F00927F91 /* LocationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocationManager.h; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/LocationManager.h"; sourceTree = "<absolute>"; };
+		EA2844B722E7817F00927F91 /* LocationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LocationManager.m; path = "/Users/mloirraqi/Desktop/Dorm-a-Shop/Dorm-a-Shop/LocationManager.m"; sourceTree = "<absolute>"; };
 		EA6732DC22DF931C004E362F /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
 		EA6732DD22DF931C004E362F /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		EA6732E622DF95E0004E362F /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
@@ -198,6 +201,8 @@
 		47A8A9A322DE3A30005D9520 /* Dorm-a-Shop */ = {
 			isa = PBXGroup;
 			children = (
+				EA2844B622E7817F00927F91 /* LocationManager.h */,
+				EA2844B722E7817F00927F91 /* LocationManager.m */,
 				EA6732E422DF959A004E362F /* HelperFIles */,
 				EA6732EC22DF95F5004E362F /* QAButton.h */,
 				EA6732E922DF95F5004E362F /* QAButton.m */,
@@ -572,6 +577,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA2844B822E7818000927F91 /* LocationManager.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
