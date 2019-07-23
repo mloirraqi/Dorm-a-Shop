@@ -28,7 +28,7 @@
 }
 
 - (IBAction)clickSend:(id)sender {
-    PFObject *chatMessage = [PFObject objectWithClassName:@"Message_fbu2019"];
+    PFObject *chatMessage = [PFObject objectWithClassName:@"Message"];
     // Use the name of your outlet to get the text the user typed
     chatMessage[@"text"] = self.messageView.text;
     chatMessage[@"user"] = PFUser.currentUser;
