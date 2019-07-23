@@ -1674,12 +1674,8 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ob4-g7-kRL"/>
-        <segue reference="KLi-YY-IiH"/>
-        <segue reference="ufI-em-euD"/>
-=======
         <segue reference="ni5-B6-yy2"/>
         <segue reference="KLi-YY-IiH"/>
->>>>>>> 8235fa58f3cf3cdcdc8b3381fe5217d08c33c1f3
+        <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>
 </document>
