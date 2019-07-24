@@ -98,7 +98,6 @@
         Post *post = self.postsArray[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.post = post;
-        NSLog(@"details watch from watch: %@", detailsViewController.post.watch);
         detailsViewController.delegate = self;
     }
 }

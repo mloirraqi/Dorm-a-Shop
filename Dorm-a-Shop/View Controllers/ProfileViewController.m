@@ -79,7 +79,6 @@
 
     [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
-            NSLog(@"posts array 0: %@", postsArray[0]);
             NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
                 return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
             }];

@@ -168,7 +168,8 @@
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    /*DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+    /*COMMENTS ARE STILL NEEDED, BUT WILL BE CLEANED UP LATER
+     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     if (detailsViewController.itemStatusChanged) {
         if (detailsViewController.post.sold == YES) {
             [self.postsArray removeObject:detailsViewController.post];
