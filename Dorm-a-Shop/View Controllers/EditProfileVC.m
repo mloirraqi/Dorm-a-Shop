@@ -26,21 +26,31 @@
 }
 
 - (void)setUpView {
+    
+    submitButton.hidden = true;
+    
     PFUser *currentUser = [PFUser currentUser];
     [currentUser fetch];
+    
     nameTextField.text = currentUser.username;
     emailTextField.text = currentUser.email;
+    passwordTextField.text = currentUser.password;
+    
+    nameTextField.delegate = self;
+    emailTextField.delegate = self;
+    passwordTextField.delegate = self;
+    confirmPasswordTextField.delegate = self;
     
     PFFileObject *image = currentUser[@"ProfilePic"];
+    
     [image getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError * _Nullable error){
         UIImage *originalImage = [UIImage imageWithData:data];
         [addPictureButton setImage:originalImage forState:UIControlStateNormal];
     }];
-    confirmPasswordTextField.hidden = YES;
-    passwordTextField.hidden = YES;
-    }
+}
 
 - (BOOL)checkFields{
+    
     if (!nameTextField.text || nameTextField.text.length == 0){
         [self showAlertView:@"Please add Name First"];
         return false;
@@ -49,10 +59,6 @@
         [self showAlertView:@"Please add Email First"];
         return false;
     }
-//    if(passwordTextField.text.length == 0){
-//        [self showAlertView:@"Please add Password First"];
-//        return false;
-//    }
     
     if (passwordTextField.text != confirmPasswordTextField.text){
         [self showAlertView:@"Passwords Don't Match"];
@@ -79,24 +85,50 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
+    
 }
 
-- (IBAction)changePasswordShow:(id)sender {
-    passwordTextField.hidden = NO;
-    confirmPasswordTextField.hidden = NO;
+- (IBAction)textValuesChanged:(id)sender {
+    [self submitButtonUpdate];
+}
+
+
+-(void)submitButtonUpdate
+{
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (nameTextField.text.length != 0 && nameTextField.text != currentUser.username){
+        submitButton.hidden = false;
+    }
+    else if (emailTextField.text.length != 0 && emailTextField.text != currentUser.email){
+        submitButton.hidden = false;
+    }
+    else if (passwordTextField.text.length != 0 && confirmPasswordTextField.text != 0){
+        submitButton.hidden = false;
+    }
+    else if (selectedImage != nil)
+    {
+        submitButton.hidden = false;
+    }
+    else if (selectedLocationPoint != nil)
+    {
+        submitButton.hidden = false;
+    }
+    else
+    {
+        submitButton.hidden = true;
+    }
 }
 
 
 - (IBAction)editProfileButtonAction:(UIButton *)sender {
+    
     if ([self checkFields]){
+        
         PFUser *currentUser = [PFUser currentUser];
         currentUser.username = nameTextField.text;
         currentUser.email = emailTextField.text;
-        
-        //        if(passwordTextField.text == @""){
-        //        currentUser.password = passwordField.text;
-        //        }
-        //        else currentUser.password = passwordTextField.text;
+        currentUser.password = passwordTextField.text;
         
         if (selectedImage != nil)
         {
@@ -117,13 +149,14 @@
                 // Hooray! Let them use the app now.
                 [self setUpView];
                 [self showAlertView:@"Updated Successfully"];
+                [self.navigationController popViewControllerAnimated:YES];
             } else {
                 NSString *errorString = [error userInfo][@"error"];
                 [self showAlertView:errorString];
                 // Show the errorString somewhere and let the user try again.
             }
         }];
-}
+    }
 }
 
 - (IBAction)updateLocationButtonAction:(UIButton *)sender {
@@ -182,12 +215,12 @@
     
 }
 
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     selectedImage = info[UIImagePickerControllerEditedImage];
     [addPictureButton setImage:selectedImage forState:UIControlStateNormal];
     [picker dismissViewControllerAnimated:YES completion:NULL];
+    [self submitButtonUpdate];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -208,6 +241,7 @@
     [updateLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
     locationSelected = YES;
     selectedLocationPoint = [PFGeoPoint geoPointWithLatitude:place.coordinate.latitude longitude:place.coordinate.longitude];
+    [self submitButtonUpdate];
 }
 
 - (void)placePickerDidCancel:(GMSPlacePickerViewController *)viewController {
@@ -216,27 +250,5 @@
     
     NSLog(@"No place selected");
 }
-
-
-
-
-    
-
-
-
-
-
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

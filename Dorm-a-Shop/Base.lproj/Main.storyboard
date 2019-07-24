@@ -373,7 +373,7 @@
         <!--Profile View Controller-->
         <scene sceneID="vrD-3O-ABM">
             <objects>
-                <viewController id="ji6-xS-49q" customClass="ProfileViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="profilePage" id="ji6-xS-49q" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vhg-Zo-bzF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -701,6 +701,9 @@
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="textValuesChanged:" destination="cUB-Zh-w6I" eventType="editingChanged" id="Dje-pF-XCC"/>
+                                </connections>
                             </textField>
                             <view alpha="0.20000000298023224" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="10J-rV-AK7">
                                 <rect key="frame" x="144.5" y="354" width="240" height="1"/>
@@ -723,6 +726,9 @@
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="textValuesChanged:" destination="cUB-Zh-w6I" eventType="editingChanged" id="EjG-vW-t9Y"/>
+                                </connections>
                             </textField>
                             <view alpha="0.20000000298023224" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o2x-td-jdR">
                                 <rect key="frame" x="144.5" y="418" width="240" height="1"/>
@@ -745,6 +751,9 @@
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="textValuesChanged:" destination="cUB-Zh-w6I" eventType="editingChanged" id="Rdl-9T-xPT"/>
+                                </connections>
                             </textField>
                             <view alpha="0.20000000298023224" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j9Y-aQ-Fn2">
                                 <rect key="frame" x="161" y="595" width="224" height="1"/>
@@ -812,6 +821,9 @@
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="textValuesChanged:" destination="cUB-Zh-w6I" eventType="editingChanged" id="fOq-e6-631"/>
+                                </connections>
                             </textField>
                             <view alpha="0.20000000298023224" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bc2-QG-uNB">
                                 <rect key="frame" x="161" y="657" width="224" height="1"/>
@@ -877,6 +889,7 @@
                         <outlet property="emailTextField" destination="PJX-nI-wG2" id="KSg-mi-8M7"/>
                         <outlet property="nameTextField" destination="kvp-UD-rPp" id="Kzz-uR-adt"/>
                         <outlet property="passwordTextField" destination="bn5-cJ-uhn" id="HSr-ys-SuT"/>
+                        <outlet property="submitButton" destination="S9f-PL-NYK" id="Glv-sh-zCd"/>
                         <outlet property="updateLocationButton" destination="jpv-Op-MyP" id="4yT-cu-gai"/>
                     </connections>
                 </viewController>
@@ -1657,7 +1670,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ni5-B6-yy2"/>
-        <segue reference="KLi-YY-IiH"/>
+        <segue reference="inK-qS-1By"/>
         <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>
 </document>

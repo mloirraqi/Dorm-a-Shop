@@ -64,6 +64,12 @@
     [self fetchProfile];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.user = PFUser.currentUser;
+    [self fetchProfile];
+}
+
 - (void)fetchProfile {
     self.username.text = self.user.username;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
