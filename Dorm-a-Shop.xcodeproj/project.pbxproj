@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4715CDDB22E7942F00E2E916 /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4715CDD922E7942F00E2E916 /* DormAShop.xcdatamodeld */; };
 		4715CDF322E7C21100E2E916 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4715CDF222E7C21100E2E916 /* LocationManager.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
@@ -40,6 +39,14 @@
 		EA6732EE22DF95F5004E362F /* QAView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732EB22DF95F5004E362F /* QAView.m */; };
 		EA6732F422DF96DE004E362F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F322DF96DE004E362F /* Utils.m */; };
 		EA6732F722DFAB25004E362F /* SignInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F622DFAB25004E362F /* SignInVC.m */; };
+		EAEB723122E9313700426226 /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EAEB722F22E9313700426226 /* DormAShop.xcdatamodeld */; };
+		EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723322E9315200426226 /* DraggableViewBackground.m */; };
+		EAEB723922E9316200426226 /* DraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723722E9316200426226 /* DraggableView.m */; };
+		EAEB723A22E9316200426226 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723822E9316200426226 /* OverlayView.m */; };
+		EAEB723D22E9369900426226 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723C22E9369900426226 /* Card.m */; };
+		EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */; };
+		EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */; };
+		EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724422E95C6B00426226 /* CardsViewController.m */; };
 		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,7 +73,6 @@
 		263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopUITests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopUITests/Pods-Dorm-a-ShopUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_Shop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
 		4715CDF122E7C21100E2E916 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
 		4715CDF222E7C21100E2E916 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +138,20 @@
 		EA6732F322DF96DE004E362F /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		EA6732F522DFAB25004E362F /* SignInVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInVC.h; sourceTree = "<group>"; };
 		EA6732F622DFAB25004E362F /* SignInVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInVC.m; sourceTree = "<group>"; };
+		EAEB723022E9313700426226 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
+		EAEB723222E9315200426226 /* DraggableViewBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableViewBackground.h; sourceTree = "<group>"; };
+		EAEB723322E9315200426226 /* DraggableViewBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableViewBackground.m; sourceTree = "<group>"; };
+		EAEB723522E9316200426226 /* DraggableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableView.h; sourceTree = "<group>"; };
+		EAEB723622E9316200426226 /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayView.h; sourceTree = "<group>"; };
+		EAEB723722E9316200426226 /* DraggableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableView.m; sourceTree = "<group>"; };
+		EAEB723822E9316200426226 /* OverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OverlayView.m; sourceTree = "<group>"; };
+		EAEB723B22E9369900426226 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		EAEB723C22E9369900426226 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		EAEB723F22E936CB00426226 /* CardItemCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardItemCollectionViewCell.h; sourceTree = "<group>"; };
+		EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardItemCollectionViewCell.m; sourceTree = "<group>"; };
+		EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
+		EAEB724422E95C6B00426226 /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
+		EAEB724522E95C6B00426226 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +222,7 @@
 		47A8A9A322DE3A30005D9520 /* Dorm-a-Shop */ = {
 			isa = PBXGroup;
 			children = (
+				EAEB722922E930BC00426226 /* Card */,
 				EA6732E422DF959A004E362F /* HelperFIles */,
 				EA6732EC22DF95F5004E362F /* QAButton.h */,
 				EA6732E922DF95F5004E362F /* QAButton.m */,
@@ -214,7 +235,7 @@
 				47A8A9AA22DE3A30005D9520 /* Main.storyboard */,
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,
-				4715CDD922E7942F00E2E916 /* DormAShop.xcdatamodeld */,
+				EAEB722F22E9313700426226 /* DormAShop.xcdatamodeld */,
 				47A8A9AD22DE3A32005D9520 /* Assets.xcassets */,
 				47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */,
 				47A8A9B222DE3A32005D9520 /* Info.plist */,
@@ -244,6 +265,8 @@
 		47A8A9DD22DE42F9005D9520 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EAEB723B22E9369900426226 /* Card.h */,
+				EAEB723C22E9369900426226 /* Card.m */,
 				47A8A9D922DE42E5005D9520 /* Post.h */,
 				47A8A9DA22DE42E5005D9520 /* Post.m */,
 				47A8A9F522E291F1005D9520 /* PostManager.h */,
@@ -335,6 +358,40 @@
 				EA6732E722DF95E0004E362F /* NJOPasswordStrengthEvaluator.m */,
 			);
 			name = Navajo;
+			sourceTree = "<group>";
+		};
+		EAEB722922E930BC00426226 /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				EAEB724522E95C6B00426226 /* CardsViewController.h */,
+				EAEB724422E95C6B00426226 /* CardsViewController.m */,
+				EAEB723E22E936B900426226 /* Card Cell */,
+				EAEB722E22E9311D00426226 /* Dragable */,
+			);
+			path = Card;
+			sourceTree = "<group>";
+		};
+		EAEB722E22E9311D00426226 /* Dragable */ = {
+			isa = PBXGroup;
+			children = (
+				EAEB723222E9315200426226 /* DraggableViewBackground.h */,
+				EAEB723322E9315200426226 /* DraggableViewBackground.m */,
+				EAEB723522E9316200426226 /* DraggableView.h */,
+				EAEB723722E9316200426226 /* DraggableView.m */,
+				EAEB723622E9316200426226 /* OverlayView.h */,
+				EAEB723822E9316200426226 /* OverlayView.m */,
+			);
+			path = Dragable;
+			sourceTree = "<group>";
+		};
+		EAEB723E22E936B900426226 /* Card Cell */ = {
+			isa = PBXGroup;
+			children = (
+				EAEB723F22E936CB00426226 /* CardItemCollectionViewCell.h */,
+				EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */,
+				EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */,
+			);
+			path = "Card Cell";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -448,6 +505,7 @@
 				47A8A9B122DE3A32005D9520 /* LaunchScreen.storyboard in Resources */,
 				47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */,
 				47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */,
+				EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,18 +633,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
+				EAEB723122E9313700426226 /* DormAShop.xcdatamodeld in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
+				EAEB723D22E9369900426226 /* Card.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
 				DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */,
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
 				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
-				4715CDDB22E7942F00E2E916 /* DormAShop.xcdatamodeld in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
+				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
+				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
@@ -595,6 +657,8 @@
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
 				47A8A9F722E291F1005D9520 /* PostManager.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
+				EAEB723A22E9316200426226 /* OverlayView.m in Sources */,
+				EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				4715CDF322E7C21100E2E916 /* LocationManager.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
@@ -921,13 +985,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		4715CDD922E7942F00E2E916 /* DormAShop.xcdatamodeld */ = {
+		EAEB722F22E9313700426226 /* DormAShop.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */,
+				EAEB723022E9313700426226 /* DormAShop.xcdatamodel */,
 			);
-			currentVersion = 4715CDDA22E7942F00E2E916 /* DormAShop.xcdatamodel */;
-			path = DormAShop.xcdatamodeld;
+			currentVersion = EAEB723022E9313700426226 /* DormAShop.xcdatamodel */;
+			name = DormAShop.xcdatamodeld;
+			path = "../../Dorm-a-Shop legit 2/Dorm-a-Shop/DormAShop.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
