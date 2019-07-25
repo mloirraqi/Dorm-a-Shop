@@ -95,4 +95,8 @@
     }
 }
 
+- (IBAction)cancel:(id)sender {
+    [self dismissViewControllerAnimated:true completion:nil];
+}
+
 @end

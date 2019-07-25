@@ -24,14 +24,14 @@
 - (void)showMsg {
     self.profilePic.layer.cornerRadius = 20;
     self.profilePic.layer.masksToBounds = YES;
-    PFFileObject *imageFile = self.sender[@"ProfilePic"];
+    PFFileObject *imageFile = (self.chat[@"sender"])[@"ProfilePic"];
     [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         if (!error) {
             UIImage *image = [UIImage imageWithData:imageData];
             [self.profilePic setImage:image];
         }
     }];
-    if (self.sender == [PFUser currentUser]) {
+    if ([((PFObject *)self.chat[@"sender"]).objectId isEqualToString:PFUser.currentUser.objectId]) {
         [self.messageLabel setTextAlignment:NSTextAlignmentRight];
         self.profilePic.hidden = YES;
         [self.profilePic removeConstraints:[self.profilePic constraints]];

@@ -9,6 +9,7 @@
 #import "MessageViewController.h"
 #import "ChatCell.h"
 @import Parse;
+@import TwilioChatClient;
 
 @interface MessageViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -40,6 +41,8 @@
     [recQuery whereKey:@"sender" equalTo:self.receiver];
     
     PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
+    [query orderByAscending:@"createdAt"];
+    [query includeKey:@"sender"];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
         if (chats != nil) {
@@ -74,11 +77,6 @@
     ChatCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChatCell"];
     PFObject *chat = self.messages[indexPath.row];
     cell.chat = chat;
-    if ([((PFUser *)chat[@"sender"]).objectId isEqualToString:[PFUser currentUser].objectId]) {
-        cell.sender = [PFUser currentUser];
-    } else {
-        cell.sender = self.receiver;
-    }
     [cell showMsg];
     return cell;
 }
