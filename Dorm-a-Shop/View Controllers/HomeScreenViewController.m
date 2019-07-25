@@ -15,7 +15,11 @@
 #import "DetailsViewController.h"
 #import "SignInVC.h"
 #import "PostManager.h"
+<<<<<<< HEAD
 #import "AppDelegate.h"
+=======
+#import "LocationManager.h"
+>>>>>>> f5699d9931b5b5611531432f170c9030258c4866
 @import Parse;
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
@@ -123,18 +127,33 @@
 }
 
 - (void)fetchPosts {
-    [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-        if (postsArray) {
-            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-            self.postsArray = activePosts;
-            self.filteredPosts = self.postsArray;
-            [self.tableView reloadData];
+    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
+    PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
+    
+    PFQuery *postQuery = [Post query];
+    [postQuery orderByDescending:@"createdAt"];
+    [postQuery includeKey:@"author"];
+    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
+    [postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:5.0];
+    
+    __weak HomeScreenViewController *weakSelf = self;
+    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
+        if (posts) {
+            weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
+            [weakSelf filterPosts];
+            [weakSelf.tableView reloadData];
         } else {
-            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
         [self.refreshControl endRefreshing];
     }];
+    /*[[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+     if (postsArray) {
+     NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+     NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+     self.postsArray = activePosts;
+     self.filteredPosts = self.postsArray;
+     [self.tableView reloadData];*/
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {

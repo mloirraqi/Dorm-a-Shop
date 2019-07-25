@@ -21,8 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *category;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) PFFileObject *image;
+@property (nonatomic, strong) PFGeoPoint *location;
 @property (nonatomic, strong) NSNumber *price;
 @property (nonatomic, assign) BOOL sold;
+
++ (instancetype)postListing: (UIImage * _Nullable)image withCaption: (NSString * _Nullable)caption withPrice: (NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion: (PFBooleanResultBlock  _Nullable)completion;
 
 //local properties
 @property (nonatomic) NSNumber *watchCount;

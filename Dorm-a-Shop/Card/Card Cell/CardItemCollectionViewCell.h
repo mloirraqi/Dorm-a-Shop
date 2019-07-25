@@ -1,8 +1,8 @@
 //
-//  PostCollectionViewCell.h
+//  CardItemCollectionViewCell.h
 //  Dorm-a-Shop
 //
-//  Created by addisonz on 7/17/19.
+//  Created by mloirraqi on 07/24/2019.
 //  Copyright © 2019 ilanashapiro. All rights reserved.
 //
 
@@ -11,13 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PostCollectionViewCell : UICollectionViewCell
-
-@property (weak, nonatomic) IBOutlet UIImageView *itemImage;
-- (void)setPost;
-
+@interface CardItemCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong) Post *post;
-
 @end
 
 NS_ASSUME_NONNULL_END
