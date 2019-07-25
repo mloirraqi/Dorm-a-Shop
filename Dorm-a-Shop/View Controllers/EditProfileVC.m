@@ -128,7 +128,10 @@
         PFUser *currentUser = [PFUser currentUser];
         currentUser.username = nameTextField.text;
         currentUser.email = emailTextField.text;
+        
+        if(passwordTextField.text.length != 0){
         currentUser.password = passwordTextField.text;
+        }
         
         if (selectedImage != nil)
         {
@@ -138,18 +141,21 @@
             currentUser[@"ProfilePic"] = image;
         }
         
-        if (selectedLocationPoint != nil) {
-            currentUser[@"Location"] = self->selectedLocationPoint;
-        }
-        
         [MBProgressHUD showHUDAddedTo:self.view animated:true];
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             [MBProgressHUD hideHUDForView:self.view animated:true];
             if (!error) {
                 // Hooray! Let them use the app now.
-                [self setUpView];
-                [self showAlertView:@"Updated Successfully"];
-                [self.navigationController popViewControllerAnimated:YES];
+                
+                if (self->selectedLocationPoint != nil) {
+                    [self setLocationName];
+                }
+                else
+                {
+                    [self setUpView];
+                    [self showAlertView:@"Updated Successfully"];
+                }
+                
             } else {
                 NSString *errorString = [error userInfo][@"error"];
                 [self showAlertView:errorString];
@@ -157,6 +163,99 @@
             }
         }];
     }
+}
+
+-(void)setLocationName
+{
+    CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:selectedLocationPoint.latitude longitude:selectedLocationPoint.longitude];
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
+        
+        NSString *strAdd = nil;
+        
+        if (error == nil && [placemarks count] > 0)
+        {
+            CLPlacemark *placemark = [placemarks lastObject];
+            
+            // strAdd -> take bydefault value nil
+            if ([placemark.subThoroughfare length] != 0)
+                strAdd = placemark.subThoroughfare;
+            
+            if ([placemark.thoroughfare length] != 0)
+            {
+                // strAdd -> store value of current location
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark thoroughfare]];
+                else
+                {
+                    // strAdd -> store only this value,which is not null
+                    strAdd = placemark.thoroughfare;
+                }
+            }
+            
+            if ([placemark.postalCode length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
+                else
+                    strAdd = placemark.postalCode;
+            }
+            
+            if ([placemark.locality length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
+                else
+                    strAdd = placemark.locality;
+            }
+            
+            if ([placemark.administrativeArea length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
+                else
+                    strAdd = placemark.administrativeArea;
+            }
+            
+            if ([placemark.country length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
+                else
+                    strAdd = placemark.country;
+            }
+            
+            NSLog(@"%@", strAdd);
+        }
+        
+        [self updateLocationWith:strAdd];
+    }];
+}
+
+-(void)updateLocationWith:(NSString *)address
+{
+    PFUser *currentUser = [PFUser currentUser];
+    currentUser[@"Location"] = selectedLocationPoint;
+    if(address != nil)
+    {
+        currentUser[@"address"] = address;
+    }
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:true];
+    [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        [MBProgressHUD hideHUDForView:self.view animated:true];
+        if (!error) {
+            // Hooray! Let them use the app now.
+            [self setUpView];
+            [self showAlertView:@"Updated Successfully"];
+            
+        } else {
+            NSString *errorString = [error userInfo][@"error"];
+            [self showAlertView:errorString];
+            // Show the errorString somewhere and let the user try again.
+        }
+    }];
 }
 
 - (IBAction)updateLocationButtonAction:(UIButton *)sender {

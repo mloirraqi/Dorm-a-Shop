@@ -39,8 +39,8 @@
     //    newPost.watchCount = @(0);
     newPost.sold = NO;
     
-    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
-    newPost.location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
+//    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
+//    newPost.location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
