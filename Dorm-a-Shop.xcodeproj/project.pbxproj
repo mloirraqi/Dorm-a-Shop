@@ -28,7 +28,7 @@
 		DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD322E66FE500B1311F /* InboxViewController.m */; };
 		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
 		DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD922E686DE00B1311F /* EditProfileVC.m */; };
-		DE4FD00E22E90A0900B1311F /* ClientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FD00D22E90A0900B1311F /* ClientManager.m */; };
+		DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
@@ -39,7 +39,6 @@
 		EA6732EE22DF95F5004E362F /* QAView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732EB22DF95F5004E362F /* QAView.m */; };
 		EA6732F422DF96DE004E362F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F322DF96DE004E362F /* Utils.m */; };
 		EA6732F722DFAB25004E362F /* SignInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F622DFAB25004E362F /* SignInVC.m */; };
-		EAEB723122E9313700426226 /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EAEB722F22E9313700426226 /* DormAShop.xcdatamodeld */; };
 		EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723322E9315200426226 /* DraggableViewBackground.m */; };
 		EAEB723922E9316200426226 /* DraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723722E9316200426226 /* DraggableView.m */; };
 		EAEB723A22E9316200426226 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723822E9316200426226 /* OverlayView.m */; };
@@ -116,8 +115,7 @@
 		DE4FCFD622E6744100B1311F /* MessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		DE4FCFD822E686DE00B1311F /* EditProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileVC.h; sourceTree = "<group>"; };
 		DE4FCFD922E686DE00B1311F /* EditProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileVC.m; sourceTree = "<group>"; };
-		DE4FD00C22E90A0900B1311F /* ClientManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ClientManager.h; sourceTree = "<group>"; };
-		DE4FD00D22E90A0900B1311F /* ClientManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ClientManager.m; sourceTree = "<group>"; };
+		DE4FD01022EA3D1100B1311F /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
 		DED744F622DFE0A400394748 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		DED744F722DFE0A400394748 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		DEFE7C8722E640DF006E3096 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -138,7 +136,6 @@
 		EA6732F322DF96DE004E362F /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		EA6732F522DFAB25004E362F /* SignInVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInVC.h; sourceTree = "<group>"; };
 		EA6732F622DFAB25004E362F /* SignInVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInVC.m; sourceTree = "<group>"; };
-		EAEB723022E9313700426226 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
 		EAEB723222E9315200426226 /* DraggableViewBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableViewBackground.h; sourceTree = "<group>"; };
 		EAEB723322E9315200426226 /* DraggableViewBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableViewBackground.m; sourceTree = "<group>"; };
 		EAEB723522E9316200426226 /* DraggableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableView.h; sourceTree = "<group>"; };
@@ -235,7 +232,7 @@
 				47A8A9AA22DE3A30005D9520 /* Main.storyboard */,
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,
-				EAEB722F22E9313700426226 /* DormAShop.xcdatamodeld */,
+				DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */,
 				47A8A9AD22DE3A32005D9520 /* Assets.xcassets */,
 				47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */,
 				47A8A9B222DE3A32005D9520 /* Info.plist */,
@@ -271,8 +268,6 @@
 				47A8A9DA22DE42E5005D9520 /* Post.m */,
 				47A8A9F522E291F1005D9520 /* PostManager.h */,
 				47A8A9F622E291F1005D9520 /* PostManager.m */,
-				DE4FD00C22E90A0900B1311F /* ClientManager.h */,
-				DE4FD00D22E90A0900B1311F /* ClientManager.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -635,7 +630,6 @@
 			files = (
 				EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
-				EAEB723122E9313700426226 /* DormAShop.xcdatamodeld in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
 				EAEB723D22E9369900426226 /* Card.m in Sources */,
@@ -661,9 +655,9 @@
 				EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				4715CDF322E7C21100E2E916 /* LocationManager.m in Sources */,
+				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
-				DE4FD00E22E90A0900B1311F /* ClientManager.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -985,14 +979,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		EAEB722F22E9313700426226 /* DormAShop.xcdatamodeld */ = {
+		DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				EAEB723022E9313700426226 /* DormAShop.xcdatamodel */,
+				DE4FD01022EA3D1100B1311F /* DormAShop.xcdatamodel */,
 			);
-			currentVersion = EAEB723022E9313700426226 /* DormAShop.xcdatamodel */;
-			name = DormAShop.xcdatamodeld;
-			path = "../../Dorm-a-Shop legit 2/Dorm-a-Shop/DormAShop.xcdatamodeld";
+			currentVersion = DE4FD01022EA3D1100B1311F /* DormAShop.xcdatamodel */;
+			path = DormAShop.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -9,22 +9,16 @@
 #import "MessageViewController.h"
 #import "ChatCell.h"
 @import Parse;
-@import ParseLiveQuery;
 
 @interface MessageViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (weak, nonatomic) IBOutlet UITextField *msgInput;
-//@property (strong, nonatomic) PFLiveQueryClient *pfclient;
-//@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
 
 @end
 
 @implementation MessageViewController
-
-PFLiveQueryClient *pfclient;
-PFLiveQuerySubscription *subscription;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,29 +28,6 @@ PFLiveQuerySubscription *subscription;
     self.navigationItem.title = [@"@" stringByAppendingString:self.receiver.username];
 
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
-//    pfclient = [[PFLiveQueryClient alloc] init];
-//    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
-//    [sentQuery whereKey:@"receiver" equalTo:self.receiver];
-//    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
-//
-//    PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
-//    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
-//    [recQuery whereKey:@"sender" equalTo:self.receiver];
-//    NSLog(@"%@", subscription);
-//
-//    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
-//    subscription = [pfclient subscribeToQuery:sentQuery];
-//    NSLog(@"%@", subscription);
-//    [subscription addCreateHandler:^(PFQuery * query, PFObject * message) {
-//        NSLog(@"LQ!!");
-//    }];
-//    [subscription addUpdateHandler:^(PFQuery * _Nonnull query, PFObject * _Nonnull obj) {
-//        NSLog(@"Update");
-//    }];
-//    [subscription addCreateHandler:^(PFQuery * query, PFObject * message) {
-//        NSLog(@"LQ!!");
-//    }];
-
 }
 
 - (void)onTimer {

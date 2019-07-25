@@ -181,6 +181,16 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="avF-9v-k1C">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="4U8-xg-feh">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="684-2U-4Ms">
+                                <rect key="frame" x="20" y="7" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Search"/>
+                                <connections>
+                                    <segue destination="O11-22-vap" kind="show" id="fhM-T6-QvG"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="add" style="plain" id="D1h-A7-BLP" userLabel="Post New Item">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MxR-xl-vgc">
                                 <rect key="frame" x="294" y="7" width="100" height="30"/>
@@ -1033,7 +1043,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="huz-Vy-fBK" kind="relationship" relationship="viewControllers" id="jZd-Ke-rOh"/>
-                        <segue destination="O11-22-vap" kind="relationship" relationship="viewControllers" id="i8z-rM-wXq"/>
+                        <segue destination="dis-H7-DlH" kind="relationship" relationship="viewControllers" id="S4g-Ze-d0C"/>
                         <segue destination="dDI-Qk-IoB" kind="relationship" relationship="viewControllers" id="I1A-NR-1di"/>
                         <segue destination="DJx-3h-Trp" kind="relationship" relationship="viewControllers" id="vDR-6b-RlU"/>
                         <segue destination="oXO-JU-K28" kind="relationship" relationship="viewControllers" id="wbs-vl-Xvx"/>
@@ -1470,7 +1480,18 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="lre-w2-kQ4"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Search" id="z69-qG-qbh"/>
+                    <navigationItem key="navigationItem" title="Search" id="z69-qG-qbh">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="gO1-aS-Jfd">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dAy-xt-GD9">
+                                <rect key="frame" x="20" y="7" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancel:" destination="hoC-Uw-hNx" eventType="touchUpInside" id="Cvu-Fc-MNZ"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="4nu-E0-9J7" id="psT-v0-Vus"/>
                         <outlet property="tableView" destination="eLp-J3-m4G" id="T5b-o0-FIh"/>
@@ -1478,7 +1499,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bwa-aY-CVQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2050.7246376811595" y="2354.4642857142858"/>
+            <point key="canvasLocation" x="3693" y="2182"/>
         </scene>
         <!--Inbox-->
         <scene sceneID="5uo-wp-sam">
@@ -1543,7 +1564,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s56-CZ-wsH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2960.8695652173915" y="3112.5"/>
+            <point key="canvasLocation" x="1106" y="2321"/>
         </scene>
         <!--Message View Controller-->
         <scene sceneID="R85-UX-ygf">
@@ -1622,7 +1643,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FZB-9u-YCF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3855.0724637681164" y="3112.5"/>
+            <point key="canvasLocation" x="1774" y="2321"/>
         </scene>
         <!--Search-->
         <scene sceneID="9c5-hY-tiv">
@@ -1641,7 +1662,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2vD-ak-640" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1140.5797101449277" y="2354.4642857142858"/>
+            <point key="canvasLocation" x="2933" y="2182"/>
         </scene>
         <!--Inbox-->
         <scene sceneID="H9s-J1-gJJ">
@@ -1660,7 +1681,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cp1-SV-Wla" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2050.7246376811595" y="3112.5"/>
+            <point key="canvasLocation" x="445" y="2321"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Aak-Ou-3dg">
@@ -1715,8 +1736,8 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ni5-B6-yy2"/>
+        <segue reference="Ob4-g7-kRL"/>
         <segue reference="cnV-vk-Wb5"/>
-        <segue reference="ufI-em-euD"/>
+        <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
 </document>
