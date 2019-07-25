@@ -13,7 +13,7 @@ target 'Dorm-a-Shop' do
   pod 'GoogleMaps'
   pod 'GooglePlacePicker'
   pod 'GooglePlaces'
-
+  
   target 'Dorm-a-ShopTests' do
     inherit! :search_paths
     # Pods for testing

@@ -133,9 +133,9 @@
                                 <rect key="frame" x="212" y="136" width="91" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <state key="normal" title="Times: All"/>
+                                <state key="normal" title="Price: All"/>
                                 <connections>
-                                    <action selector="timesChange:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tTO-OF-2ks"/>
+                                    <action selector="pricesChange:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jhX-VG-DQB"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gej-ih-dYz">
@@ -199,10 +199,10 @@
                         <outlet property="conditionTable" destination="ChR-1e-XT3" id="VVb-Xm-4fF"/>
                         <outlet property="distanceButton" destination="gej-ih-dYz" id="OdP-sS-IeF"/>
                         <outlet property="distanceTable" destination="r77-WC-Qlj" id="Mtv-Zv-aF6"/>
+                        <outlet property="pricesTable" destination="0Am-37-PW9" id="y0h-rh-g22"/>
                         <outlet property="searchBar" destination="BsX-gJ-qHi" id="rrH-dU-XZ5"/>
                         <outlet property="tableView" destination="SRH-BO-TuC" id="ZfJ-49-H1P"/>
                         <outlet property="timesButton" destination="JZN-Kn-cdI" id="8VC-H2-zKs"/>
-                        <outlet property="timesTable" destination="0Am-37-PW9" id="CJv-al-k4a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -1670,7 +1670,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ni5-B6-yy2"/>
-        <segue reference="inK-qS-1By"/>
+        <segue reference="cnV-vk-Wb5"/>
         <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>
 </document>
