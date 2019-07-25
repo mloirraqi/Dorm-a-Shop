@@ -9,6 +9,7 @@
 #import "MessageViewController.h"
 #import "ChatCell.h"
 @import Parse;
+@import TwilioChatClient;
 
 @interface MessageViewController () <UITableViewDelegate, UITableViewDataSource>
 

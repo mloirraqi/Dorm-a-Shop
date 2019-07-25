@@ -13,6 +13,7 @@ target 'Dorm-a-Shop' do
   pod 'GoogleMaps'
   pod 'GooglePlacePicker'
   pod 'GooglePlaces'
+  pod 'TwilioChatClient', '2.2.0'
   
   target 'Dorm-a-ShopTests' do
     inherit! :search_paths
