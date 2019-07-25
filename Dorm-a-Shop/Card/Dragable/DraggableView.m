@@ -5,7 +5,6 @@
 //  Created by Richard Kim on 5/21/14.
 //  Copyright (c) 2014 Richard Kim. All rights reserved.
 //
-//  @cwRichardKim for updates and requests
 
 #define ACTION_MARGIN 120 //%%% distance from center where the action applies. Higher = swipe further in order for the action to be called
 #define SCALE_STRENGTH 4 //%%% how quickly the card shrinks. Higher = slower shrinking
@@ -16,17 +15,21 @@
 
 
 #import "DraggableView.h"
+#import "CardItemCollectionViewCell.h"
+
+@interface DraggableView () <UICollectionViewDelegate, UICollectionViewDataSource>
+@property (nonatomic, strong) UICollectionView *collectionView;
+@end
 
 @implementation DraggableView {
     CGFloat xFromCenter;
     CGFloat yFromCenter;
 }
 
-//delegate is instance of ViewController
 @synthesize delegate;
 
 @synthesize panGestureRecognizer;
-@synthesize information;
+
 @synthesize overlayView;
 
 - (id)initWithFrame:(CGRect)frame
@@ -34,89 +37,63 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setupView];
-        
-#warning placeholder stuff, replace with card-specific information {
-        information = [[UILabel alloc]initWithFrame:CGRectMake(0, 50, self.frame.size.width, 100)];
-        information.text = @"no info given";
-        [information setTextAlignment:NSTextAlignmentCenter];
-        information.textColor = [UIColor blackColor];
-        
         self.backgroundColor = [UIColor whiteColor];
-#warning placeholder stuff, replace with card-specific information }
-        
-        
         
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];
-        
         [self addGestureRecognizer:panGestureRecognizer];
-        [self addSubview:information];
         
-        overlayView = [[OverlayView alloc]initWithFrame:CGRectMake(self.frame.size.width/2-100, 0, 100, 100)];
-        overlayView.alpha = 0;
-        [self addSubview:overlayView];
     }
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
 }
 
 -(void)setupView
 {
     self.layer.cornerRadius = 4;
-    self.layer.shadowRadius = 3;
-    self.layer.shadowOpacity = 0.2;
+    self.layer.shadowRadius = 4;
+    self.layer.shadowOpacity = 0.1;
     self.layer.shadowOffset = CGSizeMake(1, 1);
+    
+    [self setupCollectionView];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *kCardItemCell = @"cardItemCell";
+    CardItemCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCardItemCell forIndexPath:indexPath];
+    cell.post = self.card.posts[indexPath.row];
+    return cell;
 }
-*/
 
-//%%% called when you move your finger across the screen.
-// called many times a second
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.card.posts.count;
+}
+
 -(void)beingDragged:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    //%%% this extracts the coordinate data from your swipe movement. (i.e. How much did you move?)
-    xFromCenter = [gestureRecognizer translationInView:self].x; //%%% positive for right swipe, negative for left
-    yFromCenter = [gestureRecognizer translationInView:self].y; //%%% positive for up, negative for down
+    xFromCenter = [gestureRecognizer translationInView:self].x;
+    yFromCenter = [gestureRecognizer translationInView:self].y;
     
-    //%%% checks what state the gesture is in. (are you just starting, letting go, or in the middle of a swipe?)
     switch (gestureRecognizer.state) {
-            //%%% just started swiping
         case UIGestureRecognizerStateBegan:{
             self.originalPoint = self.center;
             break;
         };
-            //%%% in the middle of a swipe
         case UIGestureRecognizerStateChanged:{
-            //%%% dictates rotation (see ROTATION_MAX and ROTATION_STRENGTH for details)
             CGFloat rotationStrength = MIN(xFromCenter / ROTATION_STRENGTH, ROTATION_MAX);
-            
-            //%%% degree change in radians
             CGFloat rotationAngel = (CGFloat) (ROTATION_ANGLE * rotationStrength);
-            
-            //%%% amount the height changes when you move the card up to a certain point
             CGFloat scale = MAX(1 - fabsf(rotationStrength) / SCALE_STRENGTH, SCALE_MAX);
-            
-            //%%% move the object's center by center + gesture coordinate
             self.center = CGPointMake(self.originalPoint.x + xFromCenter, self.originalPoint.y + yFromCenter);
             
-            //%%% rotate by certain amount
             CGAffineTransform transform = CGAffineTransformMakeRotation(rotationAngel);
-            
-            //%%% scale by certain amount
             CGAffineTransform scaleTransform = CGAffineTransformScale(transform, scale, scale);
-            
-            //%%% apply transformations
             self.transform = scaleTransform;
             [self updateOverlay:xFromCenter];
             
             break;
         };
-            //%%% let go of the card
         case UIGestureRecognizerStateEnded: {
             [self afterSwipeAction];
             break;
@@ -127,7 +104,6 @@
     }
 }
 
-//%%% checks to see if you are moving right or left and applies the correct overlay image
 -(void)updateOverlay:(CGFloat)distance
 {
     if (distance > 0) {
@@ -139,7 +115,6 @@
     overlayView.alpha = MIN(fabsf(distance)/100, 0.4);
 }
 
-//%%% called when the card is let go
 - (void)afterSwipeAction
 {
     if (xFromCenter > ACTION_MARGIN) {
@@ -156,7 +131,6 @@
     }
 }
 
-//%%% called when a swipe exceeds the ACTION_MARGIN to the right
 -(void)rightAction
 {
     CGPoint finishPoint = CGPointMake(500, 2*yFromCenter +self.originalPoint.y);
@@ -168,11 +142,8 @@
                      }];
     
     [delegate cardSwipedRight:self];
-    
-    NSLog(@"YES");
 }
 
-//%%% called when a swip exceeds the ACTION_MARGIN to the left
 -(void)leftAction
 {
     CGPoint finishPoint = CGPointMake(-500, 2*yFromCenter +self.originalPoint.y);
@@ -184,8 +155,6 @@
                      }];
     
     [delegate cardSwipedLeft:self];
-    
-    NSLog(@"NO");
 }
 
 -(void)rightClickAction
@@ -200,8 +169,6 @@
                      }];
     
     [delegate cardSwipedRight:self];
-    
-    NSLog(@"YES");
 }
 
 -(void)leftClickAction
@@ -216,10 +183,33 @@
                      }];
     
     [delegate cardSwipedLeft:self];
-    
-    NSLog(@"NO");
 }
 
+#pragma mark - Make
+
+-(UICollectionView *)setupCollectionView {
+    CGRect collectionViewFrame = CGRectMake(2.5f, 2.5f, self.frame.size.width - 5, self.frame.size.height - 5);
+    
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.itemSize = CGSizeMake(collectionViewFrame.size.width/3, collectionViewFrame.size.width/3);
+    flowLayout.minimumLineSpacing = 0;
+    flowLayout.minimumInteritemSpacing = 0;
+    flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:collectionViewFrame collectionViewLayout:flowLayout];
+    collectionView.backgroundColor = [UIColor clearColor];
+    [self addSubview: collectionView];
+    
+    [collectionView registerNib: [UINib nibWithNibName:@"CardItemCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"cardItemCell"];
+    
+    collectionView.delegate = self;
+    collectionView.dataSource = self;
+    collectionView.scrollEnabled = NO;
+    collectionView.allowsSelection = NO;
+    
+    return collectionView;
+}
 
 
 @end

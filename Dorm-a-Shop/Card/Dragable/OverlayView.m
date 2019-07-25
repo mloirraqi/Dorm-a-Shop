@@ -5,7 +5,6 @@
 //  Created by Richard Kim on 5/22/14.
 //  Copyright (c) 2014 Richard Kim. All rights reserved.
 //
-//  @cwRichardKim for updates and requests
 
 #import "OverlayView.h"
 
@@ -23,8 +22,7 @@
     return self;
 }
 
--(void)setMode:(GGOverlayViewMode)mode
-{
+-(void)setMode:(GGOverlayViewMode)mode {
     if (_mode == mode) {
         return;
     }
@@ -32,25 +30,16 @@
     _mode = mode;
     
     if(mode == GGOverlayViewModeLeft) {
-        imageView.image = [UIImage imageNamed:@"noButton"];
+        imageView.image = [UIImage imageNamed:@"ic_cancel"];
     } else {
-        imageView.image = [UIImage imageNamed:@"yesButton"];
+        imageView.image = [UIImage imageNamed:@"ic_accept"];
     }
 }
 
--(void)layoutSubviews
-{
+-(void)layoutSubviews {
     [super layoutSubviews];
-    imageView.frame = CGRectMake(50, 50, 100, 100);
+    imageView.frame = CGRectMake((self.superview.frame.size.width/2 - 50), (self.superview.frame.size.height/2 - 50), 100, 100);
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

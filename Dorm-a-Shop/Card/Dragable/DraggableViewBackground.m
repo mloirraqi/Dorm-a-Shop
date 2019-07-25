@@ -7,168 +7,156 @@
 //
 
 #import "DraggableViewBackground.h"
+#import "PostManager.h"
+#import "Post.h"
+#import <Parse/Parse.h>
+#import "Card.h"
 
-@implementation DraggableViewBackground{
-    NSInteger cardsLoadedIndex; //%%% the index of the card you have loaded into the loadedCards array last
-    NSMutableArray *loadedCards; //%%% the array of card loaded (change max_buffer_size to increase or decrease the number of cards this holds)
-    
-    UIButton* menuButton;
-    UIButton* messageButton;
-    UIButton* checkButton;
-    UIButton* xButton;
-}
-//this makes it so only two cards are loaded at a time to
-//avoid performance and memory costs
-static const int MAX_BUFFER_SIZE = 2; //%%% max number of cards loaded at any given time, must be greater than 1
-static const float CARD_HEIGHT = 386; //%%% height of the draggable card
-static const float CARD_WIDTH = 290; //%%% width of the draggable card
+static const int MAX_BUFFER_SIZE = 2;
 
-@synthesize exampleCardLabels; //%%% all the labels I'm using as example data at the moment
-@synthesize allCards;//%%% all the cards
+@interface DraggableViewBackground ()
+@property (nonatomic, strong) NSMutableArray *cardArray;
+@property (nonatomic, strong) UILabel *userNameLabel;
+@property (nonatomic, assign) NSInteger cardsLoadedIndex;
+@property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, strong) NSMutableArray *loadedCards;
+@end
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
+@implementation DraggableViewBackground
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
     if (self) {
-        [super layoutSubviews];
-        [self setupView];
-        exampleCardLabels = [[NSArray alloc]initWithObjects:@"first",@"second",@"third",@"fourth",@"last", nil]; //%%% placeholder for card-specific information
-        loadedCards = [[NSMutableArray alloc] init];
-        allCards = [[NSMutableArray alloc] init];
-        cardsLoadedIndex = 0;
-        [self loadCards];
+        self.loadedCards = [[NSMutableArray alloc] init];
+        self.allCards = [[NSMutableArray alloc] init];
+        self.cardsLoadedIndex = 0;
+        [self setupCards];
     }
     return self;
 }
 
-//%%% sets up the extra buttons on the screen
--(void)setupView
-{
-#warning customize all of this.  These are just place holders to make it look pretty
-    self.backgroundColor = [UIColor colorWithRed:.92 green:.93 blue:.95 alpha:1]; //the gray background colors
-    menuButton = [[UIButton alloc]initWithFrame:CGRectMake(17, 34, 22, 15)];
-    [menuButton setImage:[UIImage imageNamed:@"menuButton"] forState:UIControlStateNormal];
-    messageButton = [[UIButton alloc]initWithFrame:CGRectMake(284, 34, 18, 18)];
-    [messageButton setImage:[UIImage imageNamed:@"messageButton"] forState:UIControlStateNormal];
-    xButton = [[UIButton alloc]initWithFrame:CGRectMake(60, 485, 59, 59)];
-    [xButton setImage:[UIImage imageNamed:@"xButton"] forState:UIControlStateNormal];
-    [xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
-    checkButton = [[UIButton alloc]initWithFrame:CGRectMake(200, 485, 59, 59)];
-    [checkButton setImage:[UIImage imageNamed:@"checkButton"] forState:UIControlStateNormal];
-    [checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:menuButton];
-    [self addSubview:messageButton];
-    [self addSubview:xButton];
-    [self addSubview:checkButton];
+-(void)setupView {
+    self.currentIndex = 0;
+    
+    CGSize screenSize = UIScreen.mainScreen.bounds.size;
+    CGRect frame = CGRectMake(0, 24, screenSize.width, 24);
+    
+    self.userNameLabel = [[UILabel alloc] initWithFrame: frame];
+    self.userNameLabel.textAlignment = NSTextAlignmentCenter;
+    self.userNameLabel.font = [UIFont systemFontOfSize:18];
+    Card *card = self.cardArray.firstObject;
+    self.userNameLabel.text = card.author.username;
+    self.backgroundColor = [UIColor redColor];
+    [self addSubview:self.userNameLabel];
+    self.backgroundColor = [UIColor colorWithRed:168/255.f green:225/255.f blue:255/255.f alpha:1];
 }
 
-#warning include own card customization here!
-//%%% creates a card and returns it.  This should be customized to fit your needs.
-// use "index" to indicate where the information should be pulled.  If this doesn't apply to you, feel free
-// to get rid of it (eg: if you are building cards from data from the internet)
--(DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index
-{
-    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
-    draggableView.information.text = [exampleCardLabels objectAtIndex:index]; //%%% placeholder for card-specific information
+-(DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
+    CGSize screenSize = UIScreen.mainScreen.bounds.size;
+    CGFloat cardWidth = screenSize.width - 80;
+    CGFloat cardHeight = screenSize.height - (screenSize.height - self.frame.size.height) - 140;
+    
+    CGRect frame = CGRectMake(((screenSize.width) - cardWidth)/2, ((screenSize.height - (screenSize.height - self.frame.size.height)) - cardHeight)/2, cardWidth, cardHeight);
+    
+    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:frame];
+    draggableView.card = self.cardArray[index];
     draggableView.delegate = self;
+    
     return draggableView;
 }
 
-//%%% loads all the cards and puts the first x in the "loaded cards" array
--(void)loadCards
-{
-    if([exampleCardLabels count] > 0) {
-        NSInteger numLoadedCardsCap =(([exampleCardLabels count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[exampleCardLabels count]);
-        //%%% if the buffer size is greater than the data size, there will be an array error, so this makes sure that doesn't happen
+-(void)loadCards {
+
+    if([self.cardArray count] > 0) {
+        NSInteger numLoadedCardsCap =(([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
         
-        //%%% loops through the exampleCardsLabels array to create a card for each label.  This should be customized by removing "exampleCardLabels" with your own array of data
-        for (int i = 0; i<[exampleCardLabels count]; i++) {
+        for (int i = 0; i<[self.cardArray count]; i++) {
             DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
-            [allCards addObject:newCard];
+            [self.allCards addObject:newCard];
             
             if (i<numLoadedCardsCap) {
-                //%%% adds a small number of cards to be loaded
-                [loadedCards addObject:newCard];
+                [self.loadedCards addObject:newCard];
             }
         }
-        
-        //%%% displays the small number of loaded cards dictated by MAX_BUFFER_SIZE so that not all the cards
-        // are showing at once and clogging a ton of data
-        for (int i = 0; i<[loadedCards count]; i++) {
+    
+        for (int i = 0; i<[self.loadedCards count]; i++) {
             if (i>0) {
-                [self insertSubview:[loadedCards objectAtIndex:i] belowSubview:[loadedCards objectAtIndex:i-1]];
+                [self insertSubview:[self.loadedCards objectAtIndex:i] belowSubview:[self.loadedCards objectAtIndex:i-1]];
             } else {
-                [self addSubview:[loadedCards objectAtIndex:i]];
+                [self addSubview:[self.loadedCards objectAtIndex:i]];
             }
-            cardsLoadedIndex++; //%%% we loaded a card into loaded cards, so we have to increment
+            self.cardsLoadedIndex++;
         }
     }
 }
 
-#warning include own action here!
-//%%% action called when the card goes to the left.
-// This should be customized with your own action
--(void)cardSwipedLeft:(UIView *)card;
-{
-    //do whatever you want with the card that was swiped
-    //    DraggableView *c = (DraggableView *)card;
-    
-    [loadedCards removeObjectAtIndex:0]; //%%% card was swiped, so it's no longer a "loaded card"
-    
-    if (cardsLoadedIndex < [allCards count]) { //%%% if we haven't reached the end of all cards, put another into the loaded cards
-        [loadedCards addObject:[allCards objectAtIndex:cardsLoadedIndex]];
-        cardsLoadedIndex++;//%%% loaded a card, so have to increment count
-        [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
+-(void)cardSwipedLeft:(UIView *)card {
+    [self.loadedCards removeObjectAtIndex:0];
+    if (self.cardsLoadedIndex < [self.allCards count]) {
+        [self.loadedCards addObject:[self.allCards objectAtIndex:self.cardsLoadedIndex]];
+        self.cardsLoadedIndex++;
+        [self insertSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
+    }
+    [self updateUsernameLabel];
+}
+
+-(void)cardSwipedRight:(UIView *)card {
+    [self.loadedCards removeObjectAtIndex:0];
+    if (self.cardsLoadedIndex < [self.allCards count]) {
+        [self.loadedCards addObject:[self.allCards objectAtIndex:self.cardsLoadedIndex]];
+        self.cardsLoadedIndex++;
+        [self insertSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
+    }
+    [self updateUsernameLabel];
+}
+
+-(void)updateUsernameLabel {
+    if (self.cardArray.count-1 > self.currentIndex) {
+        self.currentIndex++;
+        Card *card = self.cardArray[self.currentIndex];
+        self.userNameLabel.text = card.author.username;
+    } else {
+        self.userNameLabel.text = @"";
     }
 }
 
-#warning include own action here!
-//%%% action called when the card goes to the right.
-// This should be customized with your own action
--(void)cardSwipedRight:(UIView *)card
-{
-    //do whatever you want with the card that was swiped
-    //    DraggableView *c = (DraggableView *)card;
-    
-    [loadedCards removeObjectAtIndex:0]; //%%% card was swiped, so it's no longer a "loaded card"
-    
-    if (cardsLoadedIndex < [allCards count]) { //%%% if we haven't reached the end of all cards, put another into the loaded cards
-        [loadedCards addObject:[allCards objectAtIndex:cardsLoadedIndex]];
-        cardsLoadedIndex++;//%%% loaded a card, so have to increment count
-        [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
-    }
-
-}
-
-//%%% when you hit the right button, this is called and substitutes the swipe
--(void)swipeRight
-{
-    DraggableView *dragView = [loadedCards firstObject];
-    dragView.overlayView.mode = GGOverlayViewModeRight;
-    [UIView animateWithDuration:0.2 animations:^{
-        dragView.overlayView.alpha = 1;
+-(void)setupCards {
+    self.cardArray = [[NSMutableArray alloc]init];
+    [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+        if (postsArray) {
+            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+            
+            NSMutableArray *userNameArray = [[NSMutableArray alloc]init];
+            NSMutableArray *userArray = [[NSMutableArray alloc]init];
+            for (Post* post in activePosts) {
+                if (post.author != nil) {
+                    if (![userNameArray containsObject:post.author.username]) {
+                        [userNameArray addObject:post.author.username];
+                        [userArray addObject:post.author];
+                    }
+                }
+            }            
+            
+            for (PFUser *user in userArray) {
+                NSMutableArray *userPosts = [[NSMutableArray alloc] init];
+                Card *card = [[Card alloc]init];
+                card.author = user;
+                card.posts = userPosts;
+                for (Post *post in activePosts) {
+                    if ([post.author.objectId isEqualToString:user.objectId]) {
+                        [userPosts addObject:post];
+                    }
+                }
+                [self.cardArray addObject:card];
+            }
+            
+            [self loadCards];
+            [self setupView];
+        } else {
+            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
+        }
     }];
-    [dragView rightClickAction];
 }
-
-//%%% when you hit the left button, this is called and substitutes the swipe
--(void)swipeLeft
-{
-    DraggableView *dragView = [loadedCards firstObject];
-    dragView.overlayView.mode = GGOverlayViewModeLeft;
-    [UIView animateWithDuration:0.2 animations:^{
-        dragView.overlayView.alpha = 1;
-    }];
-    [dragView leftClickAction];
-}
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end
