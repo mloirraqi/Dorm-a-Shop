@@ -2,7 +2,7 @@
 //  UserCoreData+CoreDataProperties.h
 //  
 //
-//  Created by ilanashapiro on 7/24/19.
+//  Created by ilanashapiro on 7/25/19.
 //
 //
 

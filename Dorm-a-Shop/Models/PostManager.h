@@ -23,11 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSMutableArray *)getProfilePostsFromCoreDataForUser:(UserCoreData *)user;
 - (void)queryWatchedPostsForCurrentUserWithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
-- (NSArray *)getWatchedPostsForCurrentUserFromCoreData;
+- (NSMutableArray *)getActiveWatchedPostsForCurrentUserFromCoreData;
 //- (BOOL)getCurrentUserWatchStatusFromCoreDataForPost:(PostCoreData *)post;
 - (void)queryWatchCountForPost:(Post *)post withCompletion:(void (^)(int, NSError *))completion;
-- (void)queryAllPostsWithCompletion:(void (^)(NSMutableArray *, NSError *))completion;
-- (NSArray *)getAllPostsFromCoreData;
+- (void)queryActivePostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+- (NSMutableArray *)getActivePostsFromCoreData;
 - (void)unwatchPost:(Post *)post withCompletion:(void (^)(NSError *))completion ;
 - (void)watchPost:(Post *)post withCompletion:(void (^)(NSError *))completion;
 - (void)setPost:(Post *)post sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion;

@@ -10,16 +10,13 @@
 #import "PostCoreData+CoreDataClass.h"
 #import "HomeScreenViewController.h"
 #import "PostTableViewCell.h"
-//#import "Post.h"
+#import "Post.h"
 #import "UploadViewController.h"
 #import "DetailsViewController.h"
 #import "SignInVC.h"
-#import "PostManager.h"
-<<<<<<< HEAD
 #import "AppDelegate.h"
-=======
 #import "LocationManager.h"
->>>>>>> f5699d9931b5b5611531432f170c9030258c4866
+#import "PostManager.h"
 @import Parse;
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
@@ -84,7 +81,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
-    [self fetchPosts];
+    [self fetchPostsFromCoreData];
     [self createRefreshControl];
 }
 
@@ -116,18 +113,37 @@
         [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView endUpdates];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        [self fetchPosts];
+        [self queryPostsFromParse];
     }
 }
 
 - (void)createRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchPosts) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(queryPostsFromParse) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
-- (void)fetchPosts {
-    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
+- (void)queryPostsFromParse {
+    [[PostManager shared] queryActivePostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+        if (postsArray) {
+            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+            self.postsArray = activePosts;
+            self.filteredPosts = self.postsArray;
+            [self.tableView reloadData];
+        } else {
+            NSLog(@"Error querying active posts from parse ! %@", error.localizedDescription);
+        }
+    }];
+}
+
+- (void)fetchPostsFromCoreData {
+    self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
+    [self filterPosts];
+    [self.tableView reloadData];
+    [self.refreshControl endRefreshing];
+    
+    /*CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
     
     PFQuery *postQuery = [Post query];

@@ -11,9 +11,9 @@
 #import <GooglePlaces/GooglePlaces.h>
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import <Parse/Parse.h>
 #import "PostManager.h"
 #import "LocationManager.h"
+@import Parse;
 
 @interface AppDelegate ()
 
@@ -41,6 +41,12 @@
         
         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
     }
+    
+    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        }
+    }];
     
     return YES;
 }

@@ -52,17 +52,10 @@
 }
 
 - (void)fetchPosts {
-    [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-        if (postsArray) {
-            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            NSMutableArray *activeWatchPosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-            self.postsArray = activeWatchPosts;
-            [self.tableView reloadData];
-        } else {
-            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
-        }
-        [self.refreshControl endRefreshing];
-    }];
+    NSMutableArray *activeWatchPosts = [[PostManager shared] getActiveWatchedPostsForCurrentUserFromCoreData];
+    self.postsArray = activeWatchPosts;
+    [self.tableView reloadData];
+    [self.refreshControl endRefreshing];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
