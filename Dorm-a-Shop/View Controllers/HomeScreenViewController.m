@@ -32,12 +32,13 @@
 @property (strong, nonatomic) NSArray *categories;
 @property (strong, nonatomic) NSArray *conditions;
 @property (strong, nonatomic) NSArray *prices;
+@property (strong, nonatomic) NSArray *pricesInt;
 @property (strong, nonatomic) NSArray *distances;
 @property (weak, nonatomic) IBOutlet UIButton *conditionButton;
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
-@property (weak, nonatomic) IBOutlet UIButton *timesButton;
+@property (weak, nonatomic) IBOutlet UIButton *pricesButton;
 @property (weak, nonatomic) IBOutlet UIButton *distanceButton;
-
+@property NSNumber *limit;
 @end
 
 @implementation HomeScreenViewController
@@ -61,6 +62,7 @@
     self.categories = @[@"All", @"Furniture", @"Books", @"Beauty", @"Other"];
     self.conditions = @[@"All", @"New", @"Nearly New", @"Old"];
     self.prices = @[@"All", @"<$25", @"<$50", @"<$100"];
+    self.pricesInt = @[@0, @25, @50, @100];
     self.distances = @[@"All", @"<1 Miles", @"<3 Miles", @"<5 Miles"];
     self.categoryTable.hidden = YES;
     self.conditionTable.hidden = YES;
@@ -232,6 +234,12 @@
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:coPredicate]];
     }
+    if (![[self.pricesButton currentTitle] isEqual: @"Price: All"]) {
+        NSPredicate *pPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+            return (post.price.intValue <= self.limit.intValue);
+        }];
+        self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:pPredicate]];
+    }
     
     [self.tableView reloadData];
 }
@@ -288,7 +296,12 @@
         }
     } else if (tableView == self.pricesTable) {
         self.pricesTable.hidden = YES;
-        [self.timesButton setTitle:self.prices[indexPath.row] forState:UIControlStateNormal];
+        if (indexPath.row == 0) {
+            [self.pricesButton setTitle:@"Price: All" forState:UIControlStateNormal];
+        } else {
+            [self.pricesButton setTitle:self.prices[indexPath.row] forState:UIControlStateNormal];
+            self.limit = self.pricesInt[indexPath.row];
+        }
     } else if (tableView == self.distanceTable) {
         self.distanceTable.hidden = YES;
         [self.distanceButton setTitle:self.distances[indexPath.row] forState:UIControlStateNormal];
