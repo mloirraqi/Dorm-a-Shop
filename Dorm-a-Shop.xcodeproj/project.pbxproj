@@ -9,10 +9,12 @@
 /* Begin PBXBuildFile section */
 		47960FD722EA1FFD00E3849A /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47960FD522EA1FFD00E3849A /* LocationManager.m */; };
 		4796F77522EA2F94006EC507 /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4796F77322EA2F94006EC507 /* DormAShop.xcdatamodeld */; };
-		4796F78A22EA3EBA006EC507 /* PostCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F78222EA3EB9006EC507 /* PostCoreData+CoreDataProperties.m */; };
-		4796F78B22EA3EBA006EC507 /* UserCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F78522EA3EB9006EC507 /* UserCoreData+CoreDataProperties.m */; };
-		4796F78C22EA3EBA006EC507 /* UserCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F78922EA3EBA006EC507 /* UserCoreData+CoreDataClass.m */; };
-		4796F78D22EA3EBA006EC507 /* PostCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F78622EA3EB9006EC507 /* PostCoreData+CoreDataClass.m */; };
+		4796F7A222EA4F21006EC507 /* UserCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F79A22EA4F21006EC507 /* UserCoreData+CoreDataClass.m */; };
+		4796F7A322EA4F21006EC507 /* PostCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F79F22EA4F21006EC507 /* PostCoreData+CoreDataProperties.m */; };
+		4796F7A422EA4F21006EC507 /* UserCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F7A122EA4F21006EC507 /* UserCoreData+CoreDataProperties.m */; };
+		4796F7A522EA4F21006EC507 /* PostCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F79D22EA4F21006EC507 /* PostCoreData+CoreDataClass.m */; };
+		4796F7A822EA5CFD006EC507 /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F7A722EA5CFD006EC507 /* Watches.m */; };
+		4796F7B122EA6666006EC507 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4796F7AF22EA6666006EC507 /* User.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
@@ -80,14 +82,18 @@
 		47960FD622EA1FFD00E3849A /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
 		4796F77222EA2338006EC507 /* PostManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostManager.h; sourceTree = "<group>"; };
 		4796F77422EA2F94006EC507 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
-		4796F78222EA3EB9006EC507 /* PostCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PostCoreData+CoreDataProperties.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataProperties.m"; sourceTree = "<absolute>"; };
-		4796F78322EA3EB9006EC507 /* PostCoreData+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PostCoreData+CoreDataClass.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataClass.h"; sourceTree = "<absolute>"; };
-		4796F78422EA3EB9006EC507 /* UserCoreData+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UserCoreData+CoreDataClass.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataClass.h"; sourceTree = "<absolute>"; };
-		4796F78522EA3EB9006EC507 /* UserCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UserCoreData+CoreDataProperties.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataProperties.m"; sourceTree = "<absolute>"; };
-		4796F78622EA3EB9006EC507 /* PostCoreData+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PostCoreData+CoreDataClass.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataClass.m"; sourceTree = "<absolute>"; };
-		4796F78722EA3EB9006EC507 /* PostCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PostCoreData+CoreDataProperties.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		4796F78822EA3EBA006EC507 /* UserCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UserCoreData+CoreDataProperties.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		4796F78922EA3EBA006EC507 /* UserCoreData+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UserCoreData+CoreDataClass.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataClass.m"; sourceTree = "<absolute>"; };
+		4796F79A22EA4F21006EC507 /* UserCoreData+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UserCoreData+CoreDataClass.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataClass.m"; sourceTree = "<absolute>"; };
+		4796F79B22EA4F21006EC507 /* UserCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UserCoreData+CoreDataProperties.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataProperties.h"; sourceTree = "<absolute>"; };
+		4796F79C22EA4F21006EC507 /* UserCoreData+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UserCoreData+CoreDataClass.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataClass.h"; sourceTree = "<absolute>"; };
+		4796F79D22EA4F21006EC507 /* PostCoreData+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PostCoreData+CoreDataClass.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataClass.m"; sourceTree = "<absolute>"; };
+		4796F79E22EA4F21006EC507 /* PostCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PostCoreData+CoreDataProperties.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataProperties.h"; sourceTree = "<absolute>"; };
+		4796F79F22EA4F21006EC507 /* PostCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PostCoreData+CoreDataProperties.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataProperties.m"; sourceTree = "<absolute>"; };
+		4796F7A022EA4F21006EC507 /* PostCoreData+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PostCoreData+CoreDataClass.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataClass.h"; sourceTree = "<absolute>"; };
+		4796F7A122EA4F21006EC507 /* UserCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UserCoreData+CoreDataProperties.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataProperties.m"; sourceTree = "<absolute>"; };
+		4796F7A622EA5CFD006EC507 /* Watches.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Watches.h; sourceTree = "<group>"; };
+		4796F7A722EA5CFD006EC507 /* Watches.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Watches.m; sourceTree = "<group>"; };
+		4796F7AF22EA6666006EC507 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = User.m; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/User.m"; sourceTree = "<absolute>"; };
+		4796F7B022EA6666006EC507 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = User.h; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/User.h"; sourceTree = "<absolute>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -276,18 +282,22 @@
 				EAEB723C22E9369900426226 /* Card.m */,
 				47A8A9D922DE42E5005D9520 /* Post.h */,
 				47A8A9DA22DE42E5005D9520 /* Post.m */,
+				4796F7B022EA6666006EC507 /* User.h */,
+				4796F7AF22EA6666006EC507 /* User.m */,
+				4796F7A622EA5CFD006EC507 /* Watches.h */,
+				4796F7A722EA5CFD006EC507 /* Watches.m */,
 				4796F77222EA2338006EC507 /* PostManager.h */,
 				47A8A9F622E291F1005D9520 /* PostManager.m */,
 				47960FD622EA1FFD00E3849A /* LocationManager.h */,
 				47960FD522EA1FFD00E3849A /* LocationManager.m */,
-				4796F78822EA3EBA006EC507 /* UserCoreData+CoreDataProperties.h */,
-				4796F78422EA3EB9006EC507 /* UserCoreData+CoreDataClass.h */,
-				4796F78922EA3EBA006EC507 /* UserCoreData+CoreDataClass.m */,
-				4796F78522EA3EB9006EC507 /* UserCoreData+CoreDataProperties.m */,
-				4796F78722EA3EB9006EC507 /* PostCoreData+CoreDataProperties.h */,
-				4796F78322EA3EB9006EC507 /* PostCoreData+CoreDataClass.h */,
-				4796F78622EA3EB9006EC507 /* PostCoreData+CoreDataClass.m */,
-				4796F78222EA3EB9006EC507 /* PostCoreData+CoreDataProperties.m */,
+				4796F79E22EA4F21006EC507 /* PostCoreData+CoreDataProperties.h */,
+				4796F7A022EA4F21006EC507 /* PostCoreData+CoreDataClass.h */,
+				4796F79D22EA4F21006EC507 /* PostCoreData+CoreDataClass.m */,
+				4796F79F22EA4F21006EC507 /* PostCoreData+CoreDataProperties.m */,
+				4796F79B22EA4F21006EC507 /* UserCoreData+CoreDataProperties.h */,
+				4796F79C22EA4F21006EC507 /* UserCoreData+CoreDataClass.h */,
+				4796F79A22EA4F21006EC507 /* UserCoreData+CoreDataClass.m */,
+				4796F7A122EA4F21006EC507 /* UserCoreData+CoreDataProperties.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -648,13 +658,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4796F78A22EA3EBA006EC507 /* PostCoreData+CoreDataProperties.m in Sources */,
+				4796F7B122EA6666006EC507 /* User.m in Sources */,
+				4796F7A322EA4F21006EC507 /* PostCoreData+CoreDataProperties.m in Sources */,
 				EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */,
 				47960FD722EA1FFD00E3849A /* LocationManager.m in Sources */,
-				4796F78C22EA3EBA006EC507 /* UserCoreData+CoreDataClass.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
-				4796F78B22EA3EBA006EC507 /* UserCoreData+CoreDataProperties.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
 				EAEB723D22E9369900426226 /* Card.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
@@ -667,9 +676,9 @@
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
 				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
-				4796F78D22EA3EBA006EC507 /* PostCoreData+CoreDataClass.m in Sources */,
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,
+				4796F7A522EA4F21006EC507 /* PostCoreData+CoreDataClass.m in Sources */,
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				4796F77522EA2F94006EC507 /* DormAShop.xcdatamodeld in Sources */,
@@ -677,12 +686,15 @@
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
 				47A8A9F722E291F1005D9520 /* PostManager.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
+				4796F7A822EA5CFD006EC507 /* Watches.m in Sources */,
 				EAEB723A22E9316200426226 /* OverlayView.m in Sources */,
 				EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
+				4796F7A222EA4F21006EC507 /* UserCoreData+CoreDataClass.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
+				4796F7A422EA4F21006EC507 /* UserCoreData+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

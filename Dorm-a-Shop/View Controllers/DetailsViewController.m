@@ -8,7 +8,7 @@
 
 #import "DetailsViewController.h"
 #import "Post.h"
-#import "PostCoreData.h"
+#import "PostCoreData+CoreDataClass.h"
 #import "PostManager.h"
 @import Parse;
 
@@ -52,12 +52,11 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        if (self.post.watch != nil) {
-            self.watchButton.selected = YES;
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", self.post.watchCount] forState:UIControlStateSelected];
+        [self.watchButton setSelected:self.post.watched];
+        if (self.post.watched) {
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
         } else {
-            self.watchButton.selected = NO;
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", self.post.watchCount] forState:UIControlStateNormal];
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
         }
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
         NSNumber *soldNumVal = [[notification userInfo] objectForKey:@"sold"];
@@ -73,7 +72,7 @@
     }
 }
 
-- (void)setDetailsPost:(Post *)post {
+- (void)setDetailsPost:(PostCoreData *)post {
     _post = post;
     
     if ([((PFObject *)post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId] && post[@"sold"] == [NSNumber numberWithBool: NO]) {

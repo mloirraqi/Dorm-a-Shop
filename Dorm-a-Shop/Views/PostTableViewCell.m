@@ -33,7 +33,13 @@
     [self.postPFImageView loadInBackground];
     
     //instead of [PFUser currentUser], should i query core data to get current user?????
-    [self setUIWatchedForUser:[PFUser currentUser] Post:post];
+    //[self setUIWatchedForUser:[PFUser currentUser] Post:post];
+    [self.watchButton setSelected:self.post.watched];
+    if (self.post.watched) {
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+    } else {
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+    }
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
@@ -41,7 +47,7 @@
     self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
 }
 
-- (void)setUIWatchedForUser:(PFUser *)user Post:(PostCoreData *)post{
+/*- (void)setUIWatchedForUser:(PFUser *)user Post:(PostCoreData *)post{
     __weak PostTableViewCell *weakSelf = self;
     [[PostManager shared] getCurrentUserWatchStatusForPost:post withCompletion:^(PostCoreData * _Nonnull post, NSError * _Nonnull error) {
         if (error) {
@@ -56,7 +62,7 @@
             }
         }
     }];
-}
+}*/
 
 - (IBAction)didTapWatch:(id)sender {
     __weak PostTableViewCell *weakSelf = self;
@@ -65,8 +71,6 @@
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
-            } else {
-                NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
         }];
     } else {
@@ -74,8 +78,6 @@
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
-            } else {
-                NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }
         }];
     }

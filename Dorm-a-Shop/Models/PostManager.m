@@ -8,6 +8,7 @@
 
 #import "PostManager.h"
 #import "Post.h"
+#import "Watches.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "UserCoreData+CoreDataClass.h"
 #import <CoreData/CoreData.h>
@@ -38,24 +39,68 @@
     return sharedPostManager;
 }
 
-- (NSMutableArray *)getProfilePostsFromCoreDataForUser:(UserCoreData *)user {
-    /*NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
-        return [post.author.objectId isEqualToString:user.objectId];
+- (void)queryActivePostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    //    if (self.allPostsArray != nil) {
+    //        completion(self.allPostsArray, nil);
+    //    } else {
+    PFQuery *postQuery = [Post query];
+    [postQuery orderByDescending:@"createdAt"];
+    [postQuery includeKey:@"author"];
+    [postQuery whereKey:@"sold" equalTo:NO];
+    
+    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
+    PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
+    [postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:kilometers];
+    
+    [postQuery includeKey:@"image"];
+    
+    __weak PostManager *weakSelf = self;
+    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+        if (posts) {
+            //weakSelf.allPostsArray = [NSMutableArray arrayWithArray:posts];
+            NSMutableArray *allPostsArray = [[NSMutableArray alloc] init];
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+            
+            for (Post *post in posts) {
+                PostCoreData *postCoreData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
+                if (postCoreData) {
+                    postCoreData.sold = post.sold;
+                    //update any other properties except for watch and watchCount which are handled in a different function
+                } else {
+                    //nested query???????????????????????????
+                    PostCoreData *newPostCoreData = [weakSelf savePostWithObjectId:post.objectId withImageData:nil withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title toCoreDataWithManagedObjectContext:context];
+                    [post.image getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        //set image later
+                        newPostCoreData.image = data;
+                    }];
+                }
+                [allPostsArray addObject:postCoreData];
+            }
+            
+            completion(allPostsArray, nil);
+        } else {
+            NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
+            completion(nil, error);
+        }
     }];
-    NSArray *allPostsArray = [self getAllPostsFromCoreData];
-    return [NSMutableArray arrayWithArray:[allPostsArray filteredArrayUsingPredicate:predicate]];*/
+    //    }
+}
+
+//get from core data
+- (NSMutableArray *)getActivePostsFromCoreData {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"author = %@", user]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"sold = %@", NO]];
     
     NSError *error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
     if (!results) {
-        NSLog(@"Error fetching PostCoreData objects for current user: %@\n%@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
     
@@ -66,7 +111,7 @@
 //    if (self.watchedPostsArray != nil) {
 //        completion(self.watchedPostsArray, nil);
 //    } else {
-        PFQuery *watchQuery = [PFQuery queryWithClassName:@"Watches"];
+        PFQuery *watchQuery = [Watches query];
         [watchQuery orderByDescending:@"createdAt"];
         [watchQuery whereKey:@"user" equalTo:[PFUser currentUser]];
         [watchQuery includeKey:@"post"];
@@ -84,9 +129,7 @@
                 for (PFObject *watch in userWatches) {
                     Post *watchedPost = watch[@"post"];
                     PostCoreData *postCoreData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:watchedPost.objectId withContext:context];
-                    if (postCoreData) {
-                        postCoreData.watched = YES;
-                    } else {
+                    if (!postCoreData) {
                         //this really should never get executed if the posts are stored properly upon initialization
                         //also nested query???????????????????????????
                         postCoreData = [weakSelf savePostWithObjectId:watchedPost.objectId withImageData:nil withCaption:watchedPost.caption withPrice:[watchedPost.price doubleValue] withCondition:watchedPost.condition withCategory:watchedPost.category withTitle:watchedPost.title toCoreDataWithManagedObjectContext:context];
@@ -95,6 +138,8 @@
                             postCoreData.image = data;
                         }];
                     }
+                    postCoreData.watched = YES;
+                    postCoreData.watchObjectId = watch.objectId;
                     [watchedPostsArray addObject:postCoreData];
                 }
                 completion(watchedPostsArray, nil);
@@ -120,7 +165,7 @@
         abort();
     }
     
-    return results;
+    return [NSMutableArray arrayWithArray:results];
 }
 
 /*- (BOOL)getCurrentUserWatchStatusFromCoreDataForPost:(PostCoreData *)post {
@@ -208,63 +253,36 @@
     }];
 }
 
-- (void)queryActivePostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
-    //    if (self.allPostsArray != nil) {
-    //        completion(self.allPostsArray, nil);
-    //    } else {
-    PFQuery *postQuery = [Post query];
-    [postQuery orderByDescending:@"createdAt"];
-    [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:NO];
-    
-    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
-    PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
-    [postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:kilometers];
-    
-    [postQuery includeKey:@"image"];
-    
-    __weak PostManager *weakSelf = self;
-    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-        if (posts) {
-            //weakSelf.allPostsArray = [NSMutableArray arrayWithArray:posts];
-            NSMutableArray *allPostsArray = [[NSMutableArray alloc] init];
-            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-            
-            for (Post *post in posts) {
-                PostCoreData *postCoreData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
-                if (postCoreData) {
-                    postCoreData.sold = post.sold;
-                    //update any other properties except for watch and watchCount which are handled in a different function
-                } else {
-                    //nested query???????????????????????????
-                    PostCoreData *newPostCoreData = [weakSelf savePostWithObjectId:post.objectId withImageData:nil withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title toCoreDataWithManagedObjectContext:context];
-                    [post.image getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-                        //set image later
-                        newPostCoreData.image = data;
-                    }];
-                }
-                [allPostsArray addObject:postCoreData];
-            }
-            
-            completion(allPostsArray, nil);
-        } else {
-            NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
-            completion(nil, error);
-        }
-    }];
-    //    }
-}
-
-//get from core data
-- (NSMutableArray *)getActivePostsFromCoreData {
+- (NSMutableArray *)getProfilePostsFromCoreDataForUser:(UserCoreData *)user {
+    /*NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
+     return [post.author.objectId isEqualToString:user.objectId];
+     }];
+     NSArray *allPostsArray = [self getAllPostsFromCoreData];
+     return [NSMutableArray arrayWithArray:[allPostsArray filteredArrayUsingPredicate:predicate]];*/
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"sold = %@", NO]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"author = %@", user]];
+    
+    NSError *error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects for current user: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    return [NSMutableArray arrayWithArray:results]; //firstObject is nil if results has length 0
+}
+
+- (NSManagedObject *)getCoreDataEntityWithName:(NSString *)name withObjectId:(NSString *)postObjectId withContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:name inManagedObjectContext:context];
+    [request setEntity:entityDescription];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"objectId = %@", postObjectId]];
+    [request setFetchLimit:1];
     
     NSError *error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
@@ -273,76 +291,74 @@
         abort();
     }
     
-    return [NSMutableArray arrayWithArray:results]; //firstObject is nil if results has length 0
+    return [results firstObject]; //firstObject is nil if results has length 0
 }
 
-- (void)unwatchPost:(Post *)post withCompletion:(void (^)(NSError *))completion {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-    PostCoreData *postCoreData = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
-    if (postCoreData) {
-        postCoreData.watchCount --;
-        postCoreData.watched = NO;
-    }
+- (void)watchPost:(PostCoreData *)postCoreData withCompletion:(void (^)(NSError *))completion {
+    postCoreData.watchCount ++;
+    postCoreData.watched = YES;
     
-//    __weak PostManager *weakSelf = self;
-    [post.watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-//            post.watch = nil;
-//            int watchCountInt = [post.watchCount intValue];
-//            watchCountInt --;
-//            post.watchCount = [NSNumber numberWithInt:watchCountInt];
-//            [weakSelf.watchedPostsArray removeObject:post];
-            completion(nil);
+    PFQuery *postQuery = [Post query];
+    [postQuery getObjectInBackgroundWithId:postCoreData.objectId block:^(PFObject * _Nullable post, NSError * _Nullable error) {
+        if (post) {
+            Watches *watch = (Watches *)[Watches new];
+            watch.post = post;
+            watch.user = [PFUser currentUser];
+            [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error saving new object in server! %@", error.localizedDescription);
+                    completion(error);
+                } else {
+                    completion(nil);
+                }
+            }];
         } else {
+            NSLog(@"error querying post object by objectId! %@", error.localizedDescription);
             completion(error);
         }
     }];
 }
 
-- (void)watchPost:(Post *)post withCompletion:(void (^)(NSError *))completion {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-    PostCoreData *postCoreData = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
-    if (postCoreData) {
-        postCoreData.watchCount ++;
-        postCoreData.watched = YES;
-    }
-    
-    PFObject *watch = [PFObject objectWithClassName:@"Watches"];
-    watch[@"post"] = post;
-    watch[@"user"] = [PFUser currentUser];
-    
-//    __weak PostManager *weakSelf = self;
-    [watch saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-//            post.watch = watch;
-//            int watchCountInt = [post.watchCount intValue];
-//            watchCountInt ++;
-//            post.watchCount = [NSNumber numberWithInt:watchCountInt];
-//            [weakSelf.watchedPostsArray insertObject:post atIndex:0];
-            completion(nil);
+- (void)unwatchPost:(PostCoreData *)postCoreData withCompletion:(void (^)(NSError *))completion {
+    postCoreData.watchCount --;
+    postCoreData.watched = NO;
+
+    PFQuery *watchQuery = [Watches query];
+    [watchQuery getObjectInBackgroundWithId:postCoreData.watchObjectId block:^(PFObject * _Nullable watch, NSError * _Nullable error) {
+        if (watch) {
+            [watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error deleting watch object in server! %@", error.localizedDescription);
+                    completion(error);
+                } else {
+                    completion(nil);
+                }
+            }];
         } else {
+            NSLog(@"error querying watch object by objectId! %@", error.localizedDescription);
             completion(error);
         }
     }];
 }
 
-- (void)setPost:(Post *)post sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-    PostCoreData *postCoreData = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
-    if (postCoreData) {
-        postCoreData.sold = sold;
-    }
+- (void)setPost:(PostCoreData *)postCoreData sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion {
+    postCoreData.sold = sold;
     
-    post.sold = sold;
-    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (error != nil) {
-            NSLog(@"Post status update failed: %@", error.localizedDescription);
-            completion(error);
+    PFQuery *postQuery = [Post query];
+    [postQuery getObjectInBackgroundWithId:postCoreData.objectId block:^(PFObject * _Nullable post, NSError * _Nullable error) {
+        if (post) {
+            ((Post *)post).sold = sold;
+            [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error updating sold status of post in server! %@", error.localizedDescription);
+                    completion(error);
+                } else {
+                    completion(nil);
+                }
+            }];
         } else {
-            completion(nil);
+            NSLog(@"error querying post by objectId in server! %@", error.localizedDescription);
+            completion(error);
         }
     }];
 }
@@ -416,6 +432,10 @@
         newPost = [[PostCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
     
         UserCoreData *author = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:[PFUser currentUser].objectId withContext:context];
+//        if (!author) {
+//            PFUser *currentUser = [PFUser currentUser];
+//            author = [self saveUserWithObjectId:currentUser.objectId withUsername:currentUser.username withEmail:currentUser.email withLocation:currentUser.locat withProfilePic:<#(NSData * _Nullable)#> toCoreDataWithManagedObjectContext:<#(nonnull NSManagedObjectContext *)#>]
+//        }
         if (!newPost.author) {
             newPost.author = author;
         }
@@ -470,23 +490,6 @@
     }
     
     return user;
-}
-
-- (NSManagedObject *)getCoreDataEntityWithName:(NSString *)name withObjectId:(NSString *)postObjectId withContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:name inManagedObjectContext:context];
-    [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"objectId = %@", postObjectId]];
-    [request setFetchLimit:1];
-    
-    NSError *error = nil;
-    NSArray *results = [context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    return [results firstObject]; //firstObject is nil if results has length 0
 }
 
 @end

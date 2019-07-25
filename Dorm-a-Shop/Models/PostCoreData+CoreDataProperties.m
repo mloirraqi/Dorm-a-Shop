@@ -26,6 +26,7 @@
 @dynamic title;
 @dynamic watchCount;
 @dynamic watched;
+@dynamic watchObjectId;
 @dynamic author;
 
 @end

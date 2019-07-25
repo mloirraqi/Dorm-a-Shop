@@ -11,10 +11,11 @@
 #import "DetailsViewController.h"
 #import "Post.h"
 #import "SignInVC.h"
+#import "EditProfileVC.h"
 #import "PostManager.h"
 @import Parse;
 
-@interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *activeItems;
@@ -58,50 +59,32 @@
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchProfile) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(fetchProfileFromCoreData) forControlEvents:UIControlEventValueChanged];
     [self.scrollView addSubview:self.refreshControl];
 
-    [self fetchProfile];
+    [self fetchProfileFromCoreData];
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    self.user = PFUser.currentUser;
-    [self fetchProfile];
-}
-
-- (void)fetchProfile {
+- (void)fetchProfileFromCoreData {
     self.username.text = self.user.username;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;
-    PFFileObject *imageFile = self.user[@"ProfilePic"];
-    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [self.profilePic setImage:image];
-        }
-    }];
+    
+    NSData *imageData = self.user.profilePic;
+    UIImage *image = [UIImage imageWithData:imageData];
+    [self.profilePic setImage:image];
 
-    [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-        if (postsArray) {
-            NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-                return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
-            }];
-            NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
-            
-            NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
-            self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-            NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
-            self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
-            self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-            [self.collectionView reloadData];
-        } else {
-            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
-        }
-        [self.refreshControl endRefreshing];
-    }];
+    NSMutableArray *profilePostsArray = [[PostManager shared] getProfilePostsFromCoreDataForUser:self.user];
+    NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+    self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
+    self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+    NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+    self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
+    self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+    
+    [self.collectionView reloadData];
+    [self.refreshControl endRefreshing];
 }
 
 - (IBAction)changedSegment:(id)sender {
@@ -152,7 +135,7 @@
     if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostCollectionViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
-        Post *post;
+        PostCoreData *post;
         
         if ([self.segmentControl selectedSegmentIndex] == 0) {
             post = self.activeItems[indexPath.row];
@@ -164,6 +147,9 @@
         detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
+    } else if ([segue.identifier isEqualToString:@"segueToEditProfile"]) {
+        EditProfileVC *editProfileViewController = [segue destinationViewController];
+        editProfileViewController.delegate = self;
     }
 }
 
@@ -173,6 +159,10 @@
     SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
     
     [self presentViewController:signInVC animated:YES completion:nil];
+}
+
+- (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
+    [self fetchProfileFromCoreData];
 }
 
 @end

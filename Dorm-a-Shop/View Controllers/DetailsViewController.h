@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN

@@ -9,6 +9,7 @@
 #import "SignUpVC.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "Utils.h"
+#import "User.h"
 #import "NJOPasswordStrengthEvaluator.h"
 #import <Parse/Parse.h>
 #import "HomeScreenViewController.h"
@@ -86,12 +87,12 @@
         CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
         PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
         
-        PFUser *user = [PFUser user];
+        User *user = [User new];
         user.username = self->nameTextField.text;
         user.password = self->passwordTextField.text;
         user.email = self->emailTextField.text;
-        user[@"ProfilePic"] = image;
-        user[@"Location"] = location;
+        user.profilePic = image;
+        user.location = location;
         
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [hud hideAnimated:YES];

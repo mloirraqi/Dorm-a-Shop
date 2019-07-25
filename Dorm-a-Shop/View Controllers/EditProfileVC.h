@@ -11,9 +11,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EditProfileVC : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITextFieldDelegate>
+@protocol EditProfileViewControllerDelegate <NSObject>
 
-{
+- (void)updateEditProfileData:(UIViewController *)editProfileViewController;
+
+@end
+
+@interface EditProfileVC : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITextFieldDelegate> {
     __weak IBOutlet UITextField *emailTextField;
     __weak IBOutlet UITextField *nameTextField;
     __weak IBOutlet UITextField *passwordTextField;
@@ -26,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL locationSelected;
     PFGeoPoint *selectedLocationPoint;
 }
+
+@property (nonatomic, strong) id<EditProfileViewControllerDelegate> delegate;
 
 @end
 

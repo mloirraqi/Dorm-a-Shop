@@ -532,7 +532,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Edit"/>
                                 <connections>
-                                    <segue destination="cUB-Zh-w6I" kind="show" id="Iln-gp-mUe"/>
+                                    <segue destination="cUB-Zh-w6I" kind="show" identifier="segueToEditProfile" id="Iln-gp-mUe"/>
                                 </connections>
                             </button>
                         </barButtonItem>

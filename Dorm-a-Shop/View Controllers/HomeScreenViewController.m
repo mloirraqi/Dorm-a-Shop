@@ -81,7 +81,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
-    [self fetchPostsFromCoreData];
+    [self fetchActivePostsFromCoreData];
     [self createRefreshControl];
 }
 
@@ -101,7 +101,6 @@
    [self performSegueWithIdentifier:@"chatBox" sender:nil];
 }
 
-
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         //Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
@@ -113,17 +112,17 @@
         [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView endUpdates];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        [self queryPostsFromParse];
+        [self fetchActivePostsFromCoreData];
     }
 }
 
 - (void)createRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(queryPostsFromParse) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(queryActivePostsFromParse) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
-- (void)queryPostsFromParse {
+- (void)queryActivePostsFromParse {
     [[PostManager shared] queryActivePostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
@@ -137,7 +136,7 @@
     }];
 }
 
-- (void)fetchPostsFromCoreData {
+- (void)fetchActivePostsFromCoreData {
     self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];

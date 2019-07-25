@@ -33,7 +33,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
-    [self fetchPosts];
+    [self fetchPostsFromCoreData];
     [self createRefreshControl];
 }
 
@@ -41,17 +41,17 @@
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         [self.tableView reloadData];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        [self fetchPosts];
+        [self fetchPostsFromCoreData];
     }
 }
 
 - (void)createRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchPosts) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(fetchPostsFromCoreData) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
-- (void)fetchPosts {
+- (void)fetchPostsFromCoreData {
     NSMutableArray *activeWatchPosts = [[PostManager shared] getActiveWatchedPostsForCurrentUserFromCoreData];
     self.postsArray = activeWatchPosts;
     [self.tableView reloadData];
@@ -60,8 +60,7 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-
-    Post *post = self.postsArray[indexPath.row];
+    PostCoreData *post = self.postsArray[indexPath.row];
     cell.post = post;
     return cell;
 }

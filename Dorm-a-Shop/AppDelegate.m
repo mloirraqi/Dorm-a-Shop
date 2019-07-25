@@ -42,7 +42,7 @@
         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
     }
     
-    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+    [[PostManager shared] queryActivePostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         }
