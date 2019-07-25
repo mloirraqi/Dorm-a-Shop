@@ -20,7 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DetailsViewController : UIViewController
 
-@property (nonatomic, strong) Post *post;
+//@property (nonatomic, strong) Post *post;
+@property (nonatomic, strong) PostCoreData *post;
+
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (strong, nonatomic) NSString *senderClassName;
 @property (nonatomic) BOOL watchStatusChanged;

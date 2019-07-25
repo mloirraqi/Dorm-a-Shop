@@ -6,20 +6,28 @@
 //  Copyright © 2019 ilanashapiro. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
+#import "PostCoreData+CoreDataClass.h"
 #import "HomeScreenViewController.h"
 #import "PostTableViewCell.h"
-#import "Post.h"
+//#import "Post.h"
 #import "UploadViewController.h"
 #import "DetailsViewController.h"
 #import "SignInVC.h"
 #import "PostManager.h"
+#import "AppDelegate.h"
 @import Parse;
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
 
+@property (strong, nonatomic) AppDelegate *appDelegate;
+@property (strong, nonatomic) NSManagedObjectContext *context;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @property (strong, nonatomic) NSMutableArray *postsArray;
+
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) NSString *className;
@@ -43,6 +51,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.appDelegate = [[UIApplication sharedApplication] delegate];
+    self.context = self.appDelegate.persistentContainer.viewContext;
     
     self.className = @"HomeScreenViewController";
     
@@ -73,6 +84,18 @@
     [self createRefreshControl];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSError *error = nil;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"PostCoreData"];
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+}
+
 - (IBAction)chatButton:(id)sender {
    [self performSegueWithIdentifier:@"chatBox" sender:nil];
 }
@@ -80,7 +103,9 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        //Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        
         NSUInteger postIndexRow = [self.postsArray indexOfObject:notificationPost];
         NSIndexPath *postIndexPath = [NSIndexPath indexPathForRow:postIndexRow inSection:0];
         [self.tableView beginUpdates];
@@ -103,7 +128,7 @@
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             self.postsArray = activePosts;
-            self.filteredPosts = self.postsArray; //new
+            self.filteredPosts = self.postsArray;
             [self.tableView reloadData];
         } else {
             NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
@@ -115,7 +140,8 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (tableView == self.tableView) {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-        Post *post = self.filteredPosts[indexPath.row];
+        //Post *post = self.filteredPosts[indexPath.row];
+        PostCoreData *post = self.filteredPosts[indexPath.row];
         cell.post = post;
         return cell;
     } else if (tableView == self.categoryTable) {
@@ -153,7 +179,7 @@
     }
 }
 
-- (void)didUpload:(Post *)post {
+- (void)didUpload:(PostCoreData *)post {
     [self.postsArray insertObject:post atIndex:0];
     [self filterPosts];
 }
@@ -180,7 +206,8 @@
     } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
-        Post *post = self.filteredPosts[indexPath.row];
+        //Post *post = self.filteredPosts[indexPath.row];
+        PostCoreData *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.delegate = self;
@@ -209,21 +236,21 @@
     self.filteredPosts = self.postsArray;
     
     if (self.searchBar.text.length != 0) {
-        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.title localizedCaseInsensitiveContainsString:self.searchBar.text] || [post.caption localizedCaseInsensitiveContainsString:self.searchBar.text]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:predicate]];
     }
     
     if (![[self.categoryButton currentTitle] isEqual: @"Category: All"]) {
-        NSPredicate *caPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+        NSPredicate *caPredicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.category isEqualToString:[self.categoryButton currentTitle]]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:caPredicate]];
     }
     
     if (![[self.conditionButton currentTitle] isEqual: @"Condition: All"]) {
-        NSPredicate *coPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+        NSPredicate *coPredicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.condition isEqualToString:[self.conditionButton currentTitle]]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:coPredicate]];

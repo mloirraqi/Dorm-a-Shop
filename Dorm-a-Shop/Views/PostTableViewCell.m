@@ -9,12 +9,13 @@
 #import "PostTableViewCell.h"
 #import "NSDate+DateTools.h"
 #import "WatchListViewController.h"
-#import "Post.h"
+//#import "Post.h"
 #import "PostManager.h"
+#import "PostCoreData+CoreDataClass.h"
 @import Parse;
 
 @interface PostTableViewCell()
-//isInialReload not working, gets set YES thru prepare for reuse when watch button is clicked
+
 @property (nonatomic) BOOL isInitialReload;
 
 - (IBAction)didTapWatch:(id)sender;
@@ -31,6 +32,7 @@
     self.postPFImageView.file = post[@"image"];
     [self.postPFImageView loadInBackground];
     
+    //instead of [PFUser currentUser], should i query core data to get current user?????
     [self setUIWatchedForUser:[PFUser currentUser] Post:post];
     
     self.conditionLabel.text = post.condition;
@@ -39,9 +41,9 @@
     self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
 }
 
-- (void)setUIWatchedForUser:(PFUser *)user Post:(Post *)post{
+- (void)setUIWatchedForUser:(PFUser *)user Post:(PostCoreData *)post{
     __weak PostTableViewCell *weakSelf = self;
-    [[PostManager shared] getCurrentUserWatchStatusForPost:post withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
+    [[PostManager shared] getCurrentUserWatchStatusForPost:post withCompletion:^(PostCoreData * _Nonnull post, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
         } else {
@@ -70,7 +72,6 @@
     } else {
         [[PostManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
-                NSLog(@"%@", weakSelf.post.watch);
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {

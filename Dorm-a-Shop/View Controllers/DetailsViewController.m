@@ -8,6 +8,7 @@
 
 #import "DetailsViewController.h"
 #import "Post.h"
+#import "PostCoreData.h"
 #import "PostManager.h"
 @import Parse;
 

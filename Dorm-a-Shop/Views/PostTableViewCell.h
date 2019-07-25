@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -21,7 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *conditionLabel;
 
-@property (nonatomic, strong) Post *post;
+//@property (nonatomic, strong) Post *post;
+@property (nonatomic, strong) PostCoreData *post;
 
 @end
 

@@ -8,29 +8,23 @@
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="price" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="sold" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="watchCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="author" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
-        <relationship name="watch" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WatchCoreData" syncable="YES"/>
+        <attribute name="watched" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
     </entity>
     <entity name="UserCoreData" representedClassName="UserCoreData" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profilePic" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="posts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PostCoreData" syncable="YES"/>
-        <relationship name="watchingPost" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WatchCoreData" syncable="YES"/>
-    </entity>
-    <entity name="WatchCoreData" representedClassName="WatchCoreData" syncable="YES">
         <relationship name="post" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PostCoreData" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
     </entity>
     <elements>
         <element name="PostCoreData" positionX="262.109375" positionY="174.48828125" width="128" height="240"/>
-        <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="150"/>
-        <element name="WatchCoreData" positionX="-18.82421875" positionY="270.54296875" width="128" height="75"/>
+        <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="135"/>
     </elements>
 </model>

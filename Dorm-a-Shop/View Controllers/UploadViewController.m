@@ -8,7 +8,7 @@
 
 #import "UploadViewController.h"
 #import "PostManager.h"
-#import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
 
 @interface UploadViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
