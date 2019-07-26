@@ -46,7 +46,6 @@
 		EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */; };
 		EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */; };
 		EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724422E95C6B00426226 /* CardsViewController.m */; };
-		EAEB724922EA1F8700426226 /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724722EA1F8700426226 /* DormAShop.xcdatamodeld */; };
 		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -150,7 +149,6 @@
 		EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		EAEB724422E95C6B00426226 /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
 		EAEB724522E95C6B00426226 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
-		EAEB724822EA1F8700426226 /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,7 +232,6 @@
 				47A8A9AA22DE3A30005D9520 /* Main.storyboard */,
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,
-				EAEB724722EA1F8700426226 /* DormAShop.xcdatamodeld */,
 				DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */,
 				47A8A9AD22DE3A32005D9520 /* Assets.xcassets */,
 				47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */,
@@ -643,7 +640,6 @@
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
-				EAEB724922EA1F8700426226 /* DormAShop.xcdatamodeld in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
 				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
@@ -837,13 +833,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GBM98UU555;
+				DEVELOPMENT_TEAM = A3A3BF55QH;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -855,13 +851,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GBM98UU555;
+				DEVELOPMENT_TEAM = A3A3BF55QH;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -983,12 +979,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		EAEB724722EA1F8700426226 /* DormAShop.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				EAEB724822EA1F8700426226 /* DormAShop.xcdatamodel */,
-			);
-			currentVersion = EAEB724822EA1F8700426226 /* DormAShop.xcdatamodel */;
 		DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
