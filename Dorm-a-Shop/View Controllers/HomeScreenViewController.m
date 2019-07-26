@@ -97,10 +97,11 @@
 
 - (void)fetchPosts {
     
-    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
-    PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
+    PFUser *currentUser = PFUser.currentUser;
+    PFGeoPoint *location = currentUser[@"Location"];
     
     PFQuery *userQuery = [PFUser query];
+    [userQuery whereKey:@"objectId" notEqualTo:currentUser.objectId];
     [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
 
     PFQuery *postQuery = [Post query];
