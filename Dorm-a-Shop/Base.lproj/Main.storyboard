@@ -1767,10 +1767,16 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
+
         <segue reference="MkK-t9-lSX"/>
         <segue reference="Bvx-1i-tFM"/>
         <segue reference="Ob4-g7-kRL"/>
         <segue reference="T5c-ri-LSw"/>
+        <segue reference="ni5-B6-yy2"/>
+        <segue reference="KLi-YY-IiH"/>
+        <segue reference="ufI-em-euD"/>
+        <segue reference="Ob4-g7-kRL"/>
+        <segue reference="inK-qS-1By"/>
         <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
 </document>
