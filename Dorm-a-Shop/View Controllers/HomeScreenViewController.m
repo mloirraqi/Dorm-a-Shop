@@ -138,6 +138,7 @@
 
 - (void)fetchActivePostsFromCoreData {
     self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
+    NSLog(@"all posts array %@", self.postsArray);
     [self filterPosts];
     [self.tableView reloadData];
     [self.refreshControl endRefreshing];
@@ -268,9 +269,11 @@
 
 - (void)filterPosts {
     self.filteredPosts = self.postsArray;
-    
+    NSLog(@"prelim filtered posts: %@", self.filteredPosts);
     if (self.searchBar.text.length != 0) {
         NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
+            NSLog(@"post core data %@", post);
+            NSLog(@"post title: %@, post caption: %@", post.title, post.caption);
             return ([post.title localizedCaseInsensitiveContainsString:self.searchBar.text] || [post.caption localizedCaseInsensitiveContainsString:self.searchBar.text]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:predicate]];

@@ -36,13 +36,19 @@
     
     [Parse initializeWithConfiguration:config];
     
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+    
+    NSError *deleteError = nil;
+    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
+    
     if (PFUser.currentUser) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         
         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
     }
     
-    [[PostManager shared] queryActivePostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+    [[PostManager shared] queryActivePostsWithinKilometers:10000 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         }

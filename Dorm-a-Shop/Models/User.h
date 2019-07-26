@@ -11,8 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface User : PFUser
 
-@property (nonatomic, strong) PFFileObject *profilePic;
-@property (nonatomic, strong) PFGeoPoint *location;
+@property (nonatomic, strong) PFFileObject *ProfilePic;
+@property (nonatomic, strong) PFGeoPoint *Location;
 
 @end
 

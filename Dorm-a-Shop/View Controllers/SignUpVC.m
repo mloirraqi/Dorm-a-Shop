@@ -18,6 +18,7 @@
 
 
 @interface SignUpVC ()
+
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
 
 @end
@@ -36,7 +37,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     locationManager = [[LocationManager alloc]init];
-    // Do any additional setup after loading the view.
     
     self.lenientValidator = [NJOPasswordValidator standardValidator];
     [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:passwordTextField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
@@ -47,7 +47,7 @@
 
 }
 
-- (BOOL)checkFields{
+- (BOOL)checkFields {
     if (!nameTextField.text || nameTextField.text.length == 0){
         [self showAlertView:@"Please Add a Name"];
         return false;
@@ -75,9 +75,7 @@
     }
     
     return true;
-    
 }
-
 
 - (IBAction)signUpButtonTap:(UIButton *)sender {
     if ([self checkFields]){
@@ -92,27 +90,123 @@
         user.username = self->nameTextField.text;
         user.password = self->passwordTextField.text;
         user.email = self->emailTextField.text;
-        user.profilePic = image;
-        user.location = location;
+        user.ProfilePic = image;
+        user.Location = location;
         
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
         UserCoreData *newUser = [[PostManager shared] saveUserWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withProfilePic:imageData toCoreDataWithManagedObjectContext:context];
         
+        __weak SignUpVC *weakSelf = self;
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [hud hideAnimated:YES];
             if (!error) {
                 newUser.objectId = user.objectId;
-                [self showAlertView:@"Welcome!"];
-                [self performSegueWithIdentifier:@"homeScreen" sender:nil];
+                [weakSelf showAlertView:@"Welcome!"];
+                [weakSelf performSegueWithIdentifier:@"homeScreen" sender:nil];
             } else {
                 [hud hideAnimated:YES];
-                [self showAlertView:@"Someything goes wrong, Please try again"];
+                [weakSelf showAlertView:@"Someything went wrong, please try again"];
                 NSLog(@"😫😫😫, error: %@", error.localizedDescription);
             }
         }];
     }
+}
+
+- (void)setLocationName {
+    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
+    PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
+        
+        NSString *strAdd = nil;
+        
+        if (error == nil && [placemarks count] > 0)
+        {
+            CLPlacemark *placemark = [placemarks lastObject];
+            
+            // strAdd -> take bydefault value nil
+            
+            
+            if ([placemark.subThoroughfare length] != 0)
+                strAdd = placemark.subThoroughfare;
+            
+            if ([placemark.thoroughfare length] != 0)
+            {
+                // strAdd -> store value of current location
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark thoroughfare]];
+                else
+                {
+                    // strAdd -> store only this value,which is not null
+                    strAdd = placemark.thoroughfare;
+                }
+            }
+            
+            if ([placemark.postalCode length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
+                else
+                    strAdd = placemark.postalCode;
+            }
+            
+            if ([placemark.locality length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
+                else
+                    strAdd = placemark.locality;
+            }
+            
+            if ([placemark.administrativeArea length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
+                else
+                    strAdd = placemark.administrativeArea;
+            }
+            
+            if ([placemark.country length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
+                else
+                    strAdd = placemark.country;
+            }
+            
+            NSLog(@"%@", strAdd);
+        }
+        
+        [self updateLocationWith:strAdd location:location];
+    }];
+}
+
+- (void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location {
+    PFUser *currentUser = [PFUser currentUser];
+    currentUser[@"Location"] = location;
+    if(address != nil)
+    {
+        currentUser[@"address"] = address;
+    }
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:true];
+    [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        [MBProgressHUD hideHUDForView:self.view animated:true];
+        if (!error) {
+            // Hooray! Let them use the app now.
+            [self showAlertView:@"Welcome!"];
+            [self performSegueWithIdentifier:@"homeScreen" sender:nil];
+            
+        } else {
+            NSString *errorString = [error userInfo][@"error"];
+            [self showAlertView:errorString];
+            // Show the errorString somewhere and let the user try again.
+        }
+    }];
 }
 
 - (IBAction)backButtonTap:(UIButton *)sender {

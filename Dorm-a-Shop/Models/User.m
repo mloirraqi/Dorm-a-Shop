@@ -9,8 +9,8 @@
 
 @implementation User
 
-@dynamic profilePic;
-@dynamic location;
+@dynamic ProfilePic;
+@dynamic Location;
 
 //Since User is a subclass of PFUser, which is itself a subclass, it may not have a separate +parseClassName definitions. User should inherit +parseClassName from PFUser.
 

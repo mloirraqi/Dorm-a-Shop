@@ -26,8 +26,6 @@
 
 @implementation PostManager
 
-//@synthesize allPostsArray;
-
 #pragma mark Singleton Methods
 
 + (instancetype)shared {
@@ -50,12 +48,13 @@
     
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
-    [postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:kilometers];
+    //[postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:kilometers];
     
     [postQuery includeKey:@"image"];
     
     __weak PostManager *weakSelf = self;
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+        NSLog(@"%d", posts == nil);
         if (posts) {
             //weakSelf.allPostsArray = [NSMutableArray arrayWithArray:posts];
             NSMutableArray *allPostsArray = [[NSMutableArray alloc] init];
@@ -95,7 +94,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"sold = %@", NO]];
+    //[request setPredicate:[NSPredicate predicateWithFormat:@"sold = %@", NO]];
     
     NSError *error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
@@ -103,8 +102,10 @@
         NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
-    
-    return [NSMutableArray arrayWithArray:results]; //firstObject is nil if results has length 0
+    NSLog(@"posts from core data: %@", results);
+    NSMutableArray *temp = [NSMutableArray arrayWithArray:results]; //firstObject is nil if results has length 0
+    NSLog(@"temp %@", temp);
+    return temp;
 }
 
 - (void)queryWatchedPostsForCurrentUserWithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion {
@@ -416,12 +417,14 @@
 - (PostCoreData *)savePostWithObjectId:(NSString *)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title toCoreDataWithManagedObjectContext:(NSManagedObjectContext*)context {
     
     PostCoreData *newPost = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:postObjectId withContext:context];
-    
+    NSLog(@"%@", newPost);
     //if post doesn't already exist in core data, then create it
     if (!newPost) {
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
-        newPost = [[PostCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
-    
+        
+        //NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
+        //newPost = [[PostCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
+        newPost = (PostCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"PostCoreData" inManagedObjectContext:context];
+        
         UserCoreData *author = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:[PFUser currentUser].objectId withContext:context];
 //        if (!author) {
 //            PFUser *currentUser = [PFUser currentUser];
@@ -447,6 +450,8 @@
         newPost.watched = NO;
         newPost.watchCount = 0;
         newPost.price = price;
+        
+        NSLog(@"newpost.title %@", newPost.title);
 
         //save to core data persisted store
         NSError *error = nil;
@@ -464,8 +469,9 @@
     
     //if post doesn't already exist in core data, then create it
     if (!user) {
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:context];
-        user = [[UserCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
+//        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:context];
+//        user = [[UserCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
+        user = (UserCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"UserCoreData" inManagedObjectContext:context];
         
         user.objectId = userObjectId;
         user.profilePic = imageData;
