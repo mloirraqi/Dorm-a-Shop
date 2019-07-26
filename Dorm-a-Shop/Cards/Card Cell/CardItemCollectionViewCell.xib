@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="CardItemCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="242" height="226"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="242" height="226"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UOt-41-LNk">
+                        <rect key="frame" x="5" y="5" width="232" height="216"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vw3-wp-ol6" customClass="PFImageView">
+                                <rect key="frame" x="0.0" y="0.0" width="232" height="216"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kM7-PB-M9o">
+                                <rect key="frame" x="0.0" y="188" width="232" height="28"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Kk-WB-9vl">
+                                        <rect key="frame" x="8" y="6" width="34.5" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6WV-Ya-UJz">
+                                        <rect key="frame" x="193" y="7" width="31" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="0.79984061454849498" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="6WV-Ya-UJz" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1Kk-WB-9vl" secondAttribute="trailing" constant="16" id="1l5-UN-HOg"/>
+                                    <constraint firstItem="1Kk-WB-9vl" firstAttribute="leading" secondItem="kM7-PB-M9o" secondAttribute="leading" constant="8" id="3qf-6x-8il"/>
+                                    <constraint firstItem="6WV-Ya-UJz" firstAttribute="top" secondItem="kM7-PB-M9o" secondAttribute="top" constant="7" id="6KS-AK-hds"/>
+                                    <constraint firstAttribute="trailing" secondItem="6WV-Ya-UJz" secondAttribute="trailing" constant="8" id="LJC-Fy-Hgz"/>
+                                    <constraint firstItem="1Kk-WB-9vl" firstAttribute="top" secondItem="kM7-PB-M9o" secondAttribute="top" constant="6" id="V4N-9J-v0n"/>
+                                    <constraint firstAttribute="bottom" secondItem="1Kk-WB-9vl" secondAttribute="bottom" constant="6" id="j0a-lM-DK7"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="vw3-wp-ol6" secondAttribute="bottom" id="XaM-2y-WKA"/>
+                            <constraint firstAttribute="trailing" secondItem="vw3-wp-ol6" secondAttribute="trailing" id="aFP-dr-EGq"/>
+                            <constraint firstAttribute="trailing" secondItem="kM7-PB-M9o" secondAttribute="trailing" id="i5D-2G-Log"/>
+                            <constraint firstItem="vw3-wp-ol6" firstAttribute="leading" secondItem="UOt-41-LNk" secondAttribute="leading" id="lIT-hT-aK3"/>
+                            <constraint firstAttribute="bottom" secondItem="kM7-PB-M9o" secondAttribute="bottom" id="nvY-rq-NUB"/>
+                            <constraint firstItem="vw3-wp-ol6" firstAttribute="top" secondItem="UOt-41-LNk" secondAttribute="top" id="u53-Jy-K1d"/>
+                            <constraint firstItem="kM7-PB-M9o" firstAttribute="leading" secondItem="UOt-41-LNk" secondAttribute="leading" id="uG6-Pe-ecV"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="UOt-41-LNk" secondAttribute="bottom" constant="5" id="7Op-Bp-gfX"/>
+                <constraint firstItem="UOt-41-LNk" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="O6c-hQ-Ydh"/>
+                <constraint firstItem="UOt-41-LNk" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="iI2-ID-EGL"/>
+                <constraint firstAttribute="trailing" secondItem="UOt-41-LNk" secondAttribute="trailing" constant="5" id="uXr-SF-bda"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <size key="customSize" width="242" height="226"/>
+            <connections>
+                <outlet property="postPFImageView" destination="vw3-wp-ol6" id="Tmh-68-QXz"/>
+                <outlet property="priceLabel" destination="6WV-Ya-UJz" id="Hql-UQ-iq2"/>
+                <outlet property="titleLabel" destination="1Kk-WB-9vl" id="Vce-CB-uPS"/>
+            </connections>
+            <point key="canvasLocation" x="186.95652173913044" y="94.419642857142847"/>
+        </collectionViewCell>
+    </objects>
+</document>

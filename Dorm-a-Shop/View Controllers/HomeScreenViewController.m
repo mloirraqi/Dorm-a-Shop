@@ -96,15 +96,18 @@
 }
 
 - (void)fetchPosts {
+    
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
     
+    PFQuery *userQuery = [PFUser query];
+    [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
+
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
     [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
-    [postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:5.0];
-    
+    [postQuery whereKey:@"author" matchesQuery:userQuery];
     __weak HomeScreenViewController *weakSelf = self;
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {

@@ -402,7 +402,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u3h-8c-UIn">
-                                                <rect key="frame" x="139" y="47" width="66" height="21"/>
+                                                <rect key="frame" x="139" y="47" width="251" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -550,6 +550,7 @@
                     <connections>
                         <outlet property="activeCount" destination="UtB-uj-P2h" id="A1G-Uv-iu8"/>
                         <outlet property="collectionView" destination="imT-sc-NpR" id="Wdw-Fk-0AT"/>
+                        <outlet property="location" destination="u3h-8c-UIn" id="MwA-6J-vYb"/>
                         <outlet property="profilePic" destination="h6n-9m-t5P" id="vC8-na-sv2"/>
                         <outlet property="scrollView" destination="iAM-p9-Pa1" id="l4i-uo-GNV"/>
                         <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
@@ -905,7 +906,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JME-qJ-rWa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2898.5507246376815" y="918.75"/>
+            <point key="canvasLocation" x="2859" y="919"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3K8-Bv-zwe">
@@ -1736,8 +1737,13 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="ni5-B6-yy2"/>
+        <segue reference="KLi-YY-IiH"/>
+        <segue reference="ufI-em-euD"/>
+=======
         <segue reference="Ob4-g7-kRL"/>
         <segue reference="cnV-vk-Wb5"/>
         <segue reference="ch5-tg-CXn"/>
+>>>>>>> 1fa0db0712220c769850126caf7e627afe9e555d
     </inferredMetricsTieBreakers>
 </document>

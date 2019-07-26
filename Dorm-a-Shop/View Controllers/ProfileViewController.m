@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *username;
+@property (weak, nonatomic) IBOutlet UILabel *location;
 @property (weak, nonatomic) IBOutlet UILabel *activeCount;
 @property (weak, nonatomic) IBOutlet UILabel *soldCount;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -72,6 +73,7 @@
 
 - (void)fetchProfile {
     self.username.text = self.user.username;
+    self.location.text = self.user[@"address"];
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;
