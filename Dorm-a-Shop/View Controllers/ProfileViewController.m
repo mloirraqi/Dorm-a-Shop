@@ -13,6 +13,7 @@
 #import "SignInVC.h"
 #import "EditProfileVC.h"
 #import "PostManager.h"
+#import "AppDelegate.h"
 @import Parse;
 
 @interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -40,7 +41,9 @@
     self.className = @"ProfileViewController";
     
     if (!self.user) {
-        self.user = PFUser.currentUser;
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+        self.user = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
     } else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
@@ -66,7 +69,7 @@
 }
 
 - (void)fetchProfileFromCoreData {
-    self.username.text = self.user.username;
+    /*self.username.text = self.user.username;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;
@@ -84,7 +87,7 @@
     self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
     
     [self.collectionView reloadData];
-    [self.refreshControl endRefreshing];
+    [self.refreshControl endRefreshing];*/
 }
 
 - (IBAction)changedSegment:(id)sender {
@@ -94,12 +97,12 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if ([self.segmentControl selectedSegmentIndex] == 0) {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"active" forIndexPath:indexPath];
-        Post *post = self.activeItems[indexPath.item];
+        PostCoreData *post = self.activeItems[indexPath.item];
         cell.post = post;
         return cell;
     } else {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
-        Post *post = self.soldItems[indexPath.item];
+        PostCoreData *post = self.soldItems[indexPath.item];
         cell.post = post;
         return cell;
     }

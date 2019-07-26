@@ -9,36 +9,14 @@
 #import "PostCollectionViewCell.h"
 #import "PostManager.h"
 
-@interface PostCollectionViewCell()
-
-@property (nonatomic) BOOL isInitialReload;
-
-@end
-
 @implementation PostCollectionViewCell
 
-//- (void)awakeFromNib {
-//    [super awakeFromNib];
-//    self.isInitialReload = YES;
-//}
-//
-//- (void)prepareForReuse {
-//    [super prepareForReuse];
-//    self.isInitialReload = YES;
-//}
-
 - (void)setPost:(Post *)post {
-//    [self setWatchedUser:[PFUser currentUser] Post:self.post];
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
     
-    PFFileObject *imageFile = self.post.image;
-    
-    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [self.itemImage setImage:image];
-        }
-    }];
+    NSData *imageData = self.post.image;
+    UIImage *image = [UIImage imageWithData:imageData];
+    [self.itemImage setImage:image];
 }
 
 @end

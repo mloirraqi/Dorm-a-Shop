@@ -14,6 +14,7 @@
 #import <Parse/Parse.h>
 #import "HomeScreenViewController.h"
 #import "LocationManager.h"
+#import "PostManager.h"
 
 
 @interface SignUpVC ()
@@ -94,9 +95,15 @@
         user.profilePic = image;
         user.location = location;
         
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+        NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
+        UserCoreData *newUser = [[PostManager shared] saveUserWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withProfilePic:imageData toCoreDataWithManagedObjectContext:context];
+        
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [hud hideAnimated:YES];
             if (!error) {
+                newUser.objectId = user.objectId;
                 [self showAlertView:@"Welcome!"];
                 [self performSegueWithIdentifier:@"homeScreen" sender:nil];
             } else {

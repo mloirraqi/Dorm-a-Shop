@@ -34,7 +34,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="168.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="74z-au-tcV" customClass="PFImageView">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="74z-au-tcV">
                                                     <rect key="frame" x="0.0" y="0.0" width="127" height="124"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="111" id="LFR-oI-YrY"/>
@@ -571,7 +571,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="168.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="knj-BV-kTd" customClass="PFImageView">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="knj-BV-kTd">
                                                     <rect key="frame" x="0.0" y="0.0" width="127" height="124"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="111" id="cPX-3y-DpZ"/>
@@ -923,7 +923,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="jct-hS-uqG" customClass="PFImageView">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="jct-hS-uqG">
                                 <rect key="frame" x="-2" y="88" width="414" height="224"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -1716,7 +1716,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ni5-B6-yy2"/>
-        <segue reference="inK-qS-1By"/>
+        <segue reference="T5c-ri-LSw"/>
         <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>
 </document>

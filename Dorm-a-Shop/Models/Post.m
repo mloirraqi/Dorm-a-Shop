@@ -21,8 +21,7 @@
 @dynamic price;
 @dynamic title;
 @dynamic sold;
-@dynamic watch;
-@dynamic watchCount;
+@dynamic location;
 
 + (nonnull NSString *)parseClassName {
     return @"Post";

@@ -46,7 +46,7 @@
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:NO];
+    [postQuery whereKey:@"sold" equalTo:@NO];
     
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
@@ -376,7 +376,7 @@
 //    }];
 //}
 
-- (void)postListing:(UIImage * _Nullable)image withCaption:(NSString * _Nullable)caption withPrice:(NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion:(void (^)(Post *, NSError *))completion {
+- (void)postListingToParseWithImage:(UIImage * _Nullable)image withCaption:(NSString * _Nullable)caption withPrice:(NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion:(void (^)(Post *, NSError *))completion {
     //parse/server
     Post *newPost = [Post new];
     
@@ -393,22 +393,13 @@
     NSNumber *priceNum = [formatter numberFromString:price];
     newPost.price = priceNum;
     
-    //save to parse
-    //__weak PostManager *weakSelf = self;
     [newPost saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error != nil) {
             completion(nil, error);
         } else {
-            //[weakSelf.allPostsArray insertObject:newPost atIndex:0];
             completion(newPost, nil);
         }
     }];
-    
-    //core data
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-    NSData *imageData = UIImagePNGRepresentation(image);
-    [self savePostWithObjectId:newPost.objectId withImageData:imageData withCaption:caption withPrice:[priceNum doubleValue] withCondition:condition withCategory:category withTitle:title toCoreDataWithManagedObjectContext:context];
 }
 
 + (PFFileObject *)getPFFileFromImage:(UIImage * _Nullable)image {
@@ -473,7 +464,7 @@
     
     //if post doesn't already exist in core data, then create it
     if (!user) {
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:context];
         user = [[UserCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
         
         user.objectId = userObjectId;

@@ -9,11 +9,9 @@
 
 @implementation User
 
+@dynamic profilePic;
 @dynamic location;
-@dynamic image;
 
-+ (nonnull NSString *)parseClassName {
-    return @"User";
-}
+//Since User is a subclass of PFUser, which is itself a subclass, it may not have a separate +parseClassName definitions. User should inherit +parseClassName from PFUser.
 
 @end
