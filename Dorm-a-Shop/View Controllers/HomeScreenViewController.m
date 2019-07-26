@@ -101,7 +101,7 @@
     PFGeoPoint *location = currentUser[@"Location"];
     
     PFQuery *userQuery = [PFUser query];
-    [userQuery whereKey:@"objectId" notEqualTo:currentUser.objectId];
+//    [userQuery whereKey:@"objectId" notEqualTo:currentUser.objectId];
     [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
 
     PFQuery *postQuery = [Post query];
