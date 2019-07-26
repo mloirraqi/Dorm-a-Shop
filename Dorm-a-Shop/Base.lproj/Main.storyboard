@@ -395,7 +395,7 @@
                                         <rect key="frame" x="8" y="0.0" width="398" height="725"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J0d-zI-pQn">
-                                                <rect key="frame" x="139" y="18" width="251" height="21"/>
+                                                <rect key="frame" x="139" y="18" width="158" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -502,6 +502,14 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I06-uU-Ytn">
+                                                <rect key="frame" x="322" y="13" width="62" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Message"/>
+                                                <connections>
+                                                    <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="I1W-46-wBB"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
@@ -1535,6 +1543,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QS2-PP-UOa">
+                                                    <rect key="frame" x="82" y="44" width="312" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="wwp-uV-CzQ" firstAttribute="top" secondItem="dqC-Jo-n0Q" secondAttribute="topMargin" constant="8" id="0Hu-tT-K1S"/>
@@ -1548,6 +1563,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="profilePic" destination="bpE-op-v3a" id="63d-zy-aeY"/>
+                                            <outlet property="recentText" destination="QS2-PP-UOa" id="vPL-dV-VRs"/>
                                             <outlet property="username" destination="wwp-uV-CzQ" id="tcT-Ev-mzS"/>
                                             <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="Bvx-1i-tFM"/>
                                         </connections>
@@ -1558,14 +1574,28 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="nrn-J4-eXk"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Inbox" id="fDU-L2-Uot"/>
+                    <navigationItem key="navigationItem" title="Inbox" id="fDU-L2-Uot">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="vnd-c9-1JY">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dbB-WP-rEx">
+                                <rect key="frame" x="-23" y="-15" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
+                                </accessibility>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <segue destination="O11-22-vap" kind="show" id="MkK-t9-lSX"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="l7p-6k-5K7" id="aoa-dI-U2t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s56-CZ-wsH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1106" y="2321"/>
+            <point key="canvasLocation" x="1105.7971014492755" y="2320.9821428571427"/>
         </scene>
         <!--Message View Controller-->
         <scene sceneID="R85-UX-ygf">
@@ -1737,13 +1767,10 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ni5-B6-yy2"/>
-        <segue reference="KLi-YY-IiH"/>
-        <segue reference="ufI-em-euD"/>
-=======
+        <segue reference="MkK-t9-lSX"/>
+        <segue reference="Bvx-1i-tFM"/>
         <segue reference="Ob4-g7-kRL"/>
-        <segue reference="cnV-vk-Wb5"/>
+        <segue reference="T5c-ri-LSw"/>
         <segue reference="ch5-tg-CXn"/>
->>>>>>> 1fa0db0712220c769850126caf7e627afe9e555d
     </inferredMetricsTieBreakers>
 </document>

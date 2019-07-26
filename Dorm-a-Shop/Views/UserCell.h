@@ -13,10 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UserCell : UITableViewCell
 
+@property (strong, nonatomic) PFObject *user;
+@property (strong, nonatomic) PFObject *convo;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
-@property (strong, nonatomic) PFObject *user;
+@property (weak, nonatomic) IBOutlet UILabel *recentText;
 - (void)setUser;
 
 @end

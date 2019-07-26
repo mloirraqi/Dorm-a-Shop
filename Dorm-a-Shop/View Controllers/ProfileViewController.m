@@ -12,6 +12,7 @@
 #import "Post.h"
 #import "SignInVC.h"
 #import "PostManager.h"
+#import "MessageViewController.h"
 @import Parse;
 
 @interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -45,6 +46,7 @@
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
         self.navigationItem.leftItemsSupplementBackButton = true;
+        NSLog(@"%@", self.user);
     }
     
     self.collectionView.dataSource = self;
@@ -62,12 +64,6 @@
     [self.refreshControl addTarget:self action:@selector(fetchProfile) forControlEvents:UIControlEventValueChanged];
     [self.scrollView addSubview:self.refreshControl];
 
-    [self fetchProfile];
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    self.user = PFUser.currentUser;
     [self fetchProfile];
 }
 
@@ -166,6 +162,9 @@
         detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
+    } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
+        MessageViewController *msgViewController = [segue destinationViewController];
+        msgViewController.receiver = self.user;
     }
 }
 

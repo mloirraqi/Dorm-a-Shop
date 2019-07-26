@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MessageViewController : UIViewController
 
 @property (strong, nonatomic) PFUser *receiver;
+@property (strong, nonatomic) PFObject *convo;
 
 @end
 
