@@ -105,7 +105,7 @@
                                         <connections>
                                             <outlet property="categoryLabel" destination="x77-Gf-PcM" id="ItK-67-P92"/>
                                             <outlet property="conditionLabel" destination="MZi-cJ-56M" id="uGX-XT-pjf"/>
-                                            <outlet property="postPFImageView" destination="74z-au-tcV" id="hRt-92-8MY"/>
+                                            <outlet property="postImageView" destination="74z-au-tcV" id="X8s-Am-4fk"/>
                                             <outlet property="priceLabel" destination="yCe-z1-a88" id="yFf-QD-nGa"/>
                                             <outlet property="titleLabel" destination="0Xp-yd-qDU" id="wUH-db-tE5"/>
                                             <outlet property="watchButton" destination="Fng-7Z-gqv" id="L0U-8Q-agh"/>
@@ -642,7 +642,7 @@
                                         <connections>
                                             <outlet property="categoryLabel" destination="WYf-qE-Gt4" id="gSE-iV-HKe"/>
                                             <outlet property="conditionLabel" destination="K31-ES-VOK" id="cQv-Z4-IR7"/>
-                                            <outlet property="postPFImageView" destination="knj-BV-kTd" id="7eN-tm-sjB"/>
+                                            <outlet property="postImageView" destination="knj-BV-kTd" id="ZHy-Rw-q9P"/>
                                             <outlet property="priceLabel" destination="d6V-MC-i6d" id="M5R-du-EVf"/>
                                             <outlet property="titleLabel" destination="XJ9-uo-RD8" id="ZrP-WE-FCV"/>
                                             <outlet property="watchButton" destination="MT8-hU-OqA" id="hc1-7L-Neg"/>
@@ -1716,7 +1716,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ni5-B6-yy2"/>
-        <segue reference="T5c-ri-LSw"/>
-        <segue reference="ufI-em-euD"/>
+        <segue reference="cnV-vk-Wb5"/>
+        <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
 </document>

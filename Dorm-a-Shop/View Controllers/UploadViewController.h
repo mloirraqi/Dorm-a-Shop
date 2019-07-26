@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol UploadViewControllerDelegate <NSObject>
 
-- (void)didUpload:(Post *)post;
+- (void)didUpload:(PostCoreData *)post;
 
 @end
 

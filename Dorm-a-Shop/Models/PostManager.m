@@ -68,12 +68,14 @@
                     //update any other properties except for watch and watchCount which are handled in a different function
                 } else {
                     //nested query???????????????????????????
-                    PostCoreData *newPostCoreData = [weakSelf savePostWithObjectId:post.objectId withImageData:nil withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title toCoreDataWithManagedObjectContext:context];
+                    postCoreData = [weakSelf savePostWithObjectId:post.objectId withImageData:nil withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title toCoreDataWithManagedObjectContext:context];
+                    NSLog(@"post core data: %@", postCoreData);
                     [post.image getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
-                        newPostCoreData.image = data;
+                        postCoreData.image = data;
                     }];
                 }
+                NSLog(@"post core data: %@", postCoreData);
                 [allPostsArray addObject:postCoreData];
             }
             
@@ -459,7 +461,7 @@
          NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
         }
     }
-    
+    NSLog(@"newpost: %@", newPost);
     return newPost;
 }
 

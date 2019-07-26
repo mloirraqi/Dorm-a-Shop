@@ -25,12 +25,13 @@
 
 @implementation PostTableViewCell
 
-- (void)setPost:(Post *)post {
+- (void)setPost:(PostCoreData *)post {
     _post = post;
     
-    [self.postPFImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
-    self.postPFImageView.file = post[@"image"];
-    [self.postPFImageView loadInBackground];
+    [self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
+    if (post.image) {
+        [self.postImageView setImage:[UIImage imageWithData:post.image]];
+    }
     
     //instead of [PFUser currentUser], should i query core data to get current user?????
     //[self setUIWatchedForUser:[PFUser currentUser] Post:post];
@@ -38,13 +39,13 @@
     if (self.post.watched) {
         [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
     } else {
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
     }
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
     self.titleLabel.text = post.title;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
 }
 
 /*- (void)setUIWatchedForUser:(PFUser *)user Post:(PostCoreData *)post{
