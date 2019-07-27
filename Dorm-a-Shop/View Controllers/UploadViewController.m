@@ -72,8 +72,7 @@
     imagePickerVC.allowsEditing = YES;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }
-    else {
+    } else {
         NSLog(@"Camera 🚫 available so we will use photo library instead");
         imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
@@ -103,7 +102,7 @@
         NSData *imageData = UIImagePNGRepresentation(self.postImage);
         
         //set the Parse object id later when the parse query completes
-        PostCoreData *newPost = [[PostManager shared] savePostWithObjectId:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text toCoreDataWithManagedObjectContext:context];
+        PostCoreData *newPost = [[PostManager shared] savePostToCoreDataWithObjectId:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withSoldStatus:NO withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withManagedObjectContext:context];
         
         //parse. here we update the objectId for the post in core data, in the completion block
         [[PostManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
@@ -111,6 +110,7 @@
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
                 newPost.objectId = post.objectId;
+                [context save:nil];
                 [self dismissViewControllerAnimated:true completion:nil];
             }
         }];
@@ -176,8 +176,7 @@
     self.pickerviewToolbar.hidden = YES;
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
+- (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:@"add a description for the item here"]) {
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
@@ -185,8 +184,7 @@
     [textView becomeFirstResponder];
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
+- (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:@""]) {
         textView.text = @"add a description for the item here";
         textView.textColor = [UIColor lightGrayColor];

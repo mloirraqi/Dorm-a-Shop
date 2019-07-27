@@ -35,7 +35,7 @@
         if (error != nil) {
             [self showAlertView:@"Unable to Sign in"];
         } else {
-            NSLog(@"User logged in successfully");
+//            NSLog(@"User logged in successfully");
             UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
             
             [self presentViewController:tabBarController animated:YES completion:nil];

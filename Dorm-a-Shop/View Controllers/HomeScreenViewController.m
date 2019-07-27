@@ -138,44 +138,14 @@
 
 - (void)fetchActivePostsFromCoreData {
     self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
-    NSLog(@"all posts array %@", self.postsArray);
     [self filterPosts];
     [self.tableView reloadData];
     [self.refreshControl endRefreshing];
-    
-    /*CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
-    PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
-    
-    PFQuery *postQuery = [Post query];
-    [postQuery orderByDescending:@"createdAt"];
-    [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
-    [postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:5.0];
-    
-    __weak HomeScreenViewController *weakSelf = self;
-    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
-        if (posts) {
-            weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
-            [weakSelf filterPosts];
-            [weakSelf.tableView reloadData];
-        } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-        }
-        [self.refreshControl endRefreshing];
-    }];
-    /*[[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-     if (postsArray) {
-     NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-     NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-     self.postsArray = activePosts;
-     self.filteredPosts = self.postsArray;
-     [self.tableView reloadData];*/
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (tableView == self.tableView) {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-        //Post *post = self.filteredPosts[indexPath.row];
         PostCoreData *post = self.filteredPosts[indexPath.row];
         cell.post = post;
         return cell;
@@ -216,6 +186,7 @@
 
 - (void)didUpload:(PostCoreData *)post {
     [self.postsArray insertObject:post atIndex:0];
+    NSLog(@"self.postsArray %@", self.postsArray);
     [self filterPosts];
 }
 
@@ -241,7 +212,6 @@
     } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
-        //Post *post = self.filteredPosts[indexPath.row];
         PostCoreData *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
@@ -269,11 +239,8 @@
 
 - (void)filterPosts {
     self.filteredPosts = self.postsArray;
-    NSLog(@"prelim filtered posts: %@", self.filteredPosts);
     if (self.searchBar.text.length != 0) {
         NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
-            NSLog(@"post core data %@", post);
-            NSLog(@"post title: %@, post caption: %@", post.title, post.caption);
             return ([post.title localizedCaseInsensitiveContainsString:self.searchBar.text] || [post.caption localizedCaseInsensitiveContainsString:self.searchBar.text]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:predicate]];

@@ -96,7 +96,7 @@
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-        UserCoreData *newUser = [[PostManager shared] saveUserWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withProfilePic:imageData toCoreDataWithManagedObjectContext:context];
+        UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withProfilePic:imageData withManagedObjectContext:context];
         
         __weak SignUpVC *weakSelf = self;
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -120,7 +120,7 @@
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
+//        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
         
         NSString *strAdd = nil;
         
@@ -178,7 +178,7 @@
                     strAdd = placemark.country;
             }
             
-            NSLog(@"%@", strAdd);
+//            NSLog(@"%@", strAdd);
         }
         
         [self updateLocationWith:strAdd location:location];
