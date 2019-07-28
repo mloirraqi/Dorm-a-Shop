@@ -37,21 +37,26 @@
     [Parse initializeWithConfiguration:config];
     
     //delete all of core data. this commented out code is greatly needed for now!!
-//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-//    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-//    NSError *deleteError = nil;
-//    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+    NSError *deleteError = nil;
+    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
 
     
     [[PostManager shared] queryActivePostsWithinKilometers:10000 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
-            //NSLog(@"app delegate all posts array %@", allPostsArray);
-            if (PFUser.currentUser) {
-                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
-            }
+            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (!error) {
+                    if (PFUser.currentUser) {
+                        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+                    }
+                } else {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                }
+            }];
         }
     }];
     

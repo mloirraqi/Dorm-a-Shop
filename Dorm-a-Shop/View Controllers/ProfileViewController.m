@@ -69,7 +69,7 @@
 }
 
 - (void)fetchProfileFromCoreData {
-    /*self.username.text = self.user.username;
+    self.username.text = self.user.username;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;
@@ -79,19 +79,29 @@
     [self.profilePic setImage:image];
 
     NSMutableArray *profilePostsArray = [[PostManager shared] getProfilePostsFromCoreDataForUser:self.user];
+    
     NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
     self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
     self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+    
     NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
     self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
     self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
     
     [self.collectionView reloadData];
-    [self.refreshControl endRefreshing];*/
+    [self.refreshControl endRefreshing];
 }
 
 - (IBAction)changedSegment:(id)sender {
     [self.collectionView reloadData];
+}
+
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if ([self.segmentControl selectedSegmentIndex] == 0) {
+        return self.activeItems.count;
+    } else {
+        return self.soldItems.count;
+    }
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -108,14 +118,6 @@
     }
 }
 
-- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if ([self.segmentControl selectedSegmentIndex] == 0) {
-        return self.activeItems.count;
-    } else {
-        return self.soldItems.count;
-    }
-}
-
 - (void)updateDetailsData:(UIViewController *)viewController {
     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
     
@@ -124,7 +126,7 @@
             [self.activeItems insertObject:detailsViewController.post atIndex:0];
             [self.soldItems removeObject:detailsViewController.post];
         } else {
-            [self.soldItems  insertObject:detailsViewController.post atIndex:0];
+            [self.soldItems insertObject:detailsViewController.post atIndex:0];
             [self.activeItems removeObject:detailsViewController.post];
         }
         

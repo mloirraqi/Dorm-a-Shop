@@ -11,10 +11,9 @@
 
 @implementation PostCollectionViewCell
 
-- (void)setPost:(Post *)post {
+- (void)setPost:(PostCoreData *)post {
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
-    
-    NSData *imageData = self.post.image;
+    NSData *imageData = post.image;
     UIImage *image = [UIImage imageWithData:imageData];
     [self.itemImage setImage:image];
 }

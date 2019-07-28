@@ -103,7 +103,6 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        //Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
         
         NSUInteger postIndexRow = [self.postsArray indexOfObject:notificationPost];
@@ -130,8 +129,9 @@
             self.postsArray = activePosts;
             self.filteredPosts = self.postsArray;
             [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
         } else {
-            NSLog(@"Error querying active posts from parse ! %@", error.localizedDescription);
+            NSLog(@"Error querying active posts from parse! %@", error.localizedDescription);
         }
     }];
 }
@@ -140,7 +140,6 @@
     self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];
-    [self.refreshControl endRefreshing];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -186,7 +185,6 @@
 
 - (void)didUpload:(PostCoreData *)post {
     [self.postsArray insertObject:post atIndex:0];
-    NSLog(@"self.postsArray %@", self.postsArray);
     [self filterPosts];
 }
 

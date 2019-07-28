@@ -39,6 +39,13 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        if (!notificationPost.watched) {
+            [self.postsArray removeObject:notificationPost];
+        } else {
+            [self.postsArray insertObject:notificationPost atIndex:0];
+        }
+        
         [self.tableView reloadData];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
         [self fetchPostsFromCoreData];
