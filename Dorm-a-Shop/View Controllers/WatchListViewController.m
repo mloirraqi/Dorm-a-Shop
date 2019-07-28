@@ -42,7 +42,7 @@
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
         if (!notificationPost.watched) {
             [self.postsArray removeObject:notificationPost];
-        } else {
+        } else if (!notificationPost.sold) {
             [self.postsArray insertObject:notificationPost atIndex:0];
         }
         

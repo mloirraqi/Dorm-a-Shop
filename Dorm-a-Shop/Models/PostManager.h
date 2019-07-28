@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 //@property (nonatomic, strong) NSMutableArray *allPostsArray;
 //@property (nonatomic, strong) NSMutableArray *watchedPostsArray;
 
-- (void)queryActivePostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+- (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
 - (NSMutableArray *)getActivePostsFromCoreData;
 - (void)queryWatchedPostsForUser:(PFUser * _Nullable)user withCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
 

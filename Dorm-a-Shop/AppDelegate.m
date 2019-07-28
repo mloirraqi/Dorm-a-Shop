@@ -37,13 +37,13 @@
     [Parse initializeWithConfiguration:config];
     
     //delete all of core data. this commented out code is greatly needed for now!!
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-    NSError *deleteError = nil;
-    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
+//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+//    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+//    NSError *deleteError = nil;
+//    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
 
     
-    [[PostManager shared] queryActivePostsWithinKilometers:10000 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
