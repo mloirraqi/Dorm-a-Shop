@@ -35,17 +35,18 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *categoryTable;
 @property (weak, nonatomic) IBOutlet UITableView *conditionTable;
-@property (weak, nonatomic) IBOutlet UITableView *timesTable;
+@property (weak, nonatomic) IBOutlet UITableView *pricesTable;
 @property (weak, nonatomic) IBOutlet UITableView *distanceTable;
 @property (strong, nonatomic) NSArray *categories;
 @property (strong, nonatomic) NSArray *conditions;
-@property (strong, nonatomic) NSArray *times;
+@property (strong, nonatomic) NSArray *prices;
+@property (strong, nonatomic) NSArray *pricesInt;
 @property (strong, nonatomic) NSArray *distances;
 @property (weak, nonatomic) IBOutlet UIButton *conditionButton;
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
-@property (weak, nonatomic) IBOutlet UIButton *timesButton;
+@property (weak, nonatomic) IBOutlet UIButton *pricesButton;
 @property (weak, nonatomic) IBOutlet UIButton *distanceButton;
-
+@property NSNumber *limit;
 @end
 
 @implementation HomeScreenViewController
@@ -65,17 +66,18 @@
     self.categoryTable.delegate = self;
     self.conditionTable.dataSource = self;
     self.conditionTable.delegate = self;
-    self.timesTable.dataSource = self;
-    self.timesTable.delegate = self;
+    self.pricesTable.dataSource = self;
+    self.pricesTable.delegate = self;
     self.distanceTable.dataSource = self;
     self.distanceTable.delegate = self;
     self.categories = @[@"All", @"Furniture", @"Books", @"Beauty", @"Other"];
     self.conditions = @[@"All", @"New", @"Nearly New", @"Old"];
-    self.times = @[@"All", @"<1 Day", @"<1 Week", @"<1 Month"];
+    self.prices = @[@"All", @"<$25", @"<$50", @"<$100"];
+    self.pricesInt = @[@0, @25, @50, @100];
     self.distances = @[@"All", @"<1 Miles", @"<3 Miles", @"<5 Miles"];
     self.categoryTable.hidden = YES;
     self.conditionTable.hidden = YES;
-    self.timesTable.hidden = YES;
+    self.pricesTable.hidden = YES;
     self.distanceTable.hidden = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
@@ -85,6 +87,7 @@
     [self createRefreshControl];
 }
 
+//should find a way to take this out
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -95,10 +98,6 @@
         NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
-}
-
-- (IBAction)chatButton:(id)sender {
-   [self performSegueWithIdentifier:@"chatBox" sender:nil];
 }
 
 - (void)receiveNotification:(NSNotification *) notification {
@@ -130,8 +129,6 @@
             self.filteredPosts = self.postsArray;
             [self.tableView reloadData];
             [self.refreshControl endRefreshing];
-        } else {
-            NSLog(@"Error querying active posts from parse! %@", error.localizedDescription);
         }
     }];
 }
@@ -156,9 +153,9 @@
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         cell.textLabel.text = self.conditions[indexPath.row];
         return cell;
-    } else if (tableView == self.timesTable) {
+    } else if (tableView == self.pricesTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
-        cell.textLabel.text = self.times[indexPath.row];
+        cell.textLabel.text = self.prices[indexPath.row];
         [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
         return cell;
     } else {
@@ -176,8 +173,8 @@
         return self.categories.count;
     } else if (tableView == self.conditionTable) {
         return self.conditions.count;
-    } else if (tableView == self.timesTable) {
-        return self.times.count;
+    } else if (tableView == self.pricesTable) {
+        return self.prices.count;
     } else {
         return self.distances.count;
     }
@@ -257,6 +254,12 @@
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:coPredicate]];
     }
+    if (![[self.pricesButton currentTitle] isEqual: @"Price: All"]) {
+        NSPredicate *pPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+            return (post.price.intValue <= self.limit.intValue);
+        }];
+        self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:pPredicate]];
+    }
     
     [self.tableView reloadData];
 }
@@ -277,11 +280,11 @@
     }
 }
 
-- (IBAction)timesChange:(id)sender {
-    if(self.timesTable.hidden) {
-        self.timesTable.hidden = NO;
+- (IBAction)pricesChange:(id)sender {
+    if(self.pricesTable.hidden) {
+        self.pricesTable.hidden = NO;
     } else {
-        self.timesTable.hidden = YES;
+        self.pricesTable.hidden = YES;
     }
 }
 
@@ -293,8 +296,7 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if(tableView == self.categoryTable) {
         self.categoryTable.hidden = YES;
         if (indexPath.row == 0) {
@@ -311,9 +313,14 @@
         } else {
             [self.conditionButton setTitle:self.conditions[indexPath.row] forState:UIControlStateNormal];
         }
-    } else if (tableView == self.timesTable) {
-        self.timesTable.hidden = YES;
-        [self.timesButton setTitle:self.times[indexPath.row] forState:UIControlStateNormal];
+    } else if (tableView == self.pricesTable) {
+        self.pricesTable.hidden = YES;
+        if (indexPath.row == 0) {
+            [self.pricesButton setTitle:@"Price: All" forState:UIControlStateNormal];
+        } else {
+            [self.pricesButton setTitle:self.prices[indexPath.row] forState:UIControlStateNormal];
+            self.limit = self.pricesInt[indexPath.row];
+        }
     } else if (tableView == self.distanceTable) {
         self.distanceTable.hidden = YES;
         [self.distanceButton setTitle:self.distances[indexPath.row] forState:UIControlStateNormal];

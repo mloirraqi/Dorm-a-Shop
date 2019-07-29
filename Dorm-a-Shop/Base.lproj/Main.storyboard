@@ -133,9 +133,9 @@
                                 <rect key="frame" x="212" y="136" width="91" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <state key="normal" title="Times: All"/>
+                                <state key="normal" title="Price: All"/>
                                 <connections>
-                                    <action selector="timesChange:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tTO-OF-2ks"/>
+                                    <action selector="pricesChange:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zeV-Sk-JJz"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gej-ih-dYz">
@@ -181,6 +181,16 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="avF-9v-k1C">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="4U8-xg-feh">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="684-2U-4Ms">
+                                <rect key="frame" x="20" y="7" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Search"/>
+                                <connections>
+                                    <segue destination="O11-22-vap" kind="show" id="fhM-T6-QvG"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="add" style="plain" id="D1h-A7-BLP" userLabel="Post New Item">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MxR-xl-vgc">
                                 <rect key="frame" x="294" y="7" width="100" height="30"/>
@@ -199,10 +209,10 @@
                         <outlet property="conditionTable" destination="ChR-1e-XT3" id="VVb-Xm-4fF"/>
                         <outlet property="distanceButton" destination="gej-ih-dYz" id="OdP-sS-IeF"/>
                         <outlet property="distanceTable" destination="r77-WC-Qlj" id="Mtv-Zv-aF6"/>
+                        <outlet property="pricesButton" destination="JZN-Kn-cdI" id="uJ0-Zj-9Lj"/>
+                        <outlet property="pricesTable" destination="0Am-37-PW9" id="y0h-rh-g22"/>
                         <outlet property="searchBar" destination="BsX-gJ-qHi" id="rrH-dU-XZ5"/>
                         <outlet property="tableView" destination="SRH-BO-TuC" id="ZfJ-49-H1P"/>
-                        <outlet property="timesButton" destination="JZN-Kn-cdI" id="8VC-H2-zKs"/>
-                        <outlet property="timesTable" destination="0Am-37-PW9" id="CJv-al-k4a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -385,14 +395,14 @@
                                         <rect key="frame" x="8" y="0.0" width="398" height="725"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J0d-zI-pQn">
-                                                <rect key="frame" x="139" y="18" width="251" height="21"/>
+                                                <rect key="frame" x="139" y="18" width="158" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u3h-8c-UIn">
-                                                <rect key="frame" x="139" y="47" width="66" height="21"/>
+                                                <rect key="frame" x="139" y="47" width="251" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -492,6 +502,14 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I06-uU-Ytn">
+                                                <rect key="frame" x="322" y="13" width="62" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Message"/>
+                                                <connections>
+                                                    <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="I1W-46-wBB"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
@@ -540,6 +558,7 @@
                     <connections>
                         <outlet property="activeCount" destination="UtB-uj-P2h" id="A1G-Uv-iu8"/>
                         <outlet property="collectionView" destination="imT-sc-NpR" id="Wdw-Fk-0AT"/>
+                        <outlet property="location" destination="u3h-8c-UIn" id="MwA-6J-vYb"/>
                         <outlet property="profilePic" destination="h6n-9m-t5P" id="vC8-na-sv2"/>
                         <outlet property="scrollView" destination="iAM-p9-Pa1" id="l4i-uo-GNV"/>
                         <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
@@ -895,7 +914,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JME-qJ-rWa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2898.5507246376815" y="918.75"/>
+            <point key="canvasLocation" x="2859" y="919"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3K8-Bv-zwe">
@@ -1033,7 +1052,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="huz-Vy-fBK" kind="relationship" relationship="viewControllers" id="jZd-Ke-rOh"/>
-                        <segue destination="O11-22-vap" kind="relationship" relationship="viewControllers" id="i8z-rM-wXq"/>
+                        <segue destination="dis-H7-DlH" kind="relationship" relationship="viewControllers" id="S4g-Ze-d0C"/>
                         <segue destination="dDI-Qk-IoB" kind="relationship" relationship="viewControllers" id="I1A-NR-1di"/>
                         <segue destination="DJx-3h-Trp" kind="relationship" relationship="viewControllers" id="vDR-6b-RlU"/>
                         <segue destination="oXO-JU-K28" kind="relationship" relationship="viewControllers" id="wbs-vl-Xvx"/>
@@ -1470,7 +1489,18 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="lre-w2-kQ4"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Search" id="z69-qG-qbh"/>
+                    <navigationItem key="navigationItem" title="Search" id="z69-qG-qbh">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="gO1-aS-Jfd">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dAy-xt-GD9">
+                                <rect key="frame" x="20" y="7" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancel:" destination="hoC-Uw-hNx" eventType="touchUpInside" id="Cvu-Fc-MNZ"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="4nu-E0-9J7" id="psT-v0-Vus"/>
                         <outlet property="tableView" destination="eLp-J3-m4G" id="T5b-o0-FIh"/>
@@ -1478,7 +1508,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bwa-aY-CVQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2050.7246376811595" y="2354.4642857142858"/>
+            <point key="canvasLocation" x="3693" y="2182"/>
         </scene>
         <!--Inbox-->
         <scene sceneID="5uo-wp-sam">
@@ -1513,6 +1543,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QS2-PP-UOa">
+                                                    <rect key="frame" x="82" y="44" width="312" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="wwp-uV-CzQ" firstAttribute="top" secondItem="dqC-Jo-n0Q" secondAttribute="topMargin" constant="8" id="0Hu-tT-K1S"/>
@@ -1526,6 +1563,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="profilePic" destination="bpE-op-v3a" id="63d-zy-aeY"/>
+                                            <outlet property="recentText" destination="QS2-PP-UOa" id="vPL-dV-VRs"/>
                                             <outlet property="username" destination="wwp-uV-CzQ" id="tcT-Ev-mzS"/>
                                             <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="Bvx-1i-tFM"/>
                                         </connections>
@@ -1536,14 +1574,28 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="nrn-J4-eXk"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Inbox" id="fDU-L2-Uot"/>
+                    <navigationItem key="navigationItem" title="Inbox" id="fDU-L2-Uot">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="vnd-c9-1JY">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dbB-WP-rEx">
+                                <rect key="frame" x="302" y="7" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
+                                </accessibility>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <segue destination="O11-22-vap" kind="show" id="MkK-t9-lSX"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="l7p-6k-5K7" id="aoa-dI-U2t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s56-CZ-wsH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2960.8695652173915" y="3112.5"/>
+            <point key="canvasLocation" x="1105.7971014492755" y="2320.9821428571427"/>
         </scene>
         <!--Message View Controller-->
         <scene sceneID="R85-UX-ygf">
@@ -1622,7 +1674,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FZB-9u-YCF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3855.0724637681164" y="3112.5"/>
+            <point key="canvasLocation" x="1774" y="2321"/>
         </scene>
         <!--Search-->
         <scene sceneID="9c5-hY-tiv">
@@ -1641,7 +1693,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2vD-ak-640" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1140.5797101449277" y="2354.4642857142858"/>
+            <point key="canvasLocation" x="2933" y="2182"/>
         </scene>
         <!--Inbox-->
         <scene sceneID="H9s-J1-gJJ">
@@ -1660,7 +1712,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cp1-SV-Wla" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2050.7246376811595" y="3112.5"/>
+            <point key="canvasLocation" x="445" y="2321"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Aak-Ou-3dg">
@@ -1715,8 +1767,10 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="MkK-t9-lSX"/>
+        <segue reference="Bvx-1i-tFM"/>
         <segue reference="ni5-B6-yy2"/>
-        <segue reference="cnV-vk-Wb5"/>
+        <segue reference="inK-qS-1By"/>
         <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
 </document>

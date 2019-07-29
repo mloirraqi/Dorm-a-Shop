@@ -14,7 +14,9 @@
 @interface InboxViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSMutableArray *users;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -22,23 +24,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.users = [[NSMutableArray alloc] init];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchUsers) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
     [self fetchUsers];
 }
 
 - (void)fetchUsers {
-    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
-    [userQuery orderByAscending:@"username"];
+    self.users = [[NSMutableArray alloc] init];
+    
+    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];
+    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
+
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
+    [query orderByDescending:@"updatedAt"];
+    [query includeKey:@"sender"];
+    [query includeKey:@"receiver"];
     
     __weak InboxViewController *weakSelf = self;
-    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
-        if (users) {
-            weakSelf.users = [NSMutableArray arrayWithArray:users];
+    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable messages, NSError * _Nullable error) {
+        if (messages) {
+            for (PFObject *message in messages) {
+                if(![((PFUser *)message[@"sender"]).objectId isEqualToString:PFUser.currentUser.objectId]) {
+                    [weakSelf.users addObject:((PFUser *)message[@"sender"])];
+                } else {
+                    [weakSelf.users addObject:((PFUser *)message[@"receiver"])];
+                }
+            }
+            self.messages = [NSMutableArray arrayWithArray:messages];
             [weakSelf.tableView reloadData];
+            [self.refreshControl endRefreshing];
         } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
         }
     }];
 }
@@ -46,7 +71,9 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
     PFObject *user = self.users[indexPath.row];
+    PFObject *convo = self.messages[indexPath.row];
     cell.user = user;
+    cell.convo = convo;
     [cell setUser];
     return cell;
 }
@@ -60,19 +87,10 @@
         UserCell *tappedCell = sender;
         MessageViewController *profileViewController = [segue destinationViewController];
         profileViewController.receiver = (PFUser *) tappedCell.user;
+        profileViewController.convo = tappedCell.convo;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

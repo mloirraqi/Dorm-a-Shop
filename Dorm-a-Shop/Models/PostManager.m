@@ -38,13 +38,17 @@
 }
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    PFUser *currentUser = PFUser.currentUser;
+    PFGeoPoint *location = currentUser[@"Location"];
+    
+    PFQuery *userQuery = [PFUser query];
+    [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
+    
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
-    
-    CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
-    PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
-    //[postQuery whereKey:@"location" nearGeoPoint:location withinKilometers:kilometers];
+    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
+    [postQuery whereKey:@"author" matchesQuery:userQuery];
     
     __weak PostManager *weakSelf = self;
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable posts, NSError * _Nullable error) {
@@ -229,7 +233,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"author.objectId MATCHES %@", user.objectId]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"author.objectId == %@", user.objectId]];
     
     NSError *error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];

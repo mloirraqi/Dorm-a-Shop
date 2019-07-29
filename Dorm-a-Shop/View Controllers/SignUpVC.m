@@ -16,7 +16,6 @@
 #import "LocationManager.h"
 #import "PostManager.h"
 
-
 @interface SignUpVC ()
 
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
@@ -120,7 +119,6 @@
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-//        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
         
         NSString *strAdd = nil;
         
@@ -177,8 +175,6 @@
                 else
                     strAdd = placemark.country;
             }
-            
-//            NSLog(@"%@", strAdd);
         }
         
         [self updateLocationWith:strAdd location:location];

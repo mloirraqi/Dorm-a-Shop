@@ -14,6 +14,7 @@
 #import "EditProfileVC.h"
 #import "PostManager.h"
 #import "AppDelegate.h"
+#import "MessageViewController.h"
 @import Parse;
 
 @interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -25,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *username;
+@property (weak, nonatomic) IBOutlet UILabel *location;
 @property (weak, nonatomic) IBOutlet UILabel *activeCount;
 @property (weak, nonatomic) IBOutlet UILabel *soldCount;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -70,6 +72,7 @@
 
 - (void)fetchProfileFromCoreData {
     self.username.text = self.user.username;
+    self.location.text = self.user.location;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;
@@ -155,6 +158,9 @@
     } else if ([segue.identifier isEqualToString:@"segueToEditProfile"]) {
         EditProfileVC *editProfileViewController = [segue destinationViewController];
         editProfileViewController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
+        MessageViewController *msgViewController = [segue destinationViewController];
+        msgViewController.receiver = self.user;
     }
 }
 

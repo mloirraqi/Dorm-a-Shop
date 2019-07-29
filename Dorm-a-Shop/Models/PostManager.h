@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Post.h"
-#import "PostCoreData+CoreDataProperties.h"
-#import "UserCoreData+CoreDataProperties.h"
+#import "PostCoreData+CoreDataClass.h"
+#import "UserCoreData+CoreDataClass.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN

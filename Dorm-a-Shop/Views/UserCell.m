@@ -29,6 +29,7 @@
         }
     }];
     self.username.text = self.user[@"username"];
+    self.recentText.text = self.convo[@"lastText"];
 }
 
 @end
