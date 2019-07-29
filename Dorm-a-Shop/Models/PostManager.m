@@ -233,15 +233,20 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"author.objectId == %@", user.objectId]];
+    //[request setPredicate:[NSPredicate predicateWithFormat:@"author.objectId == %@", user.objectId]];
     
     NSError *error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
+    [request setReturnsObjectsAsFaults:NO];
     if (!results) {
         NSLog(@"Error fetching PostCoreData objects for current user: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
-    
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
+        return [post.author.objectId isEqualToString:user.objectId];
+    }];
+    results = [results filteredArrayUsingPredicate:predicate];
+    NSLog(@"filtered results: %@", results);
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -398,7 +403,7 @@
         //NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
         //newPost = [[PostCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
         newPost = (PostCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"PostCoreData" inManagedObjectContext:context];
-        
+
         UserCoreData *author = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:[PFUser currentUser].objectId withContext:context];
 
         if (!newPost.author) {
@@ -437,7 +442,10 @@
 
 - (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString *)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext*)context {
     
-    UserCoreData *user = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
+    UserCoreData *user;
+    if (userObjectId) {
+        user = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
+    }
     
     //if post doesn't already exist in core data, then create it
     if (!user) {
