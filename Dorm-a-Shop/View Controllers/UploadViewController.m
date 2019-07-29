@@ -51,8 +51,8 @@
     self.conditionPickerView.dataSource = self;
     self.conditionPickerView.hidden = YES;
     
-    self.categories = @[@"Other", @"Furniture", @"Books", @"Beauty"];
-    self.conditions = @[@"New", @"Nearly New", @"Old"];
+    self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
+    self.conditions = @[@"New", @"Nearly New", @"Used"];
     
     [self.itemTitle addTarget:self.itemTitle action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     

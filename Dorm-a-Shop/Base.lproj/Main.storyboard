@@ -280,7 +280,7 @@
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B6W-xA-Xi4">
                                 <rect key="frame" x="70" y="303" width="274" height="30"/>
-                                <state key="normal" title="Furniture"/>
+                                <state key="normal" title="Other"/>
                                 <connections>
                                     <action selector="changeCategory:" destination="taT-74-9c7" eventType="touchUpInside" id="svY-6b-68H"/>
                                 </connections>
@@ -1577,7 +1577,7 @@
                     <navigationItem key="navigationItem" title="Inbox" id="fDU-L2-Uot">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="vnd-c9-1JY">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dbB-WP-rEx">
-                                <rect key="frame" x="-23" y="-15" width="92" height="30"/>
+                                <rect key="frame" x="302" y="7" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" image="YES"/>
@@ -1767,15 +1767,9 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
-
         <segue reference="MkK-t9-lSX"/>
         <segue reference="Bvx-1i-tFM"/>
-        <segue reference="Ob4-g7-kRL"/>
-        <segue reference="T5c-ri-LSw"/>
         <segue reference="ni5-B6-yy2"/>
-        <segue reference="KLi-YY-IiH"/>
-        <segue reference="ufI-em-euD"/>
-        <segue reference="Ob4-g7-kRL"/>
         <segue reference="inK-qS-1By"/>
         <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
