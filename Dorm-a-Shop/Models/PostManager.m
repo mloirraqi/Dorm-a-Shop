@@ -9,6 +9,7 @@
 #import "PostManager.h"
 #import "Post.h"
 #import "Watches.h"
+#import "User.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "UserCoreData+CoreDataClass.h"
 #import <CoreData/CoreData.h>
@@ -138,8 +139,8 @@
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
             
-            for (PFObject *watch in userWatches) {
-                Post *watchedPost = watch[@"post"];
+            for (Watches *watch in userWatches) {
+                Post *watchedPost = watch.post;
                 PostCoreData *postCoreData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:watchedPost.objectId withContext:context];
                 if (!postCoreData) {
                     //this really should never get executed if the posts are stored properly upon initialization
@@ -226,6 +227,55 @@
     }];
 }
 
+- (void)queryAllUsersWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    PFUser *currentUser = PFUser.currentUser;
+    PFGeoPoint *location = currentUser[@"Location"];
+    
+    PFQuery *userQuery = [PFUser query];
+    //[userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
+    
+    __weak PostManager *weakSelf = self;
+    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
+        if (users) {
+            NSMutableArray *usersArray = [[NSMutableArray alloc] init];
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+            
+            for (User *user in users) {
+                UserCoreData *userCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:user.objectId withContext:context];
+                NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
+                if (!userCoreData) {
+                    //we don't know if it's watched from this query so we default to NO. this gets handled later. same for watchCount, defaults to 0
+                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    
+                    
+                } else {
+                    //update any properties a user could have changed, except image, which is handled below
+                    userCoreData.location = location;
+                }
+                //in either case, either create the profile image or make sure it's up to date
+                [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                    //set image later
+                    if (data) {
+                        userCoreData.profilePic = data;
+                        
+                        //save updated attribute to managed object context
+                        [context save:nil];
+                    } else {
+                        NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                    }
+                }];
+                [usersArray addObject:userCoreData];
+            }
+            
+            completion(usersArray, nil);
+        } else {
+            NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
+            completion(nil, error);
+        }
+    }];
+}
+
 - (NSMutableArray *)getProfilePostsFromCoreDataForUser:(UserCoreData *)user {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
@@ -245,7 +295,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
         return [post.author.objectId isEqualToString:user.objectId];
     }];
-    results = [results filteredArrayUsingPredicate:predicate];
+    //results = [results filteredArrayUsingPredicate:predicate];
     NSLog(@"filtered results: %@", results);
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
@@ -259,7 +309,7 @@
     //this commented out code is greatly needed for now!!
 //    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:name inManagedObjectContext:context];
 //    [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"objectId MATCHES %@", postObjectId]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"objectId == %@", postObjectId]];
     [request setFetchLimit:1];
     [request setReturnsObjectsAsFaults:NO];
     

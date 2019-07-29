@@ -36,27 +36,34 @@
     
     [Parse initializeWithConfiguration:config];
     
-    //delete all of core data. this commented out code is greatly needed for now!!
-//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-//    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-//    NSError *deleteError = nil;
-//    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
-
+    if (PFUser.currentUser) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+    }
     
+    //delete all of core data. this commented out code is greatly needed for now!!
+//        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+//        NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+//        NSError *deleteError = nil;
+//        [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
+
     [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
             [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                if (!error) {
-                    if (PFUser.currentUser) {
-                        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
-                    }
-                } else {
+                if (error) {
                     NSLog(@"error getting watch posts/updating core data watch status");
+                } else {
+                    
                 }
             }];
+        }
+    }];
+    
+    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         }
     }];
     

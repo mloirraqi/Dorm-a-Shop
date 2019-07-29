@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableArray *)getProfilePostsFromCoreDataForUser:(UserCoreData *)user;
 - (NSManagedObject *)getCoreDataEntityWithName:(NSString *)name withObjectId:(NSString *)postObjectId withContext:(NSManagedObjectContext *)context;
 
+- (void)queryAllUsersWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+
 - (void)watchPost:(PostCoreData *)postCoreData withCompletion:(void (^)(NSError *))completion;
 - (void)unwatchPost:(PostCoreData *)postCoreData withCompletion:(void (^)(NSError *))completion;
 - (void)setPost:(PostCoreData *)postCoreData sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion;
