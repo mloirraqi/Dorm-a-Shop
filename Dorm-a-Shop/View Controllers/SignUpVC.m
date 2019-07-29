@@ -9,13 +9,15 @@
 #import "SignUpVC.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "Utils.h"
+#import "User.h"
 #import "NJOPasswordStrengthEvaluator.h"
 #import <Parse/Parse.h>
 #import "HomeScreenViewController.h"
 #import "LocationManager.h"
-
+#import "PostManager.h"
 
 @interface SignUpVC ()
+
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
 
 @end
@@ -34,7 +36,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     locationManager = [[LocationManager alloc]init];
-    // Do any additional setup after loading the view.
     
     self.lenientValidator = [NJOPasswordValidator standardValidator];
     [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:passwordTextField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
@@ -45,7 +46,7 @@
 
 }
 
-- (BOOL)checkFields{
+- (BOOL)checkFields {
     if (!nameTextField.text || nameTextField.text.length == 0){
         [self showAlertView:@"Please Add a Name"];
         return false;
@@ -73,9 +74,7 @@
     }
     
     return true;
-    
 }
-
 
 - (IBAction)signUpButtonTap:(UIButton *)sender {
     if ([self checkFields]){
@@ -86,35 +85,40 @@
         CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
         PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
         
-        PFUser *user = [PFUser user];
+        User *user = [User new];
         user.username = self->nameTextField.text;
         user.password = self->passwordTextField.text;
         user.email = self->emailTextField.text;
-        user[@"ProfilePic"] = image;
-        user[@"Location"] = location;
+        user.ProfilePic = image;
+        user.Location = location;
         
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+        NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
+        UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withProfilePic:imageData withManagedObjectContext:context];
+        
+        __weak SignUpVC *weakSelf = self;
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [hud hideAnimated:YES];
             if (!error) {
-                [self showAlertView:@"Welcome!"];
-                [self performSegueWithIdentifier:@"homeScreen" sender:nil];
+                newUser.objectId = user.objectId;
+                [weakSelf showAlertView:@"Welcome!"];
+                [weakSelf performSegueWithIdentifier:@"homeScreen" sender:nil];
             } else {
                 [hud hideAnimated:YES];
-                [self showAlertView:@"Someything goes wrong, Please try again"];
+                [weakSelf showAlertView:@"Someything went wrong, please try again"];
                 NSLog(@"😫😫😫, error: %@", error.localizedDescription);
             }
         }];
     }
 }
 
--(void)setLocationName
-{
+- (void)setLocationName {
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
         
         NSString *strAdd = nil;
         
@@ -171,16 +175,13 @@
                 else
                     strAdd = placemark.country;
             }
-            
-            NSLog(@"%@", strAdd);
         }
         
         [self updateLocationWith:strAdd location:location];
     }];
 }
 
--(void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location
-{
+- (void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location {
     PFUser *currentUser = [PFUser currentUser];
     currentUser[@"Location"] = location;
     if(address != nil)

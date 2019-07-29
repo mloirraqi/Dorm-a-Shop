@@ -6,21 +6,29 @@
 //  Copyright © 2019 ilanashapiro. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
+#import "PostCoreData+CoreDataClass.h"
 #import "HomeScreenViewController.h"
 #import "PostTableViewCell.h"
 #import "Post.h"
 #import "UploadViewController.h"
 #import "DetailsViewController.h"
 #import "SignInVC.h"
-#import "PostManager.h"
+#import "AppDelegate.h"
 #import "LocationManager.h"
+#import "PostManager.h"
 @import Parse;
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
 
+@property (strong, nonatomic) AppDelegate *appDelegate;
+@property (strong, nonatomic) NSManagedObjectContext *context;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @property (strong, nonatomic) NSMutableArray *postsArray;
+
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) NSString *className;
@@ -45,6 +53,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.appDelegate = [[UIApplication sharedApplication] delegate];
+    self.context = self.appDelegate.persistentContainer.viewContext;
     
     self.className = @"HomeScreenViewController";
     
@@ -72,60 +83,66 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
-    [self fetchPosts];
+    [self fetchActivePostsFromCoreData];
     [self createRefreshControl];
+}
+
+//should find a way to take this out
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSError *error = nil;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"PostCoreData"];
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
 }
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        Post *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        
         NSUInteger postIndexRow = [self.postsArray indexOfObject:notificationPost];
         NSIndexPath *postIndexPath = [NSIndexPath indexPathForRow:postIndexRow inSection:0];
         [self.tableView beginUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView endUpdates];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        [self fetchPosts];
+        [self fetchActivePostsFromCoreData];
     }
 }
 
 - (void)createRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchPosts) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(queryActivePostsFromParse) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
-- (void)fetchPosts {
-    
-    PFUser *currentUser = PFUser.currentUser;
-    PFGeoPoint *location = currentUser[@"Location"];
-    
-    PFQuery *userQuery = [PFUser query];
-//    [userQuery whereKey:@"objectId" notEqualTo:currentUser.objectId];
-    [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
-
-    PFQuery *postQuery = [Post query];
-    [postQuery orderByDescending:@"createdAt"];
-    [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
-    [postQuery whereKey:@"author" matchesQuery:userQuery];
-    __weak HomeScreenViewController *weakSelf = self;
-    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
-        if (posts) {
-            weakSelf.postsArray = [NSMutableArray arrayWithArray:posts];
-            [weakSelf filterPosts];
-            [weakSelf.tableView reloadData];
-        } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+- (void)queryActivePostsFromParse {
+    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+        if (postsArray) {
+            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
+            self.postsArray = activePosts;
+            self.filteredPosts = self.postsArray;
+            [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
         }
-        [self.refreshControl endRefreshing];
     }];
+}
+
+- (void)fetchActivePostsFromCoreData {
+    self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
+    [self filterPosts];
+    [self.tableView reloadData];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (tableView == self.tableView) {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-        Post *post = self.filteredPosts[indexPath.row];
+        PostCoreData *post = self.filteredPosts[indexPath.row];
         cell.post = post;
         return cell;
     } else if (tableView == self.categoryTable) {
@@ -163,7 +180,7 @@
     }
 }
 
-- (void)didUpload:(Post *)post {
+- (void)didUpload:(PostCoreData *)post {
     [self.postsArray insertObject:post atIndex:0];
     [self filterPosts];
 }
@@ -190,7 +207,7 @@
     } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
-        Post *post = self.filteredPosts[indexPath.row];
+        PostCoreData *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.delegate = self;
@@ -217,23 +234,22 @@
 
 - (void)filterPosts {
     self.filteredPosts = self.postsArray;
-    
     if (self.searchBar.text.length != 0) {
-        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.title localizedCaseInsensitiveContainsString:self.searchBar.text] || [post.caption localizedCaseInsensitiveContainsString:self.searchBar.text]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:predicate]];
     }
     
     if (![[self.categoryButton currentTitle] isEqual: @"Category: All"]) {
-        NSPredicate *caPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+        NSPredicate *caPredicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.category isEqualToString:[self.categoryButton currentTitle]]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:caPredicate]];
     }
     
     if (![[self.conditionButton currentTitle] isEqual: @"Condition: All"]) {
-        NSPredicate *coPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
+        NSPredicate *coPredicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.condition isEqualToString:[self.conditionButton currentTitle]]);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:coPredicate]];
@@ -280,8 +296,7 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if(tableView == self.categoryTable) {
         self.categoryTable.hidden = YES;
         if (indexPath.row == 0) {

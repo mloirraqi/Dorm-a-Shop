@@ -11,9 +11,9 @@
 #import <GooglePlaces/GooglePlaces.h>
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import <Parse/Parse.h>
 #import "PostManager.h"
 #import "LocationManager.h"
+@import Parse;
 
 @interface AppDelegate ()
 
@@ -36,11 +36,29 @@
     
     [Parse initializeWithConfiguration:config];
     
-    if (PFUser.currentUser) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        
-        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
-    }
+    //delete all of core data. this commented out code is greatly needed for now!!
+//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+//    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+//    NSError *deleteError = nil;
+//    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
+
+    
+    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        } else {
+            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (!error) {
+                    if (PFUser.currentUser) {
+                        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+                    }
+                } else {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                }
+            }];
+        }
+    }];
     
     return YES;
 }
@@ -78,9 +96,11 @@
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;
+//@synthesize managedObjectContext = _managedObjectContext;
+//@synthesize managedObjectModel = _managedObjectModel;
 
 - (NSPersistentContainer *)persistentContainer {
-    // The persistent container for the application. This implementation creates and returns a container, having loaded the store for the application to it.
+    // The persistent container for the application. This implementation creates and returns a container, having loaded the store for the application to it. This way you can access the persistent container anywhere since you can access AppDelegate from anywhere (similar for saveContext)
     @synchronized (self) {
         if (_persistentContainer == nil) {
             _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"DormAShop"];

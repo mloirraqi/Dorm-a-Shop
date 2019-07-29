@@ -20,9 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
     __weak IBOutlet UIButton *addPictureButton;
     
     PFGeoPoint *selectedLocationPoint;
-    UIImage * selectedImage;
+    UIImage *selectedImage;
     LocationManager *locationManager;
-    
 }
 @property (nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
 

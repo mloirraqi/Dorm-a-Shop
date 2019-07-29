@@ -11,11 +11,13 @@
 #import "DetailsViewController.h"
 #import "Post.h"
 #import "SignInVC.h"
+#import "EditProfileVC.h"
 #import "PostManager.h"
+#import "AppDelegate.h"
 #import "MessageViewController.h"
 @import Parse;
 
-@interface ProfileViewController () <DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *activeItems;
@@ -41,12 +43,13 @@
     self.className = @"ProfileViewController";
     
     if (!self.user) {
-        self.user = PFUser.currentUser;
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+        self.user = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
     } else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
         self.navigationItem.leftItemsSupplementBackButton = true;
-        NSLog(@"%@", self.user);
     }
     
     self.collectionView.dataSource = self;
@@ -61,63 +64,39 @@
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchProfile) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(fetchProfileFromCoreData) forControlEvents:UIControlEventValueChanged];
     [self.scrollView addSubview:self.refreshControl];
 
-    [self fetchProfile];
+    [self fetchProfileFromCoreData];
 }
 
-- (void)fetchProfile {
+- (void)fetchProfileFromCoreData {
     self.username.text = self.user.username;
-    self.location.text = self.user[@"address"];
+    self.location.text = self.user.location;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;
-    PFFileObject *imageFile = self.user[@"ProfilePic"];
-    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [self.profilePic setImage:image];
-        }
-    }];
+    
+    NSData *imageData = self.user.profilePic;
+    UIImage *image = [UIImage imageWithData:imageData];
+    [self.profilePic setImage:image];
 
-    [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-        if (postsArray) {
-            NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-                return [((PFObject *)post[@"author"]).objectId isEqualToString:self.user.objectId];
-            }];
-            NSArray *profilePostsArray = [postsArray filteredArrayUsingPredicate:predicate];
-            
-            NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
-            self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-            NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
-            self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
-            self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-            [self.collectionView reloadData];
-        } else {
-            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
-        }
-        [self.refreshControl endRefreshing];
-    }];
+    NSMutableArray *profilePostsArray = [[PostManager shared] getProfilePostsFromCoreDataForUser:self.user];
+    
+    NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
+    self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
+    self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+    
+    NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
+    self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
+    self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+    
+    [self.collectionView reloadData];
+    [self.refreshControl endRefreshing];
 }
 
 - (IBAction)changedSegment:(id)sender {
     [self.collectionView reloadData];
-}
-
-- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if ([self.segmentControl selectedSegmentIndex] == 0) {
-        PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"active" forIndexPath:indexPath];
-        Post *post = self.activeItems[indexPath.item];
-        cell.post = post;
-        return cell;
-    } else {
-        PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
-        Post *post = self.soldItems[indexPath.item];
-        cell.post = post;
-        return cell;
-    }
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -125,6 +104,20 @@
         return self.activeItems.count;
     } else {
         return self.soldItems.count;
+    }
+}
+
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    if ([self.segmentControl selectedSegmentIndex] == 0) {
+        PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"active" forIndexPath:indexPath];
+        PostCoreData *post = self.activeItems[indexPath.item];
+        cell.post = post;
+        return cell;
+    } else {
+        PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
+        PostCoreData *post = self.soldItems[indexPath.item];
+        cell.post = post;
+        return cell;
     }
 }
 
@@ -136,7 +129,7 @@
             [self.activeItems insertObject:detailsViewController.post atIndex:0];
             [self.soldItems removeObject:detailsViewController.post];
         } else {
-            [self.soldItems  insertObject:detailsViewController.post atIndex:0];
+            [self.soldItems insertObject:detailsViewController.post atIndex:0];
             [self.activeItems removeObject:detailsViewController.post];
         }
         
@@ -150,7 +143,7 @@
     if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostCollectionViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
-        Post *post;
+        PostCoreData *post;
         
         if ([self.segmentControl selectedSegmentIndex] == 0) {
             post = self.activeItems[indexPath.row];
@@ -162,6 +155,9 @@
         detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
+    } else if ([segue.identifier isEqualToString:@"segueToEditProfile"]) {
+        EditProfileVC *editProfileViewController = [segue destinationViewController];
+        editProfileViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
         msgViewController.receiver = self.user;
@@ -174,6 +170,10 @@
     SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
     
     [self presentViewController:signInVC animated:YES completion:nil];
+}
+
+- (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
+    [self fetchProfileFromCoreData];
 }
 
 @end

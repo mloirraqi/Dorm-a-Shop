@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PostCoreData+CoreDataClass.h"
 #import "Post.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PostCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) Post *post;
 @property (weak, nonatomic) IBOutlet UIImageView *itemImage;
+@property (nonatomic, strong) PostCoreData *post;
 
 @end
 

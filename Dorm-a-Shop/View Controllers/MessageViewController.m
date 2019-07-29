@@ -54,7 +54,6 @@
     }];
 }
 
-
 - (IBAction)sendMsg:(id)sender {
     if (!self.convo) {
         PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];

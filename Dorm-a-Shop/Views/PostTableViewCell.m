@@ -9,12 +9,12 @@
 #import "PostTableViewCell.h"
 #import "NSDate+DateTools.h"
 #import "WatchListViewController.h"
-#import "Post.h"
 #import "PostManager.h"
+#import "PostCoreData+CoreDataClass.h"
 @import Parse;
 
 @interface PostTableViewCell()
-//isInialReload not working, gets set YES thru prepare for reuse when watch button is clicked
+
 @property (nonatomic) BOOL isInitialReload;
 
 - (IBAction)didTapWatch:(id)sender;
@@ -24,36 +24,25 @@
 
 @implementation PostTableViewCell
 
-- (void)setPost:(Post *)post {
+- (void)setPost:(PostCoreData *)post {
     _post = post;
     
-    [self.postPFImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
-    self.postPFImageView.file = post[@"image"];
-    [self.postPFImageView loadInBackground];
+    [self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
+    if (post.image) {
+        [self.postImageView setImage:[UIImage imageWithData:post.image]];
+    }
     
-    [self setUIWatchedForUser:[PFUser currentUser] Post:post];
+    [self.watchButton setSelected:self.post.watched];
+    if (self.post.watched) {
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+    } else {
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+    }
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
     self.titleLabel.text = post.title;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
-}
-
-- (void)setUIWatchedForUser:(PFUser *)user Post:(Post *)post{
-    __weak PostTableViewCell *weakSelf = self;
-    [[PostManager shared] getCurrentUserWatchStatusForPost:post withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
-        } else {
-            if (post.watch != nil) {
-                weakSelf.watchButton.selected = YES;
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateSelected];
-            } else {
-                weakSelf.watchButton.selected = NO;
-                [weakSelf.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", weakSelf.post.watchCount] forState:UIControlStateNormal];
-            }
-        }
-    }];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
 }
 
 - (IBAction)didTapWatch:(id)sender {
@@ -64,17 +53,16 @@
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
-                NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
+                NSLog(@"Error unwatching post: %@", error.localizedDescription);
             }
         }];
     } else {
         [[PostManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
-                NSLog(@"%@", weakSelf.post.watch);
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
-                NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
+                NSLog(@"Error watching post: %@", error.localizedDescription);
             }
         }];
     }

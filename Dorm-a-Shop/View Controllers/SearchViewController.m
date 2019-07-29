@@ -89,7 +89,7 @@
     if ([segue.identifier isEqualToString:@"userDeets"]) {
         UserCell *tappedCell = sender;
         ProfileViewController *profileViewController = [segue destinationViewController];
-        profileViewController.user = (PFUser *) tappedCell.user;
+        profileViewController.user = (UserCoreData *)tappedCell.user;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }

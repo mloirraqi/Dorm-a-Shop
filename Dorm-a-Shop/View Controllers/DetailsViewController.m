@@ -8,6 +8,7 @@
 
 #import "DetailsViewController.h"
 #import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
 #import "PostManager.h"
 @import Parse;
 
@@ -15,7 +16,7 @@
 
 - (IBAction)didTapWatch:(id)sender;
 
-@property (weak, nonatomic) IBOutlet PFImageView *postPFImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *postImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
@@ -51,12 +52,11 @@
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
-        if (self.post.watch != nil) {
-            self.watchButton.selected = YES;
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", self.post.watchCount] forState:UIControlStateSelected];
+        [self.watchButton setSelected:self.post.watched];
+        if (self.post.watched) {
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
         } else {
-            self.watchButton.selected = NO;
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", self.post.watchCount] forState:UIControlStateNormal];
+            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
         }
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
         NSNumber *soldNumVal = [[notification userInfo] objectForKey:@"sold"];
@@ -72,42 +72,40 @@
     }
 }
 
-- (void)setDetailsPost:(Post *)post {
+- (void)setDetailsPost:(PostCoreData *)post {
     _post = post;
     
-    if ([((PFObject *)post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId] && post[@"sold"] == [NSNumber numberWithBool: NO]) {
+    if ([post.author.objectId isEqualToString:PFUser.currentUser.objectId] && post.sold == NO) {
         [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
         [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
         self.statusButton.hidden = NO;
     }
     
-    if (post[@"sold"] == [NSNumber numberWithBool: YES]) {
+    if (post.sold == YES) {
         self.statusButton.hidden = NO;
     }
     
-    self.postPFImageView.file = post[@"image"];
-    [self.postPFImageView loadInBackground];
+    self.postImageView.image = [UIImage imageWithData:self.post.image];
     
-    if (self.post.watch != nil) {
-        [self.watchButton setSelected:YES];
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%@ watching)", self.post.watchCount] forState:UIControlStateSelected];
+    [self.watchButton setSelected:self.post.watched];
+    if (self.post.watched) {
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
     } else {
-        [self.watchButton setSelected:NO];
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%@ watching)", self.post.watchCount] forState:UIControlStateNormal];
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
     }
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
     self.captionLabel.text = post.caption;
     self.titleLabel.text = post.title;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
 }
 
 - (IBAction)didTapWatch:(id)sender {
     self.watchStatusChanged = YES;
     
     __weak DetailsViewController *weakSelf = self;
-    if (self.post.watch != nil) {
+    if (self.post.watched) {
         [[PostManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post,@"post", nil];
@@ -130,7 +128,7 @@
 
 - (IBAction)changeStatus:(id)sender {
     __weak DetailsViewController *weakSelf = self;
-    if([((PFObject *) self.post[@"author"]).objectId isEqualToString:PFUser.currentUser.objectId]) {
+    if ([self.post.author.objectId isEqualToString:PFUser.currentUser.objectId]) {
         if (weakSelf.post.sold == NO) {
             [[PostManager shared] setPost:weakSelf.post sold:YES withCompletion:^(NSError * _Nonnull error) {
                 if (error != nil) {

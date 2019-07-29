@@ -9,26 +9,14 @@
 #import "PostCollectionViewCell.h"
 #import "PostManager.h"
 
-@interface PostCollectionViewCell()
-
-@property (nonatomic) BOOL isInitialReload;
-
-@end
-
 @implementation PostCollectionViewCell
 
-- (void)setPost:(Post *)post {
+- (void)setPost:(PostCoreData *)post {
     _post = post;
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
-    
-    PFFileObject *imageFile = self.post.image;
-    
-    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [self.itemImage setImage:image];
-        }
-    }];
+    NSData *imageData = post.image;
+    UIImage *image = [UIImage imageWithData:imageData];
+    [self.itemImage setImage:image];
 }
 
 @end
