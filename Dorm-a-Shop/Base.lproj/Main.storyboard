@@ -280,7 +280,7 @@
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B6W-xA-Xi4">
                                 <rect key="frame" x="70" y="303" width="274" height="30"/>
-                                <state key="normal" title="Furniture"/>
+                                <state key="normal" title="Other"/>
                                 <connections>
                                     <action selector="changeCategory:" destination="taT-74-9c7" eventType="touchUpInside" id="svY-6b-68H"/>
                                 </connections>
