@@ -11,21 +11,9 @@
 
 @interface PostCollectionViewCell()
 
-@property (nonatomic) BOOL isInitialReload;
-
 @end
 
 @implementation PostCollectionViewCell
-
-//- (void)awakeFromNib {
-//    [super awakeFromNib];
-//    self.isInitialReload = YES;
-//}
-//
-//- (void)prepareForReuse {
-//    [super prepareForReuse];
-//    self.isInitialReload = YES;
-//}
 
 - (void)setPost:(Post *)post {
 //    [self setWatchedUser:[PFUser currentUser] Post:self.post];

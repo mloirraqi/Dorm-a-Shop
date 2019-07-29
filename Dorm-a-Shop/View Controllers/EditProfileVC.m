@@ -49,7 +49,7 @@
     }];
 }
 
-- (BOOL)checkFields{
+- (BOOL)checkFields {
     
     if (!nameTextField.text || nameTextField.text.length == 0){
         [self showAlertView:@"Please add Name First"];
@@ -351,3 +351,4 @@
 }
 
 @end
+

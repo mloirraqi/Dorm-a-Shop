@@ -14,8 +14,6 @@
 @import Parse;
 
 @interface PostTableViewCell()
-//isInialReload not working, gets set YES thru prepare for reuse when watch button is clicked
-@property (nonatomic) BOOL isInitialReload;
 
 - (IBAction)didTapWatch:(id)sender;
 - (IBAction)didTapProfile:(id)sender;

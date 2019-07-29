@@ -45,7 +45,7 @@
 
 }
 
-- (BOOL)checkFields{
+- (BOOL)checkFields {
     if (!nameTextField.text || nameTextField.text.length == 0){
         [self showAlertView:@"Please Add a Name"];
         return false;
@@ -107,8 +107,7 @@
     }
 }
 
--(void)setLocationName
-{
+-(void)setLocationName {
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
     
@@ -179,8 +178,7 @@
     }];
 }
 
--(void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location
-{
+-(void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location {
     PFUser *currentUser = [PFUser currentUser];
     currentUser[@"Location"] = location;
     if(address != nil)

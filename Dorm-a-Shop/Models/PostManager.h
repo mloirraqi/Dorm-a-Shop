@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableArray *)getProfilePostsForUser:(PFUser *)user;
 - (void)getWatchedPostsForCurrentUserWithCompletion:(void (^)(NSMutableArray *, NSError *))completion;
 - (void)getAllPostsWithCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+- (void)getAllPostsOfNonRelatedUserWithCompletion:(void (^)(NSMutableArray *, NSError *))completion;
 - (void)unwatchPost:(Post *)post withCompletion:(void (^)(NSError *))completion;
 - (void)watchPost:(Post *)post withCompletion:(void (^)(NSError *))completion;
 - (void)setPost:(Post *)post sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion;

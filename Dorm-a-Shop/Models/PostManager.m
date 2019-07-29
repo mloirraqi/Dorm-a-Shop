@@ -94,8 +94,9 @@
                 completion(post, nil);
             }
         }];
-    //}
 }
+
+
 
 - (void)getAllPostsWithCompletion:(void (^)(NSMutableArray *, NSError *))completion {
     if (self.allPostsArray != nil) {
@@ -104,6 +105,41 @@
         PFQuery *postQuery = [Post query];
         [postQuery orderByDescending:@"createdAt"];
         [postQuery includeKey:@"author"];
+        
+        __weak PostManager *weakSelf = self;
+        [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
+            if (posts) {
+                weakSelf.allPostsArray = [NSMutableArray arrayWithArray:posts];
+                NSLog(@"all posts array: %@", weakSelf.allPostsArray);
+                completion(weakSelf.allPostsArray, nil);
+            } else {
+                NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
+                completion(nil, error);
+            }
+        }];
+    }
+}
+
+- (void)getAllPostsOfNonRelatedUserWithCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    if (self.allPostsArray != nil) {
+        completion(self.allPostsArray, nil);
+    } else {
+        
+        PFUser *currentUser = [PFUser currentUser];
+        [currentUser fetch];
+        
+        NSArray *acceptedUser = currentUser[@"accepted"];
+        NSArray *rejectedUser = currentUser[@"rejected"];
+        NSMutableArray *ignoredUser = [[NSMutableArray alloc]init];
+        [ignoredUser addObjectsFromArray:acceptedUser];
+        [ignoredUser addObjectsFromArray:rejectedUser];
+        [ignoredUser addObject:currentUser.objectId];
+        
+        
+        PFQuery *postQuery = [Post query];
+        [postQuery orderByDescending:@"createdAt"];
+        [postQuery includeKey:@"author"];
+        [postQuery whereKey:@"author" notContainedIn:ignoredUser];
         
         __weak PostManager *weakSelf = self;
         [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
