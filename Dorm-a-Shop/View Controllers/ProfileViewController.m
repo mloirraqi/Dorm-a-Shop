@@ -46,6 +46,7 @@
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         self.user = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
+        NSLog(@"self.user: %@ has username: %@", self.user, PFUser.currentUser.username);
     } else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
@@ -71,6 +72,7 @@
 }
 
 - (void)fetchProfileFromCoreData {
+    NSLog(@"User: %@", self.user);
     self.username.text = self.user.username;
     self.location.text = self.user.location;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
