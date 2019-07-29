@@ -176,41 +176,33 @@ static const int MAX_BUFFER_SIZE = 2;
 
 -(void)setupCards {
     self.cardArray = [[NSMutableArray alloc]init];
-    [[PostManager shared] getAllPostsWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-        if (postsArray) {
-            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-            
-            NSMutableArray *userNameArray = [[NSMutableArray alloc]init];
-            NSMutableArray *userArray = [[NSMutableArray alloc]init];
-            for (Post* post in activePosts) {
-                if (post.author != nil) {
-                    if (![userNameArray containsObject:post.author.username]) {
-                        [userNameArray addObject:post.author.username];
-                        [userArray addObject:post.author];
-                    }
-                }
-            }            
-            
-            for (PFUser *user in userArray) {
-                NSMutableArray *userPosts = [[NSMutableArray alloc] init];
-                Card *card = [[Card alloc]init];
-                card.author = user;
-                card.posts = userPosts;
-                for (Post *post in activePosts) {
-                    if ([post.author.objectId isEqualToString:user.objectId]) {
-                        [userPosts addObject:post];
-                    }
-                }
-                [self.cardArray addObject:card];
+    NSMutableArray *activePosts = [[PostManager shared] getActivePostsFromCoreData];
+    NSMutableArray *userNameArray = [[NSMutableArray alloc] init];
+    NSMutableArray *userArray = [[NSMutableArray alloc] init];
+    for (Post *post in activePosts) {
+        if (post.author != nil) {
+            if (![userNameArray containsObject:post.author.username]) {
+                [userNameArray addObject:post.author.username];
+                [userArray addObject:post.author];
             }
-            
-            [self loadCards];
-            [self setupView];
-        } else {
-            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
         }
-    }];
+    }
+            
+    for (PFUser *user in userArray) {
+        NSMutableArray *userPosts = [[NSMutableArray alloc] init];
+        Card *card = [[Card alloc]init];
+        card.author = user;
+        card.posts = userPosts;
+        for (Post *post in activePosts) {
+            if ([post.author.objectId isEqualToString:user.objectId]) {
+                [userPosts addObject:post];
+            }
+        }
+        [self.cardArray addObject:card];
+    }
+            
+    [self loadCards];
+    [self setupView];
 }
 
 -(void)showAlertView:(NSString*)message{

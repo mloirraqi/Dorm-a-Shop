@@ -34,7 +34,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="168.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="74z-au-tcV" customClass="PFImageView">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="74z-au-tcV">
                                                     <rect key="frame" x="0.0" y="0.0" width="127" height="124"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="111" id="LFR-oI-YrY"/>
@@ -105,7 +105,7 @@
                                         <connections>
                                             <outlet property="categoryLabel" destination="x77-Gf-PcM" id="ItK-67-P92"/>
                                             <outlet property="conditionLabel" destination="MZi-cJ-56M" id="uGX-XT-pjf"/>
-                                            <outlet property="postPFImageView" destination="74z-au-tcV" id="hRt-92-8MY"/>
+                                            <outlet property="postImageView" destination="74z-au-tcV" id="X8s-Am-4fk"/>
                                             <outlet property="priceLabel" destination="yCe-z1-a88" id="yFf-QD-nGa"/>
                                             <outlet property="titleLabel" destination="0Xp-yd-qDU" id="wUH-db-tE5"/>
                                             <outlet property="watchButton" destination="Fng-7Z-gqv" id="L0U-8Q-agh"/>
@@ -280,7 +280,7 @@
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B6W-xA-Xi4">
                                 <rect key="frame" x="70" y="303" width="274" height="30"/>
-                                <state key="normal" title="Furniture"/>
+                                <state key="normal" title="Other"/>
                                 <connections>
                                     <action selector="changeCategory:" destination="taT-74-9c7" eventType="touchUpInside" id="svY-6b-68H"/>
                                 </connections>
@@ -395,7 +395,7 @@
                                         <rect key="frame" x="8" y="0.0" width="398" height="725"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J0d-zI-pQn">
-                                                <rect key="frame" x="139" y="18" width="251" height="21"/>
+                                                <rect key="frame" x="139" y="18" width="158" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -502,6 +502,14 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I06-uU-Ytn">
+                                                <rect key="frame" x="322" y="13" width="62" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Message"/>
+                                                <connections>
+                                                    <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="I1W-46-wBB"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
@@ -542,7 +550,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Edit"/>
                                 <connections>
-                                    <segue destination="cUB-Zh-w6I" kind="show" id="Iln-gp-mUe"/>
+                                    <segue destination="cUB-Zh-w6I" kind="show" identifier="segueToEditProfile" id="Iln-gp-mUe"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -582,7 +590,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="168.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="knj-BV-kTd" customClass="PFImageView">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="knj-BV-kTd">
                                                     <rect key="frame" x="0.0" y="0.0" width="127" height="124"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="111" id="cPX-3y-DpZ"/>
@@ -653,7 +661,7 @@
                                         <connections>
                                             <outlet property="categoryLabel" destination="WYf-qE-Gt4" id="gSE-iV-HKe"/>
                                             <outlet property="conditionLabel" destination="K31-ES-VOK" id="cQv-Z4-IR7"/>
-                                            <outlet property="postPFImageView" destination="knj-BV-kTd" id="7eN-tm-sjB"/>
+                                            <outlet property="postImageView" destination="knj-BV-kTd" id="ZHy-Rw-q9P"/>
                                             <outlet property="priceLabel" destination="d6V-MC-i6d" id="M5R-du-EVf"/>
                                             <outlet property="titleLabel" destination="XJ9-uo-RD8" id="ZrP-WE-FCV"/>
                                             <outlet property="watchButton" destination="MT8-hU-OqA" id="hc1-7L-Neg"/>
@@ -934,7 +942,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="jct-hS-uqG" customClass="PFImageView">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="jct-hS-uqG">
                                 <rect key="frame" x="-2" y="88" width="414" height="224"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -1020,7 +1028,7 @@
                         <outlet property="categoryLabel" destination="TQI-Bw-cII" id="d3P-kK-tPm"/>
                         <outlet property="conditionLabel" destination="Ff0-XF-9lw" id="tix-pm-hb1"/>
                         <outlet property="locationLabel" destination="gg7-Vv-pNB" id="24d-UD-SsX"/>
-                        <outlet property="postPFImageView" destination="jct-hS-uqG" id="1xX-hf-FUf"/>
+                        <outlet property="postImageView" destination="jct-hS-uqG" id="dVY-GL-3ML"/>
                         <outlet property="priceLabel" destination="sZw-7M-84a" id="xFq-aX-sie"/>
                         <outlet property="sellerButton" destination="O26-WH-s7F" id="qs3-DJ-zzB"/>
                         <outlet property="statusButton" destination="RXI-vr-Zjq" id="H3A-nu-lS6"/>
@@ -1045,7 +1053,7 @@
                     <connections>
                         <segue destination="huz-Vy-fBK" kind="relationship" relationship="viewControllers" id="jZd-Ke-rOh"/>
                         <segue destination="dis-H7-DlH" kind="relationship" relationship="viewControllers" id="S4g-Ze-d0C"/>
-                        <segue destination="dDI-Qk-IoB" kind="relationship" relationship="viewControllers" id="I1A-NR-1di"/>
+                        <segue destination="dDI-Qk-IoB" kind="relationship" relationship="viewControllers" id="e4f-q2-7kZ"/>
                         <segue destination="DJx-3h-Trp" kind="relationship" relationship="viewControllers" id="vDR-6b-RlU"/>
                         <segue destination="oXO-JU-K28" kind="relationship" relationship="viewControllers" id="wbs-vl-Xvx"/>
                     </connections>
@@ -1535,6 +1543,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QS2-PP-UOa">
+                                                    <rect key="frame" x="82" y="44" width="312" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="wwp-uV-CzQ" firstAttribute="top" secondItem="dqC-Jo-n0Q" secondAttribute="topMargin" constant="8" id="0Hu-tT-K1S"/>
@@ -1548,6 +1563,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="profilePic" destination="bpE-op-v3a" id="63d-zy-aeY"/>
+                                            <outlet property="recentText" destination="QS2-PP-UOa" id="vPL-dV-VRs"/>
                                             <outlet property="username" destination="wwp-uV-CzQ" id="tcT-Ev-mzS"/>
                                             <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="Bvx-1i-tFM"/>
                                         </connections>
@@ -1558,14 +1574,28 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="nrn-J4-eXk"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Inbox" id="fDU-L2-Uot"/>
+                    <navigationItem key="navigationItem" title="Inbox" id="fDU-L2-Uot">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="vnd-c9-1JY">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dbB-WP-rEx">
+                                <rect key="frame" x="302" y="7" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
+                                </accessibility>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <segue destination="O11-22-vap" kind="show" id="MkK-t9-lSX"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="l7p-6k-5K7" id="aoa-dI-U2t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s56-CZ-wsH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1106" y="2321"/>
+            <point key="canvasLocation" x="1105.7971014492755" y="2320.9821428571427"/>
         </scene>
         <!--Message View Controller-->
         <scene sceneID="R85-UX-ygf">
@@ -1737,7 +1767,9 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ob4-g7-kRL"/>
+        <segue reference="MkK-t9-lSX"/>
+        <segue reference="Bvx-1i-tFM"/>
+        <segue reference="ni5-B6-yy2"/>
         <segue reference="inK-qS-1By"/>
         <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>

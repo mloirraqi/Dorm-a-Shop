@@ -8,20 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PostTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet PFImageView *postPFImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *postImageView;
 @property (weak, nonatomic) IBOutlet UIButton *watchButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *conditionLabel;
 
-@property (nonatomic, strong) Post *post;
+//@property (nonatomic, strong) Post *post;
+@property (nonatomic, strong) PostCoreData *post;
 
 @end
 

@@ -9,6 +9,8 @@
 #import "SignInVC.h"
 #import "Parse/Parse.h"
 #import "AppDelegate.h"
+#import "User.h"
+#import "PostManager.h"
 
 @interface SignInVC ()
 
@@ -31,11 +33,10 @@
     NSString *email = self.emailField.text;
     NSString *password = self.passwordField.text;
     
-    [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser *user, NSError *error) {
+    [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser *pfUser, NSError *error) {
         if (error != nil) {
             [self showAlertView:@"Unable to Sign in"];
         } else {
-            NSLog(@"User logged in successfully");
             UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
             
             [self presentViewController:tabBarController animated:YES completion:nil];

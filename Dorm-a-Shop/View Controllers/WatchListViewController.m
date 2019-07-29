@@ -33,42 +33,41 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
-    [self fetchPosts];
+    [self fetchPostsFromCoreData];
     [self createRefreshControl];
 }
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        if (!notificationPost.watched) {
+            [self.postsArray removeObject:notificationPost];
+        } else if (!notificationPost.sold) {
+            [self.postsArray insertObject:notificationPost atIndex:0];
+        }
+        
         [self.tableView reloadData];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        [self fetchPosts];
+        [self fetchPostsFromCoreData];
     }
 }
 
 - (void)createRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchPosts) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(fetchPostsFromCoreData) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
-- (void)fetchPosts {
-    [[PostManager shared] getWatchedPostsForCurrentUserWithCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
-        if (postsArray) {
-            NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
-            NSMutableArray *activeWatchPosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-            self.postsArray = activeWatchPosts;
-            [self.tableView reloadData];
-        } else {
-            NSLog(@"😫😫😫 Error getting home screen (all posts): %@", error.localizedDescription);
-        }
-        [self.refreshControl endRefreshing];
-    }];
+- (void)fetchPostsFromCoreData {
+    NSMutableArray *activeWatchPosts = [[PostManager shared] getActiveWatchedPostsForCurrentUserFromCoreData];
+    self.postsArray = activeWatchPosts;
+    [self.tableView reloadData];
+    [self.refreshControl endRefreshing];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
-
-    Post *post = self.postsArray[indexPath.row];
+    PostCoreData *post = self.postsArray[indexPath.row];
     cell.post = post;
     return cell;
 }

@@ -21,7 +21,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self setUpView];
 }
 
@@ -333,9 +332,9 @@
     // Dismiss the place picker, as it cannot dismiss itself.
     [viewController dismissViewControllerAnimated:YES completion:nil];
     
-    NSLog(@"Place name %@", place.name);
-    NSLog(@"Place address %@", place.formattedAddress);
-    NSLog(@"Place attributions %@", place.attributions.string);
+//    NSLog(@"Place name %@", place.name);
+//    NSLog(@"Place address %@", place.formattedAddress);
+//    NSLog(@"Place attributions %@", place.attributions.string);
     
     [updateLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
     locationSelected = YES;

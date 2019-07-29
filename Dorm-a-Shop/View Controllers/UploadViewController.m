@@ -8,7 +8,8 @@
 
 #import "UploadViewController.h"
 #import "PostManager.h"
-#import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
+#import "AppDelegate.h"
 
 @interface UploadViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -51,8 +52,8 @@
     self.conditionPickerView.dataSource = self;
     self.conditionPickerView.hidden = YES;
     
-    self.categories = @[@"Other", @"Furniture", @"Books", @"Beauty"];
-    self.conditions = @[@"New", @"Nearly New", @"Old"];
+    self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
+    self.conditions = @[@"New", @"Nearly New", @"Used"];
     
     [self.itemTitle addTarget:self.itemTitle action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     
@@ -66,17 +67,40 @@
 }
 
 - (IBAction)addPicture:(id)sender {
-    UIImagePickerController *imagePickerVC = [UIImagePickerController new];
-    imagePickerVC.delegate = self;
-    imagePickerVC.allowsEditing = YES;
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }
-    else {
-        NSLog(@"Camera 🚫 available so we will use photo library instead");
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    [self presentViewController:imagePickerVC animated:YES completion:nil];
+    UIAlertController *alertController=[UIAlertController alertControllerWithTitle:@"" message:@"Choose image" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *takePhoto=[UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:picker animated:YES completion:NULL];
+        [alertController dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alertController addAction:takePhoto];
+    
+    UIAlertAction *choosePhoto=[UIAlertAction actionWithTitle:@"Select From Photos" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIImagePickerController *pickerView = [[UIImagePickerController alloc] init];
+        pickerView.allowsEditing = YES;
+        pickerView.delegate = self;
+        [pickerView setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        [self presentViewController:pickerView animated:YES completion:nil];
+        [alertController dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [alertController addAction:choosePhoto];
+    
+    UIAlertAction *actionCancel=[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alertController dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [alertController addAction:actionCancel];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
@@ -96,10 +120,22 @@
         [self presentViewController:self.descriptionEmpty animated:YES completion:^{
         }];
     } else {
-        Post *newPost = [Post postListing:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-            if (!succeeded) {
+        //core data
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+        NSData *imageData = UIImagePNGRepresentation(self.postImage);
+        
+        //set the Parse object id later and Parse createdAt date later when the parse query completes
+        PostCoreData *newPost = [[PostManager shared] savePostToCoreDataWithObjectId:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withManagedObjectContext:context];
+        
+        //parse. here we update the objectId for the post in core data, in the completion block
+        [[PostManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
+            if (error) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
+                newPost.objectId = post.objectId;
+                newPost.createdAt = post.createdAt;
+                [context save:nil];
                 [self dismissViewControllerAnimated:true completion:nil];
             }
         }];
@@ -165,8 +201,7 @@
     self.pickerviewToolbar.hidden = YES;
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
+- (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:@"add a description for the item here"]) {
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
@@ -174,8 +209,7 @@
     [textView becomeFirstResponder];
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
+- (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:@""]) {
         textView.text = @"add a description for the item here";
         textView.textColor = [UIColor lightGrayColor];

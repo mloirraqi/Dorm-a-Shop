@@ -10,7 +10,8 @@
 @import Parse;
 
 @interface CardItemCollectionViewCell()
-@property (weak, nonatomic) IBOutlet PFImageView *postPFImageView;
+
+@property (weak, nonatomic) IBOutlet UIImageView *postImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @end
@@ -24,15 +25,13 @@
     // Initialization code
 }
 
-
--(void)setPost:(Post *)post {
+-(void)setPost:(PostCoreData *)post {
 	_post = post;
-	[self.postPFImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
-	self.postPFImageView.file = post[@"image"];
-	[self.postPFImageView loadInBackground];
+	[self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
+    self.postImageView.image = [UIImage imageWithData:self.post.image];
 	
 	self.titleLabel.text = post.title;
-	self.priceLabel.text = [NSString stringWithFormat:@"$%@", post.price];
+	self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
 }
 
 
