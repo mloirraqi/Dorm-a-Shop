@@ -43,30 +43,34 @@
     }];
     
     [self updatePasswordStrength:self];
-
 }
 
 - (BOOL)checkFields {
-    if (!nameTextField.text || nameTextField.text.length == 0){
+    if (!nameTextField.text || nameTextField.text.length == 0) {
         [self showAlertView:@"Please Add a Name"];
         return false;
     }
-    if (!emailTextField.text || emailTextField.text.length == 0){
+    
+    if (!emailTextField.text || emailTextField.text.length == 0) {
         [self showAlertView:@"Please Add an Email"];
         return false;
     }
-    if (!passwordTextField.text || passwordTextField.text.length == 0){
+    
+    if (!passwordTextField.text || passwordTextField.text.length == 0) {
         [self showAlertView:@"Please Add a Passsword"];
         return false;
     }
-    if (!selectedImage || selectedImage == nil){
+    
+    if (!selectedImage || selectedImage == nil) {
         [self showAlertView:@"Please Add an Image"];
         return false;
     }
-    if (![[Utils sharedInstance] isAnEmail:emailTextField.text]){
+    
+    if (![[Utils sharedInstance] isAnEmail:emailTextField.text]) {
         [self showAlertView:@"Please Add a Valid .edu Email"];
         return false;
     }
+    
     CLLocation *currentLocation = [locationManager currentLocation];
     if (currentLocation == nil) {
         [self showAlertView:@"Please Enable Location From Settings"];
@@ -129,52 +133,52 @@
             
             // strAdd -> take bydefault value nil
             
-            
-            if ([placemark.subThoroughfare length] != 0)
+            if ([placemark.subThoroughfare length] != 0) {
                 strAdd = placemark.subThoroughfare;
+            }
             
-            if ([placemark.thoroughfare length] != 0)
-            {
+            if ([placemark.thoroughfare length] != 0) {
                 // strAdd -> store value of current location
-                if ([strAdd length] != 0)
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark thoroughfare]];
-                else
-                {
+                } else {
                     // strAdd -> store only this value,which is not null
                     strAdd = placemark.thoroughfare;
                 }
             }
             
-            if ([placemark.postalCode length] != 0)
-            {
-                if ([strAdd length] != 0)
+            if ([placemark.postalCode length] != 0) {
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
-                else
+                } else {
                     strAdd = placemark.postalCode;
+                }
             }
             
-            if ([placemark.locality length] != 0)
-            {
-                if ([strAdd length] != 0)
+            if ([placemark.locality length] != 0) {
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
-                else
+                } else {
                     strAdd = placemark.locality;
+                }
             }
             
             if ([placemark.administrativeArea length] != 0)
             {
-                if ([strAdd length] != 0)
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
-                else
+                } else {
                     strAdd = placemark.administrativeArea;
+                }
             }
             
             if ([placemark.country length] != 0)
             {
-                if ([strAdd length] != 0)
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
-                else
+                } else {
                     strAdd = placemark.country;
+                }
             }
         }
         
@@ -185,8 +189,7 @@
 - (void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location {
     PFUser *currentUser = [PFUser currentUser];
     currentUser[@"Location"] = location;
-    if(address != nil)
-    {
+    if(address != nil) {
         currentUser[@"address"] = address;
     }
     
@@ -194,14 +197,11 @@
     [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:true];
         if (!error) {
-            // Hooray! Let them use the app now.
             [self showAlertView:@"Welcome!"];
             [self performSegueWithIdentifier:@"homeScreen" sender:nil];
-            
         } else {
             NSString *errorString = [error userInfo][@"error"];
             [self showAlertView:errorString];
-            // Show the errorString somewhere and let the user try again.
         }
     }];
 }
@@ -310,7 +310,6 @@
                     self.passwordStrengthMeterView.progressTintColor = [UIColor cyanColor];
                     break;
             }
-            
         } else {
             self.passwordStrengthMeterView.progress = 0.15f;
             self.passwordStrengthMeterView.progressTintColor = [UIColor redColor];

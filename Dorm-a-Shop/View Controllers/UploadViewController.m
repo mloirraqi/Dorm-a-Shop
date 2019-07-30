@@ -147,6 +147,7 @@
         NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:newPost, @"post", nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUploadNotification" object:self userInfo:watchInfoDict];
         
+        //will delete this comment when it is no longer needed for reference
         //[self.delegate didUpload:newPost];
     }
 }
@@ -214,6 +215,7 @@
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
     }
+    
     [textView becomeFirstResponder];
 }
 
@@ -222,6 +224,7 @@
         textView.text = @"add a description for the item here";
         textView.textColor = [UIColor lightGrayColor];
     }
+    
     [textView resignFirstResponder];
 }
 

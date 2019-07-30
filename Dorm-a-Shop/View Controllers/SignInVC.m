@@ -22,14 +22,12 @@
     [super viewDidLoad];
 }
 
--(void)showAlertView:(NSString*)message{
+-(void)showAlertView:(NSString*)message {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
-    
 }
 
 - (IBAction)signIn:(id)sender {
-    
     NSString *email = self.emailField.text;
     NSString *password = self.passwordField.text;
     
@@ -37,9 +35,7 @@
         if (error != nil) {
             [self showAlertView:@"Unable to Sign in"];
         } else {
-
             UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
-            
             [self presentViewController:tabBarController animated:YES completion:nil];
         }
     }];

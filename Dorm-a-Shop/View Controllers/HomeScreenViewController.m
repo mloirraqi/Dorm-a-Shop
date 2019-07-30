@@ -132,19 +132,20 @@
 }
 
 - (void)queryActivePostsFromParse {
+    __weak HomeScreenViewController *weakSelf = self;
     [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
-            self.postsArray = activePosts;
-            self.filteredPosts = self.postsArray;
+            weakSelf.postsArray = activePosts;
+            weakSelf.filteredPosts = weakSelf.postsArray;
             
             [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                 if (error) {
                     NSLog(@"error getting watch posts/updating core data watch status");
                 } else {
-                    [self.tableView reloadData];
-                    [self.refreshControl endRefreshing];
+                    [weakSelf.tableView reloadData];
+                    [weakSelf.refreshControl endRefreshing];
                 }
             }];
         }
@@ -272,6 +273,7 @@
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:coPredicate]];
     }
+    
     if (![[self.pricesButton currentTitle] isEqual: @"Price: All"]) {
         NSPredicate *pPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
             return (post.price.intValue <= self.limit.intValue);
@@ -283,7 +285,7 @@
 }
 
 - (IBAction)categoryChange:(id)sender {
-    if(self.categoryTable.hidden) {
+    if (self.categoryTable.hidden) {
         self.categoryTable.hidden = NO;
     } else {
         self.categoryTable.hidden = YES;
@@ -291,7 +293,7 @@
 }
 
 - (IBAction)conditionChange:(id)sender {
-    if(self.conditionTable.hidden) {
+    if (self.conditionTable.hidden) {
         self.conditionTable.hidden = NO;
     } else {
         self.conditionTable.hidden = YES;
@@ -299,7 +301,7 @@
 }
 
 - (IBAction)pricesChange:(id)sender {
-    if(self.pricesTable.hidden) {
+    if (self.pricesTable.hidden) {
         self.pricesTable.hidden = NO;
     } else {
         self.pricesTable.hidden = YES;
@@ -307,7 +309,7 @@
 }
 
 - (IBAction)distancesChange:(id)sender {
-    if(self.distanceTable.hidden) {
+    if (self.distanceTable.hidden) {
         self.distanceTable.hidden = NO;
     } else {
         self.distanceTable.hidden = YES;
@@ -315,11 +317,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(tableView == self.categoryTable) {
+    if (tableView == self.categoryTable) {
         self.categoryTable.hidden = YES;
         if (indexPath.row == 0) {
             [self.categoryButton setTitle:@"Category: All" forState:UIControlStateNormal];
-            
         } else {
             [self.categoryButton setTitle:self.categories[indexPath.row] forState:UIControlStateNormal];
         }
@@ -327,7 +328,6 @@
         self.conditionTable.hidden = YES;
         if (indexPath.row == 0) {
             [self.conditionButton setTitle:@"Condition: All" forState:UIControlStateNormal];
-            
         } else {
             [self.conditionButton setTitle:self.conditions[indexPath.row] forState:UIControlStateNormal];
         }
@@ -343,6 +343,7 @@
         self.distanceTable.hidden = YES;
         [self.distanceButton setTitle:self.distances[indexPath.row] forState:UIControlStateNormal];
     }
+    
     [self filterPosts];
 }
 
