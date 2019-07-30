@@ -100,7 +100,7 @@
     }
 }
 
-- (void)receiveNotification:(NSNotification *) notification {
+- (void)receiveNotification:(NSNotification *)notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
         
@@ -110,7 +110,18 @@
         [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView endUpdates];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        [self fetchActivePostsFromCoreData];
+        //[self fetchActivePostsFromCoreData];
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        if (notificationPost.sold) {
+            [self.postsArray removeObject:notificationPost];
+            [self.tableView reloadData];
+        } else {
+            [self fetchActivePostsFromCoreData];
+        }
+    } else if ([[notification name] isEqualToString:@"DidUploadNotification"]) {
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        [self.postsArray insertObject:notificationPost atIndex:0];
+        [self.tableView reloadData];
     }
 }
 

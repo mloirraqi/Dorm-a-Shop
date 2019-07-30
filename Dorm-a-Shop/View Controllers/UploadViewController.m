@@ -10,6 +10,7 @@
 #import "PostManager.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "AppDelegate.h"
+@import Parse;
 
 @interface UploadViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -125,8 +126,10 @@
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSData *imageData = UIImagePNGRepresentation(self.postImage);
         
+        UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
+        
         //set the Parse object id later and Parse createdAt date later when the parse query completes
-        PostCoreData *newPost = [[PostManager shared] savePostToCoreDataWithObjectId:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withManagedObjectContext:context];
+        PostCoreData *newPost = [[PostManager shared] savePostToCoreDataWithObjectId:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:context];
         
         //parse. here we update the objectId for the post in core data, in the completion block
         [[PostManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
@@ -136,10 +139,15 @@
                 newPost.objectId = post.objectId;
                 newPost.createdAt = post.createdAt;
                 [context save:nil];
+                
                 [self dismissViewControllerAnimated:true completion:nil];
             }
         }];
-        [self.delegate didUpload:newPost];
+        
+        NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:newPost, @"post", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUploadNotification" object:self userInfo:watchInfoDict];
+        
+        //[self.delegate didUpload:newPost];
     }
 }
 

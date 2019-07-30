@@ -36,17 +36,12 @@
     
     [Parse initializeWithConfiguration:config];
     
-    if (PFUser.currentUser) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
-    }
-    
     //delete all of core data. this commented out code is greatly needed for now!!
-//        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-//        NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-//        NSError *deleteError = nil;
-//        [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
-
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+        NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+        NSError *deleteError = nil;
+        [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
+    
     [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
@@ -55,7 +50,10 @@
                 if (error) {
                     NSLog(@"error getting watch posts/updating core data watch status");
                 } else {
-                    
+                    if (PFUser.currentUser) {
+                        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+                    }
                 }
             }];
         }

@@ -46,7 +46,6 @@
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         self.user = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
-        NSLog(@"self.user: %@ has username: %@", self.user, PFUser.currentUser.username);
     } else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
@@ -64,6 +63,9 @@
     CGFloat itemHeight = itemWidth;
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidUploadNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
+    
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchProfileFromCoreData) forControlEvents:UIControlEventValueChanged];
     [self.scrollView addSubview:self.refreshControl];
@@ -71,8 +73,17 @@
     [self fetchProfileFromCoreData];
 }
 
+- (void)receiveNotification:(NSNotification *)notification {
+    if ([[notification name] isEqualToString:@"DidUploadNotification"]) {
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        [self.activeItems insertObject:notificationPost atIndex:0];
+        [self.collectionView reloadData];
+    } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
+        [self fetchProfileFromCoreData];
+    }
+}
+
 - (void)fetchProfileFromCoreData {
-    NSLog(@"User: %@", self.user);
     self.username.text = self.user.username;
     self.location.text = self.user.location;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
@@ -81,7 +92,9 @@
     
     NSData *imageData = self.user.profilePic;
     UIImage *image = [UIImage imageWithData:imageData];
-    [self.profilePic setImage:image];
+    if (image) {
+        [self.profilePic setImage:image];
+    }
 
     NSMutableArray *profilePostsArray = [[PostManager shared] getProfilePostsFromCoreDataForUser:self.user];
     

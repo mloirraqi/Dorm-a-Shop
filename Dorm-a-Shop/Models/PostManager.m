@@ -23,8 +23,6 @@
 
 @end
 
-//PLEASE NOTE THERE IS SIGNIFICANT COMMENTED OUT CODE IN THIS FILE THAT WE STILL NEED TO REFERENCE GOING FORWARD, WILL DELETE AS SOON AS WE NO LONGER NEED IT
-
 @implementation PostManager
 
 #pragma mark Singleton Methods
@@ -48,7 +46,6 @@
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
-    [postQuery whereKey:@"sold" equalTo:[NSNumber numberWithBool: NO]];
     [postQuery whereKey:@"author" matchesQuery:userQuery];
     
     __weak PostManager *weakSelf = self;
@@ -60,9 +57,29 @@
             
             for (Post *post in posts) {
                 PostCoreData *postCoreData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
+                UserCoreData *userCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:post.author.objectId withContext:context];
+                
+                if (!userCoreData) {
+                    User *user = (User *)post.author;
+                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
+                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    
+                    [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        //set image later
+                        if (data) {
+                            userCoreData.profilePic = data;
+                            
+                            //save updated attribute to managed object context
+                            [context save:nil];
+                        } else {
+                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                        }
+                    }];
+                }
+                
                 if (!postCoreData) {
                     //we don't know if it's watched from this query so we default to NO. this gets handled later. same for watchCount, defaults to 0
-                    postCoreData = [weakSelf savePostToCoreDataWithObjectId:post.objectId withImageData:[[NSData alloc] init] withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title withCreatedDate:post.createdAt withSoldStatus:post.sold withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withManagedObjectContext:context];
+                    postCoreData = [weakSelf savePostToCoreDataWithObjectId:post.objectId withImageData:[[NSData alloc] init] withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title withCreatedDate:post.createdAt withSoldStatus:post.sold withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:context];
                     
                     [post.image getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -140,14 +157,33 @@
             NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
             
             for (Watches *watch in userWatches) {
-                Post *watchedPost = watch.post;
+                Post *watchedPost = (Post *)watch.post;
                 PostCoreData *postCoreData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:watchedPost.objectId withContext:context];
+                UserCoreData *userCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:watchedPost.author.objectId withContext:context];
+                
+                if (!userCoreData) {
+                    User *user = (User *)watchedPost.author;
+                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
+                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    
+                    [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        //set image later
+                        if (data) {
+                            userCoreData.profilePic = data;
+                            
+                            //save updated attribute to managed object context
+                            [context save:nil];
+                        } else {
+                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                        }
+                    }];
+                }
                 if (!postCoreData) {
                     //this really should never get executed if the posts are stored properly upon initialization
                     
                     //handle watch count in a different function that queries watches for post, not watched posts for user
                     //init watch count to 1 since this is a watched post by the first user paired with it in the watch list
-                    postCoreData = [weakSelf savePostToCoreDataWithObjectId:watchedPost.objectId withImageData:nil withCaption:watchedPost.caption withPrice:[watchedPost.price doubleValue] withCondition:watchedPost.condition withCategory:watchedPost.category withTitle:watchedPost.title withCreatedDate:watchedPost.createdAt withSoldStatus:watchedPost.sold withWatchStatus:YES withWatchObjectId:watchedPost.objectId withWatchCount:1 withManagedObjectContext:context];
+                    postCoreData = [weakSelf savePostToCoreDataWithObjectId:watchedPost.objectId withImageData:nil withCaption:watchedPost.caption withPrice:[watchedPost.price doubleValue] withCondition:watchedPost.condition withCategory:watchedPost.category withTitle:watchedPost.title withCreatedDate:watchedPost.createdAt withSoldStatus:watchedPost.sold withWatchStatus:YES withWatchObjectId:watchedPost.objectId withWatchCount:1 withAuthor:userCoreData withManagedObjectContext:context];
                     
                     [watchedPost.image getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -232,7 +268,7 @@
     PFGeoPoint *location = currentUser[@"Location"];
     
     PFQuery *userQuery = [PFUser query];
-    //[userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
+    [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
     
     __weak PostManager *weakSelf = self;
     [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
@@ -283,7 +319,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
     [request setEntity:entityDescription];
-    //[request setPredicate:[NSPredicate predicateWithFormat:@"author.objectId == %@", user.objectId]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"author.objectId == %@", user.objectId]];
     
     NSError *error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
@@ -292,11 +328,7 @@
         NSLog(@"Error fetching PostCoreData objects for current user: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
-    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
-        return [post.author.objectId isEqualToString:user.objectId];
-    }];
-    //results = [results filteredArrayUsingPredicate:predicate];
-    NSLog(@"filtered results: %@", results);
+    
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -306,9 +338,6 @@
 
 - (NSManagedObject *)getCoreDataEntityWithName:(NSString *)name withObjectId:(NSString *)postObjectId withContext:(NSManagedObjectContext *)context {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:name];
-    //this commented out code is greatly needed for now!!
-//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:name inManagedObjectContext:context];
-//    [request setEntity:entityDescription];
     [request setPredicate:[NSPredicate predicateWithFormat:@"objectId == %@", postObjectId]];
     [request setFetchLimit:1];
     [request setReturnsObjectsAsFaults:NO];
@@ -382,6 +411,7 @@
 - (void)setPost:(PostCoreData *)postCoreData sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion {
     postCoreData.sold = sold;
     [postCoreData.managedObjectContext save:nil];
+    NSLog(@"post.sold: %d", postCoreData.sold);
     
     PFQuery *postQuery = [Post query];
     [postQuery getObjectInBackgroundWithId:postCoreData.objectId block:^(PFObject * _Nullable post, NSError * _Nullable error) {
@@ -438,7 +468,7 @@
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
 }
 
-- (PostCoreData *)savePostToCoreDataWithObjectId:(NSString *)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate *)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString *)watchObjectId withWatchCount:(long long)watchCount withManagedObjectContext:(NSManagedObjectContext*)context {
+- (PostCoreData *)savePostToCoreDataWithObjectId:(NSString * _Nullable)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString * _Nullable)watchObjectId withWatchCount:(long long)watchCount withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     
     PostCoreData *newPost;
     
@@ -449,16 +479,8 @@
     
     //if post doesn't already exist in core data, then create it
     if (!newPost) {
-        //this commented out code is still greatly needed!!
-        //NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:context];
-        //newPost = [[PostCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
         newPost = (PostCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"PostCoreData" inManagedObjectContext:context];
-
-        UserCoreData *author = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:[PFUser currentUser].objectId withContext:context];
-
-        if (!newPost.author) {
-            newPost.author = author;
-        }
+        newPost.author = author;
         
         //the author has to exist to set its associated post. author should exist, it should have been set during signup. this is just to ensure it exists
         if (author && !author.post) {
@@ -490,7 +512,7 @@
     return newPost;
 }
 
-- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString *)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext*)context {
+- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     
     UserCoreData *user;
     if (userObjectId) {
@@ -499,9 +521,6 @@
     
     //if post doesn't already exist in core data, then create it
     if (!user) {
-        //this commented out code is still greatly needed!!
-//        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:context];
-//        user = [[UserCoreData alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:context];
         user = (UserCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"UserCoreData" inManagedObjectContext:context];
         
         user.objectId = userObjectId;

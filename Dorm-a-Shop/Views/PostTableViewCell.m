@@ -18,7 +18,6 @@
 @property (nonatomic) BOOL isInitialReload;
 
 - (IBAction)didTapWatch:(id)sender;
-- (IBAction)didTapProfile:(id)sender;
 
 @end
 
@@ -66,10 +65,6 @@
             }
         }];
     }
-}
-
-- (IBAction)didTapProfile:(id)sender {
-    
 }
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
