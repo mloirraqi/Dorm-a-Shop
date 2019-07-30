@@ -353,6 +353,28 @@
     return [results firstObject]; //firstObject is nil if results has length 0
 }
 
+- (NSMutableArray *)getAllUsersFromCoreData {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:context];
+    [request setEntity:entityDescription];
+    
+    NSError *error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
+    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    return mutableResults;
+}
+
 - (void)watchPost:(PostCoreData *)postCoreData withCompletion:(void (^)(NSError *))completion {
     postCoreData.watchCount ++;
     postCoreData.watched = YES;
@@ -538,28 +560,6 @@
     }
     
     return user;
-}
-
-- (NSMutableArray *)getAllUsersFromCoreData {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:context];
-    [request setEntity:entityDescription];
-    
-    NSError *error = nil;
-    NSArray *results = [context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
-    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    
-    return mutableResults;
 }
 
 @end

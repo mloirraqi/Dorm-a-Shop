@@ -2,7 +2,7 @@
 //  UserCoreData+CoreDataClass.m
 //  
 //
-//  Created by ilanashapiro on 7/29/19.
+//  Created by ilanashapiro on 7/30/19.
 //
 //
 
