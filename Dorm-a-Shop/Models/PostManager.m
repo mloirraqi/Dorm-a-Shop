@@ -10,8 +10,10 @@
 #import "Post.h"
 #import "Watches.h"
 #import "User.h"
+#import "Conversation.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "UserCoreData+CoreDataClass.h"
+#import "ConversationCoreData+CoreDataClass.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 #import "LocationManager.h"
@@ -560,6 +562,112 @@
     }
     
     return user;
+}
+
+- (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withSender:(UserCoreData * _Nullable)sender withReceiver:(UserCoreData * _Nullable)receiver withLastText:(NSString * _Nullable)lastText withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+    
+    ConversationCoreData *conversation;
+    if (conversationObjectId) {
+        conversation = (ConversationCoreData *)[self getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversationObjectId withContext:context];
+    }
+    
+    //if post doesn't already exist in core data, then create it
+    if (!conversation) {
+        conversation = (ConversationCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"ConversationCoreData" inManagedObjectContext:context];
+        conversation.objectId = conversationObjectId;
+        conversation.sender = sender;
+        conversation.receiver = receiver;
+        conversation.lastText = lastText;
+        
+        //save to core data persisted store
+        NSError *error = nil;
+        if ([context save:&error] == NO) {
+            NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+        }
+    }
+    
+    return conversation;
+}
+
+- (void)queryConversationUsersAndMessagesFromParseWithCompletion:(void (^)(NSMutableArray<ConversationCoreData *> *, NSMutableArray<User *> *, NSError *))completion {
+    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];
+    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
+    [query orderByDescending:@"updatedAt"];
+    [query includeKey:@"sender"];
+    [query includeKey:@"receiver"];
+    
+    __weak PostManager *weakSelf = self;
+    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable conversations, NSError * _Nullable error) {
+        if (conversations) {
+            NSMutableArray *pfUsersArray = [[NSMutableArray alloc] init];
+            NSMutableArray *conversationsCoreDataArray = [[NSMutableArray alloc] init];
+            
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+            
+            for (PFObject *pfConversation in conversations) {
+                Conversation *conversation = (Conversation *)pfConversation;
+                
+                UserCoreData *senderCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:conversation.sender.objectId withContext:context];
+                UserCoreData *receiverCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:conversation.receiver.objectId withContext:context];
+                ConversationCoreData *conversationCoreData = (ConversationCoreData *)[weakSelf getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversation.objectId withContext:context];
+                
+                if (!senderCoreData) {
+                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", conversation.sender.Location.latitude, conversation.sender.Location.longitude];
+                    senderCoreData = [weakSelf saveUserToCoreDataWithObjectId:conversation.sender.objectId withUsername:conversation.sender.username withEmail:conversation.sender.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    
+                    [conversation.sender.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        //set image later
+                        if (data) {
+                            senderCoreData.profilePic = data;
+                            
+                            //save updated attribute to managed object context
+                            [context save:nil];
+                        } else {
+                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                        }
+                    }];
+                }
+                
+                if (!receiverCoreData) {
+                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", conversation.receiver.Location.latitude, conversation.receiver.Location.longitude];
+                    senderCoreData = [weakSelf saveUserToCoreDataWithObjectId:conversation.receiver.objectId withUsername:conversation.receiver.username withEmail:conversation.receiver.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    
+                    [conversation.receiver.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        //set image later
+                        if (data) {
+                            receiverCoreData.profilePic = data;
+                            
+                            //save updated attribute to managed object context
+                            [context save:nil];
+                        } else {
+                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                        }
+                    }];
+                }
+                
+                if (!conversationCoreData) {
+                    conversationCoreData = [weakSelf saveConversationToCoreDataWithObjectId:conversation.objectId withSender:senderCoreData withReceiver:receiverCoreData withLastText:conversation.lastText withManagedObjectContext:context];
+                }
+                
+                if(![senderCoreData.objectId isEqualToString:PFUser.currentUser.objectId]) {
+                    [pfUsersArray addObject:conversation.sender];
+                } else {
+                    [pfUsersArray addObject:conversation.receiver];
+                }
+            }
+            
+            completion(conversationsCoreDataArray, pfUsersArray, nil);
+        } else {
+            NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
+            completion(nil, nil, error);
+        }
+    }];
 }
 
 @end

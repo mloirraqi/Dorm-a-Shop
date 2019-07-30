@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G84" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
-    <entity name="PostCoreData" representedClassName="PostCoreData" syncable="YES">
+    <entity name="ConversationCoreData" representedClassName="ConversationCoreData" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="receiver" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
+        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
+    </entity>
+    <entity name="PostCoreData" representedClassName="PostCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="condition" optional="YES" attributeType="String" syncable="YES"/>
@@ -16,7 +23,8 @@
         <attribute name="watchObjectId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
     </entity>
-    <entity name="UserCoreData" representedClassName="UserCoreData" syncable="YES">
+    <entity name="UserCoreData" representedClassName="UserCoreData" syncable="YES" codeGenerationType="class">
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
@@ -26,6 +34,7 @@
     </entity>
     <elements>
         <element name="PostCoreData" positionX="262.109375" positionY="174.48828125" width="128" height="255"/>
-        <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="135"/>
+        <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="150"/>
+        <element name="ConversationCoreData" positionX="117" positionY="162" width="128" height="120"/>
     </elements>
 </model>
