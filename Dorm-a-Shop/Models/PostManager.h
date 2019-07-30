@@ -10,6 +10,7 @@
 #import "Post.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "UserCoreData+CoreDataClass.h"
+#import "ConversationCoreData+CoreDataClass.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -42,6 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (PostCoreData *)savePostToCoreDataWithObjectId:(NSString * _Nullable)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString * _Nullable)watchObjectId withWatchCount:(long long)watchCount withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 - (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
+
+- (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withPfuser:(PFUser *)pfuser withPFconvo:(PFObject *)convo withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
+
+- (void)queryConversationsFromParseWithCompletion:(void (^)(NSMutableArray<ConversationCoreData *> *, NSError *))completion;
 
 @end
 
