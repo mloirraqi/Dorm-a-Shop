@@ -39,7 +39,7 @@
 }
 
 - (void)fetchUsersFromCoreData {
-    self.users = [[PostManager shared] getUsersFromCoreData];
+    self.users = [[PostManager shared] getAllUsersFromCoreData];
     [self filterUsers];
     [self.tableView reloadData];
 }

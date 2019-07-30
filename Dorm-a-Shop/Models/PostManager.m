@@ -540,7 +540,7 @@
     return user;
 }
 
-- (NSMutableArray *)getUsersFromCoreData {
+- (NSMutableArray *)getAllUsersFromCoreData {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
     
