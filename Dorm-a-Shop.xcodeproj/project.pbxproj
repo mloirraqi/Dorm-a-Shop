@@ -32,10 +32,6 @@
 		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
 		DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD922E686DE00B1311F /* EditProfileVC.m */; };
 		DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */; };
-		DEA2B50C22F0BD9C00FC71DB /* UserCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B50422F0BD9C00FC71DB /* UserCoreData+CoreDataClass.m */; };
-		DEA2B50D22F0BD9C00FC71DB /* PostCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B50622F0BD9C00FC71DB /* PostCoreData+CoreDataClass.m */; };
-		DEA2B50E22F0BD9C00FC71DB /* UserCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B50922F0BD9C00FC71DB /* UserCoreData+CoreDataProperties.m */; };
-		DEA2B50F22F0BD9C00FC71DB /* PostCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B50B22F0BD9C00FC71DB /* PostCoreData+CoreDataProperties.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
@@ -129,14 +125,6 @@
 		DE4FCFD822E686DE00B1311F /* EditProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileVC.h; sourceTree = "<group>"; };
 		DE4FCFD922E686DE00B1311F /* EditProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileVC.m; sourceTree = "<group>"; };
 		DE4FD01022EA3D1100B1311F /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
-		DEA2B50422F0BD9C00FC71DB /* UserCoreData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserCoreData+CoreDataClass.m"; sourceTree = "<group>"; };
-		DEA2B50522F0BD9C00FC71DB /* PostCoreData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostCoreData+CoreDataClass.h"; sourceTree = "<group>"; };
-		DEA2B50622F0BD9C00FC71DB /* PostCoreData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PostCoreData+CoreDataClass.m"; sourceTree = "<group>"; };
-		DEA2B50722F0BD9C00FC71DB /* UserCoreData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UserCoreData+CoreDataClass.h"; sourceTree = "<group>"; };
-		DEA2B50822F0BD9C00FC71DB /* PostCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
-		DEA2B50922F0BD9C00FC71DB /* UserCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserCoreData+CoreDataProperties.m"; sourceTree = "<group>"; };
-		DEA2B50A22F0BD9C00FC71DB /* UserCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UserCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
-		DEA2B50B22F0BD9C00FC71DB /* PostCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PostCoreData+CoreDataProperties.m"; sourceTree = "<group>"; };
 		DED744F622DFE0A400394748 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		DED744F722DFE0A400394748 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		DEFE7C8722E640DF006E3096 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -295,14 +283,6 @@
 				47A8A9F622E291F1005D9520 /* PostManager.m */,
 				470FB6F722EF70240088A3EC /* LocationManager.h */,
 				470FB6F822EF70240088A3EC /* LocationManager.m */,
-				DEA2B50522F0BD9C00FC71DB /* PostCoreData+CoreDataClass.h */,
-				DEA2B50622F0BD9C00FC71DB /* PostCoreData+CoreDataClass.m */,
-				DEA2B50822F0BD9C00FC71DB /* PostCoreData+CoreDataProperties.h */,
-				DEA2B50B22F0BD9C00FC71DB /* PostCoreData+CoreDataProperties.m */,
-				DEA2B50722F0BD9C00FC71DB /* UserCoreData+CoreDataClass.h */,
-				DEA2B50422F0BD9C00FC71DB /* UserCoreData+CoreDataClass.m */,
-				DEA2B50A22F0BD9C00FC71DB /* UserCoreData+CoreDataProperties.h */,
-				DEA2B50922F0BD9C00FC71DB /* UserCoreData+CoreDataProperties.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -666,7 +646,6 @@
 				470FB71722EF713F0088A3EC /* User.m in Sources */,
 				EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
-				DEA2B50C22F0BD9C00FC71DB /* UserCoreData+CoreDataClass.m in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
 				EAEB723D22E9369900426226 /* Card.m in Sources */,
@@ -681,13 +660,10 @@
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
-				DEA2B50F22F0BD9C00FC71DB /* PostCoreData+CoreDataProperties.m in Sources */,
 				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
-				DEA2B50D22F0BD9C00FC71DB /* PostCoreData+CoreDataClass.m in Sources */,
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
-				DEA2B50E22F0BD9C00FC71DB /* UserCoreData+CoreDataProperties.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
