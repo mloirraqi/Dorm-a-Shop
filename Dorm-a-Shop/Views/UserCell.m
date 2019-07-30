@@ -24,6 +24,8 @@
     [self.profilePic setImage:[UIImage imageWithData:self.user.profilePic]];
 
     self.username.text = self.user.username;
+    NSLog(@"%@", self.convo[@"lastText"]);
+    self.recentText.text = self.convo[@"lastText"];
 }
 
 @end
