@@ -162,7 +162,7 @@
         editProfileViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
-        msgViewController.receiver = self.user;
+        msgViewController.receiver = sender;
     }
 }
 
@@ -176,6 +176,20 @@
 
 - (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
     [self fetchProfileFromCoreData];
+}
+
+- (IBAction)sendMessage:(id)sender {
+    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
+    __weak ProfileViewController *weakSelf = self;
+    [userQuery getObjectInBackgroundWithId:self.user.objectId block:^(PFObject * _Nullable user, NSError * _Nullable error) {
+        if (user) {
+            [weakSelf performSegueWithIdentifier:@"sendMsg" sender:(PFUser *) user];
+        } else {
+            NSLog(@"error getting user by objectId! %@", error.localizedDescription);
+        }
+    }];
+    
+    
 }
 
 @end
