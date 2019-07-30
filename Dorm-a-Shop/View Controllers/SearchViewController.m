@@ -56,20 +56,6 @@
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
-    
-//    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
-//    [userQuery orderByAscending:@"username"];
-//
-//    __weak SearchViewController *weakSelf = self;
-//    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
-//        if (users) {
-//            weakSelf.users = [NSMutableArray arrayWithArray:users];
-//            [weakSelf filterUsers];
-//            [weakSelf.tableView reloadData];
-//        } else {
-//            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-//        }
-//    }];
 }
 
 - (void)filterUsers {
