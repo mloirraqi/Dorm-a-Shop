@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Post.h"
+#import "PostCoreData+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CardItemCollectionViewCell : UICollectionViewCell
-@property (nonatomic, strong) Post *post;
+@property (nonatomic, strong) PostCoreData *post;
 @end
 
 NS_ASSUME_NONNULL_END

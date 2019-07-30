@@ -45,6 +45,10 @@
 		EA6732EE22DF95F5004E362F /* QAView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732EB22DF95F5004E362F /* QAView.m */; };
 		EA6732F422DF96DE004E362F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F322DF96DE004E362F /* Utils.m */; };
 		EA6732F722DFAB25004E362F /* SignInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F622DFAB25004E362F /* SignInVC.m */; };
+		EA73B16722EFAFA5008C44EC /* UserCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EA73B16522EFAFA5008C44EC /* UserCoreData+CoreDataProperties.m */; };
+		EA73B16822EFAFA5008C44EC /* UserCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = EA73B16622EFAFA5008C44EC /* UserCoreData+CoreDataClass.m */; };
+		EA73B16D22EFAFCE008C44EC /* PostCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = EA73B16922EFAFCE008C44EC /* PostCoreData+CoreDataClass.m */; };
+		EA73B16E22EFAFCE008C44EC /* PostCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EA73B16C22EFAFCE008C44EC /* PostCoreData+CoreDataProperties.m */; };
 		EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723322E9315200426226 /* DraggableViewBackground.m */; };
 		EAEB723922E9316200426226 /* DraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723722E9316200426226 /* DraggableView.m */; };
 		EAEB723A22E9316200426226 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723822E9316200426226 /* OverlayView.m */; };
@@ -154,6 +158,14 @@
 		EA6732F322DF96DE004E362F /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		EA6732F522DFAB25004E362F /* SignInVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInVC.h; sourceTree = "<group>"; };
 		EA6732F622DFAB25004E362F /* SignInVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInVC.m; sourceTree = "<group>"; };
+		EA73B16322EFAFA5008C44EC /* UserCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UserCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
+		EA73B16422EFAFA5008C44EC /* UserCoreData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UserCoreData+CoreDataClass.h"; sourceTree = "<group>"; };
+		EA73B16522EFAFA5008C44EC /* UserCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserCoreData+CoreDataProperties.m"; sourceTree = "<group>"; };
+		EA73B16622EFAFA5008C44EC /* UserCoreData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserCoreData+CoreDataClass.m"; sourceTree = "<group>"; };
+		EA73B16922EFAFCE008C44EC /* PostCoreData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PostCoreData+CoreDataClass.m"; sourceTree = "<group>"; };
+		EA73B16A22EFAFCE008C44EC /* PostCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
+		EA73B16B22EFAFCE008C44EC /* PostCoreData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostCoreData+CoreDataClass.h"; sourceTree = "<group>"; };
+		EA73B16C22EFAFCE008C44EC /* PostCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PostCoreData+CoreDataProperties.m"; sourceTree = "<group>"; };
 		EAEB723222E9315200426226 /* DraggableViewBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableViewBackground.h; sourceTree = "<group>"; };
 		EAEB723322E9315200426226 /* DraggableViewBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableViewBackground.m; sourceTree = "<group>"; };
 		EAEB723522E9316200426226 /* DraggableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableView.h; sourceTree = "<group>"; };
@@ -298,6 +310,14 @@
 				DEA2B4FB22EFA5BF00FC71DB /* UserCoreData+CoreDataClass.m */,
 				DEA2B4FD22EFA5BF00FC71DB /* UserCoreData+CoreDataProperties.h */,
 				DEA2B4FF22EFA5BF00FC71DB /* UserCoreData+CoreDataProperties.m */,
+				EA73B16422EFAFA5008C44EC /* UserCoreData+CoreDataClass.h */,
+				EA73B16622EFAFA5008C44EC /* UserCoreData+CoreDataClass.m */,
+				EA73B16322EFAFA5008C44EC /* UserCoreData+CoreDataProperties.h */,
+				EA73B16522EFAFA5008C44EC /* UserCoreData+CoreDataProperties.m */,
+				EA73B16B22EFAFCE008C44EC /* PostCoreData+CoreDataClass.h */,
+				EA73B16922EFAFCE008C44EC /* PostCoreData+CoreDataClass.m */,
+				EA73B16A22EFAFCE008C44EC /* PostCoreData+CoreDataProperties.h */,
+				EA73B16C22EFAFCE008C44EC /* PostCoreData+CoreDataProperties.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -677,11 +697,14 @@
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
 				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
+				EA73B16E22EFAFCE008C44EC /* PostCoreData+CoreDataProperties.m in Sources */,
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				DEA2B50022EFA5BF00FC71DB /* PostCoreData+CoreDataClass.m in Sources */,
+				EA73B16822EFAFA5008C44EC /* UserCoreData+CoreDataClass.m in Sources */,
+				EA73B16722EFAFA5008C44EC /* UserCoreData+CoreDataProperties.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
 				DEA2B50222EFA5BF00FC71DB /* PostCoreData+CoreDataProperties.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
@@ -691,6 +714,7 @@
 				EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
+				EA73B16D22EFAFCE008C44EC /* PostCoreData+CoreDataClass.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				DEA2B50122EFA5BF00FC71DB /* UserCoreData+CoreDataClass.m in Sources */,
