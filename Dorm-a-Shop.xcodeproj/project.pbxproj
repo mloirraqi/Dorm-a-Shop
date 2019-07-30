@@ -10,10 +10,7 @@
 		470FB6F922EF70240088A3EC /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB6F822EF70240088A3EC /* LocationManager.m */; };
 		470FB71722EF713F0088A3EC /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71322EF713F0088A3EC /* User.m */; };
 		470FB71A22EF71780088A3EC /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71922EF71780088A3EC /* Watches.m */; };
-		470FB72322F0B6230088A3EC /* UserCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72022F0B6230088A3EC /* UserCoreData+CoreDataProperties.m */; };
-		470FB72422F0B6230088A3EC /* PostCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71B22F0B6220088A3EC /* PostCoreData+CoreDataProperties.m */; };
-		470FB72522F0B6230088A3EC /* UserCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71F22F0B6230088A3EC /* UserCoreData+CoreDataClass.m */; };
-		470FB72622F0B6230088A3EC /* PostCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72222F0B6230088A3EC /* PostCoreData+CoreDataClass.m */; };
+		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
@@ -83,14 +80,8 @@
 		470FB71422EF713F0088A3EC /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		470FB71822EF71780088A3EC /* Watches.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Watches.h; sourceTree = "<group>"; };
 		470FB71922EF71780088A3EC /* Watches.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Watches.m; sourceTree = "<group>"; };
-		470FB71B22F0B6220088A3EC /* PostCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PostCoreData+CoreDataProperties.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataProperties.m"; sourceTree = "<absolute>"; };
-		470FB71C22F0B6220088A3EC /* UserCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UserCoreData+CoreDataProperties.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		470FB71D22F0B6220088A3EC /* UserCoreData+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UserCoreData+CoreDataClass.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataClass.h"; sourceTree = "<absolute>"; };
-		470FB71E22F0B6230088A3EC /* PostCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PostCoreData+CoreDataProperties.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		470FB71F22F0B6230088A3EC /* UserCoreData+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UserCoreData+CoreDataClass.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataClass.m"; sourceTree = "<absolute>"; };
-		470FB72022F0B6230088A3EC /* UserCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UserCoreData+CoreDataProperties.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/UserCoreData+CoreDataProperties.m"; sourceTree = "<absolute>"; };
-		470FB72122F0B6230088A3EC /* PostCoreData+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PostCoreData+CoreDataClass.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataClass.h"; sourceTree = "<absolute>"; };
-		470FB72222F0B6230088A3EC /* PostCoreData+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PostCoreData+CoreDataClass.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/PostCoreData+CoreDataClass.m"; sourceTree = "<absolute>"; };
+		470FB72A22F0C09B0088A3EC /* Conversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Conversation.h; sourceTree = "<group>"; };
+		470FB72B22F0C09B0088A3EC /* Conversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -286,18 +277,12 @@
 				470FB71322EF713F0088A3EC /* User.m */,
 				470FB71822EF71780088A3EC /* Watches.h */,
 				470FB71922EF71780088A3EC /* Watches.m */,
+				470FB72A22F0C09B0088A3EC /* Conversation.h */,
+				470FB72B22F0C09B0088A3EC /* Conversation.m */,
 				47A8A9F522E291F1005D9520 /* PostManager.h */,
 				47A8A9F622E291F1005D9520 /* PostManager.m */,
 				470FB6F722EF70240088A3EC /* LocationManager.h */,
 				470FB6F822EF70240088A3EC /* LocationManager.m */,
-				470FB71E22F0B6230088A3EC /* PostCoreData+CoreDataProperties.h */,
-				470FB72122F0B6230088A3EC /* PostCoreData+CoreDataClass.h */,
-				470FB72222F0B6230088A3EC /* PostCoreData+CoreDataClass.m */,
-				470FB71B22F0B6220088A3EC /* PostCoreData+CoreDataProperties.m */,
-				470FB71C22F0B6220088A3EC /* UserCoreData+CoreDataProperties.h */,
-				470FB71D22F0B6220088A3EC /* UserCoreData+CoreDataClass.h */,
-				470FB71F22F0B6230088A3EC /* UserCoreData+CoreDataClass.m */,
-				470FB72022F0B6230088A3EC /* UserCoreData+CoreDataProperties.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -659,7 +644,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				470FB71722EF713F0088A3EC /* User.m in Sources */,
-				470FB72622F0B6230088A3EC /* PostCoreData+CoreDataClass.m in Sources */,
 				EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
@@ -680,11 +664,10 @@
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
-				470FB72522F0B6230088A3EC /* UserCoreData+CoreDataClass.m in Sources */,
-				470FB72422F0B6230088A3EC /* PostCoreData+CoreDataProperties.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
+				470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */,
 				47A8A9F722E291F1005D9520 /* PostManager.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
 				EAEB723A22E9316200426226 /* OverlayView.m in Sources */,
@@ -694,7 +677,6 @@
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
-				470FB72322F0B6230088A3EC /* UserCoreData+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
