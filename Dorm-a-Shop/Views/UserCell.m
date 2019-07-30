@@ -22,15 +22,8 @@
     self.profilePic.layer.cornerRadius = 25;
     self.profilePic.layer.masksToBounds = YES;
     [self.profilePic setImage:[UIImage imageWithData:self.user.profilePic]];
-//    PFFileObject *imageFile = self.user[@"ProfilePic"];
-//    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-//        if (!error) {
-//            UIImage *image = [UIImage imageWithData:imageData];
-//            [self.profilePic setImage:image];
-//        }
-//    }];
+
     self.username.text = self.user.username;
-//    self.recentText.text = self.convo[@"lastText"];
 }
 
 @end
