@@ -64,7 +64,7 @@
                 if (!userCoreData) {
                     User *user = (User *)post.author;
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
-                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:context];
                     
                     [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -166,7 +166,7 @@
                 if (!userCoreData) {
                     User *user = (User *)watchedPost.author;
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
-                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:context];
                     
                     [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -283,7 +283,7 @@
                 UserCoreData *userCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:user.objectId withContext:context];
                 NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                 if (!userCoreData) {
-                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                    userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:context];
                 } else {
                     //update any properties a user could have changed, except image, which is handled below
                     userCoreData.location = location;
@@ -537,7 +537,7 @@
     return newPost;
 }
 
-- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     
     UserCoreData *user;
     if (userObjectId) {
@@ -553,6 +553,7 @@
         user.email = email;
         user.location = location;
         user.username = username;
+        user.address = address;
         
         //save to core data persisted store
         NSError *error = nil;
@@ -629,7 +630,7 @@
                     
                     if (!senderCoreData) {
                         NSString *location = [NSString stringWithFormat:@"(%f, %f)", conversation.sender.Location.latitude, conversation.sender.Location.longitude];
-                        senderCoreData = [weakSelf saveUserToCoreDataWithObjectId:conversation.sender.objectId withUsername:conversation.sender.username withEmail:conversation.sender.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+                        senderCoreData = [weakSelf saveUserToCoreDataWithObjectId:conversation.sender.objectId withUsername:conversation.sender.username withEmail:conversation.sender.email withLocation:location withAddress:conversation.sender.address withProfilePic:nil withManagedObjectContext:context];
                         
                         [conversation.sender.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                             if (data) {

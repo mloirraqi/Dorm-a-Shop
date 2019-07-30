@@ -12,6 +12,9 @@
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import "Utils.h"
 #import "SignInVC.h"
+#import "UserCoreData+CoreDataClass.h"
+#import "PostManager.h"
+#import "User.h"
 
 @interface EditProfileVC ()
 
@@ -232,13 +235,18 @@
     }];
 }
 
--(void)updateLocationWith:(NSString *)address
-{
-    PFUser *currentUser = [PFUser currentUser];
-    currentUser[@"Location"] = selectedLocationPoint;
-    if(address != nil)
-    {
-        currentUser[@"address"] = address;
+-(void)updateLocationWith:(NSString *)address {
+    User *currentUser = (User *)[PFUser currentUser];
+    currentUser.Location = selectedLocationPoint;
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+    
+    UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
+    if(address != nil) {
+        currentUser.address = address;
+        userCoreData.address = address;
+        [context save:nil];
     }
     
     [MBProgressHUD showHUDAddedTo:self.view animated:true];
