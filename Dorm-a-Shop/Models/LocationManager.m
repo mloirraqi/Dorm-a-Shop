@@ -9,8 +9,8 @@
 
 @implementation LocationManager
 
-- (id) init
-{
+- (id) init {
+    
     self = [super init];
     
     if (self != nil)
@@ -21,8 +21,8 @@
 }
 
 
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
+    
     static LocationManager *sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -32,8 +32,8 @@
     return sharedInstance;
 }
 
-- (void) locationManager
-{
+- (void) locationManager {
+    
     if ([CLLocationManager locationServicesEnabled])
     {
         locationManager = [[CLLocationManager alloc] init];
@@ -54,8 +54,8 @@
     }
 }
 
-- (void)requestWhenInUseAuthorization
-{
+- (void)requestWhenInUseAuthorization {
+    
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     
     // If the status is denied or only granted for when in use, display an alert
@@ -80,16 +80,16 @@
 
 #pragma mark - CLLocationManagerDelegate
 
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    
     NSLog(@"didFailWithError: %@", error);
     UIAlertView *errorAlert = [[UIAlertView alloc]
                                initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     //    [errorAlert show];
 }
 
--(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    
     switch (status) {
         case kCLAuthorizationStatusNotDetermined:
         case kCLAuthorizationStatusRestricted:
@@ -114,8 +114,6 @@
     _currentLocation = newLocation;
     _longitude = [NSString stringWithFormat:@"%f",coordinate.longitude];
     _latitude = [NSString stringWithFormat:@"%f",coordinate.latitude];
-    //    globalObjects.longitude = [NSString stringWithFormat:@"%f",coordinate.longitude];
-    //    globalObjects.latitude = [NSString stringWithFormat:@"%f",coordinate.latitude];
 }
 
 

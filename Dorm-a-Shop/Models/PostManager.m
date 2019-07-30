@@ -281,13 +281,12 @@
                 UserCoreData *userCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:user.objectId withContext:context];
                 NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                 if (!userCoreData) {
-                    //we don't know if it's watched from this query so we default to NO. this gets handled later. same for watchCount, defaults to 0
                     userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
-                    
-                    
                 } else {
                     //update any properties a user could have changed, except image, which is handled below
                     userCoreData.location = location;
+                    userCoreData.username = user.username;
+                    userCoreData.email = userCoreData.email;
                 }
                 //in either case, either create the profile image or make sure it's up to date
                 [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
@@ -303,8 +302,10 @@
                 }];
                 [usersArray addObject:userCoreData];
             }
-            
-            completion(usersArray, nil);
+            NSMutableArray *usersResult = [NSMutableArray arrayWithArray:usersArray];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
+            [usersResult sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            completion(usersResult, nil);
         } else {
             NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
             completion(nil, error);
@@ -328,7 +329,7 @@
         NSLog(@"Error fetching PostCoreData objects for current user: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
-    
+
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -537,6 +538,28 @@
     }
     
     return user;
+}
+
+- (NSMutableArray *)getUsersFromCoreData {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:context];
+    [request setEntity:entityDescription];
+    
+    NSError *error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
+    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    return mutableResults;
 }
 
 @end

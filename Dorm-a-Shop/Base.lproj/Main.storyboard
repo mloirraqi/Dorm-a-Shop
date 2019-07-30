@@ -507,7 +507,7 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Message"/>
                                                 <connections>
-                                                    <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="I1W-46-wBB"/>
+                                                    <action selector="sendMessage:" destination="ji6-xS-49q" eventType="touchUpInside" id="NkI-e1-FxV"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -564,6 +564,7 @@
                         <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
                         <outlet property="soldCount" destination="hnD-aV-NDt" id="wou-je-0Gh"/>
                         <outlet property="username" destination="J0d-zI-pQn" id="cJW-5K-Nbz"/>
+                        <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="I6l-3G-Wbh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aCQ-Zc-Blj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1053,7 +1054,7 @@
                     <connections>
                         <segue destination="huz-Vy-fBK" kind="relationship" relationship="viewControllers" id="jZd-Ke-rOh"/>
                         <segue destination="dis-H7-DlH" kind="relationship" relationship="viewControllers" id="S4g-Ze-d0C"/>
-                        <segue destination="dDI-Qk-IoB" kind="relationship" relationship="viewControllers" id="I1A-NR-1di"/>
+                        <segue destination="dDI-Qk-IoB" kind="relationship" relationship="viewControllers" id="e4f-q2-7kZ"/>
                         <segue destination="DJx-3h-Trp" kind="relationship" relationship="viewControllers" id="vDR-6b-RlU"/>
                         <segue destination="oXO-JU-K28" kind="relationship" relationship="viewControllers" id="wbs-vl-Xvx"/>
                     </connections>
@@ -1768,7 +1769,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="MkK-t9-lSX"/>
-        <segue reference="Bvx-1i-tFM"/>
+        <segue reference="I6l-3G-Wbh"/>
         <segue reference="ni5-B6-yy2"/>
         <segue reference="inK-qS-1By"/>
         <segue reference="ch5-tg-CXn"/>

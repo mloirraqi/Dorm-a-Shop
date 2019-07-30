@@ -74,7 +74,7 @@
             <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
             <size key="customSize" width="242" height="226"/>
             <connections>
-                <outlet property="postPFImageView" destination="vw3-wp-ol6" id="Tmh-68-QXz"/>
+                <outlet property="postImageView" destination="vw3-wp-ol6" id="65L-nP-iO6"/>
                 <outlet property="priceLabel" destination="6WV-Ya-UJz" id="Hql-UQ-iq2"/>
                 <outlet property="titleLabel" destination="1Kk-WB-9vl" id="Vce-CB-uPS"/>
             </connections>

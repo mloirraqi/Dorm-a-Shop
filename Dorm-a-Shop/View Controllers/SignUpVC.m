@@ -113,6 +113,7 @@
     }
 }
 
+
 - (void)setLocationName {
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];

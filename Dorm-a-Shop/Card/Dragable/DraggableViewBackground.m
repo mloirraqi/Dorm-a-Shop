@@ -97,6 +97,9 @@ static const int MAX_BUFFER_SIZE = 2;
         self.cardsLoadedIndex++;
         [self insertSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
     }
+    
+    Card *swipedCard = self.cardArray[self.currentIndex];
+    [self userRejected:swipedCard];
     [self updateUsernameLabel];
 }
 
@@ -107,7 +110,58 @@ static const int MAX_BUFFER_SIZE = 2;
         self.cardsLoadedIndex++;
         [self insertSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[self.loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
     }
+    
+    Card *swipedCard = self.cardArray[self.currentIndex];
+    [self userAccepted:swipedCard];
     [self updateUsernameLabel];
+}
+
+-(void)userAccepted:(Card *)card {
+    NSLog(@"%@",card.author.username);
+    [[PFUser currentUser] addUniqueObjectsFromArray:@[card.author.objectId] forKey:@"accepted"];
+    [[PFUser currentUser] saveEventually];
+    [self checkMatchwithUser:card.author];
+    
+}
+
+-(void)checkMatchwithUser:(PFUser *)acceptedUser {
+    PFQuery *userQuery = [PFUser query];
+    [userQuery whereKey:@"objectId" equalTo:acceptedUser.objectId];
+    
+    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFUser *> * _Nullable users, NSError * _Nullable error) {
+        if (users) {
+            if (users.count != 0)
+            {
+                PFUser *currentUser = [PFUser currentUser];
+                PFUser *user = [users firstObject];
+                NSArray *acceptedUserList = user[@"accepted"];
+                if ([acceptedUserList containsObject:currentUser.objectId]) {
+                    // users are matched
+                    [self showAlertView:[NSString stringWithFormat:@"Congratulations! You matched with %@",user.username]];
+                }
+                else
+                {
+                    // users are not match yet
+                    NSLog(@"😫😫😫 users are not matched yet");
+                }
+            }
+            else
+            {
+                NSLog(@"😫😫😫 No such User Found");
+            }
+        }
+        else
+        {
+            NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
+        }
+    }];
+}
+
+-(void)userRejected:(Card *)card {
+    NSLog(@"%@",card.author.username);
+    [[PFUser currentUser] addUniqueObjectsFromArray:@[card.author.objectId] forKey:@"rejected"];
+    [[PFUser currentUser] saveEventually];
+    
 }
 
 -(void)updateUsernameLabel {
@@ -149,6 +203,11 @@ static const int MAX_BUFFER_SIZE = 2;
             
     [self loadCards];
     [self setupView];
+}
+
+-(void)showAlertView:(NSString*)message{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
 }
 
 @end

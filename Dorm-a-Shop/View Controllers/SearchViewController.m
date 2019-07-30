@@ -9,6 +9,7 @@
 #import "SearchViewController.h"
 #import "UserCell.h"
 #import "ProfileViewController.h"
+#import "PostManager.h"
 @import Parse;
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
@@ -17,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) NSMutableArray *users;
 @property (strong, nonatomic) NSMutableArray *filteredUsers;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @end
 
 @implementation SearchViewController
@@ -27,30 +30,53 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
-    [self fetchUsers];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchUsers) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
+    [self fetchUsersFromCoreData];
+}
+
+- (void)fetchUsersFromCoreData {
+    self.users = [[PostManager shared] getUsersFromCoreData];
+    [self filterUsers];
+    [self.tableView reloadData];
 }
 
 - (void)fetchUsers {
-    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
-    [userQuery orderByAscending:@"username"];
-
     __weak SearchViewController *weakSelf = self;
-    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
+    [[PostManager shared] queryAllUsersWithinKilometers:5.0 withCompletion:^(NSMutableArray<UserCoreData *> * users, NSError * error) {
         if (users) {
             weakSelf.users = [NSMutableArray arrayWithArray:users];
             [weakSelf filterUsers];
             [weakSelf.tableView reloadData];
+            [self.refreshControl endRefreshing];
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
+    
+//    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
+//    [userQuery orderByAscending:@"username"];
+//
+//    __weak SearchViewController *weakSelf = self;
+//    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
+//        if (users) {
+//            weakSelf.users = [NSMutableArray arrayWithArray:users];
+//            [weakSelf filterUsers];
+//            [weakSelf.tableView reloadData];
+//        } else {
+//            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+//        }
+//    }];
 }
 
 - (void)filterUsers {
     self.filteredUsers = self.users;
     if (self.searchBar.text.length != 0) {
-        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PFObject *user, NSDictionary *bindings) {
-            return ([user[@"username"] localizedCaseInsensitiveContainsString:self.searchBar.text]);
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(UserCoreData *user, NSDictionary *bindings) {
+            return ([user.username localizedCaseInsensitiveContainsString:self.searchBar.text]);
         }];
         self.filteredUsers = [NSMutableArray arrayWithArray:[self.filteredUsers filteredArrayUsingPredicate:predicate]];
     }
@@ -59,7 +85,7 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
-    PFObject *user = self.filteredUsers[indexPath.row];
+    UserCoreData *user = self.filteredUsers[indexPath.row];
     cell.user = user;
     [cell setUser];
     return cell;
