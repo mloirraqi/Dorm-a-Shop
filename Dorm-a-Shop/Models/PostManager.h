@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PostManager : NSObject
 
+@property (strong, nonatomic) NSMutableArray *allConversations;
+
 + (id)shared;
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
