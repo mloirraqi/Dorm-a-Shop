@@ -146,6 +146,8 @@
     PFQuery *watchQuery = [Watches query];
     [watchQuery orderByDescending:@"createdAt"];
     [watchQuery includeKey:@"post"];
+    [watchQuery includeKey:@"post.author"];
+    [watchQuery includeKey:@"post.author.Location"];
 
     //if user is nil, then we query all watched posts
     if (user) {
@@ -155,7 +157,6 @@
     __weak PostManager *weakSelf = self;
     [watchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable userWatches, NSError * _Nullable error) {
         if (error) {
-            NSLog(@"😫😫😫 Error getting watch query: %@", error.localizedDescription);
             completion(nil, error);
         } else {
             NSMutableArray *watchedPostsArray = [[NSMutableArray alloc] init];
@@ -163,12 +164,14 @@
             NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
             
             for (Watches *watch in userWatches) {
+                NSLog(@"%@", watch[@"post"][@"author"][@"Location"]);
                 Post *watchedPost = (Post *)watch.post;
                 PostCoreData *postCoreData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:watchedPost.objectId withContext:context];
                 UserCoreData *userCoreData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:watchedPost.author.objectId withContext:context];
                 
                 if (!userCoreData) {
                     User *user = (User *)watchedPost.author;
+                    NSLog(@"user: %@, watchedPost[@'author'][@'Location']: %@", user, watchedPost[@"author"][@"Location"]);
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                     userCoreData = [weakSelf saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:context];
                     
@@ -252,6 +255,7 @@
             if (postCoreData) {
                 postCoreData.watched = YES;
                 postCoreData.watchCount = count;
+                [context save:nil];
             }
             completion(count, nil);
         } else {
@@ -496,15 +500,15 @@
         newPost.watchObjectId = watch.objectId;
         newPost.objectId = post.objectId;
 
-        //save to core data persisted store
+        //save core data local post and watch properties
+        newPost.post = post;
+        newPost.watch = watch;
+        
+        //save persistent attributes to core data persisted store
         NSError *error = nil;
         if ([context save:&error] == NO) {
          NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
         }
-        
-        //save core data local post and watch properties
-        newPost.post = post;
-        newPost.watch = watch;
     }
     
     return newPost;

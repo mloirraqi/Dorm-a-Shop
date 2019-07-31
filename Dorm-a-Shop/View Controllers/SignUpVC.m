@@ -108,9 +108,8 @@
             if (!error) {
                 newUser.objectId = user.objectId;
                 [context save:nil];
-                
+                [self setupCoreData];
                 [weakSelf showAlertView:@"Welcome!"];
-                [weakSelf performSegueWithIdentifier:@"homeScreen" sender:nil];
             } else {
                 [hud hideAnimated:YES];
                 [weakSelf showAlertView:@"Someything went wrong, please try again"];
@@ -194,7 +193,7 @@
     NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
     
     UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
-    if(address != nil) {
+    if (address != nil) {
         currentUser.address = address;
         userCoreData.address = address;
         [context save:nil];
@@ -321,6 +320,28 @@
             }            
         }
     }
+}
+
+- (void)setupCoreData {
+    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        } else {
+            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                } else {
+                    [self performSegueWithIdentifier:@"homeScreen" sender:nil];
+                }
+            }];
+        }
+    }];
+    
+    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+        }
+    }];
 }
 
 @end

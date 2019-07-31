@@ -35,8 +35,30 @@
         if (error != nil) {
             [self showAlertView:@"Unable to Sign in"];
         } else {
-            UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
-            [self presentViewController:tabBarController animated:YES completion:nil];
+            [self setupCoreData];
+        }
+    }];
+}
+
+- (void)setupCoreData {
+    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        } else {
+            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                } else {
+                    UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
+                    [self presentViewController:tabBarController animated:YES completion:nil];
+                }
+            }];
+        }
+    }];
+    
+    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         }
     }];
 }

@@ -36,38 +36,37 @@
     [Parse initializeWithConfiguration:config];
     
     //delete all of core data. this commented out code is greatly needed for now!!
-//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-//    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-//    NSError *deleteError = nil;
-//    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
-//
-//    NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
-//    NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
-//    NSError *deleteError1 = nil;
-//    [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+        NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+        NSError *deleteError = nil;
+        [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
     
-    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
-        } else {
-            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"error getting watch posts/updating core data watch status");
-                } else {
-                    if (PFUser.currentUser) {
+        NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+        NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
+        NSError *deleteError1 = nil;
+        [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
+    if (PFUser.currentUser) {
+        [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+            } else {
+                [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                    if (error) {
+                        NSLog(@"error getting watch posts/updating core data watch status");
+                    } else {
                         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
                     }
-                }
-            }];
-        }
-    }];
-    
-    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
-        }
-    }];
+                }];
+            }
+        }];
+        
+        [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+            }
+        }];
+    }
     
     return YES;
 }
@@ -82,6 +81,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
 }
 
 
