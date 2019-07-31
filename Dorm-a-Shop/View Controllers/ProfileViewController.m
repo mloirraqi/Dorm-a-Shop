@@ -91,8 +91,8 @@
     self.profilePic.layer.masksToBounds = YES;
     
     NSData *imageData = self.user.profilePic;
-    UIImage *image = [UIImage imageWithData:imageData];
-    if (image) {
+    if (imageData) {
+        UIImage *image = [UIImage imageWithData:imageData];
         [self.profilePic setImage:image];
     }
 

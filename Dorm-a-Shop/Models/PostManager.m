@@ -100,13 +100,13 @@
                     postCoreData.watchCount = 0;
                     postCoreData.watchObjectId = nil;
                     
-                    //update any other properties except for watch and watchCount and watchObjId which are handled in a different function
-                    postCoreData.sold = post.sold;
-                    [context save:nil];
-                    
                     //local properties
                     postCoreData.post = post;
                     postCoreData.watch = nil;
+                    
+                    //update any other properties except for watch and watchCount and watchObjId which are handled in a different function
+                    postCoreData.sold = post.sold;
+                    [context save:nil];
                 }
                 
                 [allPostsArray addObject:postCoreData];
@@ -199,10 +199,12 @@
                         [context save:nil];
                         
                     }];
+                } else {
+                    postCoreData.watch = watch;
+                    postCoreData.watchObjectId = watch.objectId;
                 }
-                postCoreData.watch = watch;
+                
                 postCoreData.watchCount ++;
-                postCoreData.watchObjectId = watch.objectId;
                 
                 if ([PFUser.currentUser.objectId isEqualToString:watch.user.objectId]) {
                     postCoreData.watched = YES;
