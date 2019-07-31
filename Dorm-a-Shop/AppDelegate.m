@@ -37,7 +37,7 @@
     [Parse initializeWithConfiguration:config];
     
     //delete all of core data. this commented out code is greatly needed for now!!
-        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
         NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
         NSError *deleteError = nil;
         [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
@@ -62,6 +62,12 @@
     [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+        }
+    }];
+    
+    [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
         }
     }];
     

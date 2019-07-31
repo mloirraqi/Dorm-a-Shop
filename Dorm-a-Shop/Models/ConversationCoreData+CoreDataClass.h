@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "Conversation.h"
 @import Parse;
 
 @class UserCoreData;
@@ -16,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ConversationCoreData : NSManagedObject
 
-@property (nonatomic, strong) PFUser *pfuser;
-@property (nonatomic, strong) PFObject *convo;
+@property (nonatomic, strong) User *pfuser;
+@property (nonatomic, strong) Conversation *convo;
 
 @end
 

@@ -576,8 +576,8 @@
         conversation.objectId = conversationObjectId;
         conversation.sender = sender;
         conversation.lastText = lastText;
-        conversation.pfuser = pfuser;
-        conversation.convo = convo;
+        conversation.pfuser = (User *) pfuser;
+        conversation.convo = (Conversation *) convo;
         
         NSError *error = nil;
         if ([context save:&error] == NO) {
@@ -609,7 +609,7 @@
             NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
             
             for (PFObject *pfConversation in conversations) {
-                Conversation *conversation = (Conversation *)pfConversation;
+                Conversation *conversation = (Conversation *) pfConversation;
                 ConversationCoreData *conversationCoreData = (ConversationCoreData *)[weakSelf getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversation.objectId withContext:context];
                 
                 if (conversationCoreData) {
@@ -617,7 +617,7 @@
                     [context save:nil];
                 } else {
                     UserCoreData *senderCoreData;
-                    PFUser *otherUser;
+                    User *otherUser;
                     if(![conversation.sender.objectId isEqualToString:PFUser.currentUser.objectId])
                     {
                         otherUser = conversation.sender;
@@ -628,10 +628,10 @@
                     }
                     
                     if (!senderCoreData) {
-                        NSString *location = [NSString stringWithFormat:@"(%f, %f)", conversation.sender.Location.latitude, conversation.sender.Location.longitude];
-                        senderCoreData = [weakSelf saveUserToCoreDataWithObjectId:conversation.sender.objectId withUsername:conversation.sender.username withEmail:conversation.sender.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
-                        
-                        [conversation.sender.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        NSString *location = [NSString stringWithFormat:@"(%f, %f)", otherUser.Location.latitude, otherUser.Location.longitude];
+                        senderCoreData = [weakSelf saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withEmail:otherUser.email withLocation:location withProfilePic:nil withManagedObjectContext:context];
+
+                        [otherUser.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                             if (data) {
                                 senderCoreData.profilePic = data;
                                 [context save:nil];
@@ -642,7 +642,11 @@
                     }
                     
                     conversationCoreData = [weakSelf saveConversationToCoreDataWithObjectId:conversation.objectId withSender:senderCoreData withLastText:conversation.lastText withPfuser:otherUser withPFconvo:conversation withManagedObjectContext:context];
+                    conversationCoreData.pfuser = otherUser;
+                    conversationCoreData.convo = conversation;
+                    [context save:nil];
                 }
+                [conversationsCoreDataArray addObject:conversationCoreData];
             }
             completion(conversationsCoreDataArray, nil);
         } else {
@@ -650,6 +654,29 @@
             completion(nil, error);
         }
     }];
+}
+
+- (NSMutableArray *)getAllConvosFromCoreData {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ConversationCoreData" inManagedObjectContext:context];
+    [request setEntity:entityDescription];
+    
+    NSError *error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    [request setReturnsObjectsAsFaults:NO];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    return mutableResults;
 }
 
 @end

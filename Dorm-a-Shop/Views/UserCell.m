@@ -25,7 +25,7 @@
 
     self.username.text = self.user.username;
     self.locationLabel.text = self.user.location;
-    self.recentText.text = self.convo[@"lastText"];
+    self.recentText.text = self.convo.lastText;
 }
 
 @end
