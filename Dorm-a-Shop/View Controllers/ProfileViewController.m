@@ -137,21 +137,23 @@
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-    
-    if (detailsViewController.itemStatusChanged) {
-        if (detailsViewController.post.sold == NO) {
-            [self.activeItems insertObject:detailsViewController.post atIndex:0];
-            [self.soldItems removeObject:detailsViewController.post];
-        } else {
-            [self.soldItems insertObject:detailsViewController.post atIndex:0];
-            [self.activeItems removeObject:detailsViewController.post];
-        }
-        
-        [self.collectionView reloadData];
-        self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-        self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-    }
+    //THIS COMMENTED OUT CODE IS STILL NEEDED FOR OUR REFERENCE AND WILL BE REMOVED ONCE NO LONGER NEEDED
+
+//    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+//
+//    if (detailsViewController.itemStatusChanged) {
+//        if (detailsViewController.post.sold == NO) {
+//            [self.activeItems insertObject:detailsViewController.post atIndex:0];
+//            [self.soldItems removeObject:detailsViewController.post];
+//        } else {
+//            [self.soldItems insertObject:detailsViewController.post atIndex:0];
+//            [self.activeItems removeObject:detailsViewController.post];
+//        }
+//
+//        [self.collectionView reloadData];
+//        self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+//        self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+//    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

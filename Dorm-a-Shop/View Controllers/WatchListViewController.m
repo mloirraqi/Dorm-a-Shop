@@ -77,15 +77,15 @@
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-    if (detailsViewController.watchStatusChanged) {
-        [self.tableView reloadData];
-    } else if (detailsViewController.itemStatusChanged) {
-        if (detailsViewController.post.sold == YES) {
-            [self.postsArray removeObject:detailsViewController.post];
-            [self.tableView reloadData];
-        }
-    }
+//    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
+//    if (detailsViewController.watchStatusChanged) {
+//        [self.tableView reloadData];
+//    } else if (detailsViewController.itemStatusChanged) {
+//        if (detailsViewController.post.sold == YES) {
+//            [self.postsArray removeObject:detailsViewController.post];
+//            [self.tableView reloadData];
+//        }
+//    }
 }
 
 #pragma mark - Navigation
