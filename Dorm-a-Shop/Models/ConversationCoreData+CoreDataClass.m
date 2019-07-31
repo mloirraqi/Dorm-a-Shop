@@ -10,4 +10,7 @@
 
 @implementation ConversationCoreData
 
+@synthesize pfuser;
+@synthesize convo;
+
 @end

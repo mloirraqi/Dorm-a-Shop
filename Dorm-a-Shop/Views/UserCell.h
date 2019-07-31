@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UserCoreData+CoreDataClass.h"
+#import "ConversationCoreData+CoreDataClass.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,8 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UserCell : UITableViewCell
 
 @property (strong, nonatomic) UserCoreData *user;
-@property (strong, nonatomic) PFUser *pfuser;
-@property (strong, nonatomic) PFObject *convo;
+@property (strong, nonatomic) ConversationCoreData *convo;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;

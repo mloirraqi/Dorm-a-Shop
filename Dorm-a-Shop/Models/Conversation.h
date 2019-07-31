@@ -11,9 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Conversation : PFObject
-
-//inherits objectId from PFObject
+@interface Conversation : PFObject <PFSubclassing>
 
 @property (nonatomic, strong) User *sender;
 @property (nonatomic, strong) User *receiver;
