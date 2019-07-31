@@ -87,7 +87,6 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    
 }
 
 - (IBAction)textValuesChanged:(id)sender {
@@ -147,8 +146,7 @@
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             [MBProgressHUD hideHUDForView:self.view animated:true];
             if (!error) {
-                // Hooray! Let them use the app now.
-                
+                //Let users use app now
                 if (self->selectedLocationPoint != nil) {
                     [self setLocationName];
                 }
@@ -339,10 +337,6 @@
 - (void)placePicker:(GMSPlacePickerViewController *)viewController didPickPlace:(GMSPlace *)place {
     // Dismiss the place picker, as it cannot dismiss itself.
     [viewController dismissViewControllerAnimated:YES completion:nil];
-    
-//    NSLog(@"Place name %@", place.name);
-//    NSLog(@"Place address %@", place.formattedAddress);
-//    NSLog(@"Place attributions %@", place.attributions.string);
     
     [updateLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
     locationSelected = YES;

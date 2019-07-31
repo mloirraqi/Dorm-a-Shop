@@ -43,6 +43,7 @@
     PFGeoPoint *location = currentUser[@"Location"];
     
     PFQuery *userQuery = [PFUser query];
+    [userQuery includeKey:@"Location"];
     [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
     
     PFQuery *postQuery = [Post query];
@@ -146,7 +147,9 @@
     PFQuery *watchQuery = [Watches query];
     [watchQuery orderByDescending:@"createdAt"];
     [watchQuery includeKey:@"post"];
-
+    [watchQuery includeKey:@"post.author"];
+    [watchQuery includeKey:@"post.author.Location"];
+    
     //if user is nil, then we query all watched posts
     if (user) {
         [watchQuery whereKey:@"user" equalTo:user];
@@ -265,6 +268,7 @@
     PFGeoPoint *location = currentUser[@"Location"];
     
     PFQuery *userQuery = [PFUser query];
+    [userQuery includeKey:@"Location"];
     [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
     
     __weak PostManager *weakSelf = self;

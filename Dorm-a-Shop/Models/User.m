@@ -9,6 +9,7 @@
 
 @implementation User
 
+@dynamic address;
 @dynamic ProfilePic;
 @dynamic Location;
 
