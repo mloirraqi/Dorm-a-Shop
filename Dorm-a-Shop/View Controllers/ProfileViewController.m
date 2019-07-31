@@ -85,7 +85,7 @@
 
 - (void)fetchProfileFromCoreData {
     self.username.text = self.user.username;
-    self.location.text = self.user.location;
+    self.location.text = self.user.address;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 40;
     self.profilePic.layer.masksToBounds = YES;

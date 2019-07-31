@@ -15,6 +15,7 @@
 #import "HomeScreenViewController.h"
 #import "LocationManager.h"
 #import "PostManager.h"
+#import "UserCoreData+CoreDataClass.h"
 
 @interface SignUpVC ()
 
@@ -99,7 +100,7 @@
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-        UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withProfilePic:imageData withManagedObjectContext:context];
+        UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData withManagedObjectContext:context];
         
         __weak SignUpVC *weakSelf = self;
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -116,7 +117,6 @@
         }];
     }
 }
-
 
 - (void)setLocationName {
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
@@ -187,10 +187,17 @@
 }
 
 - (void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location {
-    PFUser *currentUser = [PFUser currentUser];
-    currentUser[@"Location"] = location;
+    User *currentUser = (User *)[PFUser currentUser];
+    currentUser.Location = selectedLocationPoint;
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+    
+    UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
     if(address != nil) {
-        currentUser[@"address"] = address;
+        currentUser.address = address;
+        userCoreData.address = address;
+        [context save:nil];
     }
     
     [MBProgressHUD showHUDAddedTo:self.view animated:true];
