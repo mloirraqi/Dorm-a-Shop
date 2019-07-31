@@ -15,8 +15,6 @@
 
 @interface PostTableViewCell()
 
-@property (nonatomic) BOOL isInitialReload;
-
 - (IBAction)didTapWatch:(id)sender;
 
 @end
@@ -30,7 +28,7 @@
     if (post.image) {
         [self.postImageView setImage:[UIImage imageWithData:post.image]];
     }
-    
+
     [self.watchButton setSelected:self.post.watched];
     if (self.post.watched) {
         [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];

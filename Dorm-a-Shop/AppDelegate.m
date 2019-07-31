@@ -23,7 +23,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     [LocationManager sharedInstance];
     
     [GMSServices provideAPIKey:@"AIzaSyCZ98HEzZOeV7-hRjLGNJLpm85wu45B4RY"];
@@ -37,15 +36,15 @@
     [Parse initializeWithConfiguration:config];
     
     //delete all of core data. this commented out code is greatly needed for now!!
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-    NSError *deleteError = nil;
-    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
-
-    NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
-    NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
-    NSError *deleteError1 = nil;
-    [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
+//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+//    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+//    NSError *deleteError = nil;
+//    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
+//
+//    NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+//    NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
+//    NSError *deleteError1 = nil;
+//    [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
     
     [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
