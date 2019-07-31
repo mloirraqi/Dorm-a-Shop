@@ -15,6 +15,7 @@
 #import "HomeScreenViewController.h"
 #import "LocationManager.h"
 #import "PostManager.h"
+#import "UserCoreData+CoreDataClass.h"
 
 @interface SignUpVC ()
 
@@ -35,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    locationManager = [[LocationManager alloc]init];
+    locationManager = [[LocationManager alloc] init];
     
     self.lenientValidator = [NJOPasswordValidator standardValidator];
     [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:passwordTextField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
@@ -99,15 +100,16 @@
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-        UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withProfilePic:imageData withManagedObjectContext:context];
+        UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData withManagedObjectContext:context];
         
         __weak SignUpVC *weakSelf = self;
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [hud hideAnimated:YES];
             if (!error) {
                 newUser.objectId = user.objectId;
+                [context save:nil];
+                [self setupCoreData];
                 [weakSelf showAlertView:@"Welcome!"];
-                [weakSelf performSegueWithIdentifier:@"homeScreen" sender:nil];
             } else {
                 [hud hideAnimated:YES];
                 [weakSelf showAlertView:@"Someything went wrong, please try again"];
@@ -116,7 +118,6 @@
         }];
     }
 }
-
 
 - (void)setLocationName {
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
@@ -163,8 +164,7 @@
                 }
             }
             
-            if ([placemark.administrativeArea length] != 0)
-            {
+            if ([placemark.administrativeArea length] != 0) {
                 if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
                 } else {
@@ -172,8 +172,7 @@
                 }
             }
             
-            if ([placemark.country length] != 0)
-            {
+            if ([placemark.country length] != 0) {
                 if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
                 } else {
@@ -187,10 +186,17 @@
 }
 
 - (void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location {
-    PFUser *currentUser = [PFUser currentUser];
-    currentUser[@"Location"] = location;
-    if(address != nil) {
-        currentUser[@"address"] = address;
+    User *currentUser = (User *)[PFUser currentUser];
+    currentUser.Location = selectedLocationPoint;
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+    
+    UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
+    if (address != nil) {
+        currentUser.address = address;
+        userCoreData.address = address;
+        [context save:nil];
     }
     
     [MBProgressHUD showHUDAddedTo:self.view animated:true];
@@ -214,29 +220,25 @@
     UIAlertController *alertController=[UIAlertController alertControllerWithTitle:@"" message:@"Choose image" preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *takePhoto=[UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        
         picker.delegate = self;
-        
         picker.allowsEditing = YES;
         
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        } else {
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
         
         [self presentViewController:picker animated:YES completion:NULL];
-        
         [alertController dismissViewControllerAnimated:YES completion:nil];
     }];
     [alertController addAction:takePhoto];
     
     UIAlertAction *choosePhoto=[UIAlertAction actionWithTitle:@"Select From Photos" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
         UIImagePickerController *pickerView = [[UIImagePickerController alloc] init];
-        
         pickerView.allowsEditing = YES;
-        
         pickerView.delegate = self;
-        
         [pickerView setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
         
         [self presentViewController:pickerView animated:YES completion:nil];
@@ -251,12 +253,10 @@
     }];
     
     [alertController addAction:actionCancel];
-    
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
     selectedImage = info[UIImagePickerControllerEditedImage];
     [addPictureButton setImage:selectedImage forState:UIControlStateNormal];
     [picker dismissViewControllerAnimated:YES completion:NULL];
@@ -320,6 +320,28 @@
             }            
         }
     }
+}
+
+- (void)setupCoreData {
+    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        } else {
+            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                } else {
+                    [self performSegueWithIdentifier:@"homeScreen" sender:nil];
+                }
+            }];
+        }
+    }];
+    
+    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+        }
+    }];
 }
 
 @end

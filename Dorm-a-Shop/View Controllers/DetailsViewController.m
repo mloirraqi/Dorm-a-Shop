@@ -29,12 +29,14 @@
 
 @end
 
+//THE COMMENTED OUT CODE IN THIS CLASS IS STILL NEEDED FOR OUR REFERENCE AND WILL BE REMOVED ONCE NO LONGER NEEDED
+
 @implementation DetailsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.watchStatusChanged = NO;
-    self.itemStatusChanged = NO;
+//    self.watchStatusChanged = NO;
+    //self.itemStatusChanged = NO;
     self.statusButton.hidden = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
@@ -102,7 +104,7 @@
 }
 
 - (IBAction)didTapWatch:(id)sender {
-    self.watchStatusChanged = YES;
+//    self.watchStatusChanged = YES;
     
     __weak DetailsViewController *weakSelf = self;
     if (self.post.watched) {
@@ -130,12 +132,11 @@
     __weak DetailsViewController *weakSelf = self;
     if ([self.post.author.objectId isEqualToString:PFUser.currentUser.objectId]) {
         if (weakSelf.post.sold == NO) {
-            [[PostManager shared] setPost:weakSelf.post sold:YES withCompletion:^(NSError * _Nonnull error) {
+            [[PostManager shared] setPost:self.post sold:YES withCompletion:^(NSError * _Nonnull error) {
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    NSLog(@"post is sold!: %d", weakSelf.post.sold);
-                    weakSelf.itemStatusChanged = YES;
+                    //weakSelf.itemStatusChanged = YES;
                     NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"sold", nil];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
@@ -145,7 +146,7 @@
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    weakSelf.itemStatusChanged = YES;
+                    //weakSelf.itemStatusChanged = YES;
                     NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"sold", nil];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }

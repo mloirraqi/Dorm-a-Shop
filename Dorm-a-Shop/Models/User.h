@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) PFFileObject *ProfilePic;
 @property (nonatomic, strong) PFGeoPoint *Location;
+@property (nonatomic, strong) NSString *address;
+
 
 @end
 

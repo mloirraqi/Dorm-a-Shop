@@ -52,44 +52,14 @@
 }
 
 // To do - rewrite refresh function after fixing conversationcoredata bug
-//- (void)fetchUsers {
-//    self.users = [[NSMutableArray alloc] init];
-//
-//    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];
-//    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
-//
-//    PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
-//    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
-//
-//    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
-//    [query orderByDescending:@"updatedAt"];
-//    [query includeKey:@"sender"];
-//    [query includeKey:@"receiver"];
-//
-//    __weak InboxViewController *weakSelf = self;
-//    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable messages, NSError * _Nullable error) {
-//        if (messages) {
-//            for (PFObject *message in messages) {
-//                PFUser *sender = (PFUser *)message[@"sender"];
-//                PFUser *receiver = (PFUser *)message[@"receiver"];
-//                if(![sender.objectId isEqualToString:PFUser.currentUser.objectId]) {
-//                    UserCoreData *currentUser = (UserCoreData *) [[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:sender.objectId withContext:weakSelf.context];
-//                    [weakSelf.users addObject:currentUser];
-//                    [weakSelf.pfusers addObject:sender];
-//                } else {
-//                    UserCoreData *currentUser = (UserCoreData *) [[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:receiver.objectId withContext:weakSelf.context];
-//                    [weakSelf.users addObject:currentUser];
-//                    [weakSelf.pfusers addObject:receiver];
-//                }
-//            }
-//            self.messages = [NSMutableArray arrayWithArray:messages];
-//            [weakSelf.tableView reloadData];
-//            [self.refreshControl endRefreshing];
-//        } else {
-//            NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
-//        }
-//    }];
-//}
+- (void)fetchUsers {
+    __weak InboxViewController *weakSelf = self;
+    [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+        weakSelf.convos = conversations;
+        [self.tableView reloadData];
+        [self.refreshControl endRefreshing];
+    }];
+}
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];

@@ -129,7 +129,7 @@
         UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
         
         //set the Parse object id later and Parse createdAt date later when the parse query completes
-        PostCoreData *newPost = [[PostManager shared] savePostToCoreDataWithObjectId:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:context];
+        PostCoreData *newPost = [[PostManager shared] savePostToCoreDataWithPost:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatch:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:context];
         
         //parse. here we update the objectId for the post in core data, in the completion block
         [[PostManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
@@ -137,6 +137,7 @@
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
                 newPost.objectId = post.objectId;
+                newPost.post = post;
                 newPost.createdAt = post.createdAt;
                 [context save:nil];
                 

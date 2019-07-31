@@ -103,14 +103,12 @@
 - (void)receiveNotification:(NSNotification *)notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
-        
         NSUInteger postIndexRow = [self.postsArray indexOfObject:notificationPost];
         NSIndexPath *postIndexPath = [NSIndexPath indexPathForRow:postIndexRow inSection:0];
         [self.tableView beginUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[postIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView endUpdates];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        //[self fetchActivePostsFromCoreData];
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
         if (notificationPost.sold) {
             [self.postsArray removeObject:notificationPost];
@@ -139,6 +137,7 @@
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             weakSelf.postsArray = activePosts;
             weakSelf.filteredPosts = weakSelf.postsArray;
+            NSLog(@"Filtered posts: %@", weakSelf.filteredPosts);
             
             [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                 if (error) {
