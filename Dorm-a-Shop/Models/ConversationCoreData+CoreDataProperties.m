@@ -14,7 +14,7 @@
 	return [NSFetchRequest fetchRequestWithEntityName:@"ConversationCoreData"];
 }
 
-@dynamic createdAt;
+@dynamic updatedAt;
 @dynamic lastText;
 @dynamic objectId;
 @dynamic receiver;

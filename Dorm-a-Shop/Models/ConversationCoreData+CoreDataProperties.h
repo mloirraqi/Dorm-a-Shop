@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<ConversationCoreData *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSDate *createdAt;
+@property (nullable, nonatomic, copy) NSDate *updatedAt;
 @property (nullable, nonatomic, copy) NSString *lastText;
 @property (nullable, nonatomic, copy) NSString *objectId;
 @property (nullable, nonatomic, retain) UserCoreData *receiver;
