@@ -27,7 +27,7 @@
 
 - (IBAction)tapScreen:(id)sender {
     [self->nameTextField endEditing:YES];
-     [self->emailTextField endEditing:YES];
+    [self->emailTextField endEditing:YES];
 }
 
 - (NJOPasswordValidator *)validator {
@@ -97,29 +97,32 @@
         user.ProfilePic = image;
         user.Location = location;
         
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-        NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-        UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData withManagedObjectContext:context];
-        
         __weak SignUpVC *weakSelf = self;
-        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            [hud hideAnimated:YES];
-            if (!error) {
-                newUser.objectId = user.objectId;
-                [context save:nil];
-                [self setupCoreData];
-                [weakSelf showAlertView:@"Welcome!"];
-            } else {
+        [self setLocationNameForUser:user withCompletion:^(NSError *error) {
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+            NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
+            UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData withManagedObjectContext:context];
+            
+            [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 [hud hideAnimated:YES];
-                [weakSelf showAlertView:@"Someything went wrong, please try again"];
-                NSLog(@"😫😫😫, error: %@", error.localizedDescription);
-            }
+                if (!error) {
+                    newUser.objectId = user.objectId;
+                    [context save:nil];
+                    
+                    [weakSelf showAlertView:@"Welcome!"];
+                    [weakSelf performSegueWithIdentifier:@"homeScreen" sender:nil];
+                } else {
+                    [hud hideAnimated:YES];
+                    [weakSelf showAlertView:@"Someything went wrong, please try again"];
+                    NSLog(@"😫😫😫, error: %@", error.localizedDescription);
+                }
+            }];
         }];
     }
 }
 
-- (void)setLocationName {
+- (void)setLocationNameForUser:(User *)user withCompletion:(void (^)(NSError *))completion {
     CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
     PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
     
@@ -181,7 +184,11 @@
             }
         }
         
-        [self updateLocationWith:strAdd location:location];
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+        user.address = strAdd;
+        user.Location = location;
+        completion(nil);
     }];
 }
 
@@ -198,18 +205,6 @@
         userCoreData.address = address;
         [context save:nil];
     }
-    
-    [MBProgressHUD showHUDAddedTo:self.view animated:true];
-    [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        [MBProgressHUD hideHUDForView:self.view animated:true];
-        if (!error) {
-            [self showAlertView:@"Welcome!"];
-            [self performSegueWithIdentifier:@"homeScreen" sender:nil];
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-            [self showAlertView:errorString];
-        }
-    }];
 }
 
 - (IBAction)backButtonTap:(UIButton *)sender {
@@ -317,31 +312,9 @@
             NSMutableAttributedString *mutableAttributedString = [[NSMutableAttributedString alloc] init];
             for (id <NJOPasswordRule> rule in failingRules) {
                 [mutableAttributedString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"• %@\n", [rule localizedErrorDescription]] attributes:@{NSForegroundColorAttributeName: [UIColor redColor]}]];
-            }            
+            }
         }
     }
-}
-
-- (void)setupCoreData {
-    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
-        } else {
-            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"error getting watch posts/updating core data watch status");
-                } else {
-                    [self performSegueWithIdentifier:@"homeScreen" sender:nil];
-                }
-            }];
-        }
-    }];
-    
-    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
-        }
-    }];
 }
 
 @end

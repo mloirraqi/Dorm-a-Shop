@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PostCoreData : NSManagedObject
 
-@property (nullable, nonatomic, strong) Watches *watch;
-@property (nullable, nonatomic, strong) Post *post;
+//@property (nullable, nonatomic, strong) Watches *watch;
+//@property (nullable, nonatomic, strong) Post *post;
 
 @end
 

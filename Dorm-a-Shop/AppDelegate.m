@@ -12,6 +12,7 @@
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import "PostManager.h"
+#import "User.h"
 #import "LocationManager.h"
 @import Parse;
 
@@ -36,15 +37,16 @@
     [Parse initializeWithConfiguration:config];
     
     //delete all of core data. this commented out code is greatly needed for now!!
-        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
         NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
         NSError *deleteError = nil;
         [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
     
-        NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
-        NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
-        NSError *deleteError1 = nil;
-        [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
+//        NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+//        NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
+//        NSError *deleteError1 = nil;
+//        [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
+    
     if (PFUser.currentUser) {
         [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
@@ -58,6 +60,12 @@
                         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
                     }
                 }];
+                
+                [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+                    if (error) {
+                        NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+                    }
+                }];
             }
         }];
         
@@ -67,12 +75,6 @@
             }
         }];
     }
-    
-    [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
-        }
-    }];
     
     return YES;
 }

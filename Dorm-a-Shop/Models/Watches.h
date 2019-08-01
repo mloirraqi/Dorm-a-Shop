@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Watches : PFObject <PFSubclassing>
 
-@property (nonatomic, strong) NSString *watchID;
 @property (nonatomic, strong) Post *post;
 @property (nonatomic, strong) User *user;
 

@@ -10,7 +10,7 @@
 
 @implementation PostCoreData
 
-@synthesize watch;
-@synthesize post;
+//@synthesize watch;
+//@synthesize post;
 
 @end

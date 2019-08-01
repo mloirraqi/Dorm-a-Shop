@@ -137,7 +137,7 @@
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
                 newPost.objectId = post.objectId;
-                newPost.post = post;
+//                newPost.post = post;
                 newPost.createdAt = post.createdAt;
                 [context save:nil];
                 

@@ -10,7 +10,6 @@
 
 @implementation Watches
 
-@dynamic watchID;
 @dynamic post;
 @dynamic user;
 
