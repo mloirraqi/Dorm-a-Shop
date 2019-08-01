@@ -11,8 +11,9 @@
 #import "Post.h"
 #import "UploadViewController.h"
 #import "DetailsViewController.h"
-#import "PostManager.h"
+#import "ParseManager.h"
 #import "AppDelegate.h"
+#import "CoreDataManager.h"
 @import Parse;
 
 @interface WatchListViewController () <DetailsViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -60,7 +61,7 @@
 }
 
 - (void)fetchPostsFromCoreData {
-    NSMutableArray *activeWatchPosts = [[PostManager shared] getActiveWatchedPostsForCurrentUserFromCoreData];
+    NSMutableArray *activeWatchPosts = [[CoreDataManager shared] getActiveWatchedPostsForCurrentUserFromCoreData];
     self.postsArray = activeWatchPosts;
     [self.tableView reloadData];
     [self.refreshControl endRefreshing];
@@ -99,7 +100,7 @@
         DetailsViewController *detailsViewController = [segue destinationViewController];
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-        PostCoreData *postCoreData = [[PostManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
+        PostCoreData *postCoreData = [[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
         detailsViewController.post = postCoreData;
         detailsViewController.delegate = self;
     }

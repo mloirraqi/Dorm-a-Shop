@@ -10,7 +10,7 @@
 #import "ChatCell.h"
 #import "AppDelegate.h"
 #import "UserCoreData+CoreDataClass.h"
-#import "PostManager.h"
+#import "CoreDataManager.h"
 @import Parse;
 @import TwilioChatClient;
 
@@ -32,7 +32,7 @@
     self.tableView.delegate = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.receiver = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:self.user.objectId];
-    if(self.convo) {
+    if(self.conversationCoreData) {
         self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
     }
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
@@ -70,9 +70,11 @@
 - (IBAction)sendMsg:(id)sender {
     if(![self.msgInput.text isEqualToString:@""]) {
         __weak MessageViewController *weakSelf = self;
-        ConversationCoreData *conversation = (ConversationCoreData *) [[PostManager shared] getConvoFromCoreData:self.user.objectId];
-        if(conversation) {
-            self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:conversation.objectId];
+        if(!self.conversationCoreData) {
+            self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
+            if(self.conversationCoreData) {
+                self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
+            }
         }
         
         if (!self.convo) {

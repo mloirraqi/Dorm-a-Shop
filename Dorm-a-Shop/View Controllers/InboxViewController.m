@@ -9,7 +9,8 @@
 #import "InboxViewController.h"
 #import "UserCell.h"
 #import "MessageViewController.h"
-#import "PostManager.h"
+#import "ParseManager.h"
+#import "CoreDataManager.h"
 #import "AppDelegate.h"
 #import "ConversationCoreData+CoreDataClass.h"
 @import Parse;
@@ -39,13 +40,13 @@
 }
 
 - (void)fetchConvosFromCoreData {
-    self.convos = [[PostManager shared] getAllConvosFromCoreData];
+    self.convos = [[CoreDataManager shared] getAllConvosFromCoreData];
     [self.tableView reloadData];
 }
 
 - (void)fetchConvos {
     __weak InboxViewController *weakSelf = self;
-    [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+    [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
         weakSelf.convos = conversations;
         [weakSelf.tableView reloadData];
         [weakSelf.refreshControl endRefreshing];

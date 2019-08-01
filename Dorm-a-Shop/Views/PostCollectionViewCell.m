@@ -7,7 +7,7 @@
 //
 
 #import "PostCollectionViewCell.h"
-#import "PostManager.h"
+#import "ParseManager.h"
 
 @implementation PostCollectionViewCell
 

@@ -7,10 +7,11 @@
 //
 
 #import "DraggableViewBackground.h"
-#import "PostManager.h"
+#import "ParseManager.h"
 #import "Post.h"
 #import <Parse/Parse.h>
 #import "Card.h"
+#import "CoreDataManager.h"
 
 static const int MAX_BUFFER_SIZE = 2;
 
@@ -176,7 +177,7 @@ static const int MAX_BUFFER_SIZE = 2;
 
 -(void)setupCards {
     self.cardArray = [[NSMutableArray alloc]init];
-    NSMutableArray *activePosts = [[PostManager shared] getActivePostsFromCoreData];
+    NSMutableArray *activePosts = [[CoreDataManager shared] getActivePostsFromCoreData];
     NSMutableArray *userNameArray = [[NSMutableArray alloc] init];
     NSMutableArray *userArray = [[NSMutableArray alloc] init];
     for (Post *post in activePosts) {
