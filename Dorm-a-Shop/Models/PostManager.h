@@ -19,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PostManager : NSObject
 
-@property (strong, nonatomic) NSMutableArray *allConversations;
-
 + (id)shared;
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
@@ -48,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withPfuser:(PFUser *)pfuser withPFconvo:(PFObject *)convo withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 - (void)queryConversationsFromParseWithCompletion:(void (^)(NSMutableArray<ConversationCoreData *> *, NSError *))completion;
 - (NSMutableArray *)getAllConvosFromCoreData;
-
+- (NSManagedObject *)getConvoFromCoreData:(NSString *)senderId;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -39,11 +39,7 @@
 }
 
 - (void)fetchConvosFromCoreData {
-    self.convos = [[PostManager shared] allConversations];
-    NSSortDescriptor *sortDescriptor;
-    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
-    NSArray *sortedArray = [self.convos sortedArrayUsingDescriptors:@[sortDescriptor]];
-    self.convos = [NSMutableArray arrayWithArray:sortedArray];
+    self.convos = [[PostManager shared] getAllConvosFromCoreData];
     [self.tableView reloadData];
 }
 
@@ -51,8 +47,8 @@
     __weak InboxViewController *weakSelf = self;
     [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
         weakSelf.convos = conversations;
-        [self.tableView reloadData];
-        [self.refreshControl endRefreshing];
+        [weakSelf.tableView reloadData];
+        [weakSelf.refreshControl endRefreshing];
     }];
 }
 
@@ -73,8 +69,7 @@
     if ([segue.identifier isEqualToString:@"sendMsg"]) {
         UserCell *tappedCell = sender;
         MessageViewController *msgViewController = [segue destinationViewController];
-        msgViewController.receiver = tappedCell.convo.pfuser;
-        msgViewController.convo = tappedCell.convo.convo;
+        msgViewController.user = tappedCell.convo.sender;
         msgViewController.conversationCoreData = tappedCell.convo;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];

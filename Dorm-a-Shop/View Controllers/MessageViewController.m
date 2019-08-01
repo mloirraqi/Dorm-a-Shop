@@ -9,6 +9,8 @@
 #import "MessageViewController.h"
 #import "ChatCell.h"
 #import "AppDelegate.h"
+#import "UserCoreData+CoreDataClass.h"
+#import "PostManager.h"
 @import Parse;
 @import TwilioChatClient;
 
@@ -17,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (weak, nonatomic) IBOutlet UITextField *msgInput;
+@property (strong, nonatomic) PFUser *receiver;
+@property (strong, nonatomic) PFObject *convo;
 
 @end
 
@@ -27,8 +31,12 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.navigationItem.title = [@"@" stringByAppendingString:self.receiver.username];
-    
+    self.receiver = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:self.user.objectId];
+    if(self.convo) {
+        self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
+    }
+    self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
+
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 }
 
@@ -60,62 +68,53 @@
 }
 
 - (IBAction)sendMsg:(id)sender {
-    __weak MessageViewController *weakSelf = self;
-    if (!self.convo) {
-        PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];
-        [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
-        [sentQuery whereKey:@"receiver" equalTo:self.receiver];
+    if(![self.msgInput.text isEqualToString:@""]) {
+        __weak MessageViewController *weakSelf = self;
+        ConversationCoreData *conversation = (ConversationCoreData *) [[PostManager shared] getConvoFromCoreData:self.user.objectId];
+        if(conversation) {
+            self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:conversation.objectId];
+        }
         
+        if (!self.convo) {
+            PFObject *convo = [PFObject objectWithClassName:@"Convos"];
+            convo[@"sender"] = [PFUser currentUser];
+            convo[@"receiver"] = weakSelf.receiver;
+            convo[@"lastText"] = self.msgInput.text;
+            
+            [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                if (succeeded) {
+                    weakSelf.convo = convo;
+                } else {
+                    NSLog(@"%@", error.localizedDescription);
+                }
+            }];
+        } else {
+            self.convo[@"lastText"] = self.msgInput.text;
+            [self.convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+                if (!succeeded) {
+                    NSLog(@"Problem updating convos class: %@", error.localizedDescription);
+                }
+            }];
+        }
         
-        PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
-        [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
-        [recQuery whereKey:@"sender" equalTo:self.receiver];
+        PFObject *message = [PFObject objectWithClassName:@"Messages"];
+        message[@"sender"] = [PFUser currentUser];
+        message[@"receiver"] = self.receiver;
+        message[@"text"] = self.msgInput.text;
+        weakSelf.conversationCoreData.updatedAt = [NSDate date];
         
-        PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
-        
-        [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable messages, NSError * _Nullable error) {
-            if (messages.count) {
-                weakSelf.convo = messages[0];
+        [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+            if (succeeded) {
+                AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+                NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
+                weakSelf.conversationCoreData.lastText = self.msgInput.text;
+                [context save:nil];
+                weakSelf.msgInput.text = @"";
             } else {
-                PFObject *convo = [PFObject objectWithClassName:@"Convos"];
-                convo[@"sender"] = [PFUser currentUser];
-                convo[@"receiver"] = weakSelf.receiver;
-                
-                [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                    if (succeeded) {
-                        weakSelf.convo = convo;
-                    } else {
-                        NSLog(@"%@", error.localizedDescription);
-                    }
-                }];
+                NSLog(@"Problem saving message: %@", error.localizedDescription);
             }
         }];
     }
-    
-    PFObject *message = [PFObject objectWithClassName:@"Messages"];
-    message[@"sender"] = [PFUser currentUser];
-    message[@"receiver"] = self.receiver;
-    message[@"text"] = self.msgInput.text;
-    self.convo[@"lastText"] = self.msgInput.text;
-    weakSelf.conversationCoreData.updatedAt = [NSDate date];
-
-    [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-        if (succeeded) {
-            AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-            NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-            weakSelf.conversationCoreData.lastText = self.msgInput.text;
-            [context save:nil];
-            self.msgInput.text = @"";
-        } else {
-            NSLog(@"Problem saving message: %@", error.localizedDescription);
-        }
-    }];
-    
-    [self.convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-        if (!succeeded) {
-            NSLog(@"Problem updating convos class: %@", error.localizedDescription);
-        }
-    }];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
