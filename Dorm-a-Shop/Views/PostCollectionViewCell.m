@@ -15,8 +15,10 @@
     _post = post;
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
     NSData *imageData = post.image;
-    UIImage *image = [UIImage imageWithData:imageData];
-    [self.itemImage setImage:image];
+    if (imageData) {
+        UIImage *image = [UIImage imageWithData:imageData];
+        [self.itemImage setImage:image];
+    }
 }
 
 @end

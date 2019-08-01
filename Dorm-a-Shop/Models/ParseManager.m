@@ -102,8 +102,6 @@
                             NSLog(@"error updating postCoreData image! %@", error.localizedDescription);
                         }
                     }];
-                    
-                    //[self.postsCoreDataArray addObject:post];
                 } else {
                     //reset all watch properties to default as they are handled in a different function
                     postCoreData.watched = NO;

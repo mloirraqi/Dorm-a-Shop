@@ -88,19 +88,6 @@
     [self createRefreshControl];
 }
 
-//should find a way to take this out
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    NSError *error = nil;
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"PostCoreData"];
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-}
-
 - (void)receiveNotification:(NSNotification *)notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
@@ -205,14 +192,6 @@
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    /*COMMENTS ARE STILL NEEDED, BUT WILL BE CLEANED UP LATER
-     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-    if (detailsViewController.itemStatusChanged) {
-        if (detailsViewController.post.sold == YES) {
-            [self.postsArray removeObject:detailsViewController.post];
-            [self filterPosts];
-        }
-    }*/
     [self filterPosts];
 }
 

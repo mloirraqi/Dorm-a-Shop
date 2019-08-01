@@ -29,14 +29,10 @@
 
 @end
 
-//THE COMMENTED OUT CODE IN THIS CLASS IS STILL NEEDED FOR OUR REFERENCE AND WILL BE REMOVED ONCE NO LONGER NEEDED
-
 @implementation DetailsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.watchStatusChanged = NO;
-    //self.itemStatusChanged = NO;
     self.statusButton.hidden = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
@@ -87,7 +83,10 @@
         self.statusButton.hidden = NO;
     }
     
-    self.postImageView.image = [UIImage imageWithData:self.post.image];
+    [self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
+    if (self.post.image) {
+        [self.postImageView setImage:[UIImage imageWithData:self.post.image]];
+    }
     
     [self.watchButton setSelected:self.post.watched];
     if (self.post.watched) {
@@ -104,8 +103,6 @@
 }
 
 - (IBAction)didTapWatch:(id)sender {
-//    self.watchStatusChanged = YES;
-    
     __weak DetailsViewController *weakSelf = self;
     if (self.post.watched) {
         [[ParseManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
@@ -136,7 +133,6 @@
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    //weakSelf.itemStatusChanged = YES;
                     NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"sold", nil];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
@@ -146,7 +142,6 @@
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    //weakSelf.itemStatusChanged = YES;
                     NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"sold", nil];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }

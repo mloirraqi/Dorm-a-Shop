@@ -92,6 +92,7 @@
     self.profilePic.layer.masksToBounds = YES;
     
     NSData *imageData = self.user.profilePic;
+    [self.profilePic setImage:[UIImage imageNamed:@"item_placeholder"]];
     if (imageData) {
         UIImage *image = [UIImage imageWithData:imageData];
         [self.profilePic setImage:image];
