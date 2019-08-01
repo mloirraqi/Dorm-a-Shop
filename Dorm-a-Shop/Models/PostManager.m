@@ -42,7 +42,7 @@
 
 - (instancetype) init {
     self = [super init];
-    self.appDelegate = [[UIApplication sharedApplication] delegate];
+    self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = self.appDelegate.persistentContainer.viewContext;
     //self.postsCoreDataArray = [[NSMutableArray alloc] init];
     return self;
@@ -547,7 +547,7 @@
     return user;
 }
 
-- (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withPfuser:(PFUser *)pfuser withPFconvo:(PFObject *)convo withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withDate:(NSDate *)updatedAt withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withPfuser:(PFUser *)pfuser withPFconvo:(PFObject *)convo withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     
     ConversationCoreData *conversation;
     if (conversationObjectId) {
@@ -561,6 +561,7 @@
         conversation.lastText = lastText;
         conversation.pfuser = (User *) pfuser;
         conversation.convo = (Conversation *) convo;
+        conversation.updatedAt = updatedAt;
         
         NSError *error = nil;
         if ([context save:&error] == NO) {
@@ -594,9 +595,7 @@
                 
                 if (conversationCoreData) {
                     conversationCoreData.lastText = conversation.lastText;
-                    // code that needs to be taken out once bug is fixed
-                    conversationCoreData.pfuser = conversation.sender;
-                    conversationCoreData.convo = conversation;
+                    conversationCoreData.updatedAt = conversation.updatedAt;
                     [weakSelf.context save:nil];
                 } else {
                     UserCoreData *senderCoreData;
@@ -623,14 +622,18 @@
                         }];
                     }
                     
-                    conversationCoreData = [weakSelf saveConversationToCoreDataWithObjectId:conversation.objectId withSender:senderCoreData withLastText:conversation.lastText withPfuser:otherUser withPFconvo:conversation withManagedObjectContext:weakSelf.context];
+                    conversationCoreData = [weakSelf saveConversationToCoreDataWithObjectId:conversation.objectId withDate:conversation.updatedAt withSender:senderCoreData withLastText:conversation.lastText withPfuser:otherUser withPFconvo:conversation withManagedObjectContext:weakSelf.context];
                     conversationCoreData.pfuser = otherUser;
                     conversationCoreData.convo = conversation;
                     [weakSelf.context save:nil];
                 }
                 [conversationsCoreDataArray addObject:conversationCoreData];
             }
-            completion(conversationsCoreDataArray, nil);
+            NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:conversationsCoreDataArray];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
+            [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            weakSelf.allConversations = mutableResults;
+            completion(mutableResults, nil);
         } else {
             NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
             completion(nil, error);
@@ -638,25 +641,25 @@
     }];
 }
 
-- (NSMutableArray *)getAllConvosFromCoreData {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ConversationCoreData" inManagedObjectContext:self.context];
-    [request setEntity:entityDescription];
-    
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    [request setReturnsObjectsAsFaults:NO];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
-    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    
-    return mutableResults;
-}
+//- (NSMutableArray *)getAllConvosFromCoreData {
+//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ConversationCoreData" inManagedObjectContext:self.context];
+//    [request setEntity:entityDescription];
+//    
+//    NSError *error = nil;
+//    NSArray *results = [self.context executeFetchRequest:request error:&error];
+//    [request setReturnsObjectsAsFaults:NO];
+//    if (!results) {
+//        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+//        abort();
+//    }
+//    
+//    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+//    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+//    
+//    return mutableResults;
+//}
 
 //- (PFObject *)getPFObjectWithParseClassName:(NSString *)name objectId:(NSString *)objectId {
 //    PFObject *parseObj = [PFObject objectWithoutDataWithClassName:@"Post" objectId:@"ouxUNTAyDv"];

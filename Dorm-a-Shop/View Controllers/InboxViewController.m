@@ -11,19 +11,15 @@
 #import "MessageViewController.h"
 #import "PostManager.h"
 #import "AppDelegate.h"
+#import "ConversationCoreData+CoreDataClass.h"
 @import Parse;
 
 @interface InboxViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *convos;
-
-@property (strong, nonatomic) NSMutableArray *messages;
-@property (strong, nonatomic) NSMutableArray *users;
-@property (strong, nonatomic) NSMutableArray *pfusers;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-@property (nonatomic, strong) AppDelegate *appDelegate;
-@property (nonatomic, strong) NSManagedObjectContext *context;
+
 @end
 
 @implementation InboxViewController
@@ -32,27 +28,26 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.users = [[NSMutableArray alloc] init];
-    self.pfusers = [[NSMutableArray alloc] init];
-    
-    self.appDelegate = [[UIApplication sharedApplication] delegate];
-    self.context = self.appDelegate.persistentContainer.viewContext;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchUsers) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(fetchConvos) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
-    
-//    [self fetchUsers];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     [self fetchConvosFromCoreData];
 }
 
 - (void)fetchConvosFromCoreData {
-    self.convos = [[PostManager shared] getAllConvosFromCoreData];
+    self.convos = [[PostManager shared] allConversations];
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
+    NSArray *sortedArray = [self.convos sortedArrayUsingDescriptors:@[sortDescriptor]];
+    self.convos = [NSMutableArray arrayWithArray:sortedArray];
     [self.tableView reloadData];
 }
 
-// To do - rewrite refresh function after fixing conversationcoredata bug
-- (void)fetchUsers {
+- (void)fetchConvos {
     __weak InboxViewController *weakSelf = self;
     [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
         weakSelf.convos = conversations;
@@ -64,9 +59,8 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
     ConversationCoreData *convoCoreData = self.convos[indexPath.row];
-    UserCoreData *user = convoCoreData.sender;
-    cell.user = user;
     cell.convo = convoCoreData;
+    cell.user = convoCoreData.sender;
     [cell setUser];
     return cell;
 }
@@ -78,9 +72,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"sendMsg"]) {
         UserCell *tappedCell = sender;
-        MessageViewController *profileViewController = [segue destinationViewController];
-        profileViewController.receiver = tappedCell.convo.pfuser;
-        profileViewController.convo = tappedCell.convo.convo;
+        MessageViewController *msgViewController = [segue destinationViewController];
+        msgViewController.receiver = tappedCell.convo.pfuser;
+        msgViewController.convo = tappedCell.convo.convo;
+        msgViewController.conversationCoreData = tappedCell.convo;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
