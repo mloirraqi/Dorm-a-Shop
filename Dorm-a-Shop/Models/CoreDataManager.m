@@ -146,10 +146,26 @@
     }
     
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
     return mutableResults;
+}
+
+- (NSManagedObject *)getConvoFromCoreData:(NSString *)senderId {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ConversationCoreData" ];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"sender.objectId == %@", senderId]];
+    [request setFetchLimit:1];
+    [request setReturnsObjectsAsFaults:NO];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    return [results firstObject];
 }
 
 - (PostCoreData *)savePostToCoreDataWithPost:(Post * _Nullable)post withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatch:(Watches * _Nullable)watch withWatchCount:(long long)watchCount withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
@@ -224,7 +240,7 @@
     return user;
 }
 
-- (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withDate:(NSDate *)updatedAt withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withPfuser:(PFUser *)pfuser withPFconvo:(PFObject *)convo withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withDate:(NSDate *)updatedAt withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     
     ConversationCoreData *conversation;
     if (conversationObjectId) {
@@ -236,8 +252,6 @@
         conversation.objectId = conversationObjectId;
         conversation.sender = sender;
         conversation.lastText = lastText;
-        conversation.pfuser = (User *) pfuser;
-        conversation.convo = (Conversation *) convo;
         conversation.updatedAt = updatedAt;
         
         NSError *error = nil;

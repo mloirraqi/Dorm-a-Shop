@@ -36,8 +36,8 @@
     
     [Parse initializeWithConfiguration:config];
     
-    //delete all of core data. this commented out code is greatly needed for now!!
-        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+//    delete all of core data. this commented out code is greatly needed for now!!
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
         NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
         NSError *deleteError = nil;
         [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];

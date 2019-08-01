@@ -61,6 +61,12 @@
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         }
     }];
+    
+    [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+        }
+    }];
 }
 
 @end

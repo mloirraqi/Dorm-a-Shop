@@ -17,9 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ConversationCoreData : NSManagedObject
 
-@property (nonatomic, strong) User *pfuser;
-@property (nonatomic, strong) Conversation *convo;
-
 @end
 
 NS_ASSUME_NONNULL_END

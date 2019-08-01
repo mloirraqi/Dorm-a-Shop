@@ -179,34 +179,18 @@
         editProfileViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
-        msgViewController.receiver = sender;
+        msgViewController.user = self.user;
     }
 }
 
 - (IBAction)logout:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
-    
     SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
-    
     [self presentViewController:signInVC animated:YES completion:nil];
 }
 
 - (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
     [self fetchProfileFromCoreData];
-}
-
-- (IBAction)sendMessage:(id)sender {
-    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
-    __weak ProfileViewController *weakSelf = self;
-    [userQuery getObjectInBackgroundWithId:self.user.objectId block:^(PFObject * _Nullable user, NSError * _Nullable error) {
-        if (user) {
-            [weakSelf performSegueWithIdentifier:@"sendMsg" sender:(PFUser *) user];
-        } else {
-            NSLog(@"error getting user by objectId! %@", error.localizedDescription);
-        }
-    }];
-    
-    
 }
 
 @end
