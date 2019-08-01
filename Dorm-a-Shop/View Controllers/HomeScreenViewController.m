@@ -71,7 +71,7 @@
     self.distanceTable.dataSource = self;
     self.distanceTable.delegate = self;
     self.categories = @[@"All", @"Furniture", @"Books", @"Beauty", @"Other"];
-    self.conditions = @[@"All", @"New", @"Nearly New", @"Old"];
+    self.conditions = @[@"All", @"New", @"Nearly New", @"Used"];
     self.prices = @[@"All", @"<$25", @"<$50", @"<$100"];
     self.pricesInt = @[@0, @25, @50, @100];
     self.distances = @[@"All", @"<1 Miles", @"<3 Miles", @"<5 Miles"];
@@ -136,7 +136,7 @@
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             weakSelf.postsArray = activePosts;
-            weakSelf.filteredPosts = weakSelf.postsArray;
+            [weakSelf filterPosts];
             NSLog(@"Filtered posts: %@", weakSelf.filteredPosts);
             
             [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
@@ -274,8 +274,8 @@
     }
     
     if (![[self.pricesButton currentTitle] isEqual: @"Price: All"]) {
-        NSPredicate *pPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-            return (post.price.intValue <= self.limit.intValue);
+        NSPredicate *pPredicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
+            return (post.price <= self.limit.intValue);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:pPredicate]];
     }
