@@ -16,7 +16,8 @@
 #import "SignInVC.h"
 #import "AppDelegate.h"
 #import "LocationManager.h"
-#import "PostManager.h"
+#import "ParseManager.h"
+#import "CoreDataManager.h"
 @import Parse;
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
@@ -131,7 +132,7 @@
 
 - (void)queryActivePostsFromParse {
     __weak HomeScreenViewController *weakSelf = self;
-    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+    [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
@@ -139,7 +140,7 @@
             [weakSelf filterPosts];
             NSLog(@"Filtered posts: %@", weakSelf.filteredPosts);
             
-            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+            [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                 if (error) {
                     NSLog(@"error getting watch posts/updating core data watch status");
                 } else {
@@ -152,7 +153,7 @@
 }
 
 - (void)fetchActivePostsFromCoreData {
-    self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
+    self.postsArray = [[CoreDataManager shared] getActivePostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];
 }

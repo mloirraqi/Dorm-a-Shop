@@ -11,7 +11,7 @@
 #import <GooglePlaces/GooglePlaces.h>
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import "PostManager.h"
+#import "ParseManager.h"
 #import "User.h"
 #import "LocationManager.h"
 @import Parse;
@@ -48,11 +48,11 @@
 //        [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
     
     if (PFUser.currentUser) {
-        [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
             } else {
-                [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                     if (error) {
                         NSLog(@"error getting watch posts/updating core data watch status");
                     } else {
@@ -61,7 +61,7 @@
                     }
                 }];
                 
-                [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+                [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
                     if (error) {
                         NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
                     }
@@ -69,7 +69,7 @@
             }
         }];
         
-        [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
             }

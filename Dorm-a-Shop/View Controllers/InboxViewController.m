@@ -9,7 +9,7 @@
 #import "InboxViewController.h"
 #import "UserCell.h"
 #import "MessageViewController.h"
-#import "PostManager.h"
+#import "ParseManager.h"
 #import "AppDelegate.h"
 #import "ConversationCoreData+CoreDataClass.h"
 @import Parse;
@@ -39,7 +39,7 @@
 }
 
 - (void)fetchConvosFromCoreData {
-    self.convos = [[PostManager shared] allConversations];
+    self.convos = [[ParseManager shared] allConversations];
     NSSortDescriptor *sortDescriptor;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
     NSArray *sortedArray = [self.convos sortedArrayUsingDescriptors:@[sortDescriptor]];
@@ -49,7 +49,7 @@
 
 - (void)fetchConvos {
     __weak InboxViewController *weakSelf = self;
-    [[PostManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+    [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
         weakSelf.convos = conversations;
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];

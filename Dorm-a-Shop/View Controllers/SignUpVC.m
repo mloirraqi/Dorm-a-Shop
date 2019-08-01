@@ -14,7 +14,8 @@
 #import <Parse/Parse.h>
 #import "HomeScreenViewController.h"
 #import "LocationManager.h"
-#import "PostManager.h"
+#import "ParseManager.h"
+#import "CoreDataManager.h"
 #import "UserCoreData+CoreDataClass.h"
 
 @interface SignUpVC ()
@@ -102,7 +103,7 @@
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
             NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-            UserCoreData *newUser = [[PostManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData withManagedObjectContext:context];
+            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData withManagedObjectContext:context];
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 [hud hideAnimated:YES];
@@ -199,7 +200,7 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
     
-    UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
+    UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
     if (address != nil) {
         currentUser.address = address;
         userCoreData.address = address;

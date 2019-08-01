@@ -7,9 +7,11 @@
 //
 
 #import "UploadViewController.h"
-#import "PostManager.h"
+#import "ParseManager.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "AppDelegate.h"
+#import "CoreDataManager.h"
+
 @import Parse;
 
 @interface UploadViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -126,13 +128,13 @@
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSData *imageData = UIImagePNGRepresentation(self.postImage);
         
-        UserCoreData *userCoreData = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
+        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
         
         //set the Parse object id later and Parse createdAt date later when the parse query completes
-        PostCoreData *newPost = [[PostManager shared] savePostToCoreDataWithPost:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatch:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:context];
+        PostCoreData *newPost = [[CoreDataManager shared] savePostToCoreDataWithPost:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatch:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:context];
         
         //parse. here we update the objectId for the post in core data, in the completion block
-        [[PostManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
+        [[ParseManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {

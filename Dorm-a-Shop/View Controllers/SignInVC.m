@@ -10,7 +10,7 @@
 #import "Parse/Parse.h"
 #import "AppDelegate.h"
 #import "User.h"
-#import "PostManager.h"
+#import "ParseManager.h"
 
 @interface SignInVC ()
 
@@ -41,11 +41,11 @@
 }
 
 - (void)setupCoreData {
-    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+    [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
-            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+            [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                 if (error) {
                     NSLog(@"error getting watch posts/updating core data watch status");
                 } else {
@@ -56,7 +56,7 @@
         }
     }];
     
-    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+    [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         }
