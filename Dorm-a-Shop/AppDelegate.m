@@ -40,6 +40,9 @@
         [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+            } else {
+                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
             }
         }];
         

@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParseManager : NSObject
 
 + (id)shared;
+@property (nonatomic, strong) NSArray *categories;
+@property (nonatomic, strong) NSMutableArray *categoryCounts;
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
 - (void)queryWatchedPostsForUser:(PFUser * _Nullable)user withCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
