@@ -22,7 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (id)shared;
 @property (nonatomic, strong) NSArray *categories;
+@property (nonatomic, strong) NSArray *conditions;
 @property (nonatomic, strong) NSMutableArray *categoryCounts;
+@property (nonatomic, strong) NSMutableArray *conditionCounts;
+@property (nonatomic, strong) NSMutableArray *priceCounts;
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
 - (void)queryWatchedPostsForUser:(PFUser * _Nullable)user withCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
