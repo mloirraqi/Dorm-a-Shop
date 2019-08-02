@@ -6,6 +6,7 @@
 //
 
 #import "ComposeReviewViewController.h"
+#import "ReviewCoreData+CoreDataClass.h"
 #import "CoreDataManager.h"
 #import "ParseManager.h"
 #import "AppDelegate.h"
