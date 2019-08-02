@@ -112,10 +112,11 @@
     return [results firstObject]; //firstObject is nil if results has length 0
 }
 
-- (NSMutableArray *)getAllUsersFromCoreData {
+- (NSMutableArray *)getAllUsersInRadiusFromCoreData {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:self.context];
     [request setEntity:entityDescription];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"inRadius == YES"]];
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
@@ -212,7 +213,7 @@
     return postCoreData;
 }
 
-- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     UserCoreData *userCoreData;
     if (userObjectId) {
         userCoreData = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
@@ -228,6 +229,7 @@
         userCoreData.location = location;
         userCoreData.username = username;
         userCoreData.address = address;
+        userCoreData.inRadius = inRadius;
         
         //save to core data persisted store
         NSError *error = nil;

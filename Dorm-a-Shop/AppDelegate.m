@@ -76,7 +76,6 @@
             }
         }];
     } else {
-        //delete all core data
         NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
         NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
         NSError *deleteConversationsError = nil;

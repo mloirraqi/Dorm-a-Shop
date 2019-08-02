@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G84" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="ConversationCoreData" representedClassName="ConversationCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="lastText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
@@ -34,6 +34,7 @@
     <entity name="UserCoreData" representedClassName="UserCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="inRadius" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profilePic" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -44,6 +45,6 @@
         <element name="ConversationCoreData" positionX="117" positionY="162" width="128" height="105"/>
         <element name="PostCoreData" positionX="262.109375" positionY="174.48828125" width="128" height="285"/>
         <element name="ReviewCoreData" positionX="108" positionY="153" width="128" height="120"/>
-        <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="150"/>
+        <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="165"/>
     </elements>
 </model>

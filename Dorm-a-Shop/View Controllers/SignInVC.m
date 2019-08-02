@@ -65,6 +65,8 @@
     [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+        } else {
+            NSLog(@"");
         }
     }];
     
