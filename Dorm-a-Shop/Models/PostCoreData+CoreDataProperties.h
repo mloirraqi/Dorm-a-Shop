@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *title;
 @property (nonatomic) int64_t watchCount;
 @property (nonatomic) BOOL watched;
+@property (nonatomic) BOOL viewed;
 @property (nullable, nonatomic, copy) NSString *watchObjectId;
 @property (nullable, nonatomic, retain) UserCoreData *author;
 

@@ -416,4 +416,21 @@
     }];
 }
 
+- (void)viewPost:(PostCoreData *)postCoreData{
+    if(!postCoreData.viewed) {
+        postCoreData.viewed = YES;
+        [postCoreData.managedObjectContext save:nil];
+        
+        PFObject *view = [PFObject objectWithClassName:@"Views"];
+        view[@"post"] = (Post *)[PFObject objectWithoutDataWithClassName:@"Post" objectId:postCoreData.objectId];
+        view[@"user"] = (User *)[PFUser currentUser];
+        
+        [view saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
+            }
+        }];
+    }
+}
+
 @end

@@ -35,7 +35,7 @@
     }];
     
     [Parse initializeWithConfiguration:config];
-    
+
     if (PFUser.currentUser) {
         [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
