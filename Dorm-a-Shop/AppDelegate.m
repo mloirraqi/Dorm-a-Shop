@@ -37,30 +37,24 @@
     [Parse initializeWithConfiguration:config];
 
     if (PFUser.currentUser) {
+        [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+            } else {
+                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+            }
+        }];
+        
         [[ParseManager shared] queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
             if (error) {
                 NSLog(@"error getting watch posts/updating core data watch status");
             }
         }];
         
-        [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
-            if (error) {
-                NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
-            } else {
-                [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                    if (error) {
-                        NSLog(@"error getting watch posts/updating core data watch status");
-                    } else {
-                        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
-                    }
-                }];
-                
         [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
-                    if (error) {
-                        NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
-                    }
-                }];
+            if (error) {
+                NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
             }
         }];
         

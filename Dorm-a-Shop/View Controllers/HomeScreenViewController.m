@@ -22,7 +22,6 @@
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
 
-@property (strong, nonatomic) AppDelegate *appDelegate;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -55,8 +54,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = self.appDelegate.persistentContainer.viewContext;
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
     
     self.className = @"HomeScreenViewController";
     
