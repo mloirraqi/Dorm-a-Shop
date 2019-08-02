@@ -49,7 +49,7 @@
     }
     
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
     return mutableResults; //firstObject is nil if results has length 0

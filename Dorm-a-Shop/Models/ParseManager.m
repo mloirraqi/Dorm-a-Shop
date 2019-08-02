@@ -53,6 +53,10 @@
 }
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
+    self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
+    self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
+    
     PFUser *currentUser = PFUser.currentUser;
     PFGeoPoint *location = currentUser[@"Location"];
     
@@ -126,7 +130,31 @@
                 if (error) {
                     completion(nil, error);
                 } else {
-                    completion(allPostsArray, nil);
+                    [self queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable viewedPosts, NSError * _Nullable error) {
+                        if (error) {
+                            completion(nil, error);
+                        } else {
+                            for (PostCoreData *post in allPostsArray) {
+                                NSInteger categoryIndex = [weakSelf.categories indexOfObject:post.category];
+                                NSInteger conditionIndex = [weakSelf.conditions indexOfObject:post.condition];
+                                NSInteger priceIndex;
+                                if(post.price > 100) {
+                                    priceIndex = 4;
+                                } else {
+                                    priceIndex = (int)(post.price/25);
+                                }
+                                NSNumber *categoryCount = self.categoryCounts[categoryIndex];
+                                NSNumber *conditionCount = self.conditionCounts[conditionIndex];
+                                NSNumber *priceCount = self.priceCounts[priceIndex];
+                                post.rank = categoryCount.doubleValue * 0.4 + conditionCount.doubleValue * 0.3 + priceCount.doubleValue * 0.3;
+                            }
+                            
+                            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
+                            [allPostsArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                            
+                            completion(allPostsArray, nil);
+                        }
+                    }];
                 }
             }];
         } else {
