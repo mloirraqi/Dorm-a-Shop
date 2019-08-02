@@ -12,6 +12,7 @@
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import "ParseManager.h"
+#import "CoreDataManager.h"
 #import "User.h"
 #import "LocationManager.h"
 @import Parse;
@@ -21,7 +22,6 @@
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [LocationManager sharedInstance];
@@ -35,22 +35,7 @@
     }];
     
     [Parse initializeWithConfiguration:config];
-    
-    NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
-    NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
-    NSError *deleteConversationsError = nil;
-    [self.persistentContainer.viewContext executeRequest:deleteConversations error:&deleteConversationsError];
-    
-    NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-    NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
-    NSError *deletePostsError = nil;
-    [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
-    
-    NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
-    NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
-    NSError *deleteUsersError = nil;
-    [self.persistentContainer.viewContext executeRequest:deleteUsers error:&deleteUsersError];
-    
+
     if (PFUser.currentUser) {
         [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
@@ -84,6 +69,28 @@
                 NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
             }
         }];
+        
+        [[ParseManager shared] queryReviewsForSeller:(User *)PFUser.currentUser withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
+            }
+        }];
+    } else {
+        //delete all core data
+        NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+        NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+        NSError *deleteConversationsError = nil;
+        [self.persistentContainer.viewContext executeRequest:deleteConversations error:&deleteConversationsError];
+        
+        NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+        NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+        NSError *deleteUsersError = nil;
+        [self.persistentContainer.viewContext executeRequest:deleteUsers error:&deleteUsersError];
+        
+        NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+        NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+        NSError *deletePostsError = nil;
+        [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
     }
     
     return YES;

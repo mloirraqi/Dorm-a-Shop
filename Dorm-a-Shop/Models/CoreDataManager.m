@@ -11,7 +11,6 @@
 
 @interface CoreDataManager ()
 
-@property (strong, nonatomic) AppDelegate *appDelegate;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
@@ -31,8 +30,8 @@
 
 - (instancetype) init {
     self = [super init];
-    self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-    self.context = self.appDelegate.persistentContainer.viewContext;
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
     return self;
 }
 
@@ -169,39 +168,39 @@
 }
 
 - (PostCoreData *)savePostToCoreDataWithPost:(Post * _Nullable)post withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatch:(Watches * _Nullable)watch withWatchCount:(long long)watchCount withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
-    
-    PostCoreData *newPost;
+    PostCoreData *postCoreData;
     
     //a new post upload naturally won't immediately have an objectId until it is saved in Parse, so we don't check to see if it already exists bc in this case the user is just creating it
-    if (post) {
-        newPost = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
+    if (postCoreData) {
+        postCoreData = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
     }
     
     //if post doesn't already exist in core data, then create it
-    if (!newPost) {
-        newPost = (PostCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"PostCoreData" inManagedObjectContext:context];
-        newPost.author = author;
+    if (!postCoreData) {
+        postCoreData = (PostCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"PostCoreData" inManagedObjectContext:context];
+        postCoreData.author = author;
         
         //the author has to exist to set its associated post. author should exist, it should have been set during signup. this is just to ensure it exists
         if (author && !author.post) {
-            author.post = [[NSSet alloc] initWithObjects:newPost, nil];
+            author.post = [[NSSet alloc] initWithObjects:postCoreData, nil];
         } else if (author) {
-            author.post = [author.post setByAddingObject:newPost];
+            author.post = [author.post setByAddingObject:postCoreData];
         }
         
-        newPost.image = imageData;
-        newPost.caption = caption;
-        newPost.condition = condition;
-        newPost.category = category;
-        newPost.title = title;
-        newPost.sold = sold;
-        newPost.watched = watched;
-        newPost.watchCount = watchCount;
-        newPost.price = price;
-        newPost.createdAt = createdAt;
-        newPost.watchObjectId = watch.objectId;
-        newPost.objectId = post.objectId;
-        newPost.viewed = NO;
+
+        postCoreData.image = imageData;
+        postCoreData.caption = caption;
+        postCoreData.condition = condition;
+        postCoreData.category = category;
+        postCoreData.title = title;
+        postCoreData.sold = sold;
+        postCoreData.watched = watched;
+        postCoreData.watchCount = watchCount;
+        postCoreData.price = price;
+        postCoreData.createdAt = createdAt;
+        postCoreData.watchObjectId = watch.objectId;
+        postCoreData.objectId = post.objectId;
+        postCoreData.viewed = NO;
         
         //save persistent attributes to core data persisted store
         NSError *error = nil;
@@ -210,26 +209,25 @@
         }
     }
     
-    return newPost;
+    return postCoreData;
 }
 
 - (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
-    
-    UserCoreData *user;
+    UserCoreData *userCoreData;
     if (userObjectId) {
-        user = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
+        userCoreData = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
     }
     
     //if post doesn't already exist in core data, then create it
-    if (!user) {
-        user = (UserCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"UserCoreData" inManagedObjectContext:context];
+    if (!userCoreData) {
+        userCoreData = (UserCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"UserCoreData" inManagedObjectContext:context];
         
-        user.objectId = userObjectId;
-        user.profilePic = imageData;
-        user.email = email;
-        user.location = location;
-        user.username = username;
-        user.address = address;
+        userCoreData.objectId = userObjectId;
+        userCoreData.profilePic = imageData;
+        userCoreData.email = email;
+        userCoreData.location = location;
+        userCoreData.username = username;
+        userCoreData.address = address;
         
         //save to core data persisted store
         NSError *error = nil;
@@ -238,22 +236,21 @@
         }
     }
     
-    return user;
+    return userCoreData;
 }
 
 - (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withDate:(NSDate *)updatedAt withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
-    
-    ConversationCoreData *conversation;
+    ConversationCoreData *conversationCoreData;
     if (conversationObjectId) {
-        conversation = (ConversationCoreData *)[self getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversationObjectId withContext:context];
+        conversationCoreData = (ConversationCoreData *)[self getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversationObjectId withContext:context];
     }
     
-    if (!conversation) {
-        conversation = (ConversationCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"ConversationCoreData" inManagedObjectContext:context];
-        conversation.objectId = conversationObjectId;
-        conversation.sender = sender;
-        conversation.lastText = lastText;
-        conversation.updatedAt = updatedAt;
+    if (!conversationCoreData) {
+        conversationCoreData = (ConversationCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"ConversationCoreData" inManagedObjectContext:context];
+        conversationCoreData.objectId = conversationObjectId;
+        conversationCoreData.sender = sender;
+        conversationCoreData.lastText = lastText;
+        conversationCoreData.updatedAt = updatedAt;
         
         NSError *error = nil;
         if ([context save:&error] == NO) {
@@ -261,7 +258,29 @@
         }
     }
     
-    return conversation;
+    return conversationCoreData;
+}
+
+- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString *)objectId withSeller:(UserCoreData * _Nullable)seller withRating:(int)rating withReview:(NSString * _Nullable)review withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+    ReviewCoreData *reviewCoreData;
+    if (objectId) {
+        reviewCoreData = (ReviewCoreData *)[self getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:self.context];
+    }
+    
+    if (!reviewCoreData) {
+        reviewCoreData = (ReviewCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"ReviewCoreData" inManagedObjectContext:context];
+        reviewCoreData.objectId = objectId;
+        reviewCoreData.seller = seller;
+        reviewCoreData.rating = rating;
+        reviewCoreData.review = review;
+        
+        NSError *error = nil;
+        if ([context save:&error] == NO) {
+            NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+        }
+    }
+    
+    return reviewCoreData;
 }
 
 @end

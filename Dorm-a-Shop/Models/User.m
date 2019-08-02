@@ -9,8 +9,8 @@
 
 @implementation User
 
-@dynamic ProfilePic;
 @dynamic address;
+@dynamic ProfilePic;
 @dynamic Location;
 
 + (nonnull NSString *)parseClassName {

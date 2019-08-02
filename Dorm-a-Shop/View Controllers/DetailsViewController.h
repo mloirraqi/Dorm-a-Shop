@@ -19,15 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-//THE COMMENTED OUT CODE IN THIS CLASS IS STILL NEEDED FOR OUR REFERENCE AND WILL BE REMOVED ONCE NO LONGER NEEDED
 @interface DetailsViewController : UIViewController
 
 @property (nonatomic, strong) PostCoreData *post;
 
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (strong, nonatomic) NSString *senderClassName;
-//@property (nonatomic) BOOL watchStatusChanged;
-//@property (nonatomic) BOOL itemStatusChanged;
 @property (nonatomic, weak) id<DetailsViewControllerDelegate> delegate;
 
 @end

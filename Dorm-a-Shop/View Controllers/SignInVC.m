@@ -53,6 +53,12 @@
                     [self presentViewController:tabBarController animated:YES completion:nil];
                 }
             }];
+            
+            [[ParseManager shared] queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                }
+            }];
         }
     }];
     

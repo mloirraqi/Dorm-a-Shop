@@ -87,7 +87,6 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    
 }
 
 - (IBAction)textValuesChanged:(id)sender {
@@ -134,8 +133,7 @@
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             [MBProgressHUD hideHUDForView:self.view animated:true];
             if (!error) {
-                // Hooray! Let them use the app now.
-                
+                //Let users use app now
                 if (self->selectedLocationPoint != nil) {
                     [self setLocationName];
                 }
