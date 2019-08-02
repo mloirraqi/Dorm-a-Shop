@@ -35,7 +35,22 @@
     }];
     
     [Parse initializeWithConfiguration:config];
-        
+    
+    NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+    NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+    NSError *deleteConversationsError = nil;
+    [self.persistentContainer.viewContext executeRequest:deleteConversations error:&deleteConversationsError];
+    
+    NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+    NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+    NSError *deletePostsError = nil;
+    [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
+    
+    NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+    NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+    NSError *deleteUsersError = nil;
+    [self.persistentContainer.viewContext executeRequest:deleteUsers error:&deleteUsersError];
+    
     if (PFUser.currentUser) {
         [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
@@ -47,6 +62,12 @@
                     } else {
                         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+                    }
+                }];
+                
+                [[ParseManager shared] queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                    if (error) {
+                        NSLog(@"error getting watch posts/updating core data watch status");
                     }
                 }];
                 

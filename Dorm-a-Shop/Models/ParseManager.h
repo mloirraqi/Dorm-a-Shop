@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)queryConversationsFromParseWithCompletion:(void (^)(NSMutableArray<ConversationCoreData *> *, NSError *))completion;
 
 - (void)viewPost:(PostCoreData *)postCoreData;
+- (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
 
 @end
 

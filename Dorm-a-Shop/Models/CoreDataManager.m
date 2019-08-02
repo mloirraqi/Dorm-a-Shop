@@ -201,6 +201,7 @@
         newPost.createdAt = createdAt;
         newPost.watchObjectId = watch.objectId;
         newPost.objectId = post.objectId;
+        newPost.viewed = NO;
         
         //save persistent attributes to core data persisted store
         NSError *error = nil;
