@@ -44,6 +44,8 @@
     self = [super init];
     AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = appDelegate.persistentContainer.viewContext;
+    self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
+    self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
     return self;
 }
 
@@ -173,6 +175,10 @@
                     
                     if ([PFUser.currentUser.objectId isEqualToString:watch.user.objectId]) {
                         postCoreData.watched = YES;
+                        NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
+                        NSNumber *count = self.categoryCounts[categoryIndex];
+                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
+                        [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
                     }
                     
                     [weakSelf.context save:nil];
@@ -439,7 +445,6 @@
 
 - (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion {
     PFQuery *viewQuery = [PFQuery queryWithClassName:@"Views"];
-    [viewQuery orderByDescending:@"createdAt"];
     [viewQuery includeKey:@"post"];
     [viewQuery whereKey:@"user" equalTo:[PFUser currentUser]];
     
@@ -454,6 +459,10 @@
                 Post *viewedPost = (Post *)view[@"post"];
                 PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:viewedPost.objectId withContext:weakSelf.context];
                 postCoreData.viewed = YES;
+                NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
+                NSNumber *count = self.categoryCounts[categoryIndex];
+                NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
                 [weakSelf.context save:nil];
                 [watchedPostsArray addObject:postCoreData];
             }
