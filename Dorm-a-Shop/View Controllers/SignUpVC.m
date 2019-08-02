@@ -103,7 +103,7 @@
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
             NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData withManagedObjectContext:context];
+            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:context];
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 [hud hideAnimated:YES];

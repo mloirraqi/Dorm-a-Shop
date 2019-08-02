@@ -72,7 +72,7 @@
                 if (!userCoreData) {
                     User *user = (User *)post.author;
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
-                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:weakSelf.context];
+                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                     
                     [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -149,9 +149,10 @@
                 UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:watchedPost.author.objectId withContext:weakSelf.context];
                 
                 if (!userCoreData && postCoreData) {
+                    //this really shouldn't ever execute if posts/users were previoiusly saved to core data properly, it's just a failsafe
                     User *user = (User *)watchedPost.author;
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
-                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:weakSelf.context];
+                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
 
                     [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -225,7 +226,7 @@
                 UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:user.objectId withContext:weakSelf.context];
                 NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                 if (!userCoreData) {
-                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:weakSelf.context];
+                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                 } else {
                     //update any properties a user could have changed, except image, which is handled below
                     userCoreData.location = location;
@@ -246,11 +247,11 @@
                 }];
                 [usersArray addObject:userCoreData];
             }
-            NSMutableArray *usersResult = [[CoreDataManager shared] getAllUsersFromCoreData];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
-            [usersResult sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
             
-            completion(usersResult, nil);
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
+            [usersArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            
+            completion(usersArray, nil);
         } else {
             NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
             completion(nil, error);
@@ -290,7 +291,7 @@
                 
                 if (!senderCoreData) {
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", otherUser.Location.latitude, otherUser.Location.longitude];
-                    senderCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withEmail:otherUser.email withLocation:location withAddress:otherUser.address withProfilePic:nil withManagedObjectContext:weakSelf.context];
+                    senderCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withEmail:otherUser.email withLocation:location withAddress:otherUser.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
                     [otherUser.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         if (data) {

@@ -40,7 +40,7 @@
 }
 
 - (void)fetchUsersFromCoreData {
-    self.users = [[CoreDataManager shared] getAllUsersFromCoreData];
+    self.users = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
     [self filterUsers];
     [self.tableView reloadData];
 }
