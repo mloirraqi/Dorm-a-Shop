@@ -53,7 +53,8 @@
     } else {
         UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:self.seller.objectId withContext:self.context];
         
-        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withRating:[self.ratingTextField.text intValue] withReview:self.reviewTextView.text withManagedObjectContext:self.context];
+        //set date and objectId later, in order to get them from parse
+        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withRating:[self.ratingTextField.text intValue] withReview:self.reviewTextView.text withDate:nil withManagedObjectContext:self.context];
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
         NSNumber *ratingNumber = [formatter numberFromString:self.ratingTextField.text];
@@ -63,6 +64,7 @@
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
                 reviewCoreData.objectId = review.objectId;
+                reviewCoreData.dateWritten = review.createdAt;
                 [self.context save:nil];
                 
                 [self dismissViewControllerAnimated:true completion:nil];

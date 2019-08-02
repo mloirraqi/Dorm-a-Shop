@@ -116,7 +116,14 @@
                 
                 [allPostsArray addObject:postCoreData];
             }
-            completion(allPostsArray, nil);
+            
+            [self queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable watchPosts, NSError * _Nullable error) {
+                if (error) {
+                    completion(nil, error);
+                } else {
+                    completion(allPostsArray, nil);
+                }
+            }];
         } else {
             NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
             completion(nil, error);

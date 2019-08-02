@@ -25,6 +25,7 @@
         <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
     </entity>
     <entity name="ReviewCoreData" representedClassName="ReviewCoreData" syncable="YES" codeGenerationType="class">
+        <attribute name="dateWritten" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="review" optional="YES" attributeType="String" syncable="YES"/>
@@ -44,7 +45,7 @@
     <elements>
         <element name="ConversationCoreData" positionX="117" positionY="162" width="128" height="105"/>
         <element name="PostCoreData" positionX="262.109375" positionY="174.48828125" width="128" height="285"/>
-        <element name="ReviewCoreData" positionX="108" positionY="153" width="128" height="120"/>
+        <element name="ReviewCoreData" positionX="108" positionY="153" width="128" height="135"/>
         <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="165"/>
     </elements>
 </model>

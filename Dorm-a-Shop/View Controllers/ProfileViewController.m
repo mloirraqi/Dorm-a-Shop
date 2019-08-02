@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "MessageViewController.h"
 #import "ComposeReviewViewController.h"
+#import "SellerReviewsViewController.h"
 @import Parse;
 
 @interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>

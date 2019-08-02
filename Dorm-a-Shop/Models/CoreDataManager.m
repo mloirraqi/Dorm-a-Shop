@@ -263,7 +263,7 @@
     return conversationCoreData;
 }
 
-- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString *)objectId withSeller:(UserCoreData * _Nullable)seller withRating:(int)rating withReview:(NSString * _Nullable)review withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString *)objectId withSeller:(UserCoreData * _Nullable)seller withRating:(int)rating withReview:(NSString * _Nullable)review withDate:(NSDate *)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     ReviewCoreData *reviewCoreData;
     if (objectId) {
         reviewCoreData = (ReviewCoreData *)[self getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:self.context];
@@ -275,6 +275,7 @@
         reviewCoreData.seller = seller;
         reviewCoreData.rating = rating;
         reviewCoreData.review = review;
+        reviewCoreData.dateWritten = date;
         
         NSError *error = nil;
         if ([context save:&error] == NO) {

@@ -14,6 +14,7 @@
 		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
 		47486BAB22F3687400DE6D8E /* ParseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BAA22F3687400DE6D8E /* ParseManager.m */; };
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
+		47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
@@ -93,6 +94,8 @@
 		47486BAA22F3687400DE6D8E /* ParseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseManager.m; sourceTree = "<group>"; };
 		47486BB822F3D65500DE6D8E /* Review.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Review.h; sourceTree = "<group>"; };
 		47486BB922F3D65500DE6D8E /* Review.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Review.m; sourceTree = "<group>"; };
+		47486BCD22F4ECEA00DE6D8E /* ReviewTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReviewTableViewCell.h; sourceTree = "<group>"; };
+		47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReviewTableViewCell.m; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -329,9 +332,9 @@
 				DE4FCFD522E6744100B1311F /* MessageViewController.h */,
 				DE4FCFD622E6744100B1311F /* MessageViewController.m */,
 				DEA2B53522F4AE4D00FC71DB /* SellerReviewsViewController.h */,
+				DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */,
 				DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */,
 				DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */,
-				DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -345,6 +348,8 @@
 				47A8A9E422DE45EF005D9520 /* PostTableViewCell.m */,
 				DED744F622DFE0A400394748 /* PostCollectionViewCell.h */,
 				DED744F722DFE0A400394748 /* PostCollectionViewCell.m */,
+				47486BCD22F4ECEA00DE6D8E /* ReviewTableViewCell.h */,
+				47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */,
 				DEFE7C8A22E64347006E3096 /* UserCell.h */,
 				DEFE7C8B22E64347006E3096 /* UserCell.m */,
 			);
@@ -699,6 +704,7 @@
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */,
+				47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
 			);

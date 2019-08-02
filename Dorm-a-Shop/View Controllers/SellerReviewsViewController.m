@@ -6,8 +6,16 @@
 //
 
 #import "SellerReviewsViewController.h"
+#import "ReviewCoreData+CoreDataClass.h"
+#import "AppDelegate.h"
+#import "ReviewTableViewCell.h"
 
-@interface SellerReviewsViewController ()
+@interface SellerReviewsViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) NSManagedObjectContext *context;
+@property (strong, nonatomic) NSMutableArray *reviewsArray;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 @end
 
@@ -15,7 +23,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
+    
+    //[self fetchReviewsFromCoreData];
+    [self createRefreshControl];
+}
+
+- (void)receiveNotification:(NSNotification *)notification {
+    if ([[notification name] isEqualToString:@"DidReviewNotification"]) {
+        ReviewCoreData *notificationReview = [[notification userInfo] objectForKey:@"review"];
+        [self.reviewsArray insertObject:notificationReview atIndex:0];
+    }
+}
+
+- (void)createRefreshControl {
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(queryActivePostsFromParse) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
 /*
@@ -27,5 +58,13 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+//- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+//
+//}
+//
+//- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    
+//}
 
 @end
