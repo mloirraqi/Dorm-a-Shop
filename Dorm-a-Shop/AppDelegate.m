@@ -36,17 +36,6 @@
     
     [Parse initializeWithConfiguration:config];
     
-//    delete all of core data. this commented out code is greatly needed for now!!
-        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
-        NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-        NSError *deleteError = nil;
-        [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
-    
-//        NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
-//        NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
-//        NSError *deleteError1 = nil;
-//        [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
-    
     if (PFUser.currentUser) {
         [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
@@ -74,6 +63,22 @@
                 NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
             }
         }];
+    } else {
+        //delete all core data
+        NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+        NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+        NSError *deleteConversationsError = nil;
+        [self.persistentContainer.viewContext executeRequest:deleteConversations error:&deleteConversationsError];
+        
+        NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+        NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+        NSError *deleteUsersError = nil;
+        [self.persistentContainer.viewContext executeRequest:deleteUsers error:&deleteUsersError];
+        
+        NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+        NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+        NSError *deletePostsError = nil;
+        [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
     }
     
     return YES;
