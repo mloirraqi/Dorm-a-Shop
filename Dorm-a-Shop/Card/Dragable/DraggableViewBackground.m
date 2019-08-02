@@ -30,10 +30,21 @@ static const int MAX_BUFFER_SIZE = 2;
     if (self) {
         self.loadedCards = [[NSMutableArray alloc] init];
         self.allCards = [[NSMutableArray alloc] init];
+        self.cardArray = [[NSMutableArray alloc]init];
         self.cardsLoadedIndex = 0;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshContent:) name:@"DidPullActivePosts" object:nil];
         [self setupCards];
     }
     return self;
+}
+
+- (void)refreshContent:(NSNotification *)notification {
+    self.loadedCards = [[NSMutableArray alloc] init];
+    self.allCards = [[NSMutableArray alloc] init];
+    self.cardArray = [[NSMutableArray alloc]init];
+    self.cardsLoadedIndex = 0;
+    self.currentIndex = 0;
+    [self setupCards];
 }
 
 -(void)setupView {
@@ -43,6 +54,7 @@ static const int MAX_BUFFER_SIZE = 2;
     CGRect frame = CGRectMake(0, 24, screenSize.width, 24);
     
     self.userNameLabel = [[UILabel alloc] initWithFrame: frame];
+    [self addSubview:self.userNameLabel];
     self.userNameLabel.textAlignment = NSTextAlignmentCenter;
     self.userNameLabel.font = [UIFont systemFontOfSize:18];
     Card *card = self.cardArray.firstObject;
@@ -67,6 +79,10 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 -(void)loadCards {
+    
+    for (UIView *subview in self.subviews) {
+        [subview removeFromSuperview];
+    }
 
     if([self.cardArray count] > 0) {
         NSInteger numLoadedCardsCap =(([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
@@ -181,14 +197,16 @@ static const int MAX_BUFFER_SIZE = 2;
     NSMutableArray *userNameArray = [[NSMutableArray alloc] init];
     NSMutableArray *userArray = [[NSMutableArray alloc] init];
     for (Post *post in activePosts) {
-        if (post.author != nil) {
+        if (post.author != nil && post.author.username != nil) {
             if (![userNameArray containsObject:post.author.username]) {
-                [userNameArray addObject:post.author.username];
-                [userArray addObject:post.author];
+                if (![post.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
+                    [userNameArray addObject:post.author.username];
+                    [userArray addObject:post.author];
+                }
             }
         }
     }
-            
+    
     for (PFUser *user in userArray) {
         NSMutableArray *userPosts = [[NSMutableArray alloc] init];
         Card *card = [[Card alloc]init];
@@ -201,7 +219,7 @@ static const int MAX_BUFFER_SIZE = 2;
         }
         [self.cardArray addObject:card];
     }
-            
+    
     [self loadCards];
     [self setupView];
 }

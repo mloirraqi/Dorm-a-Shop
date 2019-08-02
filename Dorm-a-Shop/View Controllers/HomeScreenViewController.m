@@ -135,6 +135,7 @@
                 }
             }];
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidPullActivePosts" object:nil];
     }];
 }
 
@@ -142,6 +143,7 @@
     self.postsArray = [[CoreDataManager shared] getActivePostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DidPullActivePosts" object:nil];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
