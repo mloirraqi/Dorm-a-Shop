@@ -53,7 +53,7 @@
     
     PFQuery *userQuery = [PFUser query];
     [userQuery includeKey:@"Location"];
-    [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
+    [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:kilometers];
     
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
@@ -148,16 +148,16 @@
                 PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:watchedPost.objectId withContext:weakSelf.context];
                 UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:watchedPost.author.objectId withContext:weakSelf.context];
                 
-                if (!userCoreData) {
+                if (!userCoreData && postCoreData) {
                     User *user = (User *)watchedPost.author;
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                     userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil withManagedObjectContext:weakSelf.context];
-                    
+
                     [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
                         if (data) {
                             userCoreData.profilePic = data;
-                            
+
                             //save updated attribute to managed object context
                             [weakSelf.context save:nil];
                         } else {
@@ -246,9 +246,10 @@
                 }];
                 [usersArray addObject:userCoreData];
             }
-            NSMutableArray *usersResult = [NSMutableArray arrayWithArray:usersArray];
+            NSMutableArray *usersResult = [[CoreDataManager shared] getAllUsersFromCoreData];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
             [usersResult sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            
             completion(usersResult, nil);
         } else {
             NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
