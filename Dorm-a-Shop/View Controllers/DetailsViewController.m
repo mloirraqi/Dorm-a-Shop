@@ -39,6 +39,8 @@
     //self.itemStatusChanged = NO;
     self.statusButton.hidden = YES;
     
+    [[ParseManager shared] viewPost:self.post];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
