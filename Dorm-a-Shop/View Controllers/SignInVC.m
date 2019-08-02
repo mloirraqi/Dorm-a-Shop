@@ -45,15 +45,6 @@
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
-            [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"error getting watch posts/updating core data watch status");
-                } else {
-                    UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
-                    [self presentViewController:tabBarController animated:YES completion:nil];
-                }
-            }];
-            
             [[ParseManager shared] queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                 if (error) {
                     NSLog(@"error getting watch posts/updating core data watch status");
