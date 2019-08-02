@@ -11,6 +11,11 @@
 		470FB71722EF713F0088A3EC /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71322EF713F0088A3EC /* User.m */; };
 		470FB71A22EF71780088A3EC /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71922EF71780088A3EC /* Watches.m */; };
 		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
+		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
+		47486BAB22F3687400DE6D8E /* ParseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BAA22F3687400DE6D8E /* ParseManager.m */; };
+		47486BB422F3D14800DE6D8E /* SellerReviewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB222F3D14800DE6D8E /* SellerReviewsViewController.m */; };
+		47486BB722F3D16E00DE6D8E /* ComposeReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB622F3D16E00DE6D8E /* ComposeReviewViewController.m */; };
+		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
@@ -23,7 +28,6 @@
 		47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9E422DE45EF005D9520 /* PostTableViewCell.m */; };
 		47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9EA22DE7B2B005D9520 /* DetailsViewController.m */; };
 		47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9F022E12528005D9520 /* WatchListViewController.m */; };
-		47A8A9F722E291F1005D9520 /* PostManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9F622E291F1005D9520 /* PostManager.m */; };
 		4D6E9F6C086D7869B5467E8A /* Pods_Dorm_a_Shop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4268938640FC639A22F54977 /* Pods_Dorm_a_Shop.framework */; };
 		90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */; };
 		DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFC22DE7BE900418DE3 /* UploadViewController.m */; };
@@ -49,12 +53,6 @@
 		EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */; };
 		EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */; };
 		EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724422E95C6B00426226 /* CardsViewController.m */; };
-		EAFA14E022F0FE2C00F39EBF /* UserCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFA14DB22F0FE2C00F39EBF /* UserCoreData+CoreDataClass.m */; };
-		EAFA14E122F0FE2C00F39EBF /* UserCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFA14DC22F0FE2C00F39EBF /* UserCoreData+CoreDataProperties.m */; };
-		EAFA14E222F0FE2C00F39EBF /* PostCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFA14DD22F0FE2C00F39EBF /* PostCoreData+CoreDataProperties.m */; };
-		EAFA14E322F0FE2C00F39EBF /* PostCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFA14DE22F0FE2C00F39EBF /* PostCoreData+CoreDataClass.m */; };
-		EAFA14E822F0FE7300F39EBF /* ConversationCoreData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFA14E422F0FE7300F39EBF /* ConversationCoreData+CoreDataProperties.m */; };
-		EAFA14E922F0FE7300F39EBF /* ConversationCoreData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = EAFA14E522F0FE7300F39EBF /* ConversationCoreData+CoreDataClass.m */; };
 		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +87,16 @@
 		470FB72A22F0C09B0088A3EC /* Conversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Conversation.h; sourceTree = "<group>"; };
 		470FB72B22F0C09B0088A3EC /* Conversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		47486BA622F3626E00DE6D8E /* CoreDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
+		47486BA722F3626E00DE6D8E /* CoreDataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
+		47486BA922F3687400DE6D8E /* ParseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseManager.h; sourceTree = "<group>"; };
+		47486BAA22F3687400DE6D8E /* ParseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseManager.m; sourceTree = "<group>"; };
+		47486BB222F3D14800DE6D8E /* SellerReviewsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SellerReviewsViewController.m; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/SellerReviewsViewController.m"; sourceTree = "<absolute>"; };
+		47486BB322F3D14800DE6D8E /* SellerReviewsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SellerReviewsViewController.h; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/SellerReviewsViewController.h"; sourceTree = "<absolute>"; };
+		47486BB522F3D16E00DE6D8E /* ComposeReviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ComposeReviewViewController.h; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ComposeReviewViewController.h"; sourceTree = "<absolute>"; };
+		47486BB622F3D16E00DE6D8E /* ComposeReviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ComposeReviewViewController.m; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ComposeReviewViewController.m"; sourceTree = "<absolute>"; };
+		47486BB822F3D65500DE6D8E /* Review.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Review.h; sourceTree = "<group>"; };
+		47486BB922F3D65500DE6D8E /* Review.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Review.m; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -113,8 +121,6 @@
 		47A8A9EA22DE7B2B005D9520 /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		47A8A9EF22E12528005D9520 /* WatchListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WatchListViewController.h; sourceTree = "<group>"; };
 		47A8A9F022E12528005D9520 /* WatchListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
-		47A8A9F522E291F1005D9520 /* PostManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostManager.h; sourceTree = "<group>"; };
-		47A8A9F622E291F1005D9520 /* PostManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostManager.m; sourceTree = "<group>"; };
 		4F391BB0A88FF785BA25E839 /* Pods-Dorm-a-Shop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-Shop.release.xcconfig"; path = "Target Support Files/Pods-Dorm-a-Shop/Pods-Dorm-a-Shop.release.xcconfig"; sourceTree = "<group>"; };
 		4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dorm_a_ShopUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B990968EF4F50E238A28966 /* Pods-Dorm-a-ShopTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dorm-a-ShopTests.debug.xcconfig"; path = "Target Support Files/Pods-Dorm-a-ShopTests/Pods-Dorm-a-ShopTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -164,18 +170,6 @@
 		EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		EAEB724422E95C6B00426226 /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
 		EAEB724522E95C6B00426226 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
-		EAFA14D822F0FE2C00F39EBF /* UserCoreData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UserCoreData+CoreDataClass.h"; sourceTree = "<group>"; };
-		EAFA14D922F0FE2C00F39EBF /* UserCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UserCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
-		EAFA14DA22F0FE2C00F39EBF /* PostCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
-		EAFA14DB22F0FE2C00F39EBF /* UserCoreData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserCoreData+CoreDataClass.m"; sourceTree = "<group>"; };
-		EAFA14DC22F0FE2C00F39EBF /* UserCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserCoreData+CoreDataProperties.m"; sourceTree = "<group>"; };
-		EAFA14DD22F0FE2C00F39EBF /* PostCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PostCoreData+CoreDataProperties.m"; sourceTree = "<group>"; };
-		EAFA14DE22F0FE2C00F39EBF /* PostCoreData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PostCoreData+CoreDataClass.m"; sourceTree = "<group>"; };
-		EAFA14DF22F0FE2C00F39EBF /* PostCoreData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostCoreData+CoreDataClass.h"; sourceTree = "<group>"; };
-		EAFA14E422F0FE7300F39EBF /* ConversationCoreData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ConversationCoreData+CoreDataProperties.m"; sourceTree = "<group>"; };
-		EAFA14E522F0FE7300F39EBF /* ConversationCoreData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ConversationCoreData+CoreDataClass.m"; sourceTree = "<group>"; };
-		EAFA14E622F0FE7300F39EBF /* ConversationCoreData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConversationCoreData+CoreDataClass.h"; sourceTree = "<group>"; };
-		EAFA14E722F0FE7300F39EBF /* ConversationCoreData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConversationCoreData+CoreDataProperties.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,22 +291,14 @@
 				470FB71922EF71780088A3EC /* Watches.m */,
 				470FB72A22F0C09B0088A3EC /* Conversation.h */,
 				470FB72B22F0C09B0088A3EC /* Conversation.m */,
-				47A8A9F522E291F1005D9520 /* PostManager.h */,
-				47A8A9F622E291F1005D9520 /* PostManager.m */,
+				47486BB822F3D65500DE6D8E /* Review.h */,
+				47486BB922F3D65500DE6D8E /* Review.m */,
+				47486BA922F3687400DE6D8E /* ParseManager.h */,
+				47486BAA22F3687400DE6D8E /* ParseManager.m */,
+				47486BA622F3626E00DE6D8E /* CoreDataManager.h */,
+				47486BA722F3626E00DE6D8E /* CoreDataManager.m */,
 				470FB6F722EF70240088A3EC /* LocationManager.h */,
 				470FB6F822EF70240088A3EC /* LocationManager.m */,
-				EAFA14E622F0FE7300F39EBF /* ConversationCoreData+CoreDataClass.h */,
-				EAFA14E522F0FE7300F39EBF /* ConversationCoreData+CoreDataClass.m */,
-				EAFA14E722F0FE7300F39EBF /* ConversationCoreData+CoreDataProperties.h */,
-				EAFA14E422F0FE7300F39EBF /* ConversationCoreData+CoreDataProperties.m */,
-				EAFA14DF22F0FE2C00F39EBF /* PostCoreData+CoreDataClass.h */,
-				EAFA14DE22F0FE2C00F39EBF /* PostCoreData+CoreDataClass.m */,
-				EAFA14DA22F0FE2C00F39EBF /* PostCoreData+CoreDataProperties.h */,
-				EAFA14DD22F0FE2C00F39EBF /* PostCoreData+CoreDataProperties.m */,
-				EAFA14D822F0FE2C00F39EBF /* UserCoreData+CoreDataClass.h */,
-				EAFA14DB22F0FE2C00F39EBF /* UserCoreData+CoreDataClass.m */,
-				EAFA14D922F0FE2C00F39EBF /* UserCoreData+CoreDataProperties.h */,
-				EAFA14DC22F0FE2C00F39EBF /* UserCoreData+CoreDataProperties.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -342,6 +328,10 @@
 				DE4FCFD322E66FE500B1311F /* InboxViewController.m */,
 				DE4FCFD522E6744100B1311F /* MessageViewController.h */,
 				DE4FCFD622E6744100B1311F /* MessageViewController.m */,
+				47486BB322F3D14800DE6D8E /* SellerReviewsViewController.h */,
+				47486BB222F3D14800DE6D8E /* SellerReviewsViewController.m */,
+				47486BB522F3D16E00DE6D8E /* ComposeReviewViewController.h */,
+				47486BB622F3D16E00DE6D8E /* ComposeReviewViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -674,10 +664,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				470FB71722EF713F0088A3EC /* User.m in Sources */,
+				47486BBA22F3D65500DE6D8E /* Review.m in Sources */,
 				EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */,
 				47A8A9E022DE453C005D9520 /* HomeScreenViewController.m in Sources */,
-				EAFA14E222F0FE2C00F39EBF /* PostCoreData+CoreDataProperties.m in Sources */,
-				EAFA14E322F0FE2C00F39EBF /* PostCoreData+CoreDataClass.m in Sources */,
 				DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */,
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
 				EAEB723D22E9369900426226 /* Card.m in Sources */,
@@ -686,31 +675,30 @@
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
 				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
 				470FB71A22EF71780088A3EC /* Watches.m in Sources */,
+				47486BB422F3D14800DE6D8E /* SellerReviewsViewController.m in Sources */,
+				47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				470FB6F922EF70240088A3EC /* LocationManager.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
-				EAFA14E922F0FE7300F39EBF /* ConversationCoreData+CoreDataClass.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
-				EAFA14E822F0FE7300F39EBF /* ConversationCoreData+CoreDataProperties.m in Sources */,
 				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
-				EAFA14E022F0FE2C00F39EBF /* UserCoreData+CoreDataClass.m in Sources */,
+				47486BAB22F3687400DE6D8E /* ParseManager.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
 				470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */,
-				47A8A9F722E291F1005D9520 /* PostManager.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
 				EAEB723A22E9316200426226 /* OverlayView.m in Sources */,
 				EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
-				EAFA14E122F0FE2C00F39EBF /* UserCoreData+CoreDataProperties.m in Sources */,
+				47486BB722F3D16E00DE6D8E /* ComposeReviewViewController.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
 			);

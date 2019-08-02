@@ -12,9 +12,11 @@
 #import "Post.h"
 #import "SignInVC.h"
 #import "EditProfileVC.h"
-#import "PostManager.h"
+#import "ParseManager.h"
+#import "CoreDataManager.h"
 #import "AppDelegate.h"
 #import "MessageViewController.h"
+#import "ComposeReviewViewController.h"
 @import Parse;
 
 @interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -32,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *className;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
@@ -44,8 +47,8 @@
     
     if (!self.user) {
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-        self.user = (UserCoreData *)[[PostManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
+        self.context = appDelegate.persistentContainer.viewContext;
+        self.user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
     } else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
@@ -91,12 +94,13 @@
     self.profilePic.layer.masksToBounds = YES;
     
     NSData *imageData = self.user.profilePic;
-    UIImage *image = [UIImage imageWithData:imageData];
-    if (image) {
+    [self.profilePic setImage:[UIImage imageNamed:@"item_placeholder"]];
+    if (imageData) {
+        UIImage *image = [UIImage imageWithData:imageData];
         [self.profilePic setImage:image];
     }
 
-    NSMutableArray *profilePostsArray = [[PostManager shared] getProfilePostsFromCoreDataForUser:self.user];
+    NSMutableArray *profilePostsArray = [[CoreDataManager shared] getProfilePostsFromCoreDataForUser:self.user];
     
     NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
     self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
@@ -177,15 +181,24 @@
         editProfileViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
-        msgViewController.receiver = sender;
+        msgViewController.user = self.user;
+    } else if ([segue.identifier isEqualToString:@"segueToComposeReview"]) {
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeReviewViewController *composeReviewViewController = navigationController.topViewController;
+        composeReviewViewController.seller = self.user;
     }
 }
 
 - (IBAction)logout:(id)sender {
-    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Error logging out!: %@", error.localizedDescription);
+        } else {
+            [self deleteAllCoreData];
+        }
+    }];
     
     SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
-    
     [self presentViewController:signInVC animated:YES completion:nil];
 }
 
@@ -193,18 +206,21 @@
     [self fetchProfileFromCoreData];
 }
 
-- (IBAction)sendMessage:(id)sender {
-    PFQuery *userQuery = [PFQuery queryWithClassName:@"_User"];
-    __weak ProfileViewController *weakSelf = self;
-    [userQuery getObjectInBackgroundWithId:self.user.objectId block:^(PFObject * _Nullable user, NSError * _Nullable error) {
-        if (user) {
-            [weakSelf performSegueWithIdentifier:@"sendMsg" sender:(PFUser *) user];
-        } else {
-            NSLog(@"error getting user by objectId! %@", error.localizedDescription);
-        }
-    }];
+- (void)deleteAllCoreData {
+    NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+    NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+    NSError *deleteConversationsError = nil;
+    [self.context executeRequest:deleteConversations error:&deleteConversationsError];
     
+    NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+    NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+    NSError *deleteUsersError = nil;
+    [self.context executeRequest:deleteUsers error:&deleteUsersError];
     
+    NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+    NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+    NSError *deletePostsError = nil;
+    [self.context executeRequest:deletePosts error:&deletePostsError];
 }
 
 @end

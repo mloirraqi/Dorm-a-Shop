@@ -11,6 +11,7 @@
 
 @dynamic address;
 @dynamic ProfilePic;
+@dynamic address;
 @dynamic Location;
 
 + (nonnull NSString *)parseClassName {

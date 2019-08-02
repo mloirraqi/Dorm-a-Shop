@@ -10,7 +10,7 @@
 #import "Parse/Parse.h"
 #import "AppDelegate.h"
 #import "User.h"
-#import "PostManager.h"
+#import "ParseManager.h"
 
 @interface SignInVC ()
 
@@ -35,8 +35,36 @@
         if (error != nil) {
             [self showAlertView:@"Unable to Sign in"];
         } else {
-            UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
-            [self presentViewController:tabBarController animated:YES completion:nil];
+            [self setupCoreData];
+        }
+    }];
+}
+
+- (void)setupCoreData {
+    [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        } else {
+            [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                } else {
+                    UITabBarController *tabBarController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"tabBarController"];
+                    [self presentViewController:tabBarController animated:YES completion:nil];
+                }
+            }];
+        }
+    }];
+    
+    [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+        }
+    }];
+    
+    [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
         }
     }];
 }

@@ -9,7 +9,8 @@
 #import "SearchViewController.h"
 #import "UserCell.h"
 #import "ProfileViewController.h"
-#import "PostManager.h"
+#import "ParseManager.h"
+#import "CoreDataManager.h"
 @import Parse;
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
@@ -39,14 +40,14 @@
 }
 
 - (void)fetchUsersFromCoreData {
-    self.users = [[PostManager shared] getAllUsersFromCoreData];
+    self.users = [[CoreDataManager shared] getAllUsersFromCoreData];
     [self filterUsers];
     [self.tableView reloadData];
 }
 
 - (void)fetchUsers {
     __weak SearchViewController *weakSelf = self;
-    [[PostManager shared] queryAllUsersWithinKilometers:5.0 withCompletion:^(NSMutableArray<UserCoreData *> * users, NSError * error) {
+    [[ParseManager shared] queryAllUsersWithinKilometers:5.0 withCompletion:^(NSMutableArray<UserCoreData *> * users, NSError * error) {
         if (users) {
             weakSelf.users = [NSMutableArray arrayWithArray:users];
             [weakSelf filterUsers];

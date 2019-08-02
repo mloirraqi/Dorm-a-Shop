@@ -16,7 +16,8 @@
 #import "SignInVC.h"
 #import "AppDelegate.h"
 #import "LocationManager.h"
-#import "PostManager.h"
+#import "ParseManager.h"
+#import "CoreDataManager.h"
 @import Parse;
 
 @interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
@@ -71,7 +72,7 @@
     self.distanceTable.dataSource = self;
     self.distanceTable.delegate = self;
     self.categories = @[@"All", @"Furniture", @"Books", @"Beauty", @"Other"];
-    self.conditions = @[@"All", @"New", @"Nearly New", @"Old"];
+    self.conditions = @[@"All", @"New", @"Nearly New", @"Used"];
     self.prices = @[@"All", @"<$25", @"<$50", @"<$100"];
     self.pricesInt = @[@0, @25, @50, @100];
     self.distances = @[@"All", @"<1 Miles", @"<3 Miles", @"<5 Miles"];
@@ -85,19 +86,6 @@
     
     [self fetchActivePostsFromCoreData];
     [self createRefreshControl];
-}
-
-//should find a way to take this out
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    NSError *error = nil;
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"PostCoreData"];
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
 }
 
 - (void)receiveNotification:(NSNotification *)notification {
@@ -131,15 +119,14 @@
 
 - (void)queryActivePostsFromParse {
     __weak HomeScreenViewController *weakSelf = self;
-    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+    [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             weakSelf.postsArray = activePosts;
-            weakSelf.filteredPosts = weakSelf.postsArray;
-            NSLog(@"Filtered posts: %@", weakSelf.filteredPosts);
+            [weakSelf filterPosts];
             
-            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+            [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                 if (error) {
                     NSLog(@"error getting watch posts/updating core data watch status");
                 } else {
@@ -152,7 +139,7 @@
 }
 
 - (void)fetchActivePostsFromCoreData {
-    self.postsArray = [[PostManager shared] getActivePostsFromCoreData];
+    self.postsArray = [[CoreDataManager shared] getActivePostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];
 }
@@ -204,14 +191,6 @@
 }
 
 - (void)updateDetailsData:(UIViewController *)viewController {
-    /*COMMENTS ARE STILL NEEDED, BUT WILL BE CLEANED UP LATER
-     DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-    if (detailsViewController.itemStatusChanged) {
-        if (detailsViewController.post.sold == YES) {
-            [self.postsArray removeObject:detailsViewController.post];
-            [self filterPosts];
-        }
-    }*/
     [self filterPosts];
 }
 
@@ -274,8 +253,8 @@
     }
     
     if (![[self.pricesButton currentTitle] isEqual: @"Price: All"]) {
-        NSPredicate *pPredicate = [NSPredicate predicateWithBlock:^BOOL(Post *post, NSDictionary *bindings) {
-            return (post.price.intValue <= self.limit.intValue);
+        NSPredicate *pPredicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
+            return (post.price <= self.limit.intValue);
         }];
         self.filteredPosts = [NSMutableArray arrayWithArray:[self.filteredPosts filteredArrayUsingPredicate:pPredicate]];
     }

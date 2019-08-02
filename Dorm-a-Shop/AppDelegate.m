@@ -11,7 +11,9 @@
 #import <GooglePlaces/GooglePlaces.h>
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import "PostManager.h"
+#import "ParseManager.h"
+#import "CoreDataManager.h"
+#import "User.h"
 #import "LocationManager.h"
 @import Parse;
 
@@ -20,7 +22,6 @@
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [LocationManager sharedInstance];
@@ -34,40 +35,57 @@
     }];
     
     [Parse initializeWithConfiguration:config];
-    
-    //delete all of core data. this commented out code is greatly needed for now!!
-//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-//    NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-//    NSError *deleteError = nil;
-//    [self.persistentContainer.viewContext executeRequest:delete error:&deleteError];
-//
-//    NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
-//    NSBatchDeleteRequest *delete1 = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
-//    NSError *deleteError1 = nil;
-//    [self.persistentContainer.viewContext executeRequest:delete1 error:&deleteError1];
-    
-    [[PostManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
-        } else {
-            [[PostManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"error getting watch posts/updating core data watch status");
-                } else {
-                    if (PFUser.currentUser) {
+
+    if (PFUser.currentUser) {
+        [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+            } else {
+                [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                    if (error) {
+                        NSLog(@"error getting watch posts/updating core data watch status");
+                    } else {
                         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
                     }
-                }
-            }];
-        }
-    }];
-    
-    [[PostManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
-        if (error) {
-            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
-        }
-    }];
+                }];
+                
+                [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+                    if (error) {
+                        NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+                    }
+                }];
+            }
+        }];
+        
+        [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+            }
+        }];
+        
+        [[ParseManager shared] queryReviewsForSeller:(User *)PFUser.currentUser withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
+            }
+        }];
+    } else {
+        //delete all core data
+        NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+        NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+        NSError *deleteConversationsError = nil;
+        [self.persistentContainer.viewContext executeRequest:deleteConversations error:&deleteConversationsError];
+        
+        NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+        NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+        NSError *deleteUsersError = nil;
+        [self.persistentContainer.viewContext executeRequest:deleteUsers error:&deleteUsersError];
+        
+        NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+        NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+        NSError *deletePostsError = nil;
+        [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
+    }
     
     return YES;
 }
@@ -82,6 +100,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
 }
 
 

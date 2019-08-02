@@ -15,7 +15,7 @@
 @dynamic lastText;
 
 + (nonnull NSString *)parseClassName {
-    return @"Conversation";
+    return @"Convos";
 }
 
 @end

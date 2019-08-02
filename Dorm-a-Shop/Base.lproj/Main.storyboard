@@ -502,12 +502,25 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tCo-iS-zRe">
+                                                <rect key="frame" x="299" y="38" width="94" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="View Reviews"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g0d-yj-fjW">
+                                                <rect key="frame" x="302" y="67" width="89" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Write Review"/>
+                                                <connections>
+                                                    <segue destination="hNF-zH-KBz" kind="presentation" identifier="segueToComposeReview" id="myr-jc-hma"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I06-uU-Ytn">
-                                                <rect key="frame" x="322" y="13" width="62" height="30"/>
+                                                <rect key="frame" x="329" y="13" width="62" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Message"/>
                                                 <connections>
-                                                    <action selector="sendMessage:" destination="ji6-xS-49q" eventType="touchUpInside" id="NkI-e1-FxV"/>
+                                                    <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="oCN-lU-gXW"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -564,7 +577,6 @@
                         <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
                         <outlet property="soldCount" destination="hnD-aV-NDt" id="wou-je-0Gh"/>
                         <outlet property="username" destination="J0d-zI-pQn" id="cJW-5K-Nbz"/>
-                        <segue destination="Me0-LG-K4x" kind="show" identifier="sendMsg" id="I6l-3G-Wbh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aCQ-Zc-Blj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -916,6 +928,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JME-qJ-rWa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2859" y="919"/>
+        </scene>
+        <!--Seller Reviews View Controller-->
+        <scene sceneID="u3I-cj-RvU">
+            <objects>
+                <viewController id="jZh-I3-ppB" customClass="SellerReviewsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QWT-cM-cs3">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YZv-Tn-aPq">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="135" id="RUK-SO-vQf">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="135"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="RUK-SO-vQf" id="r4o-KM-1Rs">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="134.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="dCI-sR-n6Z"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="08o-7g-b1c" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3811.594202898551" y="918.75"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3K8-Bv-zwe">
@@ -1412,6 +1456,54 @@
             </objects>
             <point key="canvasLocation" x="1141" y="1631"/>
         </scene>
+        <!--Compose Review View Controller-->
+        <scene sceneID="QcW-Pj-YGb">
+            <objects>
+                <viewController id="zSL-ce-JhF" customClass="ComposeReviewViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R18-qa-1bY">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="g7a-kN-HFb">
+                                <rect key="frame" x="20" y="150" width="374" height="712"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <mutableString key="text">Review: Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="M3y-Uo-7Le">
+                                <rect key="frame" x="20" y="112" width="85" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="xSO-7L-X2P"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ygn-nf-k8N">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="hRO-T2-0mL">
+                            <connections>
+                                <action selector="cancelAction:" destination="zSL-ce-JhF" id="TgB-Ho-gSn"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Submit" id="qZD-BS-FHV">
+                            <connections>
+                                <action selector="submitAction:" destination="zSL-ce-JhF" id="Vks-WJ-DCi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="ratingTextField" destination="M3y-Uo-7Le" id="fY9-V7-33v"/>
+                        <outlet property="reviewTextView" destination="g7a-kN-HFb" id="43L-h1-nP6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hcd-fK-jK9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5547.826086956522" y="1668.75"/>
+        </scene>
         <!--Search-->
         <scene sceneID="hIe-vj-KNL">
             <objects>
@@ -1509,7 +1601,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bwa-aY-CVQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3693" y="2182"/>
+            <point key="canvasLocation" x="3687" y="2416"/>
         </scene>
         <!--Inbox-->
         <scene sceneID="5uo-wp-sam">
@@ -1694,7 +1786,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2vD-ak-640" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2933" y="2182"/>
+            <point key="canvasLocation" x="2926" y="2416"/>
         </scene>
         <!--Inbox-->
         <scene sceneID="H9s-J1-gJJ">
@@ -1761,6 +1853,24 @@
             </objects>
             <point key="canvasLocation" x="-43.478260869565219" y="3112.5"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="XA3-Ch-3wB">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hNF-zH-KBz" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DOd-Oc-yk9">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="zSL-ce-JhF" kind="relationship" relationship="rootViewController" id="wsc-QE-LDh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yOD-4e-1ld" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4637.68115942029" y="1668.75"/>
+        </scene>
     </scenes>
     <resources>
         <image name="addLogo" width="187" height="187"/>
@@ -1768,8 +1878,8 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MkK-t9-lSX"/>
-        <segue reference="I6l-3G-Wbh"/>
+        <segue reference="fhM-T6-QvG"/>
+        <segue reference="oCN-lU-gXW"/>
         <segue reference="ni5-B6-yy2"/>
         <segue reference="inK-qS-1By"/>
         <segue reference="ch5-tg-CXn"/>
