@@ -112,10 +112,8 @@
         
         [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (succeeded) {
-                AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-                NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
                 weakSelf.conversationCoreData.lastText = self.msgInput.text;
-                [context save:nil];
+                [weakSelf.context save:nil];
                 weakSelf.msgInput.text = @"";
             } else {
                 NSLog(@"Problem saving message: %@", error.localizedDescription);
