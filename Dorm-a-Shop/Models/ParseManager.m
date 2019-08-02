@@ -438,6 +438,31 @@
     }
 }
 
+- (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion {
+    PFQuery *viewQuery = [PFQuery queryWithClassName:@"Views"];
+    [viewQuery orderByDescending:@"createdAt"];
+    [viewQuery includeKey:@"post"];
+    [viewQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    
+    __weak ParseManager *weakSelf = self;
+    [viewQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable views, NSError * _Nullable error) {
+        if (error) {
+            completion(nil, error);
+        } else {
+            NSMutableArray *watchedPostsArray = [[NSMutableArray alloc] init];
+            
+            for (PFObject *view in views) {
+                Post *viewedPost = (Post *)view[@"post"];
+                PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:viewedPost.objectId withContext:weakSelf.context];
+                postCoreData.viewed = YES;
+                [weakSelf.context save:nil];
+                [watchedPostsArray addObject:postCoreData];
+            }
+            completion(watchedPostsArray, nil);
+        }
+    }];
+}
+            
 - (void)postReviewToParseWithSeller:(User *)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion {
     Review *newReview = [Review new];
     

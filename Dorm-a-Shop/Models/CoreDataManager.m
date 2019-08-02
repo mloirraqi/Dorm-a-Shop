@@ -187,6 +187,7 @@
             author.post = [author.post setByAddingObject:postCoreData];
         }
         
+
         postCoreData.image = imageData;
         postCoreData.caption = caption;
         postCoreData.condition = condition;
@@ -199,6 +200,7 @@
         postCoreData.createdAt = createdAt;
         postCoreData.watchObjectId = watch.objectId;
         postCoreData.objectId = post.objectId;
+        postCoreData.viewed = NO;
         
         //save persistent attributes to core data persisted store
         NSError *error = nil;

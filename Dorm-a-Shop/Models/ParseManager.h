@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)postReviewToParseWithSeller:(User * _Nullable)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion;
 
 - (void)viewPost:(PostCoreData *)postCoreData;
+- (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
 
 @end
 

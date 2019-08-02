@@ -13,8 +13,6 @@
 		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
 		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
 		47486BAB22F3687400DE6D8E /* ParseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BAA22F3687400DE6D8E /* ParseManager.m */; };
-		47486BB422F3D14800DE6D8E /* SellerReviewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB222F3D14800DE6D8E /* SellerReviewsViewController.m */; };
-		47486BB722F3D16E00DE6D8E /* ComposeReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB622F3D16E00DE6D8E /* ComposeReviewViewController.m */; };
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
@@ -36,6 +34,8 @@
 		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
 		DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD922E686DE00B1311F /* EditProfileVC.m */; };
 		DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */; };
+		DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */; };
+		DEA2B53922F4AE7800FC71DB /* ComposeReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
@@ -91,10 +91,6 @@
 		47486BA722F3626E00DE6D8E /* CoreDataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		47486BA922F3687400DE6D8E /* ParseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseManager.h; sourceTree = "<group>"; };
 		47486BAA22F3687400DE6D8E /* ParseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseManager.m; sourceTree = "<group>"; };
-		47486BB222F3D14800DE6D8E /* SellerReviewsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SellerReviewsViewController.m; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/SellerReviewsViewController.m"; sourceTree = "<absolute>"; };
-		47486BB322F3D14800DE6D8E /* SellerReviewsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SellerReviewsViewController.h; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/SellerReviewsViewController.h"; sourceTree = "<absolute>"; };
-		47486BB522F3D16E00DE6D8E /* ComposeReviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ComposeReviewViewController.h; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ComposeReviewViewController.h"; sourceTree = "<absolute>"; };
-		47486BB622F3D16E00DE6D8E /* ComposeReviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ComposeReviewViewController.m; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/View Controllers/ComposeReviewViewController.m"; sourceTree = "<absolute>"; };
 		47486BB822F3D65500DE6D8E /* Review.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Review.h; sourceTree = "<group>"; };
 		47486BB922F3D65500DE6D8E /* Review.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Review.m; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +133,10 @@
 		DE4FCFD822E686DE00B1311F /* EditProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileVC.h; sourceTree = "<group>"; };
 		DE4FCFD922E686DE00B1311F /* EditProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileVC.m; sourceTree = "<group>"; };
 		DE4FD01022EA3D1100B1311F /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
+		DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SellerReviewsViewController.m; sourceTree = "<group>"; };
+		DEA2B53522F4AE4D00FC71DB /* SellerReviewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SellerReviewsViewController.h; sourceTree = "<group>"; };
+		DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeReviewViewController.h; sourceTree = "<group>"; };
+		DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeReviewViewController.m; sourceTree = "<group>"; };
 		DED744F622DFE0A400394748 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		DED744F722DFE0A400394748 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		DEFE7C8722E640DF006E3096 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -328,10 +328,10 @@
 				DE4FCFD322E66FE500B1311F /* InboxViewController.m */,
 				DE4FCFD522E6744100B1311F /* MessageViewController.h */,
 				DE4FCFD622E6744100B1311F /* MessageViewController.m */,
-				47486BB322F3D14800DE6D8E /* SellerReviewsViewController.h */,
-				47486BB222F3D14800DE6D8E /* SellerReviewsViewController.m */,
-				47486BB522F3D16E00DE6D8E /* ComposeReviewViewController.h */,
-				47486BB622F3D16E00DE6D8E /* ComposeReviewViewController.m */,
+				DEA2B53522F4AE4D00FC71DB /* SellerReviewsViewController.h */,
+				DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */,
+				DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */,
+				DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -675,12 +675,12 @@
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
 				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
 				470FB71A22EF71780088A3EC /* Watches.m in Sources */,
-				47486BB422F3D14800DE6D8E /* SellerReviewsViewController.m in Sources */,
 				47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				470FB6F922EF70240088A3EC /* LocationManager.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
+				DEA2B53922F4AE7800FC71DB /* ComposeReviewViewController.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
 				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
@@ -698,7 +698,7 @@
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
-				47486BB722F3D16E00DE6D8E /* ComposeReviewViewController.m in Sources */,
+				DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
 			);
@@ -875,13 +875,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A3A3BF55QH;
+				DEVELOPMENT_TEAM = GBM98UU555;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -893,13 +893,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A3A3BF55QH;
+				DEVELOPMENT_TEAM = GBM98UU555;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
