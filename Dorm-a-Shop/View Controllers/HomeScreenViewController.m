@@ -125,7 +125,6 @@
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             weakSelf.postsArray = activePosts;
             [weakSelf filterPosts];
-            NSLog(@"Filtered posts: %@", weakSelf.filteredPosts);
             
             [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
                 if (error) {

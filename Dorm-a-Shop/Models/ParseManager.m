@@ -11,6 +11,7 @@
 #import "Watches.h"
 #import "User.h"
 #import "Conversation.h"
+#import "Review.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "UserCoreData+CoreDataClass.h"
 #import "ConversationCoreData+CoreDataClass.h"
@@ -22,7 +23,6 @@
 
 @interface ParseManager ()
 
-@property (strong, nonatomic) AppDelegate *appDelegate;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
@@ -42,8 +42,8 @@
 
 - (instancetype) init {
     self = [super init];
-    self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-    self.context = self.appDelegate.persistentContainer.viewContext;
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
     return self;
 }
 
@@ -257,6 +257,77 @@
     }];
 }
 
+- (void)queryConversationsFromParseWithCompletion:(void (^)(NSMutableArray<ConversationCoreData *> *, NSError *))completion {
+    NSMutableArray *conversationsCoreDataArray = [[NSMutableArray alloc] init];
+    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];
+    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
+    [query orderByDescending:@"updatedAt"];
+    [query includeKey:@"sender"];
+    [query includeKey:@"receiver"];
+    
+    __weak ParseManager *weakSelf = self;
+    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable conversations, NSError * _Nullable error) {
+        if (conversations) {
+            for (PFObject *pfConversation in conversations) {
+                Conversation *conversation = (Conversation *) pfConversation;
+                ConversationCoreData *conversationCoreData = (ConversationCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversation.objectId withContext:weakSelf.context];
+                
+                UserCoreData *senderCoreData;
+                User *otherUser;
+                if(![conversation.sender.objectId isEqualToString:PFUser.currentUser.objectId]) {
+                    otherUser = conversation.sender;
+                    senderCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:conversation.sender.objectId withContext:weakSelf.context];
+                } else {
+                    otherUser = conversation.receiver;
+                    senderCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:conversation.receiver.objectId withContext:weakSelf.context];
+                }
+                
+                if (!senderCoreData) {
+                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", otherUser.Location.latitude, otherUser.Location.longitude];
+                    senderCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withEmail:otherUser.email withLocation:location withAddress:otherUser.address withProfilePic:nil withManagedObjectContext:weakSelf.context];
+                    
+                    [otherUser.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        if (data) {
+                            senderCoreData.profilePic = data;
+                            [weakSelf.context save:nil];
+                        } else {
+                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                        }
+                    }];
+                }
+                
+                if (conversationCoreData) {
+                    conversationCoreData.lastText = conversation.lastText;
+                    conversationCoreData.updatedAt = conversation.updatedAt;
+                    conversationCoreData.sender = senderCoreData;
+                    [weakSelf.context save:nil];
+                } else {
+                    conversationCoreData = [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:conversation.objectId withDate:conversation.updatedAt withSender:senderCoreData withLastText:conversation.lastText withManagedObjectContext:weakSelf.context];
+                    [weakSelf.context save:nil];
+                }
+                [conversationsCoreDataArray addObject:conversationCoreData];
+            }
+            
+            NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:conversationsCoreDataArray];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
+            [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            completion(mutableResults, nil);
+        } else {
+            NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)queryReviewsForSeller:(User *)seller withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    
+}
+
 - (void)watchPost:(PostCoreData *)postCoreData withCompletion:(void (^)(NSError *))completion {
     postCoreData.watchCount ++;
     postCoreData.watched = YES;
@@ -316,7 +387,7 @@
 - (void)postListingToParseWithImage:(UIImage * _Nullable)image withCaption:(NSString * _Nullable)caption withPrice:(NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion:(void (^)(Post *, NSError *))completion {
     Post *newPost = [Post new];
     
-    newPost.image = [ParseManager getPFFileFromImage:image];
+    newPost.image = [self getPFFileFromImage:image];
     newPost.author = [PFUser currentUser];
     newPost.caption = caption;
     newPost.condition = condition;
@@ -338,7 +409,7 @@
     }];
 }
 
-+ (PFFileObject *)getPFFileFromImage:(UIImage * _Nullable)image {
+- (PFFileObject *)getPFFileFromImage:(UIImage * _Nullable)image {
     if (!image) {
         return nil;
     }
@@ -347,73 +418,6 @@
         return nil;
     }
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
-}
-
-- (void)queryConversationsFromParseWithCompletion:(void (^)(NSMutableArray<ConversationCoreData *> *, NSError *))completion {
-    NSMutableArray *conversationsCoreDataArray = [[NSMutableArray alloc] init];
-    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];
-    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
-    
-    PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
-    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
-    
-    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
-    [query orderByDescending:@"updatedAt"];
-    [query includeKey:@"sender"];
-    [query includeKey:@"receiver"];
-    
-    __weak ParseManager *weakSelf = self;
-    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable conversations, NSError * _Nullable error) {
-        if (conversations) {            
-            for (PFObject *pfConversation in conversations) {
-                Conversation *conversation = (Conversation *) pfConversation;
-                ConversationCoreData *conversationCoreData = (ConversationCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversation.objectId withContext:weakSelf.context];
-                
-                UserCoreData *senderCoreData;
-                User *otherUser;
-                if(![conversation.sender.objectId isEqualToString:PFUser.currentUser.objectId]) {
-                    otherUser = conversation.sender;
-                    senderCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:conversation.sender.objectId withContext:weakSelf.context];
-                } else {
-                    otherUser = conversation.receiver;
-                    senderCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:conversation.receiver.objectId withContext:weakSelf.context];
-                }
-                
-                if (!senderCoreData) {
-                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", otherUser.Location.latitude, otherUser.Location.longitude];
-                    senderCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withEmail:otherUser.email withLocation:location withAddress:otherUser.address withProfilePic:nil withManagedObjectContext:weakSelf.context];
-                    
-                    [otherUser.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-                        if (data) {
-                            senderCoreData.profilePic = data;
-                            [weakSelf.context save:nil];
-                        } else {
-                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
-                        }
-                    }];
-                }
-                
-                if (conversationCoreData) {
-                    conversationCoreData.lastText = conversation.lastText;
-                    conversationCoreData.updatedAt = conversation.updatedAt;
-                    conversationCoreData.sender = senderCoreData;
-                    [weakSelf.context save:nil];
-                } else {
-                    conversationCoreData = [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:conversation.objectId withDate:conversation.updatedAt withSender:senderCoreData withLastText:conversation.lastText withManagedObjectContext:weakSelf.context];
-                    [weakSelf.context save:nil];
-                }
-                [conversationsCoreDataArray addObject:conversationCoreData];
-            }
-            
-            NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:conversationsCoreDataArray];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
-            [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            completion(mutableResults, nil);
-        } else {
-            NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
-            completion(nil, error);
-        }
-    }];
 }
 
 - (void)viewPost:(PostCoreData *)postCoreData{
@@ -431,6 +435,24 @@
             }
         }];
     }
+}
+
+- (void)postReviewToParseWithSeller:(User *)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion {
+    Review *newReview = [Review new];
+    
+    newReview.reviewer = (User *)PFUser.currentUser;
+    newReview.seller = seller;
+    newReview.rating = rating;
+    newReview.review = review;
+    
+    NSLog(@"seller: %@, newReview.seller: %@", seller, newReview.seller);
+    [newReview saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error != nil) {
+            completion(nil, error);
+        } else {
+            completion(newReview, nil);
+        }
+    }];
 }
 
 @end

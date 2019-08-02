@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
-    <entity name="ConversationCoreData" representedClassName="ConversationCoreData" syncable="YES">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G84" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="ConversationCoreData" representedClassName="ConversationCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="lastText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
     </entity>
-    <entity name="PostCoreData" representedClassName="PostCoreData" syncable="YES">
+    <entity name="PostCoreData" representedClassName="PostCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="condition" optional="YES" attributeType="String" syncable="YES"/>
@@ -23,7 +23,14 @@
         <attribute name="watchObjectId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
     </entity>
-    <entity name="UserCoreData" representedClassName="UserCoreData" syncable="YES">
+    <entity name="ReviewCoreData" representedClassName="ReviewCoreData" syncable="YES" codeGenerationType="class">
+        <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rating" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="review" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="reviewer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
+        <relationship name="seller" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCoreData" syncable="YES"/>
+    </entity>
+    <entity name="UserCoreData" representedClassName="UserCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
@@ -36,5 +43,6 @@
         <element name="ConversationCoreData" positionX="117" positionY="162" width="128" height="105"/>
         <element name="PostCoreData" positionX="262.109375" positionY="174.48828125" width="128" height="270"/>
         <element name="UserCoreData" positionX="-45" positionY="0" width="128" height="150"/>
+        <element name="ReviewCoreData" positionX="108" positionY="153" width="128" height="120"/>
     </elements>
 </model>

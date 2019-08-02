@@ -12,8 +12,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Card : NSObject
+
 @property (nonatomic, strong) PFUser *author;
 @property (nonatomic, strong) NSMutableArray *posts;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -16,6 +16,7 @@
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
 #import "MessageViewController.h"
+#import "ComposeReviewViewController.h"
 @import Parse;
 
 @interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -33,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *className;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
@@ -45,8 +47,8 @@
     
     if (!self.user) {
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-        self.user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
+        self.context = appDelegate.persistentContainer.viewContext;
+        self.user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
     } else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
@@ -180,17 +182,45 @@
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
         msgViewController.user = self.user;
+    } else if ([segue.identifier isEqualToString:@"segueToComposeReview"]) {
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeReviewViewController *composeReviewViewController = navigationController.topViewController;
+        composeReviewViewController.seller = self.user;
     }
 }
 
 - (IBAction)logout:(id)sender {
-    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {}];
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Error logging out!: %@", error.localizedDescription);
+        } else {
+            [self deleteAllCoreData];
+        }
+    }];
+    
     SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
     [self presentViewController:signInVC animated:YES completion:nil];
 }
 
 - (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
     [self fetchProfileFromCoreData];
+}
+
+- (void)deleteAllCoreData {
+    NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+    NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+    NSError *deleteConversationsError = nil;
+    [self.context executeRequest:deleteConversations error:&deleteConversationsError];
+    
+    NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+    NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+    NSError *deleteUsersError = nil;
+    [self.context executeRequest:deleteUsers error:&deleteUsersError];
+    
+    NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+    NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+    NSError *deletePostsError = nil;
+    [self.context executeRequest:deletePosts error:&deletePostsError];
 }
 
 @end

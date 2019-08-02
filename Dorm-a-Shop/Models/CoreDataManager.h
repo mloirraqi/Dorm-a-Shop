@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "Post.h"
 #import "User.h"
+#import "Watches.h"
 #import "ConversationCoreData+CoreDataClass.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "UserCoreData+CoreDataClass.h"
 #import "ConversationCoreData+CoreDataClass.h"
+#import "ReviewCoreData+CoreDataClass.h"
 @import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -32,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (PostCoreData *)savePostToCoreDataWithPost:(Post * _Nullable)post withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatch:(Watches * _Nullable)watch withWatchCount:(long long)watchCount withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 - (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 - (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withDate:(NSDate *)updatedAt withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
+- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withRating:(int)rating withReview:(NSString * _Nullable)review withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -12,6 +12,7 @@
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import "ParseManager.h"
+#import "CoreDataManager.h"
 #import "User.h"
 #import "LocationManager.h"
 @import Parse;
@@ -21,7 +22,6 @@
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [LocationManager sharedInstance];
@@ -61,6 +61,12 @@
         [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+            }
+        }];
+        
+        [[ParseManager shared] queryReviewsForSeller:(User *)PFUser.currentUser withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
             }
         }];
     } else {
