@@ -13,6 +13,7 @@
 
 - (void)setPost:(PostCoreData *)post {
     _post = post;
+    self.itemTitle.text = post.title;
     [self.itemImage setImage:[UIImage imageNamed:@"item_placeholder"]];
     NSData *imageData = post.image;
     if (imageData) {

@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) IBOutlet UIImageView *itemImage;
 @property (nonatomic, strong) PostCoreData *post;
+@property (weak, nonatomic) IBOutlet UILabel *itemTitle;
 
 @end
 
