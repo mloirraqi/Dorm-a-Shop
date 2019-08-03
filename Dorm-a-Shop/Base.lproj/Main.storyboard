@@ -114,7 +114,7 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c6V-1Q-evB">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c6V-1Q-evB">
                                 <rect key="frame" x="113" y="136" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Condition: All">
@@ -139,15 +139,15 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gej-ih-dYz">
-                                <rect key="frame" x="317" y="137" width="81" height="29"/>
+                                <rect key="frame" x="311" y="137" width="91" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <state key="normal" title="Distance: All"/>
+                                <state key="normal" title="All Items"/>
                                 <connections>
-                                    <action selector="distancesChange:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D8j-Aw-HOF"/>
+                                    <action selector="hotnessChange:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sY5-DB-S0t"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BPs-Qo-MoN">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BPs-Qo-MoN">
                                 <rect key="frame" x="14" y="136" width="89" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Category: All"/>
@@ -166,7 +166,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="r77-WC-Qlj">
-                                <rect key="frame" x="311" y="168" width="91" height="120"/>
+                                <rect key="frame" x="311" y="168" width="91" height="97"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
@@ -207,8 +207,8 @@
                         <outlet property="categoryTable" destination="Xt1-ia-Yst" id="Zcp-mr-4dE"/>
                         <outlet property="conditionButton" destination="c6V-1Q-evB" id="F6Y-zX-dIO"/>
                         <outlet property="conditionTable" destination="ChR-1e-XT3" id="VVb-Xm-4fF"/>
-                        <outlet property="distanceButton" destination="gej-ih-dYz" id="OdP-sS-IeF"/>
-                        <outlet property="distanceTable" destination="r77-WC-Qlj" id="Mtv-Zv-aF6"/>
+                        <outlet property="hotnessButton" destination="gej-ih-dYz" id="QdV-eu-E4o"/>
+                        <outlet property="hotnessTable" destination="r77-WC-Qlj" id="igw-QP-ES3"/>
                         <outlet property="pricesButton" destination="JZN-Kn-cdI" id="uJ0-Zj-9Lj"/>
                         <outlet property="pricesTable" destination="0Am-37-PW9" id="y0h-rh-g22"/>
                         <outlet property="searchBar" destination="BsX-gJ-qHi" id="rrH-dU-XZ5"/>
@@ -1035,13 +1035,13 @@
         <!--Details View Controller-->
         <scene sceneID="135-01-T4B">
             <objects>
-                <viewController id="rb3-Xc-85n" customClass="DetailsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailsViewController" id="rb3-Xc-85n" customClass="DetailsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="D9a-Jh-gbW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="item_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="jct-hS-uqG">
-                                <rect key="frame" x="-2" y="88" width="414" height="224"/>
+                                <rect key="frame" x="-2" y="88" width="416" height="224"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O26-WH-s7F">

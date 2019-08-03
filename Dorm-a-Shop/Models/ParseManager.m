@@ -214,25 +214,28 @@
                     
                     if ([PFUser.currentUser.objectId isEqualToString:watch.user.objectId]) {
                         postCoreData.watched = YES;
-                        NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
-                        NSNumber *count = self.categoryCounts[categoryIndex];
-                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
-                        [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
                         
-                        NSInteger conditionIndex = [self.conditions indexOfObject:postCoreData.condition];
-                        count = self.conditionCounts[conditionIndex];
-                        newCount = [NSNumber numberWithInt:count.intValue + 2];
-                        [self.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
-                        
-                        if(postCoreData.price > 100) {
-                            NSNumber *count = self.categoryCounts[4];
+                        if(![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
+                            NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
+                            NSNumber *count = self.categoryCounts[categoryIndex];
                             NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
-                            [self.priceCounts replaceObjectAtIndex:4 withObject:newCount];
-                        } else {
-                            NSInteger priceIndex = (int)(postCoreData.price/25);
-                            NSNumber *count = self.priceCounts[priceIndex];
-                            NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
-                            [self.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
+                            [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
+                            
+                            NSInteger conditionIndex = [self.conditions indexOfObject:postCoreData.condition];
+                            count = self.conditionCounts[conditionIndex];
+                            newCount = [NSNumber numberWithInt:count.intValue + 2];
+                            [self.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
+                            
+                            if(postCoreData.price > 100) {
+                                NSNumber *count = self.categoryCounts[4];
+                                NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
+                                [self.priceCounts replaceObjectAtIndex:4 withObject:newCount];
+                            } else {
+                                NSInteger priceIndex = (int)(postCoreData.price/25);
+                                NSNumber *count = self.priceCounts[priceIndex];
+                                NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
+                                [self.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
+                            }
                         }
                     }
                     
@@ -483,7 +486,7 @@
 }
 
 - (void)viewPost:(PostCoreData *)postCoreData{
-    if(!postCoreData.viewed) {
+    if(!postCoreData.viewed && ![postCoreData.objectId isEqualToString:[PFUser currentUser].objectId]) {
         postCoreData.viewed = YES;
         [postCoreData.managedObjectContext save:nil];
         
@@ -516,26 +519,29 @@
                 PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:viewedPost.objectId withContext:weakSelf.context];
                 postCoreData.viewed = YES;
                 
-                NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
-                NSNumber *count = self.categoryCounts[categoryIndex];
-                NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
-                [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
-                
-                NSInteger conditionIndex = [self.conditions indexOfObject:postCoreData.condition];
-                count = self.conditionCounts[conditionIndex];
-                newCount = [NSNumber numberWithInt:count.intValue + 1];
-                [self.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
-                
-                if(postCoreData.price > 100) {
-                    NSNumber *count = self.categoryCounts[4];
+                if(![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
+                    NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
+                    NSNumber *count = self.categoryCounts[categoryIndex];
                     NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
-                    [self.priceCounts replaceObjectAtIndex:4 withObject:newCount];
-                } else {
-                    NSInteger priceIndex = (int)(postCoreData.price/25);
-                    NSNumber *count = self.priceCounts[priceIndex];
-                    NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
-                    [self.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
+                    [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
+                    
+                    NSInteger conditionIndex = [self.conditions indexOfObject:postCoreData.condition];
+                    count = self.conditionCounts[conditionIndex];
+                    newCount = [NSNumber numberWithInt:count.intValue + 1];
+                    [self.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
+                    
+                    if(postCoreData.price > 100) {
+                        NSNumber *count = self.categoryCounts[4];
+                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                        [self.priceCounts replaceObjectAtIndex:4 withObject:newCount];
+                    } else {
+                        NSInteger priceIndex = (int)(postCoreData.price/25);
+                        NSNumber *count = self.priceCounts[priceIndex];
+                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                        [self.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
+                    }
                 }
+                
                 [weakSelf.context save:nil];
                 [watchedPostsArray addObject:postCoreData];
             }

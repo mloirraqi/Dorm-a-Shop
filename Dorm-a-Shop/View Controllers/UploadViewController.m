@@ -11,7 +11,7 @@
 #import "PostCoreData+CoreDataClass.h"
 #import "AppDelegate.h"
 #import "CoreDataManager.h"
-
+#import "MBProgressHUD.h"
 @import Parse;
 
 @interface UploadViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -33,6 +33,8 @@
 @property (strong, nonatomic) UIAlertController *titleEmpty;
 @property (strong, nonatomic) UIAlertController *priceEmpty;
 @property (strong, nonatomic) UIAlertController *descriptionEmpty;
+
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
@@ -129,6 +131,9 @@
         [self presentViewController:self.descriptionEmpty animated:YES completion:^{
         }];
     } else {
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.label.text = @"Loading";
+        
         //core data
         AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
@@ -149,6 +154,7 @@
                 newPost.createdAt = post.createdAt;
                 [context save:nil];
                 
+                [self.hud hideAnimated:YES];
                 [self dismissViewControllerAnimated:true completion:nil];
             }
         }];
@@ -194,12 +200,16 @@
 }
 
 - (IBAction)changeCategory:(id)sender {
+    [self.itemPrice endEditing:YES];
+    [self.itemDescription endEditing:YES];
     self.conditionPickerView.hidden = YES;
     self.categoryPickerView.hidden = NO;
     self.pickerviewToolbar.hidden = NO;
 }
 
 - (IBAction)changeCondition:(id)sender {
+    [self.itemPrice endEditing:YES];
+    [self.itemDescription endEditing:YES];
     self.categoryPickerView.hidden = YES;
     self.conditionPickerView.hidden = NO;
     self.pickerviewToolbar.hidden = NO;

@@ -171,6 +171,11 @@
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    DetailsViewController *newDetailVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailsViewController"];
+    newDetailVC.post = self.similarItems[indexPath.row];
+    [self.navigationController pushViewController:newDetailVC animated:YES];
+}
 
 
 @end

@@ -36,16 +36,16 @@
 @property (weak, nonatomic) IBOutlet UITableView *categoryTable;
 @property (weak, nonatomic) IBOutlet UITableView *conditionTable;
 @property (weak, nonatomic) IBOutlet UITableView *pricesTable;
-@property (weak, nonatomic) IBOutlet UITableView *distanceTable;
+@property (weak, nonatomic) IBOutlet UITableView *hotnessTable;
 @property (strong, nonatomic) NSArray *categories;
 @property (strong, nonatomic) NSArray *conditions;
 @property (strong, nonatomic) NSArray *prices;
 @property (strong, nonatomic) NSArray *pricesInt;
-@property (strong, nonatomic) NSArray *distances;
+@property (strong, nonatomic) NSArray *hotNess;
 @property (weak, nonatomic) IBOutlet UIButton *conditionButton;
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
 @property (weak, nonatomic) IBOutlet UIButton *pricesButton;
-@property (weak, nonatomic) IBOutlet UIButton *distanceButton;
+@property (weak, nonatomic) IBOutlet UIButton *hotnessButton;
 @property NSNumber *limit;
 @end
 
@@ -68,17 +68,17 @@
     self.conditionTable.delegate = self;
     self.pricesTable.dataSource = self;
     self.pricesTable.delegate = self;
-    self.distanceTable.dataSource = self;
-    self.distanceTable.delegate = self;
-    self.categories = @[@"All", @"Furniture", @"Books", @"Beauty", @"Other"];
+    self.hotnessTable.dataSource = self;
+    self.hotnessTable.delegate = self;
+    self.categories =@[@"All", @"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
     self.conditions = @[@"All", @"New", @"Nearly New", @"Used"];
     self.prices = @[@"All", @"<$25", @"<$50", @"<$100"];
     self.pricesInt = @[@0, @25, @50, @100];
-    self.distances = @[@"All", @"<1 Miles", @"<3 Miles", @"<5 Miles"];
+    self.hotNess = @[@"All Items", @"Hot Items"];
     self.categoryTable.hidden = YES;
     self.conditionTable.hidden = YES;
     self.pricesTable.hidden = YES;
-    self.distanceTable.hidden = YES;
+    self.hotnessTable.hidden = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
@@ -167,7 +167,7 @@
         return cell;
     } else {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
-        cell.textLabel.text = self.distances[indexPath.row];
+        cell.textLabel.text = self.hotNess[indexPath.row];
         [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
         return cell;
     }
@@ -183,7 +183,7 @@
     } else if (tableView == self.pricesTable) {
         return self.prices.count;
     } else {
-        return self.distances.count;
+        return self.hotNess.count;
     }
 }
 
@@ -288,11 +288,11 @@
     }
 }
 
-- (IBAction)distancesChange:(id)sender {
-    if (self.distanceTable.hidden) {
-        self.distanceTable.hidden = NO;
+- (IBAction)hotnessChange:(id)sender {
+    if (self.hotnessTable.hidden) {
+        self.hotnessTable.hidden = NO;
     } else {
-        self.distanceTable.hidden = YES;
+        self.hotnessTable.hidden = YES;
     }
 }
 
@@ -319,9 +319,9 @@
             [self.pricesButton setTitle:self.prices[indexPath.row] forState:UIControlStateNormal];
             self.limit = self.pricesInt[indexPath.row];
         }
-    } else if (tableView == self.distanceTable) {
-        self.distanceTable.hidden = YES;
-        [self.distanceButton setTitle:self.distances[indexPath.row] forState:UIControlStateNormal];
+    } else if (tableView == self.hotnessTable) {
+        self.hotnessTable.hidden = YES;
+        [self.hotnessButton setTitle:self.hotNess[indexPath.row] forState:UIControlStateNormal];
     }
     
     [self filterPosts];
