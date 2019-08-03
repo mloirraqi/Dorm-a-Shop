@@ -39,7 +39,7 @@
     self.statusButton.hidden = YES;
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
-    self.similarItems = [[CoreDataManager shared] getActivePostsFromCoreData];
+    self.similarItems = [[CoreDataManager shared] getSimilarPostsFromCoreData:self.post];
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
     layout.minimumInteritemSpacing = 3;
     

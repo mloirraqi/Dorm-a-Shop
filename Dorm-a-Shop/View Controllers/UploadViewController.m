@@ -76,7 +76,13 @@
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        } else {
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+
         [self presentViewController:picker animated:YES completion:NULL];
         [alertController dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -124,7 +130,7 @@
         }];
     } else {
         //core data
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSData *imageData = UIImagePNGRepresentation(self.postImage);
         

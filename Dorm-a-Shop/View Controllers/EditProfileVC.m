@@ -217,7 +217,7 @@
     User *currentUser = (User *)[PFUser currentUser];
     currentUser.Location = selectedLocationPoint;
     
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
     
     UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
@@ -260,7 +260,12 @@
         
         picker.delegate = self;
         picker.allowsEditing = YES;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        } else {
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
         
         [self presentViewController:picker animated:YES completion:NULL];
         [alertController dismissViewControllerAnimated:YES completion:nil];
