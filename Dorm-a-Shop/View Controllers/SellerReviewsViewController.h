@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserCoreData+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SellerReviewsViewController : UIViewController
+
+@property (strong, nonatomic) UserCoreData *sellerCoreData;
 
 @end
 

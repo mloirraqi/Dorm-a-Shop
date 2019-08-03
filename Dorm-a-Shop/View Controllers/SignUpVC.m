@@ -111,6 +111,8 @@
                     newUser.objectId = user.objectId;
                     [context save:nil];
                     
+                    [weakSelf setupCoreData];
+                    
                     [weakSelf showAlertView:@"Welcome!"];
                     [weakSelf performSegueWithIdentifier:@"homeScreen" sender:nil];
                 } else {
@@ -316,6 +318,34 @@
             }
         }
     }
+}
+
+- (void)setupCoreData {
+    [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        } else {
+            [[ParseManager shared] queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error getting watch posts/updating core data watch status");
+                }
+            }];
+        }
+    }];
+    
+    [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+        } else {
+            NSLog(@"");
+        }
+    }];
+    
+    [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+        }
+    }];
 }
 
 @end

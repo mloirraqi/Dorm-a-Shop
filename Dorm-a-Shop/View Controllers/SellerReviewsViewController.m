@@ -9,6 +9,8 @@
 #import "ReviewCoreData+CoreDataClass.h"
 #import "AppDelegate.h"
 #import "ReviewTableViewCell.h"
+#import "ParseManager.h"
+#import "User.h"
 
 @interface SellerReviewsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -45,26 +47,30 @@
 
 - (void)createRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(queryActivePostsFromParse) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(queryReviewsFromParse) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)queryReviewsFromParse {
+    User *seller = (User *)[PFObject objectWithoutDataWithClassName:@"User" objectId:self.sellerCoreData.objectId];
+    [[ParseManager shared] queryReviewsForSeller:seller withCompletion:^(NSMutableArray * _Nonnull reviews, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying reviews! %@", error.localizedDescription);
+        } else {
+            //self.post
+        }
+    }];
 }
-*/
 
-//- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-//
-//}
-//
-//- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    
-//}
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    ReviewTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReviewTableViewCell"];
+    ReviewCoreData *review = self.reviewsArray[indexPath.row];
+    cell.review = review;
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.reviewsArray.count;
+}
 
 @end

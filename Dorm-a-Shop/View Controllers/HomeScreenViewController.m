@@ -124,15 +124,8 @@
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             weakSelf.postsArray = activePosts;
             [weakSelf filterPosts];
-            
-            [[ParseManager shared] queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"error getting watch posts/updating core data watch status");
-                } else {
-                    [weakSelf.tableView reloadData];
-                    [weakSelf.refreshControl endRefreshing];
-                }
-            }];
+            [weakSelf.tableView reloadData];
+            [weakSelf.refreshControl endRefreshing];
         }
     }];
 }
