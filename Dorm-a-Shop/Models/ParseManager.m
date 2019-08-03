@@ -45,11 +45,18 @@
     AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = appDelegate.persistentContainer.viewContext;
     self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
+    self.conditions = @[@"New", @"Nearly New", @"Used"];
     self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
+    self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
+    self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
     return self;
 }
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
+    self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
+    self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
+    
     PFUser *currentUser = PFUser.currentUser;
     PFGeoPoint *location = currentUser[@"Location"];
     
@@ -123,7 +130,31 @@
                 if (error) {
                     completion(nil, error);
                 } else {
-                    completion(allPostsArray, nil);
+                    [self queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable viewedPosts, NSError * _Nullable error) {
+                        if (error) {
+                            completion(nil, error);
+                        } else {
+                            for (PostCoreData *post in allPostsArray) {
+                                NSInteger categoryIndex = [weakSelf.categories indexOfObject:post.category];
+                                NSInteger conditionIndex = [weakSelf.conditions indexOfObject:post.condition];
+                                NSInteger priceIndex;
+                                if(post.price > 100) {
+                                    priceIndex = 4;
+                                } else {
+                                    priceIndex = (int)(post.price/25);
+                                }
+                                NSNumber *categoryCount = self.categoryCounts[categoryIndex];
+                                NSNumber *conditionCount = self.conditionCounts[conditionIndex];
+                                NSNumber *priceCount = self.priceCounts[priceIndex];
+                                post.rank = categoryCount.doubleValue * 0.4 + conditionCount.doubleValue * 0.3 + priceCount.doubleValue * 0.3;
+                            }
+                            
+                            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
+                            [allPostsArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                            
+                            completion(allPostsArray, nil);
+                        }
+                    }];
                 }
             }];
         } else {
@@ -183,10 +214,29 @@
                     
                     if ([PFUser.currentUser.objectId isEqualToString:watch.user.objectId]) {
                         postCoreData.watched = YES;
-                        NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
-                        NSNumber *count = self.categoryCounts[categoryIndex];
-                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
-                        [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
+                        
+                        if(![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
+                            NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
+                            NSNumber *count = self.categoryCounts[categoryIndex];
+                            NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
+                            [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
+                            
+                            NSInteger conditionIndex = [self.conditions indexOfObject:postCoreData.condition];
+                            count = self.conditionCounts[conditionIndex];
+                            newCount = [NSNumber numberWithInt:count.intValue + 2];
+                            [self.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
+                            
+                            if(postCoreData.price > 100) {
+                                NSNumber *count = self.categoryCounts[4];
+                                NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
+                                [self.priceCounts replaceObjectAtIndex:4 withObject:newCount];
+                            } else {
+                                NSInteger priceIndex = (int)(postCoreData.price/25);
+                                NSNumber *count = self.priceCounts[priceIndex];
+                                NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 2];
+                                [self.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
+                            }
+                        }
                     }
                     
                     [weakSelf.context save:nil];
@@ -436,7 +486,7 @@
 }
 
 - (void)viewPost:(PostCoreData *)postCoreData{
-    if(!postCoreData.viewed) {
+    if(!postCoreData.viewed && ![postCoreData.objectId isEqualToString:[PFUser currentUser].objectId]) {
         postCoreData.viewed = YES;
         [postCoreData.managedObjectContext save:nil];
         
@@ -468,10 +518,30 @@
                 Post *viewedPost = (Post *)view[@"post"];
                 PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:viewedPost.objectId withContext:weakSelf.context];
                 postCoreData.viewed = YES;
-                NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
-                NSNumber *count = self.categoryCounts[categoryIndex];
-                NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
-                [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
+                
+                if(![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
+                    NSInteger categoryIndex = [self.categories indexOfObject:postCoreData.category];
+                    NSNumber *count = self.categoryCounts[categoryIndex];
+                    NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                    [self.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
+                    
+                    NSInteger conditionIndex = [self.conditions indexOfObject:postCoreData.condition];
+                    count = self.conditionCounts[conditionIndex];
+                    newCount = [NSNumber numberWithInt:count.intValue + 1];
+                    [self.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
+                    
+                    if(postCoreData.price > 100) {
+                        NSNumber *count = self.categoryCounts[4];
+                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                        [self.priceCounts replaceObjectAtIndex:4 withObject:newCount];
+                    } else {
+                        NSInteger priceIndex = (int)(postCoreData.price/25);
+                        NSNumber *count = self.priceCounts[priceIndex];
+                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                        [self.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
+                    }
+                }
+                
                 [weakSelf.context save:nil];
                 [watchedPostsArray addObject:postCoreData];
             }

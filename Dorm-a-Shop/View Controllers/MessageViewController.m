@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *msgInput;
 @property (strong, nonatomic) PFUser *receiver;
 @property (strong, nonatomic) PFObject *convo;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
 
@@ -31,6 +32,8 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
     self.receiver = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:self.user.objectId];
     if(self.conversationCoreData) {
         self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
@@ -85,6 +88,8 @@
             
             [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
+                    [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:convo.objectId withDate:convo.updatedAt withSender:weakSelf.user withLastText:convo[@"lastText"] withManagedObjectContext:weakSelf.context];
+                    [weakSelf.context save:nil];
                     weakSelf.convo = convo;
                 } else {
                     NSLog(@"%@", error.localizedDescription);
@@ -107,10 +112,8 @@
         
         [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (succeeded) {
-                AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-                NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
                 weakSelf.conversationCoreData.lastText = self.msgInput.text;
-                [context save:nil];
+                [weakSelf.context save:nil];
                 weakSelf.msgInput.text = @"";
             } else {
                 NSLog(@"Problem saving message: %@", error.localizedDescription);

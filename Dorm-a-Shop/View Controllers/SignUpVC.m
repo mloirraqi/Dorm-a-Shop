@@ -21,6 +21,7 @@
 @interface SignUpVC ()
 
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
@@ -37,6 +38,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
+    
     locationManager = [[LocationManager alloc] init];
     
     self.lenientValidator = [NJOPasswordValidator standardValidator];
@@ -100,16 +105,14 @@
         
         __weak SignUpVC *weakSelf = self;
         [self setLocationNameForUser:user withCompletion:^(NSError *error) {
-            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
             NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:context];
+            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:weakSelf.context];
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 [hud hideAnimated:YES];
                 if (!error) {
                     newUser.objectId = user.objectId;
-                    [context save:nil];
+                    [weakSelf.context save:nil];
                     
                     [weakSelf setupCoreData];
                     
@@ -187,8 +190,6 @@
             }
         }
         
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         user.address = strAdd;
         user.Location = location;
         completion(nil);
@@ -199,14 +200,12 @@
     User *currentUser = (User *)[PFUser currentUser];
     currentUser.Location = selectedLocationPoint;
     
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-    
-    UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
+    __weak SignUpVC *weakSelf = self;
+    UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:weakSelf.context];
     if (address != nil) {
         currentUser.address = address;
         userCoreData.address = address;
-        [context save:nil];
+        [self.context save:nil];
     }
 }
 

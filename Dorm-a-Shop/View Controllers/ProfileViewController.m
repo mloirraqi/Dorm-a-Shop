@@ -47,7 +47,7 @@
     self.className = @"ProfileViewController";
     
     if (!self.user) {
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
         self.context = appDelegate.persistentContainer.viewContext;
         self.user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
     } else {
@@ -185,7 +185,7 @@
         msgViewController.user = self.user;
     } else if ([segue.identifier isEqualToString:@"segueToComposeReview"]) {
         UINavigationController *navigationController = [segue destinationViewController];
-        ComposeReviewViewController *composeReviewViewController = navigationController.topViewController;
+        ComposeReviewViewController *composeReviewViewController = (ComposeReviewViewController *) navigationController.topViewController;
         composeReviewViewController.seller = self.user;
     }
 }

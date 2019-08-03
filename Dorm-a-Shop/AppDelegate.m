@@ -46,12 +46,6 @@
             }
         }];
         
-        [[ParseManager shared] queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-            if (error) {
-                NSLog(@"error getting watch posts/updating core data watch status");
-            }
-        }];
-        
         [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);

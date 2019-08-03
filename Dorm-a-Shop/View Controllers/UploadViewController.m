@@ -11,7 +11,7 @@
 #import "PostCoreData+CoreDataClass.h"
 #import "AppDelegate.h"
 #import "CoreDataManager.h"
-
+#import "MBProgressHUD.h"
 @import Parse;
 
 @interface UploadViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -33,6 +33,8 @@
 @property (strong, nonatomic) UIAlertController *titleEmpty;
 @property (strong, nonatomic) UIAlertController *priceEmpty;
 @property (strong, nonatomic) UIAlertController *descriptionEmpty;
+
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
@@ -76,7 +78,13 @@
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        } else {
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+
         [self presentViewController:picker animated:YES completion:NULL];
         [alertController dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -123,8 +131,11 @@
         [self presentViewController:self.descriptionEmpty animated:YES completion:^{
         }];
     } else {
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.label.text = @"Loading";
+        
         //core data
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSData *imageData = UIImagePNGRepresentation(self.postImage);
         
@@ -143,6 +154,7 @@
                 newPost.createdAt = post.createdAt;
                 [context save:nil];
                 
+                [self.hud hideAnimated:YES];
                 [self dismissViewControllerAnimated:true completion:nil];
             }
         }];
@@ -188,12 +200,16 @@
 }
 
 - (IBAction)changeCategory:(id)sender {
+    [self.itemPrice endEditing:YES];
+    [self.itemDescription endEditing:YES];
     self.conditionPickerView.hidden = YES;
     self.categoryPickerView.hidden = NO;
     self.pickerviewToolbar.hidden = NO;
 }
 
 - (IBAction)changeCondition:(id)sender {
+    [self.itemPrice endEditing:YES];
+    [self.itemDescription endEditing:YES];
     self.categoryPickerView.hidden = YES;
     self.conditionPickerView.hidden = NO;
     self.pickerviewToolbar.hidden = NO;

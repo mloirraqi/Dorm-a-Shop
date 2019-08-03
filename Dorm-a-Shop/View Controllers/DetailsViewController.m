@@ -10,22 +10,25 @@
 #import "Post.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "ParseManager.h"
+#import "CoreDataManager.h"
+#import "PostCollectionViewCell.h"
 @import Parse;
 
-@interface DetailsViewController ()
+@interface DetailsViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
 - (IBAction)didTapWatch:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIImageView *postImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
-@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *conditionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sellerButton;
 @property (weak, nonatomic) IBOutlet UIButton *watchButton;
 @property (weak, nonatomic) IBOutlet UIButton *statusButton;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, strong) NSMutableArray *similarItems;
 
 @end
 
@@ -34,6 +37,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.statusButton.hidden = YES;
+    self.collectionView.dataSource = self;
+    self.collectionView.delegate = self;
+    self.similarItems = [[CoreDataManager shared] getSimilarPostsFromCoreData:self.post];
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
+    layout.minimumInteritemSpacing = 3;
     
     [[ParseManager shared] viewPost:self.post];
     
@@ -152,6 +160,22 @@
     }
 }
 
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.similarItems.count;
+}
+
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"similarItems" forIndexPath:indexPath];
+    PostCoreData *post = self.similarItems[indexPath.item];
+    cell.post = post;
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    DetailsViewController *newDetailVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailsViewController"];
+    newDetailVC.post = self.similarItems[indexPath.row];
+    [self.navigationController pushViewController:newDetailVC animated:YES];
+}
 
 
 @end
