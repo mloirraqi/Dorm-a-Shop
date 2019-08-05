@@ -182,7 +182,7 @@
         editProfileViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
-        msgViewController.user = self.user;
+        msgViewController.receiver = sender;
     } else if ([segue.identifier isEqualToString:@"segueToComposeReview"]) {
         UINavigationController *navigationController = [segue destinationViewController];
         ComposeReviewViewController *composeReviewViewController = (ComposeReviewViewController *) navigationController.topViewController;
