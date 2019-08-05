@@ -20,6 +20,7 @@
 }
 
 + (instancetype)sharedInstance {
+    
     static LocationManager *sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -41,6 +42,7 @@
         [locationManager startUpdatingLocation];
     }
     else {
+        
         UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:@"Location Services Disabled" message:@"You currently have all location services for this device disabled. If you proceed, you will be showing past information. To enable, Settings->Location->location services->on" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Continue",nil];
         [servicesDisabledAlert show];
         [servicesDisabledAlert setDelegate:self];
@@ -48,6 +50,7 @@
 }
 
 - (void)requestWhenInUseAuthorization {
+    
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     
     // If the status is denied or only granted for when in use, display an alert
@@ -72,6 +75,7 @@
 #pragma mark - CLLocationManagerDelegate
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    
     NSLog(@"didFailWithError: %@", error);
     UIAlertView *errorAlert = [[UIAlertView alloc]
                                initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -79,6 +83,7 @@
 }
 
 -(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    
     switch (status) {
         case kCLAuthorizationStatusNotDetermined:
         case kCLAuthorizationStatusRestricted:
@@ -95,6 +100,7 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    
     CLLocation *location;
     location =  [manager location];
     CLLocationCoordinate2D coordinate = [location coordinate];

@@ -13,6 +13,7 @@
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
 #import "ConversationCoreData+CoreDataClass.h"
+@import ParseLiveQuery;
 @import Parse;
 
 @interface InboxViewController () <UITableViewDelegate, UITableViewDataSource>

@@ -8,6 +8,7 @@ target 'Dorm-a-Shop' do
   # Pods for Dorm-a-Shop
   pod 'Parse'
   pod 'Parse/UI'
+pod 'ParseLiveQuery'
   pod 'DateTools'
   pod 'MBProgressHUD', '~> 1.0.0'
   pod 'GoogleMaps'
@@ -25,4 +26,11 @@ target 'Dorm-a-Shop' do
     # Pods for testing
   end
 
+  pre_install do |installer|
+	installer.analysis_result.specifications.each do |s|
+        if s.name == 'Bolts-Swift'
+            s.swift_version = '4.2'
+        end
+    end
+  end
 end

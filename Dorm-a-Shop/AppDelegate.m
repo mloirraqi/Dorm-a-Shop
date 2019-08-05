@@ -32,6 +32,7 @@
     ParseClientConfiguration *config = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         configuration.applicationId = @"dormAshop";
         configuration.server = @"https://dorm-a-shop.herokuapp.com/parse";
+        configuration.clientKey = @"Heroku";
     }];
     
     [Parse initializeWithConfiguration:config];
