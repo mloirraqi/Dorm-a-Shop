@@ -7,7 +7,7 @@
 //
 
 #import "DraggableViewBackground.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "Post.h"
 #import <Parse/Parse.h>
 #import "Card.h"
@@ -25,7 +25,7 @@ static const int MAX_BUFFER_SIZE = 2;
 
 @implementation DraggableViewBackground
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.loadedCards = [[NSMutableArray alloc] init];
@@ -47,7 +47,7 @@ static const int MAX_BUFFER_SIZE = 2;
     [self setupCards];
 }
 
--(void)setupView {
+- (void)setupView {
     self.currentIndex = 0;
     
     CGSize screenSize = UIScreen.mainScreen.bounds.size;
@@ -64,7 +64,7 @@ static const int MAX_BUFFER_SIZE = 2;
     self.backgroundColor = [UIColor colorWithRed:168/255.f green:225/255.f blue:255/255.f alpha:1];
 }
 
--(DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
+- (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
     CGSize screenSize = UIScreen.mainScreen.bounds.size;
     CGFloat cardWidth = screenSize.width - 80;
     CGFloat cardHeight = screenSize.height - (screenSize.height - self.frame.size.height) - 140;
@@ -78,7 +78,7 @@ static const int MAX_BUFFER_SIZE = 2;
     return draggableView;
 }
 
--(void)loadCards {
+- (void)loadCards {
     
     for (UIView *subview in self.subviews) {
         [subview removeFromSuperview];
@@ -107,7 +107,7 @@ static const int MAX_BUFFER_SIZE = 2;
     }
 }
 
--(void)cardSwipedLeft:(UIView *)card {
+- (void)cardSwipedLeft:(UIView *)card {
     [self.loadedCards removeObjectAtIndex:0];
     if (self.cardsLoadedIndex < [self.allCards count]) {
         [self.loadedCards addObject:[self.allCards objectAtIndex:self.cardsLoadedIndex]];
@@ -120,7 +120,7 @@ static const int MAX_BUFFER_SIZE = 2;
     [self updateUsernameLabel];
 }
 
--(void)cardSwipedRight:(UIView *)card {
+- (void)cardSwipedRight:(UIView *)card {
     [self.loadedCards removeObjectAtIndex:0];
     if (self.cardsLoadedIndex < [self.allCards count]) {
         [self.loadedCards addObject:[self.allCards objectAtIndex:self.cardsLoadedIndex]];
@@ -133,55 +133,44 @@ static const int MAX_BUFFER_SIZE = 2;
     [self updateUsernameLabel];
 }
 
--(void)userAccepted:(Card *)card {
-    NSLog(@"%@",card.author.username);
+- (void)userAccepted:(Card *)card {
     [[PFUser currentUser] addUniqueObjectsFromArray:@[card.author.objectId] forKey:@"accepted"];
     [[PFUser currentUser] saveEventually];
     [self checkMatchwithUser:card.author];
     
 }
 
--(void)checkMatchwithUser:(PFUser *)acceptedUser {
+- (void)checkMatchwithUser:(PFUser *)acceptedUser {
     PFQuery *userQuery = [PFUser query];
     [userQuery whereKey:@"objectId" equalTo:acceptedUser.objectId];
     
     [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFUser *> * _Nullable users, NSError * _Nullable error) {
         if (users) {
-            if (users.count != 0)
-            {
+            if (users.count != 0) {
                 PFUser *currentUser = [PFUser currentUser];
                 PFUser *user = [users firstObject];
                 NSArray *acceptedUserList = user[@"accepted"];
                 if ([acceptedUserList containsObject:currentUser.objectId]) {
-                    // users are matched
                     [self showAlertView:[NSString stringWithFormat:@"Congratulations! You matched with %@",user.username]];
-                }
-                else
-                {
-                    // users are not match yet
+                } else {
                     NSLog(@"😫😫😫 users are not matched yet");
                 }
-            }
-            else
-            {
+            } else {
                 NSLog(@"😫😫😫 No such User Found");
             }
-        }
-        else
-        {
+        } else {
             NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
         }
     }];
 }
 
--(void)userRejected:(Card *)card {
-    NSLog(@"%@",card.author.username);
+- (void)userRejected:(Card *)card {
     [[PFUser currentUser] addUniqueObjectsFromArray:@[card.author.objectId] forKey:@"rejected"];
     [[PFUser currentUser] saveEventually];
     
 }
 
--(void)updateUsernameLabel {
+- (void)updateUsernameLabel {
     if (self.cardArray.count-1 > self.currentIndex) {
         self.currentIndex++;
         Card *card = self.cardArray[self.currentIndex];

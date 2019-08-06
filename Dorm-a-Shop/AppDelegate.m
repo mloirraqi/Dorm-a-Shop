@@ -11,7 +11,7 @@
 #import <GooglePlaces/GooglePlaces.h>
 #import <GooglePlacePicker/GooglePlacePicker.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 #import "User.h"
 #import "LocationManager.h"
@@ -37,30 +37,39 @@
     [Parse initializeWithConfiguration:config];
 
     if (PFUser.currentUser) {
-        [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
             } else {
+                [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
                 UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                 self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+                NSLog(@"");
             }
         }];
         
-        [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
-            if (error) {
-                NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
-            }
-        }];
-        
-        [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+            } else {
+                [[CoreDataManager shared] enqueueDoneSavingUsers];
             }
         }];
+
         
-        [[ParseManager shared] queryReviewsForSeller:(User *)PFUser.currentUser withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+            } else {
+                [[CoreDataManager shared] enqueueDoneSavingConversations];
+            }
+        }];
+
+        [[ParseDatabaseManager shared] queryReviewsForSeller:nil withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
+            } else {
+                [[CoreDataManager shared] enqueueDoneSavingReviews];
             }
         }];
     } else {
@@ -78,6 +87,11 @@
         NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
         NSError *deletePostsError = nil;
         [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
+        
+        NSFetchRequest *requestReviews = [[NSFetchRequest alloc] initWithEntityName:@"ReviewCoreData"];
+        NSBatchDeleteRequest *deleteReviews = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestReviews];
+        NSError *deleteReviewsError = nil;
+        [self.persistentContainer.viewContext executeRequest:deleteReviews error:&deleteReviewsError];
     }
     
     return YES;
@@ -117,6 +131,7 @@
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;
+//@synthesize managedObjectContext = _managedObjectContext;
 
 - (NSPersistentContainer *)persistentContainer {
     // The persistent container for the application. This implementation creates and returns a container, having loaded the store for the application to it. This way you can access the persistent container anywhere since you can access AppDelegate from anywhere (similar for saveContext)
@@ -135,6 +150,25 @@
     return _persistentContainer;
 }
 
+//- (NSManagedObjectContext *)managedObjectContext {
+//    NSThread *thisThread = [NSThread currentThread];
+//    if (thisThread == [NSThread mainThread])
+//    {
+//        //For the Main thread just return default context iVar
+//        return _managedObjectContext;
+//    } else {
+//        //Return separate MOC for each new thread
+//        NSManagedObjectContext *threadManagedObjectContext = [[thisThread threadDictionary] objectForKey:@"MOC_KEY"];
+//        if (threadManagedObjectContext == nil) {
+//            threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+//              [threadManagedObjectContext setPersistentStoreCoordinator: self.persistentContainer.persistentStoreCoordinator];
+//              [[thisThread threadDictionary] setObject:threadManagedObjectContext forKey:@"MOC_KEY"];
+//        }
+//        
+//        return threadManagedObjectContext;
+//    }
+//}
+
 #pragma mark - Core Data Saving support
 
 - (void)saveContext {
@@ -145,5 +179,6 @@
         abort();
     }
 }
+
 
 @end

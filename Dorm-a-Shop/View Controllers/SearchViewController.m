@@ -9,7 +9,7 @@
 #import "SearchViewController.h"
 #import "UserCell.h"
 #import "ProfileViewController.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 @import Parse;
 
@@ -33,10 +33,20 @@
     self.searchBar.delegate = self;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchUsers) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(queryUsersFromParse) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingUsers" object:nil];
+    
     [self fetchUsersFromCoreData];
+    
+    
+}
+
+- (void)receiveNotification:(NSNotification *)notification {
+    if ([[notification name] isEqualToString:@"DoneSavingUsers"]) {
+        [self fetchUsersFromCoreData];
+    }
 }
 
 - (void)fetchUsersFromCoreData {
@@ -45,9 +55,9 @@
     [self.tableView reloadData];
 }
 
-- (void)fetchUsers {
+- (void)queryUsersFromParse {
     __weak SearchViewController *weakSelf = self;
-    [[ParseManager shared] queryAllUsersWithinKilometers:5.0 withCompletion:^(NSMutableArray<UserCoreData *> * users, NSError * error) {
+    [[ParseDatabaseManager shared] queryAllUsersWithinKilometers:5.0 withCompletion:^(NSMutableArray<UserCoreData *> * users, NSError * error) {
         if (users) {
             weakSelf.users = [NSMutableArray arrayWithArray:users];
             [weakSelf filterUsers];

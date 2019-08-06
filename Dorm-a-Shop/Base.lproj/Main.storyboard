@@ -507,7 +507,7 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="View Reviews"/>
                                                 <connections>
-                                                    <segue destination="jZh-I3-ppB" kind="show" identifier="" id="l1c-Me-sZN"/>
+                                                    <segue destination="jZh-I3-ppB" kind="show" identifier="segueToReviews" id="l1c-Me-sZN"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g0d-yj-fjW">
@@ -973,8 +973,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Review" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L39-pd-KfB">
-                                                    <rect key="frame" x="20" y="63" width="374" height="182"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Review" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L39-pd-KfB">
+                                                    <rect key="frame" x="20" y="63" width="374" height="181.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -988,6 +988,8 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="L39-pd-KfB" firstAttribute="leading" secondItem="r4o-KM-1Rs" secondAttribute="leading" constant="20" id="Jcq-f7-4L4"/>
+                                                <constraint firstAttribute="trailing" secondItem="L39-pd-KfB" secondAttribute="trailing" constant="20" id="fDY-et-g3L"/>
                                                 <constraint firstItem="L39-pd-KfB" firstAttribute="top" secondItem="r4o-KM-1Rs" secondAttribute="top" constant="63" id="i9i-Fa-cP4"/>
                                                 <constraint firstAttribute="bottom" secondItem="L39-pd-KfB" secondAttribute="bottom" constant="12" id="uFY-CE-PaE"/>
                                             </constraints>
@@ -1482,7 +1484,6 @@
                                 </state>
                                 <connections>
                                     <action selector="signIn:" destination="mU8-aa-DN8" eventType="touchUpInside" id="R5h-mt-rJn"/>
-                                    <segue destination="gS1-Y9-nOT" kind="show" identifier="signIn" id="0wy-pc-D6U"/>
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kD8-pd-Tja" userLabel="Strength Meter">
@@ -1502,6 +1503,7 @@
                     <connections>
                         <outlet property="emailField" destination="Ajb-Ti-qJr" id="T78-sI-w6J"/>
                         <outlet property="passwordField" destination="YEe-Io-ZVv" id="NTB-bB-IVa"/>
+                        <segue destination="gS1-Y9-nOT" kind="show" identifier="loginSegue" id="YDU-4n-DQU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nBw-L2-CLl" sceneMemberID="firstResponder"/>
@@ -1577,12 +1579,12 @@
                     <navigationItem key="navigationItem" id="Ygn-nf-k8N">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="hRO-T2-0mL">
                             <connections>
-                                <action selector="cancelAction:" destination="zSL-ce-JhF" id="TgB-Ho-gSn"/>
+                                <action selector="didTapCancel:" destination="zSL-ce-JhF" id="N8G-pD-gFj"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Submit" id="qZD-BS-FHV">
                             <connections>
-                                <action selector="submitAction:" destination="zSL-ce-JhF" id="Vks-WJ-DCi"/>
+                                <action selector="didTapSubmit:" destination="zSL-ce-JhF" id="z6K-Y3-EXQ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1971,8 +1973,8 @@
     <inferredMetricsTieBreakers>
         <segue reference="fhM-T6-QvG"/>
         <segue reference="Bvx-1i-tFM"/>
-        <segue reference="0wy-pc-D6U"/>
-        <segue reference="cnV-vk-Wb5"/>
+        <segue reference="YDU-4n-DQU"/>
+        <segue reference="inK-qS-1By"/>
         <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>
 </document>

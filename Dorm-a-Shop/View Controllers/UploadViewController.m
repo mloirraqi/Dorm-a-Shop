@@ -7,11 +7,12 @@
 //
 
 #import "UploadViewController.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "AppDelegate.h"
 #import "CoreDataManager.h"
 #import "MBProgressHUD.h"
+#import "NSNotificationCenter+MainThread.h"
 @import Parse;
 
 @interface UploadViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -35,6 +36,7 @@
 @property (strong, nonatomic) UIAlertController *descriptionEmpty;
 
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
@@ -42,6 +44,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
     
     self.itemDescription.layer.borderWidth = 1.0f;
     self.itemDescription.layer.borderColor = [[UIColor blueColor] CGColor];
@@ -134,25 +139,25 @@
         self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         self.hud.label.text = @"Loading";
         
-        //core data
-        AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-        NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         NSData *imageData = UIImagePNGRepresentation(self.postImage);
         
-        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:context];
+        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
         
         //set the Parse object id later and Parse createdAt date later when the parse query completes
-        PostCoreData *newPost = [[CoreDataManager shared] savePostToCoreDataWithPost:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatch:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:context];
+        PostCoreData *newPost = [[CoreDataManager shared] savePostToCoreDataWithObjectId:nil withImageData:imageData withCaption:self.itemDescription.text withPrice:[self.itemPrice.text doubleValue] withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCreatedDate:nil withSoldStatus:NO withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:self.context];
         
         //parse. here we update the objectId for the post in core data, in the completion block
-        [[ParseManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] postListingToParseWithImage:self.postImage withCaption:self.itemDescription.text withPrice:self.itemPrice.text withCondition:self.conditionShown.titleLabel.text withCategory:self.categoryShown.titleLabel.text withTitle:self.itemTitle.text withCompletion:^(Post * _Nonnull post, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
-                newPost.objectId = post.objectId;
-//                newPost.post = post;
-                newPost.createdAt = post.createdAt;
-                [context save:nil];
+                if (!newPost.objectId || !newPost.createdAt) {
+                    newPost.objectId = post.objectId;
+                    newPost.createdAt = post.createdAt;
+                    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                        return YES;
+                    } withName:[NSString stringWithFormat:@"%@", newPost.objectId]];
+                }
                 
                 [self.hud hideAnimated:YES];
                 [self dismissViewControllerAnimated:true completion:nil];
@@ -160,10 +165,7 @@
         }];
         
         NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:newPost, @"post", nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUploadNotification" object:self userInfo:watchInfoDict];
-        
-        //will delete this comment when it is no longer needed for reference
-        //[self.delegate didUpload:newPost];
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DidUploadNotification" object:self userInfo:watchInfoDict];
     }
 }
 

@@ -14,7 +14,7 @@
 #import <Parse/Parse.h>
 #import "HomeScreenViewController.h"
 #import "LocationManager.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 #import "UserCoreData+CoreDataClass.h"
 
@@ -22,6 +22,7 @@
 
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 
 @end
 
@@ -39,8 +40,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-    self.context = appDelegate.persistentContainer.viewContext;
+    self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = self.appDelegate.persistentContainer.viewContext;
     
     locationManager = [[LocationManager alloc] init];
     
@@ -112,7 +113,9 @@
                 [hud hideAnimated:YES];
                 if (!error) {
                     newUser.objectId = user.objectId;
-                    [weakSelf.context save:nil];
+                    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                        return YES;
+                    } withName:[NSString stringWithFormat:@"%@", newUser.objectId]];
                     
                     [weakSelf setupCoreData];
                     
@@ -205,7 +208,10 @@
     if (address != nil) {
         currentUser.address = address;
         userCoreData.address = address;
-        [self.context save:nil];
+        
+        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
     }
 }
 
@@ -320,29 +326,36 @@
 }
 
 - (void)setupCoreData {
-    [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
-            [[ParseManager shared] queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable posts, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"error getting watch posts/updating core data watch status");
-                }
-            }];
+            [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
         }
     }];
     
-    [[ParseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         } else {
-            NSLog(@"");
+            [[CoreDataManager shared] enqueueDoneSavingUsers];
         }
     }];
     
-    [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+    
+    [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+        } else {
+            [[CoreDataManager shared] enqueueDoneSavingConversations];
+        }
+    }];
+    
+    [[ParseDatabaseManager shared] queryReviewsForSeller:nil withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
+        } else {
+            [[CoreDataManager shared] enqueueDoneSavingReviews];
         }
     }];
 }

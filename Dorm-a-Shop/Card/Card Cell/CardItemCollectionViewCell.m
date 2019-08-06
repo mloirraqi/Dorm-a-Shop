@@ -22,17 +22,16 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
--(void)setPost:(PostCoreData *)post {
+- (void)setPost:(PostCoreData *)post {
 	_post = post;
+    
 	[self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
     self.postImageView.image = [UIImage imageWithData:self.post.image];
 	
 	self.titleLabel.text = post.title;
 	self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
 }
-
 
 @end

@@ -13,11 +13,13 @@
 #import "Utils.h"
 #import "SignInVC.h"
 #import "UserCoreData+CoreDataClass.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 #import "User.h"
 
 @interface EditProfileVC ()
+
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
@@ -44,6 +46,9 @@
     confirmPasswordTextField.delegate = self;
     
     PFFileObject *image = currentUser[@"ProfilePic"];
+    
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
     
     [image getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError * _Nullable error) {
         UIImage *originalImage = [UIImage imageWithData:data];
@@ -179,34 +184,36 @@
             }
             
             if ([placemark.postalCode length] != 0) {
-                if ([strAdd length] != 0)
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
-                else
+                } else {
                     strAdd = placemark.postalCode;
+            }
             }
             
             if ([placemark.locality length] != 0) {
-                if ([strAdd length] != 0)
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
-                else
+                } else {
                     strAdd = placemark.locality;
+                }
             }
             
             if ([placemark.administrativeArea length] != 0) {
-                if ([strAdd length] != 0)
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
-                else
+                } else {
                     strAdd = placemark.administrativeArea;
+                }
             }
             
             if ([placemark.country length] != 0) {
-                if ([strAdd length] != 0)
+                if ([strAdd length] != 0) {
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
-                else
+                } else {
                     strAdd = placemark.country;
+                }
             }
-            
-            NSLog(@"%@", strAdd);
         }
         
         [self updateLocationWith:strAdd];
@@ -217,28 +224,26 @@
     User *currentUser = (User *)[PFUser currentUser];
     currentUser.Location = selectedLocationPoint;
     
-    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
-    
-    UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:context];
+    UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:self.context];
     if (address != nil) {
         currentUser.address = address;
         userCoreData.address = address;
-        [context save:nil];
+        
+        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
     }
     
     [MBProgressHUD showHUDAddedTo:self.view animated:true];
     [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:true];
         if (!error) {
-            // Hooray! Let them use the app now.
             [self setUpView];
             [self showAlertView:@"Updated Successfully"];
             
         } else {
             NSString *errorString = [error userInfo][@"error"];
             [self showAlertView:errorString];
-            // Show the errorString somewhere and let the user try again.
         }
     }];
 }
@@ -302,7 +307,6 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
-
 
 // To receive the results from the place picker 'self' will need to conform to
 // GMSPlacePickerViewControllerDelegate and implement this code.

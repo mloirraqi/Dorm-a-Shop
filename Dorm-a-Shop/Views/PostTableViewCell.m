@@ -9,8 +9,9 @@
 #import "PostTableViewCell.h"
 #import "NSDate+DateTools.h"
 #import "WatchListViewController.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "PostCoreData+CoreDataClass.h"
+#import "NSNotificationCenter+MainThread.h"
 @import Parse;
 
 @interface PostTableViewCell()
@@ -45,19 +46,19 @@
 - (IBAction)didTapWatch:(id)sender {
     __weak PostTableViewCell *weakSelf = self;
     if (self.watchButton.selected) {
-        [[ParseManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
+                [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"Error unwatching post: %@", error.localizedDescription);
             }
         }];
     } else {
-        [[ParseManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post, @"post", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
+                [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"Error watching post: %@", error.localizedDescription);
             }

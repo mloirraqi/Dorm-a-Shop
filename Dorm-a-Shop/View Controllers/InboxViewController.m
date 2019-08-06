@@ -9,7 +9,7 @@
 #import "InboxViewController.h"
 #import "UserCell.h"
 #import "MessageViewController.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
 #import "ConversationCoreData+CoreDataClass.h"
@@ -33,10 +33,18 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchConvos) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingConversations" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [self fetchConvosFromCoreData];
+}
+
+- (void)receiveNotification:(NSNotification *)notification {
+    if ([[notification name] isEqualToString:@"DoneSavingConversations"]) {
+        [self fetchConvosFromCoreData];
+    }
 }
 
 - (void)fetchConvosFromCoreData {
@@ -46,7 +54,7 @@
 
 - (void)fetchConvos {
     __weak InboxViewController *weakSelf = self;
-    [[ParseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
         weakSelf.convos = conversations;
         [weakSelf.tableView reloadData];
         [weakSelf.refreshControl endRefreshing];

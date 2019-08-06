@@ -9,9 +9,10 @@
 #import "DetailsViewController.h"
 #import "Post.h"
 #import "PostCoreData+CoreDataClass.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 #import "PostCollectionViewCell.h"
+#import "NSNotificationCenter+MainThread.h"
 @import Parse;
 
 @interface DetailsViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -43,19 +44,12 @@
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
     layout.minimumInteritemSpacing = 3;
     
-    [[ParseManager shared] viewPost:self.post];
+    [[ParseDatabaseManager shared] viewPost:self.post];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     
     [self setDetailsPost:self.post];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if ([self isMovingFromParentViewController]) {
-        [self.delegate updateDetailsData:self];
-    }
 }
 
 - (void)receiveNotification:(NSNotification *) notification {
@@ -115,19 +109,19 @@
 - (IBAction)didTapWatch:(id)sender {
     __weak DetailsViewController *weakSelf = self;
     if (self.post.watched) {
-        [[ParseManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] unwatchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post,@"post", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
+                [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"Delete watch object (user/post pair) in database failed: %@", error.localizedDescription);
             }
         }];
     } else {
-        [[ParseManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] watchPost:self.post withCompletion:^(NSError * _Nonnull error) {
             if (!error) {
                 NSDictionary *watchInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:weakSelf.post,@"post", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
+                [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedWatchNotification" object:weakSelf userInfo:watchInfoDict];
             } else {
                 NSLog(@"There was an error adding to watch class in database: %@", error.localizedDescription);
             }
@@ -139,21 +133,21 @@
     __weak DetailsViewController *weakSelf = self;
     if ([self.post.author.objectId isEqualToString:PFUser.currentUser.objectId]) {
         if (weakSelf.post.sold == NO) {
-            [[ParseManager shared] setPost:self.post sold:YES withCompletion:^(NSError * _Nonnull error) {
+            [[ParseDatabaseManager shared] setPost:self.post sold:YES withCompletion:^(NSError * _Nonnull error) {
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
                     NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"sold", nil];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
+                    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
             }];
         } else {
-            [[ParseManager shared] setPost:self.post sold:NO withCompletion:^(NSError * _Nonnull error) {
+            [[ParseDatabaseManager shared] setPost:self.post sold:NO withCompletion:^(NSError * _Nonnull error) {
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
                     NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"sold", nil];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
+                    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
             }];
         }

@@ -22,7 +22,7 @@
 
 @implementation ReviewTableViewCell
 
-- (void)setPost:(ReviewCoreData *)review {
+- (void)setReview:(ReviewCoreData *)review {
     _review = review;
     
     self.reviewDateLabel.text = [NSString stringWithFormat:@"%@", [review.dateWritten shortTimeAgoSinceNow]];

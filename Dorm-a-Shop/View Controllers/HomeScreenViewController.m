@@ -16,13 +16,12 @@
 #import "SignInVC.h"
 #import "AppDelegate.h"
 #import "LocationManager.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
+#import "NSNotificationCenter+MainThread.h"
 @import Parse;
 
-@interface HomeScreenViewController () <DetailsViewControllerDelegate, UploadViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
-
-@property (strong, nonatomic) NSManagedObjectContext *context;
+@interface HomeScreenViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -54,9 +53,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = appDelegate.persistentContainer.viewContext;
-    
     self.className = @"HomeScreenViewController";
     
     self.tableView.dataSource = self;
@@ -83,6 +79,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidUploadNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingPostsWatches" object:nil];
     
     [self fetchActivePostsFromCoreData];
     [self createRefreshControl];
@@ -108,6 +105,8 @@
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
         [self.postsArray insertObject:notificationPost atIndex:0];
         [self.tableView reloadData];
+    } else if ([[notification name] isEqualToString:@"DoneSavingPostsWatches"]) {
+        [self fetchActivePostsFromCoreData];
     }
 }
 
@@ -119,7 +118,7 @@
 
 - (void)queryActivePostsFromParse {
     __weak HomeScreenViewController *weakSelf = self;
-    [[ParseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
@@ -128,7 +127,7 @@
             [weakSelf.tableView reloadData];
             [weakSelf.refreshControl endRefreshing];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidPullActivePosts" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DidPullActivePosts" object:nil];
     }];
 }
 
@@ -136,7 +135,7 @@
     self.postsArray = [[CoreDataManager shared] getActivePostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"DidPullActivePosts" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DidPullActivePosts" object:nil];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -192,17 +191,12 @@
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"segueToUpload"]) {
-        UINavigationController *uploadViewNavigationController = [segue destinationViewController];
-        UploadViewController *uploadViewController = (UploadViewController *) uploadViewNavigationController.topViewController;
-        uploadViewController.delegate = self;
-    } else if ([segue.identifier isEqualToString:@"segueToDetails"]) {
+    if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostTableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         PostCoreData *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
-        detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
     }

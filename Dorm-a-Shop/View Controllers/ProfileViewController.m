@@ -12,7 +12,7 @@
 #import "Post.h"
 #import "SignInVC.h"
 #import "EditProfileVC.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
 #import "MessageViewController.h"
@@ -20,7 +20,7 @@
 #import "SellerReviewsViewController.h"
 @import Parse;
 
-@interface ProfileViewController () <EditProfileViewControllerDelegate, DetailsViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ProfileViewController () <EditProfileViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *activeItems;
@@ -36,6 +36,7 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *className;
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 
 @end
 
@@ -47,8 +48,8 @@
     self.className = @"ProfileViewController";
     
     if (!self.user) {
-        AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-        self.context = appDelegate.persistentContainer.viewContext;
+        self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+        self.context = self.appDelegate.persistentContainer.viewContext;
         self.user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
     } else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
@@ -69,6 +70,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidUploadNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingPostsWatches" object:nil];
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchProfileFromCoreData) forControlEvents:UIControlEventValueChanged];
@@ -83,6 +85,8 @@
         [self.activeItems insertObject:notificationPost atIndex:0];
         [self.collectionView reloadData];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
+        [self fetchProfileFromCoreData];
+    } else if ([[notification name] isEqualToString:@"DoneSavingPostsWatches"]) {
         [self fetchProfileFromCoreData];
     }
 }
@@ -141,26 +145,6 @@
     }
 }
 
-- (void)updateDetailsData:(UIViewController *)viewController {
-    //THIS COMMENTED OUT CODE IS STILL NEEDED FOR OUR REFERENCE AND WILL BE REMOVED ONCE NO LONGER NEEDED
-
-//    DetailsViewController *detailsViewController = (DetailsViewController *)viewController;
-//
-//    if (detailsViewController.itemStatusChanged) {
-//        if (detailsViewController.post.sold == NO) {
-//            [self.activeItems insertObject:detailsViewController.post atIndex:0];
-//            [self.soldItems removeObject:detailsViewController.post];
-//        } else {
-//            [self.soldItems insertObject:detailsViewController.post atIndex:0];
-//            [self.activeItems removeObject:detailsViewController.post];
-//        }
-//
-//        [self.collectionView reloadData];
-//        self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
-//        self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
-//    }
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToDetails"]) {
         PostCollectionViewCell *tappedCell = sender;
@@ -174,7 +158,6 @@
         }
         
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.delegate = self;
         detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
     } else if ([segue.identifier isEqualToString:@"segueToEditProfile"]) {
@@ -187,6 +170,9 @@
         UINavigationController *navigationController = [segue destinationViewController];
         ComposeReviewViewController *composeReviewViewController = (ComposeReviewViewController *) navigationController.topViewController;
         composeReviewViewController.seller = self.user;
+    } else if ([segue.identifier isEqualToString:@"segueToReviews"]) {
+        SellerReviewsViewController *sellerReviewsViewController = [segue destinationViewController];
+        sellerReviewsViewController.sellerCoreData = self.user;
     }
 }
 
@@ -222,6 +208,11 @@
     NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
     NSError *deletePostsError = nil;
     [self.context executeRequest:deletePosts error:&deletePostsError];
+    
+    NSFetchRequest *requestReviews = [[NSFetchRequest alloc] initWithEntityName:@"ReviewCoreData"];
+    NSBatchDeleteRequest *deleteReviews = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestReviews];
+    NSError *deleteReviewsError = nil;
+    [self.context executeRequest:deleteReviews error:&deleteReviewsError];
 }
 
 @end
