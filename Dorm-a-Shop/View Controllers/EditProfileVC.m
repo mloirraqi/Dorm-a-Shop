@@ -144,8 +144,12 @@
                 }
                 else
                 {
-                    [self setUpView];
-                    [self showAlertView:@"Updated Successfully"];
+                    UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
+                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [self.navigationController popViewControllerAnimated:YES];
+                    }];
+                    [successAlert addAction:okAction];
+                    [self presentViewController:successAlert animated:YES completion:^{}];
                 }
                 
             } else {
