@@ -43,6 +43,11 @@
     
     self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = self.appDelegate.persistentContainer.viewContext;
+    
+    self.pickerViewToolbar.hidden = YES;
+    self.ratingPickerView.delegate = self;
+    self.ratingPickerView.dataSource = self;
+    self.ratingPickerView.hidden = YES;
 }
 
 - (IBAction)didTapCancel:(id)sender {
@@ -109,13 +114,8 @@
     self.pickerViewToolbar.hidden = NO;
 }
 
-- (IBAction)didChooseRating:(id)sender {
-    [self.reviewTextView endEditing:YES];
-    self.ratingPickerView.hidden = NO;
-    self.pickerViewToolbar.hidden = YES;
-}
-
 - (IBAction)didTapDone:(id)sender {
+    [self.reviewTextView endEditing:YES];
     self.ratingPickerView.hidden = YES;
     self.pickerViewToolbar.hidden = YES;
 }
