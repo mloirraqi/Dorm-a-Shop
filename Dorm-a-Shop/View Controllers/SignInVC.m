@@ -37,7 +37,7 @@
             [self showAlertView:@"Unable to Sign in"];
         } else {
             [self setupCoreData];
-            [self performSegueWithIdentifier:@"loginSegue" sender:nil];
+            [self performSegueWithIdentifier:@"signIn" sender:nil];
         }
     }];
 }
