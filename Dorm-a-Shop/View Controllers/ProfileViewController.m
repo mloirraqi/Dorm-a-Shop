@@ -94,8 +94,9 @@
 - (void)fetchProfileFromCoreData {
     self.username.text = self.user.username;
     self.location.text = self.user.address;
+    NSLog(@"self.user: %@, self.user.address: %@", self.user, self.user.username);
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
-    self.profilePic.layer.cornerRadius = 40;
+    self.profilePic.layer.cornerRadius = 50;
     self.profilePic.layer.masksToBounds = YES;
     
     NSData *imageData = self.user.profilePic;
@@ -109,11 +110,19 @@
     
     NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
     self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
-    self.activeCount.text = [NSString stringWithFormat:@"%lu", self.activeItems.count];
+    if (self.activeItems.count == 1) {
+        self.activeCount.text = [NSString stringWithFormat:@"%lu Active Item", self.activeItems.count];
+    } else {
+        self.activeCount.text = [NSString stringWithFormat:@"%lu Active Items", self.activeItems.count];
+    }
     
     NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
     self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
-    self.soldCount.text = [NSString stringWithFormat:@"%lu", self.soldItems.count];
+    if (self.soldItems.count == 1) {
+        self.soldCount.text = [NSString stringWithFormat:@"%lu Sold Item", self.soldItems.count];
+    } else {
+        self.soldCount.text = [NSString stringWithFormat:@"%lu Sold Items", self.soldItems.count];
+    }
     
     [self.collectionView reloadData];
     [self.refreshControl endRefreshing];
