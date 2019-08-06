@@ -174,7 +174,7 @@
         editProfileViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
-        msgViewController.user = self.user;
+        msgViewController.receiver = sender;
     } else if ([segue.identifier isEqualToString:@"segueToComposeReview"]) {
         UINavigationController *navigationController = [segue destinationViewController];
         ComposeReviewViewController *composeReviewViewController = (ComposeReviewViewController *) navigationController.topViewController;
@@ -195,6 +195,7 @@
     }];
     
     SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
+   
     [self presentViewController:signInVC animated:YES completion:nil];
 }
 

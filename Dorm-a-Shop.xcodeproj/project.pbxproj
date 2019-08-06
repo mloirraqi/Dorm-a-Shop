@@ -43,18 +43,21 @@
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
 		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
+		EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */; };
+		EA4315BA22F941A200CC853D /* MapsPopupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4315B722F941A200CC853D /* MapsPopupVC.m */; };
+		EA4315BB22F941A200CC853D /* MapsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4315B822F941A200CC853D /* MapsVC.m */; };
 		EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732DD22DF931C004E362F /* SignUpVC.m */; };
 		EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E722DF95E0004E362F /* NJOPasswordStrengthEvaluator.m */; };
 		EA6732ED22DF95F5004E362F /* QAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E922DF95F5004E362F /* QAButton.m */; };
 		EA6732EE22DF95F5004E362F /* QAView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732EB22DF95F5004E362F /* QAView.m */; };
 		EA6732F422DF96DE004E362F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F322DF96DE004E362F /* Utils.m */; };
 		EA6732F722DFAB25004E362F /* SignInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F622DFAB25004E362F /* SignInVC.m */; };
+		EAB1A80822F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB1A80722F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift */; };
 		EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723322E9315200426226 /* DraggableViewBackground.m */; };
 		EAEB723922E9316200426226 /* DraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723722E9316200426226 /* DraggableView.m */; };
 		EAEB723A22E9316200426226 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723822E9316200426226 /* OverlayView.m */; };
 		EAEB723D22E9369900426226 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723C22E9369900426226 /* Card.m */; };
 		EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */; };
-		EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */; };
 		EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724422E95C6B00426226 /* CardsViewController.m */; };
 		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
@@ -154,6 +157,11 @@
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
+		EA4315B622F941A200CC853D /* MapsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapsVC.h; sourceTree = "<group>"; };
+		EA4315B722F941A200CC853D /* MapsPopupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapsPopupVC.m; sourceTree = "<group>"; };
+		EA4315B822F941A200CC853D /* MapsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapsVC.m; sourceTree = "<group>"; };
+		EA4315B922F941A200CC853D /* MapsPopupVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapsPopupVC.h; sourceTree = "<group>"; };
 		EA6732DC22DF931C004E362F /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
 		EA6732DD22DF931C004E362F /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		EA6732E622DF95E0004E362F /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
@@ -166,6 +174,8 @@
 		EA6732F322DF96DE004E362F /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		EA6732F522DFAB25004E362F /* SignInVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInVC.h; sourceTree = "<group>"; };
 		EA6732F622DFAB25004E362F /* SignInVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInVC.m; sourceTree = "<group>"; };
+		EAB1A80622F8272B00C4AA25 /* Dorm-a-Shop-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Dorm-a-Shop-Bridging-Header.h"; sourceTree = "<group>"; };
+		EAB1A80722F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseLiveQueryObjCBridge.swift; sourceTree = "<group>"; };
 		EAEB723222E9315200426226 /* DraggableViewBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableViewBackground.h; sourceTree = "<group>"; };
 		EAEB723322E9315200426226 /* DraggableViewBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableViewBackground.m; sourceTree = "<group>"; };
 		EAEB723522E9316200426226 /* DraggableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableView.h; sourceTree = "<group>"; };
@@ -176,7 +186,6 @@
 		EAEB723C22E9369900426226 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
 		EAEB723F22E936CB00426226 /* CardItemCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardItemCollectionViewCell.h; sourceTree = "<group>"; };
 		EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardItemCollectionViewCell.m; sourceTree = "<group>"; };
-		EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		EAEB724422E95C6B00426226 /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
 		EAEB724522E95C6B00426226 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -265,6 +274,10 @@
 				47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */,
 				47A8A9B222DE3A32005D9520 /* Info.plist */,
 				47A8A9B322DE3A32005D9520 /* main.m */,
+				EA4315B922F941A200CC853D /* MapsPopupVC.h */,
+				EA4315B722F941A200CC853D /* MapsPopupVC.m */,
+				EA4315B622F941A200CC853D /* MapsVC.h */,
+				EA4315B822F941A200CC853D /* MapsVC.m */,
 			);
 			path = "Dorm-a-Shop";
 			sourceTree = "<group>";
@@ -339,10 +352,12 @@
 				DE4FCFD322E66FE500B1311F /* InboxViewController.m */,
 				DE4FCFD522E6744100B1311F /* MessageViewController.h */,
 				DE4FCFD622E6744100B1311F /* MessageViewController.m */,
+				EAB1A80722F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift */,
 				DEA2B53522F4AE4D00FC71DB /* SellerReviewsViewController.h */,
 				DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */,
 				DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */,
 				DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */,
+				EAB1A80622F8272B00C4AA25 /* Dorm-a-Shop-Bridging-Header.h */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -434,7 +449,7 @@
 			children = (
 				EAEB723F22E936CB00426226 /* CardItemCollectionViewCell.h */,
 				EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */,
-				EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */,
+				EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */,
 			);
 			path = "Card Cell";
 			sourceTree = "<group>";
@@ -511,6 +526,7 @@
 				TargetAttributes = {
 					47A8A9A022DE3A30005D9520 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 					47A8A9B822DE3A32005D9520 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -550,7 +566,7 @@
 				47A8A9B122DE3A32005D9520 /* LaunchScreen.storyboard in Resources */,
 				47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */,
 				47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */,
-				EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */,
+				EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,6 +703,7 @@
 				EAEB723D22E9369900426226 /* Card.m in Sources */,
 				47415D0C22F8EFE600AF4C16 /* NSNotificationCenter+MainThread.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
+				EA4315BA22F941A200CC853D /* MapsPopupVC.m in Sources */,
 				DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */,
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
 				DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */,
@@ -694,6 +711,7 @@
 				47486BD222F566C200DE6D8E /* ParseDatabaseManager.m in Sources */,
 				47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
+				EA4315BB22F941A200CC853D /* MapsVC.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				470FB6F922EF70240088A3EC /* LocationManager.m in Sources */,
 				DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */,
@@ -717,6 +735,7 @@
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */,
 				47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */,
+				EAB1A80822F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift in Sources */,
 				EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */,
 				EA6732F722DFAB25004E362F /* SignInVC.m in Sources */,
 			);
@@ -892,6 +911,7 @@
 			baseConfigurationReference = DAB21EC6927306F350ED2916 /* Pods-Dorm-a-Shop.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GBM98UU555;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
@@ -901,6 +921,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -910,6 +933,7 @@
 			baseConfigurationReference = 4F391BB0A88FF785BA25E839 /* Pods-Dorm-a-Shop.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GBM98UU555;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
@@ -919,6 +943,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -927,6 +953,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7B990968EF4F50E238A28966 /* Pods-Dorm-a-ShopTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Dorm-a-ShopTests/Info.plist";
@@ -946,6 +973,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 08E64F22EC47F3B5CBDAC20F /* Pods-Dorm-a-ShopTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Dorm-a-ShopTests/Info.plist";
@@ -965,6 +993,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 263DD222A783046F1F35C90A /* Pods-Dorm-a-ShopUITests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Dorm-a-ShopUITests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -983,6 +1012,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 241F52E5E4F95328E461C4ED /* Pods-Dorm-a-ShopUITests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Dorm-a-ShopUITests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (

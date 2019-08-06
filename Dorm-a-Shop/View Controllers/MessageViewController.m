@@ -8,10 +8,9 @@
 
 #import "MessageViewController.h"
 #import "ChatCell.h"
-#import "AppDelegate.h"
-#import "UserCoreData+CoreDataClass.h"
-#import "CoreDataManager.h"
+#import "Dorm_a_Shop-Swift.h"
 @import Parse;
+@import ParseLiveQuery;
 @import TwilioChatClient;
 
 @interface MessageViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -19,10 +18,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (weak, nonatomic) IBOutlet UITextField *msgInput;
-@property (strong, nonatomic) PFUser *receiver;
-@property (strong, nonatomic) PFObject *convo;
 @property (strong, nonatomic) NSManagedObjectContext *context;
-@property (nonatomic, strong) AppDelegate *appDelegate;
+@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
+@property (strong, nonatomic) ParseLiveQueryObjCBridge *bridge;
 
 @end
 
@@ -33,18 +31,13 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = self.appDelegate.persistentContainer.viewContext;
-    self.receiver = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:self.user.objectId];
-    if(self.conversationCoreData) {
-        self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
-    }
-    self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
 
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
+    [self fetchMessages];
+    [self subscribe];
 }
 
-- (void)onTimer {
+-(void)fetchMessages {
     PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
     [sentQuery whereKey:@"receiver" equalTo:self.receiver];
     [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
@@ -57,72 +50,105 @@
     [query orderByAscending:@"createdAt"];
     [query includeKey:@"sender"];
     
-    __weak MessageViewController *weakSelf = self;
     [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
         if (chats != nil) {
-            weakSelf.messages = [NSMutableArray arrayWithArray:chats];
-            PFObject *lastMsg = (PFObject *) [chats lastObject];
-            weakSelf.conversationCoreData.updatedAt = lastMsg.createdAt;
-            weakSelf.conversationCoreData.lastText = lastMsg[@"text"];
-            [weakSelf.tableView reloadData];
+            self.messages = [NSMutableArray arrayWithArray:chats];
+            
+            [self.tableView reloadData];
         } else {
             NSLog(@"%@", error.localizedDescription);
         }
     }];
 }
 
-- (IBAction)sendMsg:(id)sender {
-    if(![self.msgInput.text isEqualToString:@""]) {
-        __weak MessageViewController *weakSelf = self;
-        if(!self.conversationCoreData) {
-            self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
-            if(self.conversationCoreData) {
-                self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
-            }
-        }
+- (void)subscribe {
+    self.bridge = [ParseLiveQueryObjCBridge new];
+    
+    __weak MessageViewController *weakSelf = self;
+    void (^completion)(PFObject* object) = ^(PFObject* object) {
+        [weakSelf.messages addObject:object];
         
-        if (!self.convo) {
-            PFObject *convo = [PFObject objectWithClassName:@"Convos"];
-            convo[@"sender"] = [PFUser currentUser];
-            convo[@"receiver"] = weakSelf.receiver;
-            convo[@"lastText"] = self.msgInput.text;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:weakSelf.messages.count-1 inSection:0];
             
-            [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                if (succeeded) {
-                    [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:convo.objectId withDate:convo.updatedAt withSender:weakSelf.user withLastText:convo[@"lastText"] withManagedObjectContext:weakSelf.context];
-                    weakSelf.convo = convo;
-                } else {
-                    NSLog(@"%@", error.localizedDescription);
-                }
-            }];
-        } else {
-            self.convo[@"lastText"] = self.msgInput.text;
-            [self.convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-                if (!succeeded) {
-                    NSLog(@"Problem updating convos class: %@", error.localizedDescription);
-                }
-            }];
-        }
+            [weakSelf.tableView beginUpdates];
+            [weakSelf.tableView insertRowsAtIndexPaths:@[lastIndexPath]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            [weakSelf.tableView endUpdates];
+            [weakSelf.tableView scrollToRowAtIndexPath:lastIndexPath
+                                      atScrollPosition:UITableViewScrollPositionBottom
+                                              animated:NO];
+        });
+    };
+    
+    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
+    [sentQuery whereKey:@"receiver" equalTo:self.receiver];
+    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
+    [self.bridge subscribeToQuery:sentQuery handler:completion];
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+    [recQuery whereKey:@"sender" equalTo:self.receiver];
+    [self.bridge subscribeToQuery:recQuery handler:completion];
+}
+
+- (IBAction)sendMsg:(id)sender {
+    
+    if (!self.convo) {
+        PFQuery *sentQuery = [PFQuery queryWithClassName:@"Convos"];
+        [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
+        [sentQuery whereKey:@"receiver" equalTo:self.receiver];
         
-        PFObject *message = [PFObject objectWithClassName:@"Messages"];
-        message[@"sender"] = [PFUser currentUser];
-        message[@"receiver"] = self.receiver;
-        message[@"text"] = self.msgInput.text;
-        weakSelf.conversationCoreData.updatedAt = [NSDate date];
+        PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
+        [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+        [recQuery whereKey:@"sender" equalTo:self.receiver];
         
-        [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-            if (succeeded) {
-                weakSelf.conversationCoreData.lastText = self.msgInput.text;
-                
-                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-                    return YES;
-                } withName:[NSString stringWithFormat:@"%@", weakSelf.conversationCoreData.objectId]];
-                weakSelf.msgInput.text = @"";
+        PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
+        
+        __weak MessageViewController *weakSelf = self;
+        [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable messages, NSError * _Nullable error) {
+            if (messages.count) {
+                weakSelf.convo = messages[0];
+
             } else {
-                NSLog(@"Problem saving message: %@", error.localizedDescription);
+                PFObject *convo = [PFObject objectWithClassName:@"Convos"];
+                convo[@"sender"] = [PFUser currentUser];
+                convo[@"receiver"] = self.receiver;
+                
+                __weak MessageViewController *weakSelf = self;
+                [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (succeeded) {
+                        weakSelf.convo = convo;
+                    } else {
+                        NSLog(@"%@", error.localizedDescription);
+                    }
+                }];
             }
         }];
     }
+    
+    PFObject *message = [PFObject objectWithClassName:@"Messages"];
+    message[@"sender"] = [PFUser currentUser];
+    message[@"receiver"] = self.receiver;
+    message[@"text"] = self.msgInput.text;
+    [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+        if (succeeded) {
+            NSLog(@"The message was saved!");
+        } else {
+            NSLog(@"Problem saving message: %@", error.localizedDescription);
+        }
+    }];
+    
+    self.convo[@"lastText"] = self.msgInput.text;
+    [self.convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+        if (succeeded) {
+            NSLog(@"The convos class was updated!");
+        } else {
+            NSLog(@"Problem updating convos class: %@", error.localizedDescription);
+        }
+    }];
+    
+    self.msgInput.text = @"";
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {

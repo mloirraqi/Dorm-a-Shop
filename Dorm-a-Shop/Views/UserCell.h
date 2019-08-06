@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UserCell : UITableViewCell
 
 @property (strong, nonatomic) UserCoreData *user;
+@property (strong, nonatomic) PFUser *pfuser;
 @property (strong, nonatomic) ConversationCoreData *convo;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *username;
