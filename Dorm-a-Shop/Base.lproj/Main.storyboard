@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1hK-nR-NGd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XuW-PD-5qL">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -1363,6 +1363,30 @@
             </objects>
             <point key="canvasLocation" x="1142" y="920"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="40z-Zp-O2t">
+            <objects>
+                <viewController id="XuW-PD-5qL" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2w5-5o-5W2">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZUd-Qt-64n">
+                                <rect key="frame" x="157" y="438" width="100" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="vHL-zt-Ns0"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9Gl-eZ-gOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2486" y="289"/>
+        </scene>
         <!--Sign UpVC-->
         <scene sceneID="h9S-jo-ZFk">
             <objects>
@@ -2284,9 +2308,10 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="I68-gf-EeP"/>
         <segue reference="fhM-T6-QvG"/>
         <segue reference="oCN-lU-gXW"/>
-        <segue reference="dnl-93-kbr"/>
+        <segue reference="Ob4-g7-kRL"/>
         <segue reference="KLi-YY-IiH"/>
         <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
