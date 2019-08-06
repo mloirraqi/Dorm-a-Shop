@@ -22,21 +22,31 @@
 }
 
 - (void)showMsg {
-    self.profilePic.layer.cornerRadius = 20;
-    self.profilePic.layer.masksToBounds = YES;
-    PFFileObject *imageFile = (self.chat[@"sender"])[@"ProfilePic"];
-    [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            UIImage *image = [UIImage imageWithData:imageData];
-            [self.profilePic setImage:image];
-        }
-    }];
-    if ([((PFObject *)self.chat[@"sender"]).objectId isEqualToString:PFUser.currentUser.objectId]) {
+    self.messageLabel.text = self.chat[@"text"];
+    
+    PFObject *senderObject = self.chat[@"sender"];
+    
+    if ([senderObject.objectId isEqualToString:PFUser.currentUser.objectId]) {
         [self.messageLabel setTextAlignment:NSTextAlignmentRight];
         self.profilePic.hidden = YES;
         [self.profilePic removeConstraints:[self.profilePic constraints]];
     }
-    self.messageLabel.text = self.chat[@"text"];
+    
+    if ([[senderObject allKeys] containsObject:@"ProfilePic"]) {
+        PFFileObject *imageFile = senderObject[@"ProfilePic"];
+        
+        __weak ChatCell *weakSelf = self;
+        [imageFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+            if (!error) {
+                UIImage *image = [UIImage imageWithData:imageData];
+                [weakSelf.profilePic setImage:image];
+                weakSelf.profilePic.layer.cornerRadius = 20;
+                weakSelf.profilePic.layer.masksToBounds = YES;
+            }
+        }];
+    } else {
+        [self.profilePic setImage:[UIImage new]];
+    }
 }
 
 @end

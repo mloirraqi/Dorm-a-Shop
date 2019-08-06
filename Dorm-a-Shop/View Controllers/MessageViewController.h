@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 @import Parse;
 #import "ConversationCoreData+CoreDataClass.h"
-#import "UserCoreData+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

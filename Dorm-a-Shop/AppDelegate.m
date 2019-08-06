@@ -26,12 +26,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [LocationManager sharedInstance];
     
-    [GMSServices provideAPIKey:@"AIzaSyCZ98HEzZOeV7-hRjLGNJLpm85wu45B4RY"];
+    [GMSServices provideAPIKey:@"AIzaSyC1sOYEZLpUFrZgeclrwGG5UzpJ57erHg4"];
     [GMSPlacesClient provideAPIKey:@"AIzaSyCQq014wwF0Stjx8gfDIUW3TxYfBuXCDD8"];
 
     ParseClientConfiguration *config = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         configuration.applicationId = @"dormAshop";
         configuration.server = @"https://dorm-a-shop.herokuapp.com/parse";
+        configuration.clientKey = @"Heroku";
     }];
     
     [Parse initializeWithConfiguration:config];

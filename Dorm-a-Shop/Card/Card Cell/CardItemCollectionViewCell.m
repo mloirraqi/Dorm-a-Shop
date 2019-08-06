@@ -31,7 +31,18 @@
     self.postImageView.image = [UIImage imageWithData:self.post.image];
 	
 	self.titleLabel.text = post.title;
-	self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [formatter setMaximumFractionDigits:2];
+    [formatter setRoundingMode: NSNumberFormatterRoundUp];
+    
+    NSString *priceString = [formatter stringFromNumber:[NSNumber numberWithFloat:post.price]];
+    
+    NSLog(@" originial --> %f, converted --> %@", post.price, priceString);
+
+	self.priceLabel.text = [NSString stringWithFormat:@"$%@", priceString];
 }
 
 @end

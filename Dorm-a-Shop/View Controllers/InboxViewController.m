@@ -33,18 +33,10 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchConvos) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingConversations" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [self fetchConvosFromCoreData];
-}
-
-- (void)receiveNotification:(NSNotification *)notification {
-    if ([[notification name] isEqualToString:@"DoneSavingConversations"]) {
-        [self fetchConvosFromCoreData];
-    }
 }
 
 - (void)fetchConvosFromCoreData {

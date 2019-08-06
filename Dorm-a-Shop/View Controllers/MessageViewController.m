@@ -22,7 +22,6 @@
 @property (strong, nonatomic) PFUser *receiver;
 @property (strong, nonatomic) PFObject *convo;
 @property (strong, nonatomic) NSManagedObjectContext *context;
-@property (nonatomic, strong) AppDelegate *appDelegate;
 
 @end
 
@@ -33,14 +32,14 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = self.appDelegate.persistentContainer.viewContext;
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
     self.receiver = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:self.user.objectId];
     if(self.conversationCoreData) {
         self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
     }
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
-
+    
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 }
 
@@ -90,6 +89,7 @@
             [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
                     [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:convo.objectId withDate:convo.updatedAt withSender:weakSelf.user withLastText:convo[@"lastText"] withManagedObjectContext:weakSelf.context];
+                    [weakSelf saveContext];
                     weakSelf.convo = convo;
                 } else {
                     NSLog(@"%@", error.localizedDescription);
@@ -113,12 +113,7 @@
         [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (succeeded) {
                 weakSelf.conversationCoreData.lastText = self.msgInput.text;
-                
-//                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-//                    return YES;
-//                } withName:[NSString stringWithFormat:@"%@", weakSelf.conversationCoreData.objectId]];
-                [self saveContext];
-                
+                [weakSelf saveContext];
                 weakSelf.msgInput.text = @"";
             } else {
                 NSLog(@"Problem saving message: %@", error.localizedDescription);
