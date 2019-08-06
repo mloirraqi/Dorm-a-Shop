@@ -28,8 +28,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *sellerButton;
 @property (weak, nonatomic) IBOutlet UIButton *watchButton;
 @property (weak, nonatomic) IBOutlet UIButton *statusButton;
+@property (weak, nonatomic) IBOutlet UIButton *contactSellerButton;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *similarItems;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (weak, nonatomic) IBOutlet UILabel *sellerLabel;
 
 @end
 
@@ -99,11 +102,16 @@
         [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
     }
     
+    self.profileImageView.layer.cornerRadius = 15;
+    self.profileImageView.layer.masksToBounds = YES;
+    [self.profileImageView setImage:[UIImage imageWithData:self.post.author.profilePic]];
+    
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
     self.captionLabel.text = post.caption;
     self.titleLabel.text = post.title;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
+    self.sellerLabel.text = post.author.username;
+    self.priceLabel.text = [NSString stringWithFormat:@"$%.02f", post.price];
 }
 
 - (IBAction)didTapWatch:(id)sender {

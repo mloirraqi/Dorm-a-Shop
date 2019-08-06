@@ -40,7 +40,7 @@
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
     self.titleLabel.text = post.title;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%f", post.price];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%.02f", post.price];
 }
 
 - (IBAction)didTapWatch:(id)sender {

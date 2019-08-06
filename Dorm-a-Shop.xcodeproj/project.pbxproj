@@ -12,6 +12,7 @@
 		470FB71A22EF71780088A3EC /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71922EF71780088A3EC /* Watches.m */; };
 		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
 		47415D0C22F8EFE600AF4C16 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 47415D0A22F8EFE500AF4C16 /* NSNotificationCenter+MainThread.m */; };
+		47415D0F22F956D700AF4C16 /* UILabel+Boldify.m in Sources */ = {isa = PBXBuildFile; fileRef = 47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */; };
 		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
 		47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */; };
@@ -91,6 +92,8 @@
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		47415D0A22F8EFE500AF4C16 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+MainThread.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/NSNotificationCenter+MainThread.m"; sourceTree = "<absolute>"; };
 		47415D0B22F8EFE600AF4C16 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+MainThread.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Models/NSNotificationCenter+MainThread.h"; sourceTree = "<absolute>"; };
+		47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+Boldify.h"; sourceTree = "<group>"; };
+		47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Boldify.m"; sourceTree = "<group>"; };
 		47486BA622F3626E00DE6D8E /* CoreDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		47486BA722F3626E00DE6D8E /* CoreDataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		47486BB822F3D65500DE6D8E /* Review.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Review.h; sourceTree = "<group>"; };
@@ -355,6 +358,8 @@
 				DED744F722DFE0A400394748 /* PostCollectionViewCell.m */,
 				47486BCD22F4ECEA00DE6D8E /* ReviewTableViewCell.h */,
 				47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */,
+				47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */,
+				47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */,
 				DEFE7C8A22E64347006E3096 /* UserCell.h */,
 				DEFE7C8B22E64347006E3096 /* UserCell.m */,
 			);
@@ -705,6 +710,7 @@
 				470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
 				EAEB723A22E9316200426226 /* OverlayView.m in Sources */,
+				47415D0F22F956D700AF4C16 /* UILabel+Boldify.m in Sources */,
 				EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
