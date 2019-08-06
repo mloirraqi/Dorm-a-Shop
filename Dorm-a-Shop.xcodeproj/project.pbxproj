@@ -12,6 +12,7 @@
 		470FB71A22EF71780088A3EC /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71922EF71780088A3EC /* Watches.m */; };
 		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
 		47415D0F22F956D700AF4C16 /* UILabel+Boldify.m in Sources */ = {isa = PBXBuildFile; fileRef = 47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */; };
+		47415D1222FA36A600AF4C16 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 47415D1122FA36A600AF4C16 /* NSNotificationCenter+MainThread.m */; };
 		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
 		47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */; };
@@ -36,7 +37,6 @@
 		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
 		DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD922E686DE00B1311F /* EditProfileVC.m */; };
 		DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */; };
-		DE877D6222FA2FA600C35587 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DE877D6122FA2FA600C35587 /* NSNotificationCenter+MainThread.m */; };
 		DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */; };
 		DEA2B53922F4AE7800FC71DB /* ComposeReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
@@ -95,6 +95,8 @@
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+Boldify.h"; sourceTree = "<group>"; };
 		47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Boldify.m"; sourceTree = "<group>"; };
+		47415D1022FA36A600AF4C16 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
+		47415D1122FA36A600AF4C16 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		47486BA622F3626E00DE6D8E /* CoreDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		47486BA722F3626E00DE6D8E /* CoreDataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		47486BB822F3D65500DE6D8E /* Review.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Review.h; sourceTree = "<group>"; };
@@ -143,8 +145,6 @@
 		DE4FCFD822E686DE00B1311F /* EditProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileVC.h; sourceTree = "<group>"; };
 		DE4FCFD922E686DE00B1311F /* EditProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileVC.m; sourceTree = "<group>"; };
 		DE4FD01022EA3D1100B1311F /* DormAShop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DormAShop.xcdatamodel; sourceTree = "<group>"; };
-		DE877D6022FA2FA600C35587 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+MainThread.h"; path = "../../../Dorm-a-Shop-old/Dorm-a-Shop/Models/NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
-		DE877D6122FA2FA600C35587 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+MainThread.m"; path = "../../../Dorm-a-Shop-old/Dorm-a-Shop/Models/NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SellerReviewsViewController.m; sourceTree = "<group>"; };
 		DEA2B53522F4AE4D00FC71DB /* SellerReviewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SellerReviewsViewController.h; sourceTree = "<group>"; };
 		DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeReviewViewController.h; sourceTree = "<group>"; };
@@ -321,8 +321,8 @@
 				47486BA722F3626E00DE6D8E /* CoreDataManager.m */,
 				470FB6F722EF70240088A3EC /* LocationManager.h */,
 				470FB6F822EF70240088A3EC /* LocationManager.m */,
-				DE877D6022FA2FA600C35587 /* NSNotificationCenter+MainThread.h */,
-				DE877D6122FA2FA600C35587 /* NSNotificationCenter+MainThread.m */,
+				47415D1022FA36A600AF4C16 /* NSNotificationCenter+MainThread.h */,
+				47415D1122FA36A600AF4C16 /* NSNotificationCenter+MainThread.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -717,7 +717,7 @@
 				DEA2B53922F4AE7800FC71DB /* ComposeReviewViewController.m in Sources */,
 				EA6732F422DF96DE004E362F /* Utils.m in Sources */,
 				EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */,
-				DE877D6222FA2FA600C35587 /* NSNotificationCenter+MainThread.m in Sources */,
+				47415D1222FA36A600AF4C16 /* NSNotificationCenter+MainThread.m in Sources */,
 				EAEB723922E9316200426226 /* DraggableView.m in Sources */,
 				DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */,
 				47A8A9F122E12528005D9520 /* WatchListViewController.m in Sources */,

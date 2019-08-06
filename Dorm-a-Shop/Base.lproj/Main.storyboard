@@ -521,6 +521,16 @@
                                                     <segue destination="hNF-zH-KBz" kind="presentation" identifier="segueToComposeReview" id="myr-jc-hma"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Vw-cY-F0C">
+                                                <rect key="frame" x="16" y="125" width="100" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="95E-GN-s56"/>
+                                                    <constraint firstAttribute="height" constant="21" id="tCE-HZ-F6R"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -531,6 +541,7 @@
                                             <constraint firstAttribute="trailing" secondItem="g0d-yj-fjW" secondAttribute="trailing" constant="16" id="BRV-7R-yIk"/>
                                             <constraint firstItem="J0d-zI-pQn" firstAttribute="leading" secondItem="h6n-9m-t5P" secondAttribute="trailing" constant="8" id="Dhm-zw-jFz"/>
                                             <constraint firstItem="UtB-uj-P2h" firstAttribute="leading" secondItem="J0d-zI-pQn" secondAttribute="leading" id="HG3-fy-zNA"/>
+                                            <constraint firstItem="GMe-Z3-De9" firstAttribute="top" secondItem="4Vw-cY-F0C" secondAttribute="bottom" constant="8" id="KSV-7r-Irx"/>
                                             <constraint firstItem="I06-uU-Ytn" firstAttribute="top" secondItem="J0d-zI-pQn" secondAttribute="top" id="Kw7-oS-hUP"/>
                                             <constraint firstItem="UtB-uj-P2h" firstAttribute="top" secondItem="u3h-8c-UIn" secondAttribute="bottom" constant="8" id="LyZ-xo-dBi"/>
                                             <constraint firstAttribute="trailing" secondItem="tCo-iS-zRe" secondAttribute="trailing" constant="16" id="M7e-ug-MlJ"/>
@@ -542,6 +553,8 @@
                                             <constraint firstItem="imT-sc-NpR" firstAttribute="leading" secondItem="tvg-N4-hTJ" secondAttribute="leading" constant="16" id="WJ5-wR-2SW"/>
                                             <constraint firstAttribute="trailing" secondItem="imT-sc-NpR" secondAttribute="trailing" constant="16" id="ZJs-CT-Bb5"/>
                                             <constraint firstItem="hnD-aV-NDt" firstAttribute="leading" secondItem="J0d-zI-pQn" secondAttribute="leading" id="fvL-jN-jEA"/>
+                                            <constraint firstItem="4Vw-cY-F0C" firstAttribute="leading" secondItem="tvg-N4-hTJ" secondAttribute="leading" constant="16" id="nVZ-Hz-G6v"/>
+                                            <constraint firstItem="4Vw-cY-F0C" firstAttribute="top" secondItem="h6n-9m-t5P" secondAttribute="bottom" constant="8" id="p5C-fN-qnG"/>
                                             <constraint firstItem="imT-sc-NpR" firstAttribute="top" secondItem="GMe-Z3-De9" secondAttribute="bottom" constant="8" id="pAw-OX-Mla"/>
                                             <constraint firstAttribute="trailing" secondItem="I06-uU-Ytn" secondAttribute="trailing" constant="16" id="rEB-zI-9dG"/>
                                             <constraint firstItem="u3h-8c-UIn" firstAttribute="top" secondItem="J0d-zI-pQn" secondAttribute="bottom" constant="8" id="rNh-dB-HbR"/>
@@ -593,14 +606,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="activeCount" destination="UtB-uj-P2h" id="A1G-Uv-iu8"/>
+                        <outlet property="activeCountLabel" destination="UtB-uj-P2h" id="aYs-ri-t5G"/>
                         <outlet property="collectionView" destination="imT-sc-NpR" id="Wdw-Fk-0AT"/>
-                        <outlet property="location" destination="u3h-8c-UIn" id="MwA-6J-vYb"/>
+                        <outlet property="locationLabel" destination="u3h-8c-UIn" id="gm0-ar-Jzg"/>
                         <outlet property="profilePic" destination="h6n-9m-t5P" id="vC8-na-sv2"/>
+                        <outlet property="ratingLabel" destination="4Vw-cY-F0C" id="bfF-NZ-buU"/>
                         <outlet property="scrollView" destination="iAM-p9-Pa1" id="l4i-uo-GNV"/>
                         <outlet property="segmentControl" destination="GMe-Z3-De9" id="GJX-xT-FJg"/>
-                        <outlet property="soldCount" destination="hnD-aV-NDt" id="wou-je-0Gh"/>
-                        <outlet property="username" destination="J0d-zI-pQn" id="cJW-5K-Nbz"/>
+                        <outlet property="soldCountLabel" destination="hnD-aV-NDt" id="MVq-BK-mn0"/>
+                        <outlet property="usernameLabel" destination="J0d-zI-pQn" id="fc1-p4-KJU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aCQ-Zc-Blj" userLabel="First Responder" sceneMemberID="firstResponder"/>

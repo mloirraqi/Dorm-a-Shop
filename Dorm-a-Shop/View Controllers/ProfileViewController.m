@@ -29,10 +29,11 @@
 @property (nonatomic, strong) NSNumber *selectedSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
-@property (weak, nonatomic) IBOutlet UILabel *username;
-@property (weak, nonatomic) IBOutlet UILabel *location;
-@property (weak, nonatomic) IBOutlet UILabel *activeCount;
-@property (weak, nonatomic) IBOutlet UILabel *soldCount;
+@property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
+@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (weak, nonatomic) IBOutlet UILabel *activeCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *soldCountLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *className;
@@ -93,28 +94,13 @@
 }
 
 - (void)fetchProfileFromCoreData {
-    self.location.text = self.user.address;
+    self.locationLabel.text = self.user.address;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 50;
     self.profilePic.layer.masksToBounds = YES;
+    self.usernameLabel.text = self.user.username;
     
-    NSMutableArray *reviewsArray = [[CoreDataManager shared] getReviewsFromCoreDataForSeller:self.user];
-    float avgRating = 0;
-    for (ReviewCoreData *review in reviewsArray) {
-        avgRating += review.rating;
-    }
-    avgRating /= reviewsArray.count;
-    self.user.rating = avgRating;
-    [self saveContext];
-    
-    if (avgRating == 0) {
-        self.username.text = [NSString stringWithFormat:@"%@ is not yet rated", self.user.username];
-        [self.username boldSubstring:self.user.username];
-    } else {
-        self.username.text = [NSString stringWithFormat:@"%@ is rated %.02f/10", self.user.username, self.user.rating];
-        [self.username boldSubstring:self.user.username];
-        [self.username boldSubstring:[NSString stringWithFormat:@"%f", self.user.rating]];
-    }
+    [self setRating];
     
     NSData *imageData = self.user.profilePic;
     [self.profilePic setImage:[UIImage imageNamed:@"item_placeholder"]];
@@ -128,21 +114,38 @@
     NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
     self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
     if (self.activeItems.count == 1) {
-        self.activeCount.text = [NSString stringWithFormat:@"%lu Active Item", self.activeItems.count];
+        self.activeCountLabel.text = [NSString stringWithFormat:@"%lu Active Item", self.activeItems.count];
     } else {
-        self.activeCount.text = [NSString stringWithFormat:@"%lu Active Items", self.activeItems.count];
+        self.activeCountLabel.text = [NSString stringWithFormat:@"%lu Active Items", self.activeItems.count];
     }
     
     NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
     self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
     if (self.soldItems.count == 1) {
-        self.soldCount.text = [NSString stringWithFormat:@"%lu Sold Item", self.soldItems.count];
+        self.soldCountLabel.text = [NSString stringWithFormat:@"%lu Sold Item", self.soldItems.count];
     } else {
-        self.soldCount.text = [NSString stringWithFormat:@"%lu Sold Items", self.soldItems.count];
+        self.soldCountLabel.text = [NSString stringWithFormat:@"%lu Sold Items", self.soldItems.count];
     }
     
     [self.collectionView reloadData];
     [self.refreshControl endRefreshing];
+}
+
+- (void)setRating {
+    NSMutableArray *reviewsArray = [[CoreDataManager shared] getReviewsFromCoreDataForSeller:self.user];
+    float avgRating = 0;
+    for (ReviewCoreData *review in reviewsArray) {
+        avgRating += review.rating;
+    }
+    avgRating /= reviewsArray.count;
+    self.user.rating = avgRating;
+    [self saveContext];
+    
+    if (avgRating == 0) {
+        self.ratingLabel.text = @"not yet rated";
+    } else {
+        self.ratingLabel.text = [NSString stringWithFormat:@"%.02f/5", self.user.rating];
+    }
 }
 
 - (IBAction)changedSegment:(id)sender {
