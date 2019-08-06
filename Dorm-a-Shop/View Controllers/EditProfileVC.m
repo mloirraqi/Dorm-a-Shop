@@ -229,9 +229,10 @@
         currentUser.address = address;
         userCoreData.address = address;
         
-        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+//        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+//            return YES;
+//        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+        [self saveContext];
     }
     
     [MBProgressHUD showHUDAddedTo:self.view animated:true];
@@ -324,6 +325,14 @@
     // Dismiss the place picker, as it cannot dismiss itself.
     [viewController dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"No place selected");
+}
+
+- (void)saveContext {
+    NSError *error = nil;
+    if ([self.context hasChanges] && ![self.context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+        abort();
+    }
 }
 
 @end

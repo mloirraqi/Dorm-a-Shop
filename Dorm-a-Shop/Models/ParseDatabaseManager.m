@@ -89,11 +89,11 @@
                             if (!userCoreData.profilePic) {
                                 userCoreData.profilePic = data;
                                 
-                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                    return YES;
-                                } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
-                        }
-                            
+//                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                                    return YES;
+//                                } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                                [self saveContext];
+                            }
                         } else {
                             NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
                         }
@@ -110,9 +110,10 @@
                             if (!postCoreData.image) { //check bc of async saving and how the operations get executed in the queue
                                 postCoreData.image = data;
                                 
-                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                    return YES;
-                                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                                    return YES;
+//                                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                                [self saveContext];
                             }
                         } else {
                             NSLog(@"error updating postCoreData image! %@", error.localizedDescription);
@@ -127,9 +128,10 @@
                     //update any other properties except for watchStatus and watchCount and watchObjId which are handled in a different function
                     postCoreData.sold = post.sold;
                     
-                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                        return YES;
-                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                        return YES;
+//                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                    [self saveContext];
                 }
                 
                 [allPostsArray addObject:postCoreData];
@@ -212,9 +214,10 @@
                             if (!userCoreData.profilePic) {
                                 userCoreData.profilePic = data;
                                 
-                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                    return YES;
-                                } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+//                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                                    return YES;
+//                                } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                                [self saveContext];
                             }
                         } else {
                             NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
@@ -254,9 +257,10 @@
                         }
                     }
                     
-                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                        return YES;
-                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                        return YES;
+//                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                    [self saveContext];
                     
                     //if the user is not specified (e.g. the query is for all watched posts), BEWARE -- THERE WILL PROBABLY BE DUPLICATES IN THIS ARRAY!!!!
                     [watchedPostsArray addObject:postCoreData];
@@ -268,6 +272,84 @@
         }
     }];
 }
+
+- (void)viewPost:(PostCoreData *)postCoreData{
+    if(!postCoreData.viewed && ![postCoreData.objectId isEqualToString:[PFUser currentUser].objectId]) {
+        postCoreData.viewed = YES;
+        
+        //        [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+        //            return YES;
+        //        } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+        [self saveContext];
+        
+        PFObject *view = [PFObject objectWithClassName:@"Views"];
+        view[@"post"] = (Post *)[PFObject objectWithoutDataWithClassName:@"Post" objectId:postCoreData.objectId];
+        view[@"user"] = (User *)[PFUser currentUser];
+        
+        [view saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
+            }
+        }];
+    }
+}
+
+- (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion {
+    PFQuery *viewQuery = [PFQuery queryWithClassName:@"Views"];
+    [viewQuery includeKey:@"post"];
+    [viewQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    
+    __weak ParseDatabaseManager *weakSelf = self;
+    [viewQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable views, NSError * _Nullable error) {
+        if (error) {
+            completion(nil, error);
+        } else {
+            NSMutableArray *watchedPostsArray = [[NSMutableArray alloc] init];
+            
+            for (PFObject *view in views) {
+                Post *viewedPost = (Post *)view[@"post"];
+                PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:viewedPost.objectId withContext:weakSelf.context];
+                
+                if (postCoreData) {
+                    postCoreData.viewed = YES;
+                    
+                    if (![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
+                        NSInteger categoryIndex = [weakSelf.categories indexOfObject:postCoreData.category];
+                        NSLog(@"%@", postCoreData);
+                        NSNumber *count = weakSelf.categoryCounts[categoryIndex];
+                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                        [weakSelf.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
+                        
+                        NSInteger conditionIndex = [weakSelf.conditions indexOfObject:postCoreData.condition];
+                        count = weakSelf.conditionCounts[conditionIndex];
+                        newCount = [NSNumber numberWithInt:count.intValue + 1];
+                        [weakSelf.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
+                        
+                        if(postCoreData.price > 100) {
+                            NSNumber *count = weakSelf.categoryCounts[4];
+                            NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                            [weakSelf.priceCounts replaceObjectAtIndex:4 withObject:newCount];
+                        } else {
+                            NSInteger priceIndex = (int)(postCoreData.price/25);
+                            NSNumber *count = weakSelf.priceCounts[priceIndex];
+                            NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
+                            [weakSelf.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
+                        }
+                    }
+                    
+                    //                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+                    //                    return YES;
+                    //                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                    [self saveContext];
+                    
+                    [watchedPostsArray addObject:postCoreData];
+                }
+            }
+            completion(watchedPostsArray, nil);
+        }
+    }];
+}
+
 
 - (void)queryWatchCountForPost:(Post *)post withCompletion:(void (^)(int, NSError *))completion {
     PFQuery *watchQuery = [Watches query];
@@ -281,9 +363,10 @@
                 postCoreData.watched = YES;
                 postCoreData.watchCount = count;
                 
-                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                    return YES;
-                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                    return YES;
+//                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                [self saveContext];
             }
             completion(count, nil);
         } else {
@@ -323,9 +406,10 @@
                         if (!userCoreData.profilePic) {
                             userCoreData.profilePic = data;
                             
-                            [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                return YES;
-                            } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+//                            [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                                return YES;
+//                            } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                            [self saveContext];
                         }
                     } else {
                         NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
@@ -384,9 +468,10 @@
                             if (!senderCoreData.profilePic) {
                                 senderCoreData.profilePic = data;
                                 
-                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                    return YES;
-                                } withName:[NSString stringWithFormat:@"%@", senderCoreData.objectId]];
+//                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                                    return YES;
+//                                } withName:[NSString stringWithFormat:@"%@", senderCoreData.objectId]];
+                                [self saveContext];
                             }
                         } else {
                             NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
@@ -399,9 +484,10 @@
                     conversationCoreData.updatedAt = conversation.updatedAt;
                     conversationCoreData.sender = senderCoreData;
                     
-                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                        return YES;
-                    } withName:[NSString stringWithFormat:@"%@", conversationCoreData.objectId]];
+//                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                        return YES;
+//                    } withName:[NSString stringWithFormat:@"%@", conversationCoreData.objectId]];
+                    [self saveContext];
                 } else {
                     conversationCoreData = [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:conversation.objectId withDate:conversation.updatedAt withSender:senderCoreData withLastText:conversation.lastText withManagedObjectContext:weakSelf.context];
                 }
@@ -450,9 +536,10 @@
                             if (!sellerCoreData.profilePic) {
                                 sellerCoreData.profilePic = data;
                                 
-                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                    return YES;
-                                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+//                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                                    return YES;
+//                                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                                [self saveContext];
                             }
                         } else {
                             NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
@@ -470,9 +557,10 @@
                                 if (!sellerCoreData.profilePic) {
                                     sellerCoreData.profilePic = data;
                                     
-                                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                        return YES;
-                                    } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+//                                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                                        return YES;
+//                                    } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                                    [self saveContext];
                                 }
                             }
                         } else {
@@ -502,9 +590,10 @@
     postCoreData.watchCount ++;
     postCoreData.watched = YES;
     
-    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-        return YES;
-    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//        return YES;
+//    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+    [self saveContext];
     
     Watches *watch = (Watches *)[Watches new];
     watch.post = (Post *)[PFObject objectWithoutDataWithClassName:@"Post" objectId:postCoreData.objectId];
@@ -516,9 +605,10 @@
         } else {
             postCoreData.watchObjectId = watch.objectId;
             
-            [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                return YES;
-            } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//            [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//                return YES;
+//            } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+            [self saveContext];
             
             completion(nil);
         }
@@ -532,9 +622,10 @@
     postCoreData.watched = NO;
     postCoreData.watchObjectId = nil;
     
-    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-        return YES;
-    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//        return YES;
+//    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+    [self saveContext];
     
     [watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (error) {
@@ -549,9 +640,10 @@
 - (void)setPost:(PostCoreData *)postCoreData sold:(BOOL)sold withCompletion:(void (^)(NSError *))completion {
     postCoreData.sold = sold;
     
-    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-        return YES;
-    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//        return YES;
+//    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+    [self saveContext];
     
     Post *post = (Post *)[PFObject objectWithoutDataWithClassName:@"Post" objectId:postCoreData.objectId];
     post.sold = sold;
@@ -601,76 +693,6 @@
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
 }
 
-- (void)viewPost:(PostCoreData *)postCoreData{
-    if(!postCoreData.viewed && ![postCoreData.objectId isEqualToString:[PFUser currentUser].objectId]) {
-        postCoreData.viewed = YES;
-        
-        [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
-        
-        PFObject *view = [PFObject objectWithClassName:@"Views"];
-        view[@"post"] = (Post *)[PFObject objectWithoutDataWithClassName:@"Post" objectId:postCoreData.objectId];
-        view[@"user"] = (User *)[PFUser currentUser];
-        
-        [view saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            if (error) {
-                NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
-            }
-        }];
-    }
-}
-
-- (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion {
-    PFQuery *viewQuery = [PFQuery queryWithClassName:@"Views"];
-    [viewQuery includeKey:@"post"];
-    [viewQuery whereKey:@"user" equalTo:[PFUser currentUser]];
-    
-    __weak ParseDatabaseManager *weakSelf = self;
-    [viewQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable views, NSError * _Nullable error) {
-        if (error) {
-            completion(nil, error);
-        } else {
-            NSMutableArray *watchedPostsArray = [[NSMutableArray alloc] init];
-            
-            for (PFObject *view in views) {
-                Post *viewedPost = (Post *)view[@"post"];
-                PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:viewedPost.objectId withContext:weakSelf.context];
-                postCoreData.viewed = YES;
-                
-                if(![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
-                    NSInteger categoryIndex = [weakSelf.categories indexOfObject:postCoreData.category];
-                    NSNumber *count = weakSelf.categoryCounts[categoryIndex];
-                    NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
-                    [weakSelf.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
-                    
-                    NSInteger conditionIndex = [weakSelf.conditions indexOfObject:postCoreData.condition];
-                    count = weakSelf.conditionCounts[conditionIndex];
-                    newCount = [NSNumber numberWithInt:count.intValue + 1];
-                    [weakSelf.conditionCounts replaceObjectAtIndex:conditionIndex withObject:newCount];
-                    
-                    if(postCoreData.price > 100) {
-                        NSNumber *count = weakSelf.categoryCounts[4];
-                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
-                        [weakSelf.priceCounts replaceObjectAtIndex:4 withObject:newCount];
-                    } else {
-                        NSInteger priceIndex = (int)(postCoreData.price/25);
-                        NSNumber *count = weakSelf.priceCounts[priceIndex];
-                        NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
-                        [weakSelf.priceCounts replaceObjectAtIndex:priceIndex withObject:newCount];
-                    }
-                }
-                
-                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                    return YES;
-                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
-                [watchedPostsArray addObject:postCoreData];
-            }
-            completion(watchedPostsArray, nil);
-        }
-    }];
-}
-
 - (void)postReviewToParseWithSeller:(User *)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion {
     Review *newReview = [Review new];
     
@@ -686,6 +708,14 @@
             completion(newReview, nil);
         }
     }];
+}
+
+- (void)saveContext {
+    NSError *error = nil;
+    if ([self.context hasChanges] && ![self.context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+        abort();
+    }
 }
 
 @end

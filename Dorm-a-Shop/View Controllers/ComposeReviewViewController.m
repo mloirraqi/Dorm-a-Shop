@@ -13,10 +13,12 @@
 #import "Review.h"
 #import "NSNotificationCenter+MainThread.h"
 
-@interface ComposeReviewViewController ()
+@interface ComposeReviewViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UITextField *ratingTextField;
+@property (weak, nonatomic) IBOutlet UIButton *chooseRatingButton;
 @property (weak, nonatomic) IBOutlet UITextView *reviewTextView;
+@property (weak, nonatomic) IBOutlet UIPickerView *ratingPickerView;
+@property (weak, nonatomic) IBOutlet UIToolbar *pickerViewToolbar;
 @property (strong, nonatomic) UIAlertController *ratingEmptyAlert;
 @property (strong, nonatomic) UIAlertController *reviewEmptyAlert;
 @property (strong, nonatomic) NSManagedObjectContext *context;
@@ -48,7 +50,7 @@
 }
 
 - (IBAction)didTapSubmit:(id)sender {
-    if ([self.ratingTextField.text isEqual:@""]) {
+    if ([self.chooseRatingButton.titleLabel.text isEqual:@""]) {
         [self presentViewController:self.ratingEmptyAlert animated:YES completion:^{
         }];
     } else if ([self.reviewTextView.text isEqual:@""]) {
@@ -59,10 +61,10 @@
         UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
         
         //set date and objectId later, in order to get them from parse
-        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[self.ratingTextField.text intValue] withReview:self.reviewTextView.text withDate:nil withManagedObjectContext:self.context];
+        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[self.chooseRatingButton.titleLabel.text intValue] withReview:self.reviewTextView.text withDate:nil withManagedObjectContext:self.context];
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
-        NSNumber *ratingNumber = [formatter numberFromString:self.ratingTextField.text];
+        NSNumber *ratingNumber = [formatter numberFromString:self.chooseRatingButton.titleLabel.text];
         User *pfSeller = (User *)[PFObject objectWithoutDataWithClassName:@"_User" objectId:self.seller.objectId];
         [[ParseDatabaseManager shared] postReviewToParseWithSeller:pfSeller withRating:ratingNumber withReview:self.reviewTextView.text withCompletion:^(Review * _Nullable review, NSError * _Nullable error) {
             if (error) {
@@ -71,9 +73,10 @@
                 reviewCoreData.objectId = review.objectId;
                 reviewCoreData.dateWritten = review.createdAt;
                 
-                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-                    return YES;
-                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+//                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+//                    return YES;
+//                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                [self saveContext];
                 
                 [self dismissViewControllerAnimated:true completion:nil];
             }
@@ -83,4 +86,64 @@
         [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DidReviewNotification" object:self userInfo:reviewInfoDict];
     }
 }
+
+- (NSInteger)numberOfComponentsInPickerView:(nonnull UIPickerView *)pickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(nonnull UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return 10;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return [NSString stringWithFormat:@"%ld", row + 1];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    [self.chooseRatingButton setTitle:[NSString stringWithFormat:@"%ld", row + 1] forState:UIControlStateNormal];
+}
+
+- (IBAction)didPressRate:(id)sender {
+    [self.reviewTextView endEditing:YES];
+    self.ratingPickerView.hidden = NO;
+    self.pickerViewToolbar.hidden = NO;
+}
+
+- (IBAction)didChooseRating:(id)sender {
+    [self.reviewTextView endEditing:YES];
+    self.ratingPickerView.hidden = NO;
+    self.pickerViewToolbar.hidden = YES;
+}
+
+- (IBAction)didTapDone:(id)sender {
+    self.ratingPickerView.hidden = YES;
+    self.pickerViewToolbar.hidden = YES;
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    if ([self.reviewTextView.text isEqualToString:@"Write review here"]) {
+        self.reviewTextView.text = @"";
+        self.reviewTextView.textColor = [UIColor blackColor];
+    }
+    
+    [self.reviewTextView becomeFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if ([self.reviewTextView.text isEqualToString:@""]) {
+        self.reviewTextView.text = @"Write review here";
+        self.reviewTextView.textColor = [UIColor lightGrayColor];
+    }
+    
+    [self.reviewTextView resignFirstResponder];
+}
+
+- (void)saveContext {
+    NSError *error = nil;
+    if ([self.context hasChanges] && ![self.context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+        abort();
+    }
+}
+
 @end

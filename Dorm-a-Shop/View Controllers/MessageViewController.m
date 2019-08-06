@@ -114,9 +114,11 @@
             if (succeeded) {
                 weakSelf.conversationCoreData.lastText = self.msgInput.text;
                 
-                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-                    return YES;
-                } withName:[NSString stringWithFormat:@"%@", weakSelf.conversationCoreData.objectId]];
+//                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+//                    return YES;
+//                } withName:[NSString stringWithFormat:@"%@", weakSelf.conversationCoreData.objectId]];
+                [self saveContext];
+                
                 weakSelf.msgInput.text = @"";
             } else {
                 NSLog(@"Problem saving message: %@", error.localizedDescription);
@@ -135,6 +137,14 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.messages.count;
+}
+
+- (void)saveContext {
+    NSError *error = nil;
+    if ([self.context hasChanges] && ![self.context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+        abort();
+    }
 }
 
 @end

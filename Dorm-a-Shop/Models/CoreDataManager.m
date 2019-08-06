@@ -54,9 +54,26 @@
     }
     
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
-    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    NSLog(@"%@", mutableResults);
+    if (results.count > 1) {
+        double initialRank = ((PostCoreData *)results[0]).rank;
+        double rank = initialRank;
+        
+        for (PostCoreData *result in results) {
+            if (rank > result.rank) {
+                rank = result.rank;
+            }
+        }
+        
+        NSSortDescriptor *sortDescriptor;
+        if (rank == initialRank) {
+           sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
+        } else {
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+        }
+        
+        [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    }
+    
     return mutableResults; //firstObject is nil if results has length 0
 }
 
@@ -247,22 +264,23 @@
         postCoreData.objectId = postObjectId;
         postCoreData.viewed = NO;
         
-        __weak CoreDataManager *weakSelf = self;
-        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-            PostCoreData *postData;
-            BOOL operationAlreadyExists = NO;
-            
-            if (postObjectId) {
-                postData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:postObjectId withContext:context];
-                operationAlreadyExists = [self queueContainsOperationWithName:postObjectId];
-            }
-
-            if (postData || operationAlreadyExists) {
-                return NO;
-            }
-
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+//        __weak CoreDataManager *weakSelf = self;
+//        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//            PostCoreData *postData;
+//            BOOL operationAlreadyExists = NO;
+//
+//            if (postObjectId) {
+//                postData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:postObjectId withContext:context];
+//                operationAlreadyExists = [self queueContainsOperationWithName:postObjectId];
+//            }
+//
+//            if (postData || operationAlreadyExists) {
+//                return NO;
+//            }
+//
+//            return YES;
+//        } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+        [self saveContext];
     }
     
     return postCoreData;
@@ -286,22 +304,23 @@
         userCoreData.address = address;
         userCoreData.inRadius = inRadius;
         
-        __weak CoreDataManager *weakSelf = self;
-        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-            UserCoreData *userData;
-            BOOL operationAlreadyExists = NO;
-            
-            if (userObjectId) {
-                userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
-                operationAlreadyExists = YES;
-            }
-
-            if (userData || operationAlreadyExists) {
-                return NO;
-            }
-
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+//        __weak CoreDataManager *weakSelf = self;
+//        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//            UserCoreData *userData;
+//            BOOL operationAlreadyExists = NO;
+//
+//            if (userObjectId) {
+//                userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
+//                operationAlreadyExists = YES;
+//            }
+//
+//            if (userData || operationAlreadyExists) {
+//                return NO;
+//            }
+//
+//            return YES;
+//        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+        [self saveContext];
     }
     
     return userCoreData;
@@ -320,23 +339,24 @@
         conversationCoreData.lastText = lastText;
         conversationCoreData.updatedAt = updatedAt;
         
-        __weak CoreDataManager *weakSelf = self;
-        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-            ConversationCoreData *conversationData;
-            BOOL operationAlreadyExists = NO;
-            
-            if (conversationObjectId) {
-                conversationData = (ConversationCoreData *)[weakSelf getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversationObjectId withContext:context];
-                operationAlreadyExists = [self queueContainsOperationWithName:conversationObjectId];
-            }
-
-            if (conversationData || operationAlreadyExists) {
-                return NO;
-            }
-
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", conversationCoreData.objectId]];
+//        __weak CoreDataManager *weakSelf = self;
+//        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//            ConversationCoreData *conversationData;
+//            BOOL operationAlreadyExists = NO;
+//
+//            if (conversationObjectId) {
+//                conversationData = (ConversationCoreData *)[weakSelf getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversationObjectId withContext:context];
+//                operationAlreadyExists = [self queueContainsOperationWithName:conversationObjectId];
+//            }
+//
+//            if (conversationData || operationAlreadyExists) {
+//                return NO;
+//            }
+//
+//            return YES;
+//        } withName:[NSString stringWithFormat:@"%@", conversationCoreData.objectId]];
     }
+    [self saveContext];
     
     return conversationCoreData;
 }
@@ -356,21 +376,22 @@
         reviewCoreData.dateWritten = date;
         reviewCoreData.reviewer = reviewer;
         
-        __weak CoreDataManager *weakSelf = self;
-        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-            ReviewCoreData *reviewData;
-            BOOL operationAlreadyExists = NO;
-            if (objectId) {
-                reviewData = (ReviewCoreData *)[weakSelf getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:weakSelf.context];
-                operationAlreadyExists = [self queueContainsOperationWithName:objectId];
-            }
-
-            if (reviewData || operationAlreadyExists) {
-                return NO;
-            }
-
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+//        __weak CoreDataManager *weakSelf = self;
+//        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+//            ReviewCoreData *reviewData;
+//            BOOL operationAlreadyExists = NO;
+//            if (objectId) {
+//                reviewData = (ReviewCoreData *)[weakSelf getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:weakSelf.context];
+//                operationAlreadyExists = [self queueContainsOperationWithName:objectId];
+//            }
+//
+//            if (reviewData || operationAlreadyExists) {
+//                return NO;
+//            }
+//
+//            return YES;
+//        } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+        [self saveContext];
     }
     return reviewCoreData;
 }
@@ -425,6 +446,14 @@
     }
     
     return NO;
+}
+
+- (void)saveContext {
+    NSError *error = nil;
+    if ([self.context hasChanges] && ![self.context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+        abort();
+    }
 }
 
 @end

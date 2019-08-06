@@ -18,6 +18,7 @@
 #import "MessageViewController.h"
 #import "ComposeReviewViewController.h"
 #import "SellerReviewsViewController.h"
+#import "UILabel+Boldify.h"
 @import Parse;
 
 @interface ProfileViewController () <EditProfileViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -92,12 +93,28 @@
 }
 
 - (void)fetchProfileFromCoreData {
-    self.username.text = self.user.username;
     self.location.text = self.user.address;
-    NSLog(@"self.user: %@, self.user.address: %@", self.user, self.user.username);
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     self.profilePic.layer.cornerRadius = 50;
     self.profilePic.layer.masksToBounds = YES;
+    
+    NSMutableArray *reviewsArray = [[CoreDataManager shared] getReviewsFromCoreDataForSeller:self.user];
+    float avgRating = 0;
+    for (ReviewCoreData *review in reviewsArray) {
+        avgRating += review.rating;
+    }
+    avgRating /= reviewsArray.count;
+    self.user.rating = avgRating;
+    [self saveContext];
+    
+    if (avgRating == 0) {
+        self.username.text = [NSString stringWithFormat:@"%@ is not yet rated", self.user.username];
+        [self.username boldSubstring:self.user.username];
+    } else {
+        self.username.text = [NSString stringWithFormat:@"%@ is rated %.02f/10", self.user.username, self.user.rating];
+        [self.username boldSubstring:self.user.username];
+        [self.username boldSubstring:[NSString stringWithFormat:@"%f", self.user.rating]];
+    }
     
     NSData *imageData = self.user.profilePic;
     [self.profilePic setImage:[UIImage imageNamed:@"item_placeholder"]];
@@ -222,6 +239,14 @@
     NSBatchDeleteRequest *deleteReviews = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestReviews];
     NSError *deleteReviewsError = nil;
     [self.context executeRequest:deleteReviews error:&deleteReviewsError];
+}
+
+- (void)saveContext {
+    NSError *error = nil;
+    if ([self.context hasChanges] && ![self.context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+        abort();
+    }
 }
 
 @end
