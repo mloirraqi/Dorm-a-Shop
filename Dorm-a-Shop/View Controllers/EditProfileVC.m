@@ -17,7 +17,7 @@
 #import "CoreDataManager.h"
 #import "User.h"
 
-@interface EditProfileVC ()
+@interface EditProfileVC () <GMSPlacePickerViewControllerDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
@@ -52,7 +52,7 @@
     
     [image getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError * _Nullable error) {
         UIImage *originalImage = [UIImage imageWithData:data];
-        [addPictureButton setImage:originalImage forState:UIControlStateNormal];
+        [self->addPictureButton setImage:originalImage forState:UIControlStateNormal];
     }];
 }
 
@@ -149,7 +149,7 @@
                         [self.navigationController popViewControllerAnimated:YES];
                     }];
                     [successAlert addAction:okAction];
-                    [self presentViewController:successAlert animated:YES completion:^{}];
+                    [self presentViewController:successAlert animated:YES completion:nil];
                 }
                 
             } else {
@@ -243,8 +243,13 @@
     [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:true];
         if (!error) {
-            [self setUpView];
-            [self showAlertView:@"Updated Successfully"];
+            
+            UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            [successAlert addAction:okAction];
+            [self presentViewController:successAlert animated:YES completion:nil];
             
         } else {
             NSString *errorString = [error userInfo][@"error"];
@@ -288,7 +293,7 @@
         pickerView.delegate = self;
         [pickerView setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
         
-        [self presentModalViewController:pickerView animated:YES];
+        [self presentViewController:pickerView animated:YES completion:nil];
         [alertController dismissViewControllerAnimated:YES completion:nil];
     }];
     [alertController addAction:choosePhoto];
@@ -296,10 +301,8 @@
     UIAlertAction *actionCancel=[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [alertController dismissViewControllerAnimated:YES completion:nil];
     }];
-    
     [alertController addAction:actionCancel];
     [self presentViewController:alertController animated:YES completion:nil];
-    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
