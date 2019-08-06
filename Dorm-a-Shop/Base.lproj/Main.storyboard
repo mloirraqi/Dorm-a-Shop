@@ -1628,7 +1628,6 @@
                                 </state>
                                 <connections>
                                     <action selector="signIn:" destination="mU8-aa-DN8" eventType="touchUpInside" id="R5h-mt-rJn"/>
-                                    <segue destination="gS1-Y9-nOT" kind="show" identifier="signIn" id="0wy-pc-D6U"/>
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kD8-pd-Tja" userLabel="Strength Meter">
@@ -1648,6 +1647,7 @@
                     <connections>
                         <outlet property="emailField" destination="Ajb-Ti-qJr" id="T78-sI-w6J"/>
                         <outlet property="passwordField" destination="YEe-Io-ZVv" id="NTB-bB-IVa"/>
+                        <segue destination="gS1-Y9-nOT" kind="show" identifier="signIn" id="dnl-93-kbr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nBw-L2-CLl" sceneMemberID="firstResponder"/>
@@ -2289,7 +2289,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="fhM-T6-QvG"/>
         <segue reference="oCN-lU-gXW"/>
-        <segue reference="0wy-pc-D6U"/>
+        <segue reference="dnl-93-kbr"/>
         <segue reference="KLi-YY-IiH"/>
         <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
