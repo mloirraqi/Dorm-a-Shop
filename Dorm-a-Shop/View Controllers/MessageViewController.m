@@ -30,7 +30,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.navigationItem.title = [@"@" stringByAppendingString:self.receiver.username];
+    self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     [self fetchMessages];
     [self subscribe];
 }

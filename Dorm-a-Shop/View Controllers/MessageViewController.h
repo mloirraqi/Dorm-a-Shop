@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 @import Parse;
-
+#import "ConversationCoreData+CoreDataClass.h"
+#import "UserCoreData+CoreDataClass.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MessageViewController : UIViewController
 
+@property (strong, nonatomic) UserCoreData *user;
 @property (strong, nonatomic) PFUser *receiver;
 @property (strong, nonatomic) PFObject *convo;
 
