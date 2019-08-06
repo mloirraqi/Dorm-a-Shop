@@ -19,7 +19,6 @@
 @property (weak, nonatomic) IBOutlet UITextView *reviewTextView;
 @property (weak, nonatomic) IBOutlet UIPickerView *ratingPickerView;
 @property (weak, nonatomic) IBOutlet UIToolbar *pickerViewToolbar;
-@property (strong, nonatomic) UIAlertController *ratingEmptyAlert;
 @property (strong, nonatomic) UIAlertController *reviewEmptyAlert;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @property (strong, nonatomic) AppDelegate *appDelegate;
@@ -34,15 +33,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.ratingEmptyAlert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Rating empty" preferredStyle:(UIAlertControllerStyleAlert)];
+    self.reviewTextView.layer.borderWidth = 1.0f;
+    self.reviewTextView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    
     self.reviewEmptyAlert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Review empty" preferredStyle:(UIAlertControllerStyleAlert)];
 
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
-    [self.ratingEmptyAlert addAction:okAction];
     [self.reviewEmptyAlert addAction:okAction];
     
     self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = self.appDelegate.persistentContainer.viewContext;
+    
+    self.pickerViewToolbar.hidden = YES;
+    self.ratingPickerView.delegate = self;
+    self.ratingPickerView.dataSource = self;
+    self.ratingPickerView.hidden = YES;
 }
 
 - (IBAction)didTapCancel:(id)sender {
@@ -50,10 +55,7 @@
 }
 
 - (IBAction)didTapSubmit:(id)sender {
-    if ([self.chooseRatingButton.titleLabel.text isEqual:@""]) {
-        [self presentViewController:self.ratingEmptyAlert animated:YES completion:^{
-        }];
-    } else if ([self.reviewTextView.text isEqual:@""]) {
+    if ([self.reviewTextView.text isEqual:@""]) {
         [self presentViewController:self.reviewEmptyAlert animated:YES completion:^{
         }];
     } else {
@@ -92,7 +94,7 @@
 }
 
 - (NSInteger)pickerView:(nonnull UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 10;
+    return 5;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
@@ -109,13 +111,8 @@
     self.pickerViewToolbar.hidden = NO;
 }
 
-- (IBAction)didChooseRating:(id)sender {
-    [self.reviewTextView endEditing:YES];
-    self.ratingPickerView.hidden = NO;
-    self.pickerViewToolbar.hidden = YES;
-}
-
 - (IBAction)didTapDone:(id)sender {
+    [self.reviewTextView endEditing:YES];
     self.ratingPickerView.hidden = YES;
     self.pickerViewToolbar.hidden = YES;
 }

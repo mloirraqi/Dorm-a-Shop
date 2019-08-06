@@ -210,9 +210,10 @@
         currentUser.address = address;
         userCoreData.address = address;
         
-        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+//        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+//            return YES;
+//        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+        [self saveContext];
     }
 }
 
