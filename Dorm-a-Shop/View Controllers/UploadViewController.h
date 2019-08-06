@@ -12,15 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol UploadViewControllerDelegate <NSObject>
-
-- (void)didUpload:(PostCoreData *)post;
-
-@end
-
 @interface UploadViewController : UIViewController
-
-@property (nonatomic, weak) id<UploadViewControllerDelegate> delegate;
 
 @end
 

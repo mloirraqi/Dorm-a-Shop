@@ -1,8 +1,8 @@
 //
-//  ParseManager.h
+//  ParseDatabaseManager.h
 //  Dorm-a-Shop
 //
-//  Created by ilanashapiro on 8/1/19.
+//  Created by ilanashapiro on 8/2/19.
 //  Copyright © 2019 ilanashapiro. All rights reserved.
 //
 
@@ -18,7 +18,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ParseManager : NSObject
+@interface ParseDatabaseManager : NSObject
 
 + (id)shared;
 @property (nonatomic, strong) NSArray *categories;
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)queryWatchedPostsForUser:(PFUser * _Nullable)user withCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
 - (void)queryWatchCountForPost:(Post *)post withCompletion:(void (^)(int, NSError *))completion;
 - (void)queryAllUsersWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
-- (void)queryReviewsForSeller:(User *)seller withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+- (void)queryReviewsForSeller:(User * _Nullable)seller withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
 - (void)queryConversationsFromParseWithCompletion:(void (^)(NSMutableArray<ConversationCoreData *> *, NSError *))completion;
 
 - (void)watchPost:(PostCoreData *)postCoreData withCompletion:(void (^)(NSError *))completion;

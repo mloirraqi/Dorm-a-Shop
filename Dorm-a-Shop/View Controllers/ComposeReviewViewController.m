@@ -8,9 +8,10 @@
 #import "ComposeReviewViewController.h"
 #import "ReviewCoreData+CoreDataClass.h"
 #import "CoreDataManager.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
 #import "AppDelegate.h"
 #import "Review.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface ComposeReviewViewController ()
 
@@ -19,9 +20,10 @@
 @property (strong, nonatomic) UIAlertController *ratingEmptyAlert;
 @property (strong, nonatomic) UIAlertController *reviewEmptyAlert;
 @property (strong, nonatomic) NSManagedObjectContext *context;
+@property (strong, nonatomic) AppDelegate *appDelegate;
 
-- (IBAction)cancelAction:(id)sender;
-- (IBAction)submitAction:(id)sender;
+- (IBAction)didTapCancel:(id)sender;
+- (IBAction)didTapSubmit:(id)sender;
 
 @end
 
@@ -37,14 +39,15 @@
     [self.ratingEmptyAlert addAction:okAction];
     [self.reviewEmptyAlert addAction:okAction];
     
-    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-    self.context = appDelegate.persistentContainer.viewContext;
+    self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = self.appDelegate.persistentContainer.viewContext;
 }
 
-- (IBAction)cancelAction:(id)sender {
+- (IBAction)didTapCancel:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (IBAction)submitAction:(id)sender {
+- (IBAction)didTapSubmit:(id)sender {
     if ([self.ratingTextField.text isEqual:@""]) {
         [self presentViewController:self.ratingEmptyAlert animated:YES completion:^{
         }];
@@ -53,27 +56,31 @@
         }];
     } else {
         UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:self.seller.objectId withContext:self.context];
+        UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
         
         //set date and objectId later, in order to get them from parse
-        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withRating:[self.ratingTextField.text intValue] withReview:self.reviewTextView.text withDate:nil withManagedObjectContext:self.context];
+        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[self.ratingTextField.text intValue] withReview:self.reviewTextView.text withDate:nil withManagedObjectContext:self.context];
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
         NSNumber *ratingNumber = [formatter numberFromString:self.ratingTextField.text];
         User *pfSeller = (User *)[PFObject objectWithoutDataWithClassName:@"_User" objectId:self.seller.objectId];
-        [[ParseManager shared] postReviewToParseWithSeller:pfSeller withRating:ratingNumber withReview:self.reviewTextView.text withCompletion:^(Review * _Nullable review, NSError * _Nullable error) {
+        [[ParseDatabaseManager shared] postReviewToParseWithSeller:pfSeller withRating:ratingNumber withReview:self.reviewTextView.text withCompletion:^(Review * _Nullable review, NSError * _Nullable error) {
             if (error) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
                 reviewCoreData.objectId = review.objectId;
                 reviewCoreData.dateWritten = review.createdAt;
-                [self.context save:nil];
+                
+                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                    return YES;
+                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
                 
                 [self dismissViewControllerAnimated:true completion:nil];
             }
         }];
         
         NSDictionary *reviewInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:reviewCoreData, @"review", nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidReviewNotification" object:self userInfo:reviewInfoDict];
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DidReviewNotification" object:self userInfo:reviewInfoDict];
     }
 }
 @end

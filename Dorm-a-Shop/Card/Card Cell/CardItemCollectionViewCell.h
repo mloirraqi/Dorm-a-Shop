@@ -13,7 +13,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CardItemCollectionViewCell : UICollectionViewCell
+
 @property (nonatomic, strong) PostCoreData *post;
+
 @end
 
 NS_ASSUME_NONNULL_END

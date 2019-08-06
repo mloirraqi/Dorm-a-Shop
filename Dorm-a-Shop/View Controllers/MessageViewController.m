@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @property (strong, nonatomic) PFLiveQuerySubscription *subscription;
 @property (strong, nonatomic) ParseLiveQueryObjCBridge *bridge;
+
 @end
 
 @implementation MessageViewController
@@ -30,6 +31,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     [self fetchMessages];
     [self subscribe];
@@ -107,6 +109,7 @@
         [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable messages, NSError * _Nullable error) {
             if (messages.count) {
                 weakSelf.convo = messages[0];
+
             } else {
                 PFObject *convo = [PFObject objectWithClassName:@"Convos"];
                 convo[@"sender"] = [PFUser currentUser];

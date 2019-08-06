@@ -9,7 +9,8 @@
 #import "ReviewCoreData+CoreDataClass.h"
 #import "AppDelegate.h"
 #import "ReviewTableViewCell.h"
-#import "ParseManager.h"
+#import "ParseDatabaseManager.h"
+#import "CoreDataManager.h"
 #import "User.h"
 
 @interface SellerReviewsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -26,15 +27,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.context = appDelegate.persistentContainer.viewContext;
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidReviewNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingReviews" object:nil];
     
-    //[self fetchReviewsFromCoreData];
+    [self fetchReviewsFromCoreData];
     [self createRefreshControl];
 }
 
@@ -42,7 +41,15 @@
     if ([[notification name] isEqualToString:@"DidReviewNotification"]) {
         ReviewCoreData *notificationReview = [[notification userInfo] objectForKey:@"review"];
         [self.reviewsArray insertObject:notificationReview atIndex:0];
+        [self.tableView reloadData];
+    } else if ([[notification name] isEqualToString:@"DoneSavingReviews"]) {
+        [self fetchReviewsFromCoreData];
     }
+}
+
+- (void)fetchReviewsFromCoreData {
+    self.reviewsArray = [[CoreDataManager shared] getReviewsFromCoreDataForSeller:self.sellerCoreData];
+    [self.tableView reloadData];
 }
 
 - (void)createRefreshControl {
@@ -52,13 +59,16 @@
 }
 
 - (void)queryReviewsFromParse {
-    User *seller = (User *)[PFObject objectWithoutDataWithClassName:@"User" objectId:self.sellerCoreData.objectId];
-    [[ParseManager shared] queryReviewsForSeller:seller withCompletion:^(NSMutableArray * _Nonnull reviews, NSError * _Nonnull error) {
+    User *seller = (User *)[PFObject objectWithoutDataWithClassName:@"_User" objectId:self.sellerCoreData.objectId];
+    
+    [[ParseDatabaseManager shared] queryReviewsForSeller:seller withCompletion:^(NSMutableArray * _Nonnull reviews, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying reviews! %@", error.localizedDescription);
         } else {
-            //self.post
+            self.reviewsArray = reviews;
+            [self.tableView reloadData];
         }
+        [self.refreshControl endRefreshing];
     }];
 }
 

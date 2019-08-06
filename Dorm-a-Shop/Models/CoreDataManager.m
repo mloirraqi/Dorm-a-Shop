@@ -8,10 +8,13 @@
 
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface CoreDataManager ()
 
+@property (nonatomic, strong) AppDelegate *appDelegate;
 @property (strong, nonatomic) NSManagedObjectContext *context;
+@property (strong, nonatomic) NSOperationQueue *persistentContainerQueue;
 
 @end
 
@@ -30,8 +33,10 @@
 
 - (instancetype) init {
     self = [super init];
-    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-    self.context = appDelegate.persistentContainer.viewContext;
+    self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = self.appDelegate.persistentContainer.viewContext;
+    self.persistentContainerQueue = [[NSOperationQueue alloc] init];
+    self.persistentContainerQueue.maxConcurrentOperationCount = 1;
     return self;
 }
 
@@ -51,7 +56,7 @@
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    
+    NSLog(@"%@", mutableResults);
     return mutableResults; //firstObject is nil if results has length 0
 }
 
@@ -161,17 +166,36 @@
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
     if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching ConversationCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
     
     return [results firstObject];
 }
 
+- (NSMutableArray *)getReviewsFromCoreDataForSeller:(UserCoreData *)seller {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ReviewCoreData"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"seller.objectId == %@", seller.objectId]];
+    [request setReturnsObjectsAsFaults:NO];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching ReviewCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
+    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    return mutableResults;
+}
+
 - (NSMutableArray *)getSimilarPostsFromCoreData:(PostCoreData *)post {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
-    if(![post.condition isEqualToString:@"Other"]) {
+    if([post.condition isEqualToString:@"Other"]) {
          [request setPredicate:[NSPredicate predicateWithFormat:@"((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) AND (objectId != %@)", post.title, post.title, post.objectId]];
     } else {
          [request setPredicate:[NSPredicate predicateWithFormat:@"(((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) OR (category == %@)) AND (objectId != %@)", post.title, post.title, post.category, post.objectId]];
@@ -189,12 +213,12 @@
     return [NSMutableArray arrayWithArray:results];
 }
 
-- (PostCoreData *)savePostToCoreDataWithPost:(Post * _Nullable)post withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatch:(Watches * _Nullable)watch withWatchCount:(long long)watchCount withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (PostCoreData *)savePostToCoreDataWithObjectId:(NSString * _Nullable)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString * _Nullable)watchObjectId withWatchCount:(long long)watchCount withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     PostCoreData *postCoreData;
     
     //a new post upload naturally won't immediately have an objectId until it is saved in Parse, so we don't check to see if it already exists bc in this case the user is just creating it
-    if (postCoreData) {
-        postCoreData = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
+    if (postObjectId) {
+        postCoreData = (PostCoreData *)[self getCoreDataEntityWithName:@"PostCoreData" withObjectId:postObjectId withContext:context];
     }
     
     //if post doesn't already exist in core data, then create it
@@ -209,7 +233,6 @@
             author.post = [author.post setByAddingObject:postCoreData];
         }
         
-
         postCoreData.image = imageData;
         postCoreData.caption = caption;
         postCoreData.condition = condition;
@@ -220,15 +243,26 @@
         postCoreData.watchCount = watchCount;
         postCoreData.price = price;
         postCoreData.createdAt = createdAt;
-        postCoreData.watchObjectId = watch.objectId;
-        postCoreData.objectId = post.objectId;
+        postCoreData.watchObjectId = watchObjectId;
+        postCoreData.objectId = postObjectId;
         postCoreData.viewed = NO;
         
-        //save persistent attributes to core data persisted store
-        NSError *error = nil;
-        if ([context save:&error] == NO) {
-            NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-        }
+        __weak CoreDataManager *weakSelf = self;
+        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+            PostCoreData *postData;
+            BOOL operationAlreadyExists = NO;
+            
+            if (postObjectId) {
+                postData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:postObjectId withContext:context];
+                operationAlreadyExists = [self queueContainsOperationWithName:postObjectId];
+            }
+
+            if (postData || operationAlreadyExists) {
+                return NO;
+            }
+
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
     }
     
     return postCoreData;
@@ -252,11 +286,22 @@
         userCoreData.address = address;
         userCoreData.inRadius = inRadius;
         
-        //save to core data persisted store
-        NSError *error = nil;
-        if ([context save:&error] == NO) {
-            NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-        }
+        __weak CoreDataManager *weakSelf = self;
+        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+            UserCoreData *userData;
+            BOOL operationAlreadyExists = NO;
+            
+            if (userObjectId) {
+                userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
+                operationAlreadyExists = YES;
+            }
+
+            if (userData || operationAlreadyExists) {
+                return NO;
+            }
+
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
     }
     
     return userCoreData;
@@ -275,16 +320,28 @@
         conversationCoreData.lastText = lastText;
         conversationCoreData.updatedAt = updatedAt;
         
-        NSError *error = nil;
-        if ([context save:&error] == NO) {
-            NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-        }
+        __weak CoreDataManager *weakSelf = self;
+        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+            ConversationCoreData *conversationData;
+            BOOL operationAlreadyExists = NO;
+            
+            if (conversationObjectId) {
+                conversationData = (ConversationCoreData *)[weakSelf getCoreDataEntityWithName:@"ConversationCoreData" withObjectId:conversationObjectId withContext:context];
+                operationAlreadyExists = [self queueContainsOperationWithName:conversationObjectId];
+            }
+
+            if (conversationData || operationAlreadyExists) {
+                return NO;
+            }
+
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", conversationCoreData.objectId]];
     }
     
     return conversationCoreData;
 }
 
-- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString *)objectId withSeller:(UserCoreData * _Nullable)seller withRating:(int)rating withReview:(NSString * _Nullable)review withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withReviewer:(UserCoreData * _Nullable)reviewer withRating:(int)rating withReview:(NSString * _Nullable)review withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     ReviewCoreData *reviewCoreData;
     if (objectId) {
         reviewCoreData = (ReviewCoreData *)[self getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:self.context];
@@ -297,14 +354,77 @@
         reviewCoreData.rating = rating;
         reviewCoreData.review = review;
         reviewCoreData.dateWritten = date;
+        reviewCoreData.reviewer = reviewer;
         
-        NSError *error = nil;
-        if ([context save:&error] == NO) {
-            NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+        __weak CoreDataManager *weakSelf = self;
+        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+            ReviewCoreData *reviewData;
+            BOOL operationAlreadyExists = NO;
+            if (objectId) {
+                reviewData = (ReviewCoreData *)[weakSelf getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:weakSelf.context];
+                operationAlreadyExists = [self queueContainsOperationWithName:objectId];
+            }
+
+            if (reviewData || operationAlreadyExists) {
+                return NO;
+            }
+
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+    }
+    return reviewCoreData;
+}
+
+- (void)enqueueCoreDataBlock:(BOOL (^)(NSManagedObjectContext *context))block withName:(NSString *)name {
+    BOOL (^blockCopy)(NSManagedObjectContext *) = [block copy];
+    __weak CoreDataManager *weakSelf = self;
+    NSOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+        [weakSelf.context performBlockAndWait:^{
+            BOOL okToSave = blockCopy(weakSelf.context);
+            if (okToSave) {
+                NSError *error = nil;
+                if ([weakSelf.context save:&error] == NO) {
+                    NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+                }
+            }
+        }];
+    }];
+    op.name = name;
+    [self.persistentContainerQueue addOperation:op];
+}
+
+- (void)enqueueDoneSavingPostsWatches {
+    [self.persistentContainerQueue addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DoneSavingPostsWatches" object:self userInfo:nil];
+    }];
+}
+
+- (void)enqueueDoneSavingUsers {
+    [self.persistentContainerQueue addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DoneSavingUsers" object:self userInfo:nil];
+    }];
+}
+
+- (void)enqueueDoneSavingConversations {
+    [self.persistentContainerQueue addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DoneSavingConversations" object:self userInfo:nil];
+    }];
+}
+
+- (void)enqueueDoneSavingReviews {
+    [self.persistentContainerQueue addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DoneSavingReviews" object:self userInfo:nil];
+    }];
+}
+
+- (BOOL)queueContainsOperationWithName:(NSString *)name {
+    for (NSOperation *operation in self.persistentContainerQueue.operations) {
+        if ([operation.name isEqualToString:name]) {
+            return YES;
         }
     }
     
-    return reviewCoreData;
+    return NO;
 }
 
 @end
