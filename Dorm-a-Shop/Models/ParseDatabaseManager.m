@@ -156,10 +156,13 @@
                                 NSNumber *conditionCount = self.conditionCounts[conditionIndex];
                                 NSNumber *priceCount = self.priceCounts[priceIndex];
                                 post.rank = categoryCount.doubleValue * 0.4 + conditionCount.doubleValue * 0.3 + priceCount.doubleValue * 0.3;
+                                 NSLog(@"%@", categoryCount);
                             }
                             
                             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
                             [allPostsArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                            
+                            NSLog(@"%@", allPostsArray);
                             
                             completion(allPostsArray, nil);
                         }

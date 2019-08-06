@@ -1161,7 +1161,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S1V-iB-oBF">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S1V-iB-oBF">
                                 <rect key="frame" x="20" y="313" width="52" height="27.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="black" pointSize="23"/>
                                 <nil key="textColor"/>
@@ -1280,6 +1280,7 @@
                             <constraint firstItem="TQI-Bw-cII" firstAttribute="top" secondItem="RXI-vr-Zjq" secondAttribute="bottom" constant="12" id="Ovk-kq-zVO"/>
                             <constraint firstItem="9Zk-mJ-PK2" firstAttribute="top" secondItem="jct-hS-uqG" secondAttribute="bottom" constant="8" id="QKt-zO-a03"/>
                             <constraint firstItem="9Zk-mJ-PK2" firstAttribute="leading" secondItem="qLc-2e-IpE" secondAttribute="trailing" constant="5" id="Sli-nt-rtf"/>
+                            <constraint firstItem="qLc-2e-IpE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="S1V-iB-oBF" secondAttribute="trailing" constant="8" id="Vfp-sm-lGr"/>
                             <constraint firstAttribute="trailing" secondItem="ned-Ur-ikf" secondAttribute="trailing" constant="16" id="W6f-ZG-nii"/>
                             <constraint firstItem="R3b-ET-Tji" firstAttribute="centerY" secondItem="9Zk-mJ-PK2" secondAttribute="centerY" id="Xem-UX-hzN"/>
                             <constraint firstItem="MA6-l4-BaA" firstAttribute="leading" secondItem="D9a-Jh-gbW" secondAttribute="leading" constant="16" id="avZ-Yk-hKh"/>

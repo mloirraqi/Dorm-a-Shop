@@ -146,7 +146,7 @@
             }];
         }
     }
-    
+    _persistentContainer.viewContext.mergePolicy = NSMergePolicy.overwriteMergePolicy;
     return _persistentContainer;
 }
 
@@ -172,12 +172,15 @@
 #pragma mark - Core Data Saving support
 
 - (void)saveContext {
-    NSManagedObjectContext *context = self.persistentContainer.viewContext;
-    NSError *error = nil;
-    if ([context hasChanges] && ![context save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-        abort();
-    }
+//    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+//    NSError *error = nil;
+//    if ([context hasChanges] && ![context save:&error]) {
+//        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+//        abort();
+//    }
+    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+        return YES;
+    } withName:@""];
 }
 
 

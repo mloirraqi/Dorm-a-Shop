@@ -56,7 +56,7 @@
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    
+    NSLog(@"%@", mutableResults);
     return mutableResults; //firstObject is nil if results has length 0
 }
 
@@ -195,7 +195,7 @@
 - (NSMutableArray *)getSimilarPostsFromCoreData:(PostCoreData *)post {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
-    if(![post.condition isEqualToString:@"Other"]) {
+    if([post.condition isEqualToString:@"Other"]) {
          [request setPredicate:[NSPredicate predicateWithFormat:@"((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) AND (objectId != %@)", post.title, post.title, post.objectId]];
     } else {
          [request setPredicate:[NSPredicate predicateWithFormat:@"(((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) OR (category == %@)) AND (objectId != %@)", post.title, post.title, post.category, post.objectId]];
