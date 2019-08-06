@@ -52,7 +52,6 @@ static const int MAX_BUFFER_SIZE = 2;
     
     CGSize screenSize = UIScreen.mainScreen.bounds.size;
     CGRect frame = CGRectMake(0, 24, screenSize.width, 24);
-    
     self.userNameLabel = [[UILabel alloc] initWithFrame: frame];
     [self addSubview:self.userNameLabel];
     self.userNameLabel.textAlignment = NSTextAlignmentCenter;
@@ -60,7 +59,6 @@ static const int MAX_BUFFER_SIZE = 2;
     Card *card = self.cardArray.firstObject;
     self.userNameLabel.text = card.author.username;
     self.backgroundColor = [UIColor redColor];
-    [self addSubview:self.userNameLabel];
     self.backgroundColor = [UIColor colorWithRed:168/255.f green:225/255.f blue:255/255.f alpha:1];
 }
 

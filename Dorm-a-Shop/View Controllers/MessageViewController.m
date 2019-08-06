@@ -8,9 +8,6 @@
 
 #import "MessageViewController.h"
 #import "ChatCell.h"
-#import "AppDelegate.h"
-#import "UserCoreData+CoreDataClass.h"
-#import "CoreDataManager.h"
 #import "Dorm_a_Shop-Swift.h"
 @import Parse;
 @import ParseLiveQuery;
@@ -91,7 +88,6 @@
         [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
         [sentQuery whereKey:@"receiver" equalTo:self.receiver];
         
-        
         PFQuery *recQuery = [PFQuery queryWithClassName:@"Convos"];
         [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
         [recQuery whereKey:@"sender" equalTo:self.receiver];
@@ -126,7 +122,6 @@
         [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (succeeded) {
                 NSLog(@"The message was saved!");
-
             } else {
                 NSLog(@"Problem saving message: %@", error.localizedDescription);
             }

@@ -41,6 +41,7 @@
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
 		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
+		EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */; };
 		EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732DD22DF931C004E362F /* SignUpVC.m */; };
 		EA6732E822DF95E0004E362F /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E722DF95E0004E362F /* NJOPasswordStrengthEvaluator.m */; };
 		EA6732ED22DF95F5004E362F /* QAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732E922DF95F5004E362F /* QAButton.m */; };
@@ -53,7 +54,6 @@
 		EAEB723A22E9316200426226 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723822E9316200426226 /* OverlayView.m */; };
 		EAEB723D22E9369900426226 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723C22E9369900426226 /* Card.m */; };
 		EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */; };
-		EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */; };
 		EAEB724622E95C6B00426226 /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB724422E95C6B00426226 /* CardsViewController.m */; };
 		EECDD1FF4F471AAB79FA48C6 /* Pods_Dorm_a_ShopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FAC4896E8B29719A398C9 /* Pods_Dorm_a_ShopUITests.framework */; };
 /* End PBXBuildFile section */
@@ -149,6 +149,7 @@
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		EA6732DC22DF931C004E362F /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
 		EA6732DD22DF931C004E362F /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		EA6732E622DF95E0004E362F /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
@@ -173,7 +174,6 @@
 		EAEB723C22E9369900426226 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
 		EAEB723F22E936CB00426226 /* CardItemCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardItemCollectionViewCell.h; sourceTree = "<group>"; };
 		EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardItemCollectionViewCell.m; sourceTree = "<group>"; };
-		EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		EAEB724422E95C6B00426226 /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
 		EAEB724522E95C6B00426226 /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -429,7 +429,7 @@
 			children = (
 				EAEB723F22E936CB00426226 /* CardItemCollectionViewCell.h */,
 				EAEB724022E936CB00426226 /* CardItemCollectionViewCell.m */,
-				EAEB724122E936CB00426226 /* CardItemCollectionViewCell.xib */,
+				EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */,
 			);
 			path = "Card Cell";
 			sourceTree = "<group>";
@@ -546,7 +546,7 @@
 				47A8A9B122DE3A32005D9520 /* LaunchScreen.storyboard in Resources */,
 				47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */,
 				47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */,
-				EAEB724322E936CB00426226 /* CardItemCollectionViewCell.xib in Resources */,
+				EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

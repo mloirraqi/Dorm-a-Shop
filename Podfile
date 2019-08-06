@@ -15,6 +15,7 @@ pod 'ParseLiveQuery'
   pod 'GooglePlacePicker'
   pod 'GooglePlaces'
   pod 'TwilioChatClient', '2.2.0'
+  pod 'SDWebImage'
   
   target 'Dorm-a-ShopTests' do
     inherit! :search_paths

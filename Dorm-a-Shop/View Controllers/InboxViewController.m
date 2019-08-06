@@ -9,10 +9,8 @@
 #import "InboxViewController.h"
 #import "UserCell.h"
 #import "MessageViewController.h"
-#import "ParseManager.h"
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
-#import "ConversationCoreData+CoreDataClass.h"
 @import ParseLiveQuery;
 @import Parse;
 

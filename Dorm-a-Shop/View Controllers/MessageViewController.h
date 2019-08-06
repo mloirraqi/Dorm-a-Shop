@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) PFUser *receiver;
 @property (strong, nonatomic) PFObject *convo;
-@property (strong, nonatomic) NSString *textBefore;
 
 @end
 

@@ -1684,6 +1684,7 @@
                                 </connections>
                             </button>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Maps" id="g5G-0E-0yz"/>
                     </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="4nu-E0-9J7" id="psT-v0-Vus"/>
@@ -1970,9 +1971,9 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="fhM-T6-QvG"/>
-        <segue reference="Bvx-1i-tFM"/>
+        <segue reference="oCN-lU-gXW"/>
         <segue reference="0wy-pc-D6U"/>
-        <segue reference="cnV-vk-Wb5"/>
-        <segue reference="ufI-em-euD"/>
+        <segue reference="inK-qS-1By"/>
+        <segue reference="ch5-tg-CXn"/>
     </inferredMetricsTieBreakers>
 </document>
