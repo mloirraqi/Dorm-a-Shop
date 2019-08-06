@@ -13,6 +13,7 @@
 #import "CoreDataManager.h"
 #import "PostCollectionViewCell.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "ProfileViewController.h"
 @import Parse;
 
 @interface DetailsViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -177,6 +178,13 @@
     DetailsViewController *newDetailVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailsViewController"];
     newDetailVC.post = self.similarItems[indexPath.row];
     [self.navigationController pushViewController:newDetailVC animated:YES];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"contactSeller"]) {
+        ProfileViewController *profileViewController = [segue destinationViewController];
+        profileViewController.user = self.post.author;
+    }
 }
 
 
