@@ -158,13 +158,27 @@
                                 NSNumber *conditionCount = self.conditionCounts[conditionIndex];
                                 NSNumber *priceCount = self.priceCounts[priceIndex];
                                 post.rank = categoryCount.doubleValue * 0.4 + conditionCount.doubleValue * 0.3 + priceCount.doubleValue * 0.3;
-                                 NSLog(@"%@", categoryCount);
                             }
                             
-                            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
-                            [allPostsArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-                            
-                            NSLog(@"%@", allPostsArray);
+                            if (allPostsArray.count > 1) {
+                                double initialRank = ((PostCoreData *)allPostsArray[0]).rank;
+                                double rank = initialRank;
+                                
+                                for (PostCoreData *post in allPostsArray) {
+                                    if (rank > post.rank) {
+                                        rank = post.rank;
+                                    }
+                                }
+                                
+                                NSSortDescriptor *sortDescriptor;
+                                if (rank == initialRank) {
+                                    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
+                                } else {
+                                    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+                                }
+                                
+                                [allPostsArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                            }
                             
                             completion(allPostsArray, nil);
                         }

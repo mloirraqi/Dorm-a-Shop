@@ -419,7 +419,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="GMe-Z3-De9">
-                                                <rect key="frame" x="16" y="247" width="382" height="29"/>
+                                                <rect key="frame" x="16" y="154" width="382" height="122"/>
                                                 <segments>
                                                     <segment title="Active Items"/>
                                                     <segment title="Sold Items"/>

@@ -37,7 +37,6 @@
             [self showAlertView:@"Unable to Sign in"];
         } else {
             [self setupCoreData];
-            [self performSegueWithIdentifier:@"signIn" sender:nil];
         }
     }];
 }
@@ -47,6 +46,7 @@
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
+            [self performSegueWithIdentifier:@"signIn" sender:nil];
 //            [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
         }
     }];
