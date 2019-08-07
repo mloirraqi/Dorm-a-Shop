@@ -217,7 +217,7 @@
     }
 }
 
-- (IBAction)backButtonTap:(UIButton *)sender {
+- (IBAction)signInTap:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 

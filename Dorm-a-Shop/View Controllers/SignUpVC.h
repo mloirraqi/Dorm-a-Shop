@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
 
 - (IBAction)signUpButtonTap:(UIButton *)sender;
-- (IBAction)backButtonTap:(UIButton *)sender;
+- (IBAction)signIntap:(UIButton *)sender;
 - (IBAction)pictureButtonTap:(UIButton *)sender;
 
 @end
