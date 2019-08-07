@@ -75,7 +75,7 @@
     __weak ParseDatabaseManager *weakSelf = self;
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
-            NSMutableArray *allPostsArray = [[NSMutableArray alloc] init];
+            NSMutableArray __block *allPostsArray = [[NSMutableArray alloc] init];
             
             for (Post *post in posts) {
                 PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:weakSelf.context];
@@ -165,24 +165,31 @@
                             
                             if (allPostsArray.count > 1) {
                                 double initialRank = ((PostCoreData *)allPostsArray[0]).rank;
-                                double rank = initialRank;
-                                
+                               
                                 for (PostCoreData *post in allPostsArray) {
-                                    if (rank > post.rank) {
-                                        rank = post.rank;
+                                    if (initialRank != post.rank) {
+                                        break;
                                     }
                                 }
                                 
-                                NSSortDescriptor *sortDescriptor;
-                                if (rank == initialRank) {
-                                    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
-                                } else {
-                                    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
-                                }
-                                
-                                [allPostsArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                                allPostsArray = (NSMutableArray *)[allPostsArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+                                    PostCoreData *first = (PostCoreData *)a;
+                                    PostCoreData *second = (PostCoreData *)b;
+                                    
+                                    if (first.rank > second.rank) {
+                                        return NSOrderedAscending;
+                                    } else if (first.rank > second.rank) {
+                                        return NSOrderedDescending;
+                                    } else if ([first.createdAt compare:second.createdAt] == NSOrderedDescending) {
+                                        return NSOrderedDescending;
+                                    } else if ([first.createdAt compare:second.createdAt] == NSOrderedAscending) {
+                                        return NSOrderedAscending;
+                                    }
+                                    
+                                    NSLog(@"first: %@, second: %@", first, second);
+                                    return NSOrderedSame;
+                                }];
                             }
-                            
                             completion(allPostsArray, nil);
                         }
                     }];

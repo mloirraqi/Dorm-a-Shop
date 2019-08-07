@@ -53,25 +53,33 @@
         abort();
     }
     
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray __block *mutableResults = [NSMutableArray arrayWithArray:results];
     if (results.count > 1) {
         double initialRank = ((PostCoreData *)results[0]).rank;
         double rank = initialRank;
         
         for (PostCoreData *result in results) {
-            if (rank > result.rank) {
-                rank = result.rank;
+            if (rank != result.rank) {
+                break;
             }
         }
         
-        NSSortDescriptor *sortDescriptor;
-        if (rank == initialRank) {
-           sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
-        } else {
-            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
-        }
-        
-        [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        mutableResults = (NSMutableArray *)[mutableResults sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            PostCoreData *first = (PostCoreData *)a;
+            PostCoreData *second = (PostCoreData *)b;
+            
+            if (first.rank > second.rank) {
+                return NSOrderedAscending;
+            } else if (first.rank > second.rank) {
+                return NSOrderedDescending;
+            } else if ([first.createdAt compare:second.createdAt] == NSOrderedDescending) {
+                return NSOrderedDescending;
+            } else if ([first.createdAt compare:second.createdAt] == NSOrderedAscending) {
+                return NSOrderedAscending;
+            }
+            
+            return NSOrderedSame;
+        }];
     }
     
     return mutableResults; //firstObject is nil if results has length 0
