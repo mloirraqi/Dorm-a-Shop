@@ -1888,6 +1888,7 @@
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Ggr-T9-IcF" firstAttribute="top" secondItem="xSO-7L-X2P" secondAttribute="top" id="RSu-6l-SQL"/>
                             <constraint firstAttribute="trailing" secondItem="Ggr-T9-IcF" secondAttribute="trailing" id="UQA-Ah-j8Q"/>
@@ -1895,6 +1896,9 @@
                             <constraint firstItem="Ggr-T9-IcF" firstAttribute="leading" secondItem="R18-qa-1bY" secondAttribute="leading" id="amt-9y-Lbh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xSO-7L-X2P"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="iBu-f2-fQe" appends="YES" id="9Hf-q8-ib6"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="Ygn-nf-k8N">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="hRO-T2-0mL">
@@ -1918,9 +1922,9 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hcd-fK-jK9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="CmP-qP-vgw">
+                <tapGestureRecognizer id="iBu-f2-fQe">
                     <connections>
-                        <action selector="onTap:" destination="zSL-ce-JhF" id="wwo-OJ-7YS"/>
+                        <action selector="onTap:" destination="zSL-ce-JhF" id="TF1-cN-1ol"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -2427,10 +2431,10 @@
         <image name="item_placeholder" width="848" height="660"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="I68-gf-EeP"/>
+        <segue reference="uHt-QB-VG6"/>
         <segue reference="fhM-T6-QvG"/>
         <segue reference="oCN-lU-gXW"/>
-        <segue reference="Ob4-g7-kRL"/>
+        <segue reference="dnl-93-kbr"/>
         <segue reference="KLi-YY-IiH"/>
         <segue reference="iII-YD-ifK"/>
     </inferredMetricsTieBreakers>
