@@ -17,7 +17,7 @@
 #import "CoreDataManager.h"
 #import "User.h"
 
-@interface EditProfileVC () <GMSPlacePickerViewControllerDelegate>
+@interface EditProfileVC () <GMSPlacePickerViewControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
@@ -341,6 +341,19 @@
         abort();
     }
 }
+
+- (IBAction)onTap:(id)sender {
+    [self->nameTextField endEditing:YES];
+    [self->passwordTextField endEditing:YES];
+    [self->emailTextField endEditing:YES];
+    [self->confirmPasswordTextField endEditing:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
 
 @end
 

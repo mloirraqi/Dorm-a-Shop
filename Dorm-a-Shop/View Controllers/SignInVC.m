@@ -13,7 +13,7 @@
 #import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 
-@interface SignInVC ()
+@interface SignInVC () <UITextFieldDelegate>
 
 @end
 
@@ -21,6 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.passwordField.delegate = self;
 }
 
 -(void)showAlertView:(NSString*)message {
@@ -76,5 +77,21 @@
         }
     }];
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailField) {
+        [textField resignFirstResponder];
+        return NO;
+    } else {
+        [self signIn:nil];
+    }
+    return YES;
+}
+
+- (IBAction)onTap:(id)sender {
+    [self.emailField endEditing:YES];
+    [self.passwordField endEditing:YES];
+}
+
 
 @end
