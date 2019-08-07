@@ -146,7 +146,7 @@
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"sold", nil];
+                    NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"sold", weakSelf.post, @"post", nil];
                     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
             }];
@@ -155,7 +155,7 @@
                 if (error != nil) {
                     NSLog(@"Post sold status update failed: %@", error.localizedDescription);
                 } else {
-                    NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"sold", nil];
+                    NSDictionary *soldInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"sold", weakSelf.post, @"post", nil];
                     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"ChangedSoldNotification" object:weakSelf userInfo:soldInfoDict];
                 }
             }];

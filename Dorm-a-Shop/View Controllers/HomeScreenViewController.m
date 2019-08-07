@@ -99,7 +99,9 @@
             [self.postsArray removeObject:notificationPost];
             [self.tableView reloadData];
         } else {
-            [self fetchActivePostsFromCoreData];
+            [self.postsArray addObject:notificationPost];
+            self.postsArray = [self sortPostsArray:self.postsArray];
+            [self.tableView reloadData];
         }
     } else if ([[notification name] isEqualToString:@"DidUploadNotification"]) {
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
@@ -312,6 +314,27 @@
     }
     
     [self filterPosts];
+}
+
+- (NSMutableArray *)sortPostsArray:(NSMutableArray *)postsArray {
+    NSArray *sortedResults = [postsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+        PostCoreData *firstPost = (PostCoreData *)firstObj;
+        PostCoreData *secondPost = (PostCoreData *)secondObj;
+        
+        if (firstPost.rank > secondPost.rank) {
+            return NSOrderedAscending;
+        } else if (firstPost.rank > secondPost.rank) {
+            return NSOrderedDescending;
+        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
+            return NSOrderedDescending;
+        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
+            return NSOrderedAscending;
+        }
+        
+        return NSOrderedSame;
+    }];
+    
+    return [NSMutableArray arrayWithArray:sortedResults];
 }
 
 @end

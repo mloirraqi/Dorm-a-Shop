@@ -39,8 +39,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingUsers" object:nil];
     
     [self fetchUsersFromCoreData];
-    
-    
 }
 
 - (void)receiveNotification:(NSNotification *)notification {

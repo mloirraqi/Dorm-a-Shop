@@ -172,23 +172,24 @@
                                     }
                                 }
                                 
-                                allPostsArray = (NSMutableArray *)[allPostsArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-                                    PostCoreData *first = (PostCoreData *)a;
-                                    PostCoreData *second = (PostCoreData *)b;
+                                NSArray *sortedPosts = [allPostsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+                                    PostCoreData *firstPost = (PostCoreData *)firstObj;
+                                    PostCoreData *secondPost = (PostCoreData *)secondObj;
                                     
-                                    if (first.rank > second.rank) {
+                                    if (firstPost.rank > secondPost.rank) {
                                         return NSOrderedAscending;
-                                    } else if (first.rank > second.rank) {
+                                    } else if (firstPost.rank > secondPost.rank) {
                                         return NSOrderedDescending;
-                                    } else if ([first.createdAt compare:second.createdAt] == NSOrderedDescending) {
+                                    } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
                                         return NSOrderedDescending;
-                                    } else if ([first.createdAt compare:second.createdAt] == NSOrderedAscending) {
+                                    } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
                                         return NSOrderedAscending;
                                     }
                                     
-                                    NSLog(@"first: %@, second: %@", first, second);
                                     return NSOrderedSame;
                                 }];
+                                
+                                allPostsArray = [NSMutableArray arrayWithArray:sortedPosts];
                             }
                             completion(allPostsArray, nil);
                         }
