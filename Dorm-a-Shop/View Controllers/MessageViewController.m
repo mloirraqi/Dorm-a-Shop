@@ -10,8 +10,10 @@
 #import "ChatCell.h"
 #import "AppDelegate.h"
 #import "UserCoreData+CoreDataClass.h"
+#import "Dorm_a_Shop-Swift.h"
 #import "CoreDataManager.h"
 @import Parse;
+@import ParseLiveQuery;
 @import TwilioChatClient;
 
 @interface MessageViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -21,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *msgInput;
 @property (strong, nonatomic) PFUser *receiver;
 @property (strong, nonatomic) PFObject *convo;
+@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
+@property (strong, nonatomic) ParseLiveQueryObjCBridge *bridge;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
@@ -40,10 +44,11 @@
     }
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
     
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [self fetchMessages];
+    [self subscribe];
 }
 
-- (void)onTimer {
+- (void)fetchMessages {
     PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
     [sentQuery whereKey:@"receiver" equalTo:self.receiver];
     [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
@@ -70,9 +75,41 @@
     }];
 }
 
+- (void)subscribe {
+    self.bridge = [ParseLiveQueryObjCBridge new];
+    
+    __weak MessageViewController *weakSelf = self;
+    void (^completion)(PFObject* object) = ^(PFObject* object) {
+        [weakSelf.messages addObject:object];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:weakSelf.messages.count-1 inSection:0];
+            
+            [weakSelf.tableView beginUpdates];
+            [weakSelf.tableView insertRowsAtIndexPaths:@[lastIndexPath]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            [weakSelf.tableView endUpdates];
+            [weakSelf.tableView scrollToRowAtIndexPath:lastIndexPath
+                                      atScrollPosition:UITableViewScrollPositionBottom
+                                              animated:NO];
+        });
+    };
+    
+    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
+    [sentQuery whereKey:@"receiver" equalTo:self.receiver];
+    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
+    [self.bridge subscribeToQuery:sentQuery handler:completion];
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+    [recQuery whereKey:@"sender" equalTo:self.receiver];
+    [self.bridge subscribeToQuery:recQuery handler:completion];
+}
+
 - (IBAction)sendMsg:(id)sender {
     if(![self.msgInput.text isEqualToString:@""]) {
         __weak MessageViewController *weakSelf = self;
+        
         if(!self.conversationCoreData) {
             self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
             if(self.conversationCoreData) {
@@ -91,6 +128,7 @@
                     [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:convo.objectId withDate:convo.updatedAt withSender:weakSelf.user withLastText:convo[@"lastText"] withManagedObjectContext:weakSelf.context];
                     [weakSelf saveContext];
                     weakSelf.convo = convo;
+                    
                 } else {
                     NSLog(@"%@", error.localizedDescription);
                 }

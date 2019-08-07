@@ -19,7 +19,6 @@
 		47486BD222F566C200DE6D8E /* ParseDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BD122F566C200DE6D8E /* ParseDatabaseManager.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
-		47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AD22DE3A32005D9520 /* Assets.xcassets */; };
 		47A8A9B122DE3A32005D9520 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */; };
 		47A8A9B422DE3A32005D9520 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9B322DE3A32005D9520 /* main.m */; };
 		47A8A9BE22DE3A32005D9520 /* Dorm_a_ShopTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9BD22DE3A32005D9520 /* Dorm_a_ShopTests.m */; };
@@ -53,6 +52,8 @@
 		DEFE7C8922E640DF006E3096 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8822E640DF006E3096 /* SearchViewController.m */; };
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
 		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
+		EA0E3AFC22FAB11C003BE858 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA0E3AF922FAB11C003BE858 /* Assets.xcassets */; };
+		EA0E3AFD22FAB11C003BE858 /* UserCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */; };
 		EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */; };
 		EA4315BA22F941A200CC853D /* MapsPopupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4315B722F941A200CC853D /* MapsPopupVC.m */; };
 		EA4315BB22F941A200CC853D /* MapsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4315B822F941A200CC853D /* MapsVC.m */; };
@@ -119,7 +120,6 @@
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		47A8A9AB22DE3A30005D9520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		47A8A9AD22DE3A32005D9520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		47A8A9B022DE3A32005D9520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		47A8A9B222DE3A32005D9520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		47A8A9B322DE3A32005D9520 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -178,6 +178,9 @@
 		DEFE7C8B22E64347006E3096 /* UserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
 		EA03725C22E6501B00354DA2 /* ChatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		EA0E3AF922FAB11C003BE858 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../../../Dorm-a-Shop copy 2/Dorm-a-Shop/Assets.xcassets"; sourceTree = "<group>"; };
+		EA0E3AFA22FAB11C003BE858 /* UserCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCollectionCell.h; sourceTree = "<group>"; };
+		EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCollectionCell.m; sourceTree = "<group>"; };
 		EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		EA4315B622F941A200CC853D /* MapsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapsVC.h; sourceTree = "<group>"; };
 		EA4315B722F941A200CC853D /* MapsPopupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapsPopupVC.m; sourceTree = "<group>"; };
@@ -292,7 +295,6 @@
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,
 				DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */,
-				47A8A9AD22DE3A32005D9520 /* Assets.xcassets */,
 				47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */,
 				47A8A9B222DE3A32005D9520 /* Info.plist */,
 				47A8A9B322DE3A32005D9520 /* main.m */,
@@ -402,6 +404,9 @@
 				47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */,
 				DEFE7C8A22E64347006E3096 /* UserCell.h */,
 				DEFE7C8B22E64347006E3096 /* UserCell.m */,
+				EA0E3AFA22FAB11C003BE858 /* UserCollectionCell.h */,
+				EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */,
+				EA0E3AF922FAB11C003BE858 /* Assets.xcassets */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -625,7 +630,7 @@
 				DE877D7622FA3EB500C35587 /* chair_DIFFUSE.png in Resources */,
 				47A8A9B122DE3A32005D9520 /* LaunchScreen.storyboard in Resources */,
 				DE877D7422FA3EB500C35587 /* chair_SHADOW.png in Resources */,
-				47A8A9AE22DE3A32005D9520 /* Assets.xcassets in Resources */,
+				EA0E3AFC22FAB11C003BE858 /* Assets.xcassets in Resources */,
 				47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */,
 				EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */,
 				DE877D7322FA3EB500C35587 /* chair_METALLIC.png in Resources */,
@@ -799,6 +804,7 @@
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				DE877D6422FA3CC900C35587 /* ARViewController.swift in Sources */,
+				EA0E3AFD22FAB11C003BE858 /* UserCollectionCell.m in Sources */,
 				DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */,
 				47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */,
 				EAB1A80822F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift in Sources */,
@@ -979,13 +985,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DH593U6VL;
+				DEVELOPMENT_TEAM = GBM98UU555;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1001,13 +1007,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DH593U6VL;
+				DEVELOPMENT_TEAM = GBM98UU555;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "mloirraqi-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
