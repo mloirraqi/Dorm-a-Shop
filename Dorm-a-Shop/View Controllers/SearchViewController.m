@@ -85,6 +85,7 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.collectionView reloadData];
+    [self fetchUsersFromCoreData];
 }
 
 - (void)receiveNotification:(NSNotification *)notification {

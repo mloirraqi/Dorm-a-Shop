@@ -75,7 +75,7 @@
     __weak ParseDatabaseManager *weakSelf = self;
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
-            NSMutableArray *allPostsArray = [[NSMutableArray alloc] init];
+            NSMutableArray __block *allPostsArray = [[NSMutableArray alloc] init];
             
             for (Post *post in posts) {
                 PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:weakSelf.context];
@@ -165,24 +165,32 @@
                             
                             if (allPostsArray.count > 1) {
                                 double initialRank = ((PostCoreData *)allPostsArray[0]).rank;
-                                double rank = initialRank;
-                                
+                               
                                 for (PostCoreData *post in allPostsArray) {
-                                    if (rank > post.rank) {
-                                        rank = post.rank;
+                                    if (initialRank != post.rank) {
+                                        break;
                                     }
                                 }
                                 
-                                NSSortDescriptor *sortDescriptor;
-                                if (rank == initialRank) {
-                                    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
-                                } else {
-                                    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
-                                }
+                                NSArray *sortedPosts = [allPostsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+                                    PostCoreData *firstPost = (PostCoreData *)firstObj;
+                                    PostCoreData *secondPost = (PostCoreData *)secondObj;
+                                    
+                                    if (firstPost.rank > secondPost.rank) {
+                                        return NSOrderedAscending;
+                                    } else if (firstPost.rank > secondPost.rank) {
+                                        return NSOrderedDescending;
+                                    } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
+                                        return NSOrderedDescending;
+                                    } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
+                                        return NSOrderedAscending;
+                                    }
+                                    
+                                    return NSOrderedSame;
+                                }];
                                 
-                                [allPostsArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                                allPostsArray = [NSMutableArray arrayWithArray:sortedPosts];
                             }
-                            
                             completion(allPostsArray, nil);
                         }
                     }];
@@ -540,6 +548,7 @@
     [reviewsQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable reviews, NSError * _Nullable error) {
         if (reviews) {
             for (Review *review in reviews) {
+                NSLog(@"%@", review);
                 UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
                 UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
                 ReviewCoreData *reviewCoreData = (ReviewCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:review.objectId withContext:weakSelf.context];
@@ -587,9 +596,10 @@
                 }
                 
                 if (!reviewCoreData) {
-                    reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:review.objectId withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[review.rating intValue] withReview:review.review withDate:review.createdAt withManagedObjectContext:weakSelf.context];
+                    reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:review.objectId withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[review.rating intValue] withReview:review.review withTitle:review.title withItemDescription:review.itemDescription withDate:review.createdAt withManagedObjectContext:weakSelf.context];
                 }
                 
+                NSLog(@"%@", reviewCoreData);
                 [reviewsCoreDataArray addObject:reviewCoreData];
             }
             NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:reviewsCoreDataArray];
@@ -710,13 +720,15 @@
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
 }
 
-- (void)postReviewToParseWithSeller:(User *)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion {
+- (void)postReviewToParseWithSeller:(User *)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withTitle:(NSString *)title withItemDescription:(NSString *)itemDescription withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion {
     Review *newReview = [Review new];
     
     newReview.reviewer = (User *)PFUser.currentUser;
     newReview.seller = seller;
     newReview.rating = rating;
     newReview.review = review;
+    newReview.itemDescription = itemDescription;
+    newReview.title = title;
     
     [newReview saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error != nil) {

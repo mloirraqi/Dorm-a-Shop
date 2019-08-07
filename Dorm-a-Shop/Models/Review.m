@@ -14,6 +14,8 @@
 @dynamic reviewer;
 @dynamic review;
 @dynamic rating;
+@dynamic title;
+@dynamic itemDescription;
 
 + (nonnull NSString *)parseClassName {
     return @"Review";

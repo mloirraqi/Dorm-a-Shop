@@ -53,25 +53,35 @@
         abort();
     }
     
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray __block *mutableResults = [NSMutableArray arrayWithArray:results];
     if (results.count > 1) {
         double initialRank = ((PostCoreData *)results[0]).rank;
         double rank = initialRank;
         
         for (PostCoreData *result in results) {
-            if (rank > result.rank) {
-                rank = result.rank;
+            if (rank != result.rank) {
+                break;
             }
         }
         
-        NSSortDescriptor *sortDescriptor;
-        if (rank == initialRank) {
-           sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:NO];
-        } else {
-            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
-        }
+        NSArray *sortedPosts = [mutableResults sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+            PostCoreData *firstPost = (PostCoreData *)firstObj;
+            PostCoreData *secondPost = (PostCoreData *)secondObj;
+            
+            if (firstPost.rank > secondPost.rank) {
+                return NSOrderedAscending;
+            } else if (firstPost.rank > secondPost.rank) {
+                return NSOrderedDescending;
+            } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
+                return NSOrderedDescending;
+            } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
+                return NSOrderedAscending;
+            }
+            
+            return NSOrderedSame;
+        }];
         
-        [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        mutableResults = [NSMutableArray arrayWithArray:sortedPosts];
     }
     
     return mutableResults; //firstObject is nil if results has length 0
@@ -362,7 +372,7 @@
     return conversationCoreData;
 }
 
-- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withReviewer:(UserCoreData * _Nullable)reviewer withRating:(int)rating withReview:(NSString * _Nullable)review withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withReviewer:(UserCoreData * _Nullable)reviewer withRating:(int)rating withReview:(NSString * _Nullable)review withTitle:(NSString *)title withItemDescription:(NSString *)itemDescription withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     ReviewCoreData *reviewCoreData;
     if (objectId) {
         reviewCoreData = (ReviewCoreData *)[self getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:self.context];
@@ -376,6 +386,8 @@
         reviewCoreData.review = review;
         reviewCoreData.dateWritten = date;
         reviewCoreData.reviewer = reviewer;
+        reviewCoreData.itemDescription = itemDescription;
+        reviewCoreData.title = title;
         
 //        __weak CoreDataManager *weakSelf = self;
 //        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {

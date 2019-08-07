@@ -87,7 +87,18 @@
         [self.activeItems insertObject:notificationPost atIndex:0];
         [self.collectionView reloadData];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
-        [self fetchProfileFromCoreData];
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        if (notificationPost.sold) {
+            [self.activeItems removeObject:notificationPost];
+            [self.soldItems addObject:notificationPost];
+            self.soldItems = [self sortPostsArray:self.soldItems];
+            [self.collectionView reloadData];
+        } else {
+            [self.soldItems removeObject:notificationPost];
+            [self.activeItems addObject:notificationPost];
+            self.activeItems = [self sortPostsArray:self.activeItems];
+            [self.collectionView reloadData];
+        }
     } else if ([[notification name] isEqualToString:@"DoneSavingPostsWatches"]) {
         [self fetchProfileFromCoreData];
     }
@@ -256,6 +267,23 @@
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
+}
+
+- (NSMutableArray *)sortPostsArray:(NSMutableArray *)postsArray {
+    NSArray *sortedResults = [postsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+        PostCoreData *firstPost = (PostCoreData *)firstObj;
+        PostCoreData *secondPost = (PostCoreData *)secondObj;
+        
+        if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
+            return NSOrderedDescending;
+        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
+            return NSOrderedAscending;
+        }
+        
+        return NSOrderedSame;
+    }];
+    
+    return [NSMutableArray arrayWithArray:sortedResults];
 }
 
 @end
