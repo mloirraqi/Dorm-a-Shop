@@ -134,10 +134,15 @@
 - (void)setRating {
     NSMutableArray *reviewsArray = [[CoreDataManager shared] getReviewsFromCoreDataForSeller:self.user];
     float avgRating = 0;
-    for (ReviewCoreData *review in reviewsArray) {
-        avgRating += review.rating;
+    
+    if (reviewsArray.count > 0) {
+        for (ReviewCoreData *review in reviewsArray) {
+            avgRating += review.rating;
+        }
+        
+        avgRating /= reviewsArray.count;
     }
-    avgRating /= reviewsArray.count;
+
     self.user.rating = avgRating;
     [self saveContext];
     
