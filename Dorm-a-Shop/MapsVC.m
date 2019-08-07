@@ -10,7 +10,6 @@
 #import "MapsPopupVC.h"
 #import "CoreDataManager.h"
 #import "ParseDatabaseManager.h"
-//#import <SDWebImage/SDWebImage.h>
 @import Parse;
 
 @interface MapsVC ()
@@ -24,8 +23,6 @@
     NSMutableSet* addedMarkers;
 }
 
-
-//View Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     addedMarkers = [[NSMutableSet alloc] init];
@@ -41,8 +38,6 @@
     [self fetchUsers];
 }
 
-
-//Maps
 - (void)setupMaps {
     
     User *currentUser = (User *)[PFUser currentUser];
@@ -69,8 +64,6 @@
 
 }
 
-
-//Users
 - (void)fetchUsers {
     __weak MapsVC *weakSelf = self;
     [[ParseDatabaseManager shared] queryAllUsersWithinKilometers:5.0 withCompletion:^(NSMutableArray<UserCoreData *> * users, NSError * error) {
@@ -83,8 +76,6 @@
     }];
 }
 
-
-//Reload markers
 - (void)populateMarkers {
     
     NSLog(@"users count: %lu", (unsigned long)self.users.count);
@@ -92,7 +83,6 @@
     NSCharacterSet* mySet = [NSCharacterSet characterSetWithCharactersInString:@",-.0123456789"];
 
     for (UserCoreData* user in self.users) {
-        
         
         NSString *latLongStr = [[user.location componentsSeparatedByCharactersInSet:[mySet invertedSet]] componentsJoinedByString:@""];
         NSArray *latLong = [latLongStr componentsSeparatedByString:@","];
