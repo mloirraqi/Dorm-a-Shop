@@ -24,6 +24,7 @@
 
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @property (nonatomic, strong) AppDelegate *appDelegate;
+@property (nonatomic, strong) NSDate *oneDayAgo;
 
 @end
 
@@ -49,6 +50,8 @@
     self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
     self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
     self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
+    NSDate *now = [NSDate date];
+    self.oneDayAgo = [now dateByAddingTimeInterval:-24*60*60];
     return self;
 }
 
@@ -102,7 +105,7 @@
                 
                 if (!postCoreData) {
                     //we don't know if it's watched from this query so we default to NO. this gets handled later. same for watchCount, defaults to 0
-                    postCoreData = [[CoreDataManager shared] savePostToCoreDataWithObjectId:post.objectId withImageData:nil withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title withCreatedDate:post.createdAt withSoldStatus:post.sold withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withAuthor:userCoreData withManagedObjectContext:weakSelf.context];
+                    postCoreData = [[CoreDataManager shared] savePostToCoreDataWithObjectId:post.objectId withImageData:nil withCaption:post.caption withPrice:[post.price doubleValue] withCondition:post.condition withCategory:post.category withTitle:post.title withCreatedDate:post.createdAt withSoldStatus:post.sold withWatchStatus:NO withWatchObjectId:nil withWatchCount:0 withHotness:0 withAuthor:userCoreData withManagedObjectContext:weakSelf.context];
                     
                     [post.image getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
