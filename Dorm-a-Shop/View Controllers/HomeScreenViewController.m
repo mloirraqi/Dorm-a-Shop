@@ -30,7 +30,6 @@
 
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (strong, nonatomic) NSString *className;
 
 @property (weak, nonatomic) IBOutlet UITableView *categoryTable;
 @property (weak, nonatomic) IBOutlet UITableView *conditionTable;
@@ -52,8 +51,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.className = @"HomeScreenViewController";
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -199,7 +196,6 @@
         PostCoreData *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
-        detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
     }
 }
@@ -256,6 +252,9 @@
 - (IBAction)categoryChange:(id)sender {
     if (self.categoryTable.hidden) {
         self.categoryTable.hidden = NO;
+        self.hotnessTable.hidden = YES;
+        self.pricesTable.hidden = YES;
+        self.conditionTable.hidden = YES;
     } else {
         self.categoryTable.hidden = YES;
     }
@@ -264,6 +263,9 @@
 - (IBAction)conditionChange:(id)sender {
     if (self.conditionTable.hidden) {
         self.conditionTable.hidden = NO;
+        self.categoryTable.hidden = YES;
+        self.hotnessTable.hidden = YES;
+        self.pricesTable.hidden = YES;
     } else {
         self.conditionTable.hidden = YES;
     }
@@ -272,6 +274,9 @@
 - (IBAction)pricesChange:(id)sender {
     if (self.pricesTable.hidden) {
         self.pricesTable.hidden = NO;
+        self.conditionTable.hidden = YES;
+        self.categoryTable.hidden = YES;
+        self.hotnessTable.hidden = YES;
     } else {
         self.pricesTable.hidden = YES;
     }
@@ -280,6 +285,9 @@
 - (IBAction)hotnessChange:(id)sender {
     if (self.hotnessTable.hidden) {
         self.hotnessTable.hidden = NO;
+        self.pricesTable.hidden = YES;
+        self.conditionTable.hidden = YES;
+        self.categoryTable.hidden = YES;
     } else {
         self.hotnessTable.hidden = YES;
     }
