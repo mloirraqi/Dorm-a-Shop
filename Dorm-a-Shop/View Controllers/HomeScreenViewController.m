@@ -27,6 +27,7 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) NSMutableArray *postsArray;
+@property (strong, nonatomic) NSMutableArray *hotArray;
 
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
@@ -99,7 +100,9 @@
             [self.postsArray removeObject:notificationPost];
             [self.tableView reloadData];
         } else {
-            [self fetchActivePostsFromCoreData];
+            [self.postsArray addObject:notificationPost];
+            self.postsArray = [self sortPostsArray:self.postsArray];
+            [self.tableView reloadData];
         }
     } else if ([[notification name] isEqualToString:@"DidUploadNotification"]) {
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
@@ -133,6 +136,7 @@
 
 - (void)fetchActivePostsFromCoreData {
     self.postsArray = [[CoreDataManager shared] getActivePostsFromCoreData];
+    self.hotArray = [[CoreDataManager shared] getHotPostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DidPullActivePosts" object:nil];
@@ -219,7 +223,11 @@
 }
 
 - (void)filterPosts {
-    self.filteredPosts = self.postsArray;
+    if([[self.hotnessButton currentTitle] isEqual: @"All Items"]) {
+        self.filteredPosts = self.postsArray;
+    } else {
+        self.filteredPosts = self.hotArray;
+    }
     if (self.searchBar.text.length != 0) {
         NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.title localizedCaseInsensitiveContainsString:self.searchBar.text] || [post.caption localizedCaseInsensitiveContainsString:self.searchBar.text]);
@@ -312,6 +320,27 @@
     }
     
     [self filterPosts];
+}
+
+- (NSMutableArray *)sortPostsArray:(NSMutableArray *)postsArray {
+    NSArray *sortedResults = [postsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+        PostCoreData *firstPost = (PostCoreData *)firstObj;
+        PostCoreData *secondPost = (PostCoreData *)secondObj;
+        
+        if (firstPost.rank > secondPost.rank) {
+            return NSOrderedAscending;
+        } else if (firstPost.rank > secondPost.rank) {
+            return NSOrderedDescending;
+        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
+            return NSOrderedDescending;
+        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
+            return NSOrderedAscending;
+        }
+        
+        return NSOrderedSame;
+    }];
+    
+    return [NSMutableArray arrayWithArray:sortedResults];
 }
 
 @end

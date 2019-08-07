@@ -37,23 +37,33 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingPostsWatches" object:nil];
     
     [self fetchPostsFromCoreData];
+    self.postsArray = [self sortPostsArray:self.postsArray];
     [self createRefreshControl];
 }
 
 - (void)receiveNotification:(NSNotification *) notification {
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        NSLog(@"self.postsArray: %@, notificationPost: %@, class: %@", self.postsArray, notificationPost, [self.postsArray class]);
         if (!notificationPost.watched) {
             [self.postsArray removeObject:notificationPost];
         } else if (!notificationPost.sold) {
-            [self.postsArray insertObject:notificationPost atIndex:0];
-        } else if ([[notification name] isEqualToString:@"DoneSavingPostsWatches"]) {
-            [self fetchPostsFromCoreData];
+            [self.postsArray addObject:notificationPost];
         }
-        
+        self.postsArray = [self sortPostsArray:self.postsArray];
         [self.tableView reloadData];
-    } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
+    } else if ([[notification name] isEqualToString:@"DoneSavingPostsWatches"]) {
         [self fetchPostsFromCoreData];
+    } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
+        PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
+        if (notificationPost.sold) {
+            [self.postsArray removeObject:notificationPost];
+            [self.tableView reloadData];
+        } else {
+            [self.postsArray addObject:notificationPost];
+            self.postsArray = [self sortPostsArray:self.postsArray];
+            [self.tableView reloadData];
+        }
     }
 }
 
@@ -79,6 +89,27 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.postsArray.count;
+}
+
+- (NSMutableArray *)sortPostsArray:(NSMutableArray *)postsArray {
+    NSArray *sortedResults = [postsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+        PostCoreData *firstPost = (PostCoreData *)firstObj;
+        PostCoreData *secondPost = (PostCoreData *)secondObj;
+        
+        if (firstPost.rank > secondPost.rank) {
+            return NSOrderedAscending;
+        } else if (firstPost.rank > secondPost.rank) {
+            return NSOrderedDescending;
+        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
+            return NSOrderedDescending;
+        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
+            return NSOrderedAscending;
+        }
+        
+        return NSOrderedSame;
+    }];
+    
+    return [NSMutableArray arrayWithArray:sortedResults];;
 }
 
 #pragma mark - Navigation

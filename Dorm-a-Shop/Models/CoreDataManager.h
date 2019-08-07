@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (id)shared;
 
 - (NSMutableArray *)getActivePostsFromCoreData;
+- (NSMutableArray *)getHotPostsFromCoreData;
 - (NSMutableArray *)getActiveWatchedPostsForCurrentUserFromCoreData;
 - (NSMutableArray *)getProfilePostsFromCoreDataForUser:(UserCoreData *)user;
 - (NSManagedObject *)getCoreDataEntityWithName:(NSString *)name withObjectId:(NSString *)postObjectId withContext:(NSManagedObjectContext *)context;
@@ -36,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (PostCoreData *)savePostToCoreDataWithObjectId:(NSString * _Nullable)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString * _Nullable)watchObjectId withWatchCount:(long long)watchCount withHotness:(double)hotness withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 - (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 - (ConversationCoreData *)saveConversationToCoreDataWithObjectId:(NSString * _Nullable)conversationObjectId withDate:(NSDate *)updatedAt withSender:(UserCoreData * _Nullable)sender withLastText:(NSString * _Nullable)lastText withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
-- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withReviewer:(UserCoreData * _Nullable)reviewer withRating:(int)rating withReview:(NSString * _Nullable)review withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
+- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withReviewer:(UserCoreData * _Nullable)reviewer withRating:(int)rating withReview:(NSString * _Nullable)review withTitle:(NSString *)title withItemDescription:(NSString *)itemDescription withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 
 - (void)enqueueCoreDataBlock:(BOOL (^)(NSManagedObjectContext *context))block withName:(NSString *)name;
 - (void)enqueueDoneSavingPostsWatches;
