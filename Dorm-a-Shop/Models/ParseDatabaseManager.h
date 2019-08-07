@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)postListingToParseWithImage:(UIImage * _Nullable)image withCaption:(NSString * _Nullable)caption withPrice:(NSString * _Nullable)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCompletion:(void (^)(Post * _Nullable, NSError * _Nullable))completion;
 - (PFFileObject *)getPFFileFromImage:(UIImage * _Nullable)image;
-- (void)postReviewToParseWithSeller:(User * _Nullable)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion;
+- (void)postReviewToParseWithSeller:(User * _Nullable)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withTitle:(NSString *)title withItemDescription:(NSString *)itemDescription withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion;
 
 - (void)viewPost:(PostCoreData *)postCoreData;
 - (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;

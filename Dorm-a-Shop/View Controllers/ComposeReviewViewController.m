@@ -13,10 +13,12 @@
 #import "Review.h"
 #import "NSNotificationCenter+MainThread.h"
 
-@interface ComposeReviewViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
+@interface ComposeReviewViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *chooseRatingButton;
 @property (weak, nonatomic) IBOutlet UITextView *reviewTextView;
+@property (weak, nonatomic) IBOutlet UITextView *itemDescriptionTextView;
+@property (weak, nonatomic) IBOutlet UITextView *titleTextView;
 @property (weak, nonatomic) IBOutlet UIPickerView *ratingPickerView;
 @property (weak, nonatomic) IBOutlet UIToolbar *pickerViewToolbar;
 @property (strong, nonatomic) UIAlertController *reviewEmptyAlert;
@@ -33,8 +35,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.reviewTextView.layer.cornerRadius = 5;
     self.reviewTextView.layer.borderWidth = 1.0f;
     self.reviewTextView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    
+    self.itemDescriptionTextView.layer.cornerRadius = 5;
+    self.itemDescriptionTextView.layer.borderWidth = 1.0f;
+    self.itemDescriptionTextView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    
+    self.titleTextView.layer.cornerRadius = 5;
+    self.titleTextView.layer.borderWidth = 1.0f;
+    self.titleTextView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
     
     self.reviewEmptyAlert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Review empty" preferredStyle:(UIAlertControllerStyleAlert)];
 
@@ -63,12 +74,12 @@
         UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
         
         //set date and objectId later, in order to get them from parse
-        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[self.chooseRatingButton.titleLabel.text intValue] withReview:self.reviewTextView.text withDate:nil withManagedObjectContext:self.context];
+        ReviewCoreData *reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:nil withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[self.chooseRatingButton.titleLabel.text intValue] withReview:self.reviewTextView.text withTitle:self.titleTextView.text withItemDescription:self.itemDescriptionTextView.text withDate:nil withManagedObjectContext:self.context];
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
         NSNumber *ratingNumber = [formatter numberFromString:self.chooseRatingButton.titleLabel.text];
         User *pfSeller = (User *)[PFObject objectWithoutDataWithClassName:@"_User" objectId:self.seller.objectId];
-        [[ParseDatabaseManager shared] postReviewToParseWithSeller:pfSeller withRating:ratingNumber withReview:self.reviewTextView.text withCompletion:^(Review * _Nullable review, NSError * _Nullable error) {
+        [[ParseDatabaseManager shared] postReviewToParseWithSeller:pfSeller withRating:ratingNumber withReview:self.reviewTextView.text withTitle:self.titleTextView.text withItemDescription:self.itemDescriptionTextView.text withCompletion:^(Review * _Nullable review, NSError * _Nullable error) {
             if (error) {
                 NSLog(@"😫😫😫 Error uploading picture: %@", error.localizedDescription);
             } else {
@@ -103,6 +114,12 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     [self.chooseRatingButton setTitle:[NSString stringWithFormat:@"%ld", row + 1] forState:UIControlStateNormal];
+}
+
+- (IBAction)onTap:(id)sender {
+    [self.reviewTextView endEditing:YES];
+    self.ratingPickerView.hidden = YES;
+    self.pickerViewToolbar.hidden = YES;
 }
 
 - (IBAction)didPressRate:(id)sender {

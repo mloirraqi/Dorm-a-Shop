@@ -540,6 +540,7 @@
     [reviewsQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable reviews, NSError * _Nullable error) {
         if (reviews) {
             for (Review *review in reviews) {
+                NSLog(@"%@", review);
                 UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
                 UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
                 ReviewCoreData *reviewCoreData = (ReviewCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:review.objectId withContext:weakSelf.context];
@@ -587,9 +588,10 @@
                 }
                 
                 if (!reviewCoreData) {
-                    reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:review.objectId withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[review.rating intValue] withReview:review.review withDate:review.createdAt withManagedObjectContext:weakSelf.context];
+                    reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:review.objectId withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[review.rating intValue] withReview:review.review withTitle:review.title withItemDescription:review.itemDescription withDate:review.createdAt withManagedObjectContext:weakSelf.context];
                 }
                 
+                NSLog(@"%@", reviewCoreData);
                 [reviewsCoreDataArray addObject:reviewCoreData];
             }
             NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:reviewsCoreDataArray];
@@ -710,13 +712,15 @@
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
 }
 
-- (void)postReviewToParseWithSeller:(User *)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion {
+- (void)postReviewToParseWithSeller:(User *)seller withRating:(NSNumber * _Nullable)rating withReview:(NSString * _Nullable)review withTitle:(NSString *)title withItemDescription:(NSString *)itemDescription withCompletion:(void (^)(Review * _Nullable, NSError * _Nullable))completion {
     Review *newReview = [Review new];
     
     newReview.reviewer = (User *)PFUser.currentUser;
     newReview.seller = seller;
     newReview.rating = rating;
     newReview.review = review;
+    newReview.itemDescription = itemDescription;
+    newReview.title = title;
     
     [newReview saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error != nil) {

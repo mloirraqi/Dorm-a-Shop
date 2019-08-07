@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) User *reviewer;
 @property (nonatomic, strong) NSString *review;
 @property (nonatomic, strong) NSNumber *rating;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *itemDescription;
 
 @end
 

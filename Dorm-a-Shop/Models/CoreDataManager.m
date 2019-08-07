@@ -362,7 +362,7 @@
     return conversationCoreData;
 }
 
-- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withReviewer:(UserCoreData * _Nullable)reviewer withRating:(int)rating withReview:(NSString * _Nullable)review withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (ReviewCoreData *)saveReviewToCoreDataWithObjectId:(NSString * _Nullable)objectId withSeller:(UserCoreData * _Nullable)seller withReviewer:(UserCoreData * _Nullable)reviewer withRating:(int)rating withReview:(NSString * _Nullable)review withTitle:(NSString *)title withItemDescription:(NSString *)itemDescription withDate:(NSDate * _Nullable)date withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     ReviewCoreData *reviewCoreData;
     if (objectId) {
         reviewCoreData = (ReviewCoreData *)[self getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:objectId withContext:self.context];
@@ -376,6 +376,8 @@
         reviewCoreData.review = review;
         reviewCoreData.dateWritten = date;
         reviewCoreData.reviewer = reviewer;
+        reviewCoreData.itemDescription = itemDescription;
+        reviewCoreData.title = title;
         
 //        __weak CoreDataManager *weakSelf = self;
 //        [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {

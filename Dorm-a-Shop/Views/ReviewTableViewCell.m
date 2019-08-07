@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *reviewerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reviewDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reviewLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *sellerProfileImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *reviewerProfileImageView;
@@ -33,6 +34,7 @@
     self.reviewerLabel.text = review.reviewer.username;
     self.sellerLabel.text = review.seller.username;
     self.reviewLabel.text = review.review;
+    self.titleLabel.text = review.title;
     
     self.sellerProfileImageView.layer.cornerRadius = 15;
     self.sellerProfileImageView.layer.masksToBounds = YES;
