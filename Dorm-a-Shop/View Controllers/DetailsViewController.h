@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PostCoreData *post;
 
 @property (nonatomic, strong) NSIndexPath *indexPath;
-@property (strong, nonatomic) NSString *senderClassName;
 
 @end
 

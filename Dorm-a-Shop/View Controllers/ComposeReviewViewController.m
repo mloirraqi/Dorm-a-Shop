@@ -86,9 +86,9 @@
                 reviewCoreData.objectId = review.objectId;
                 reviewCoreData.dateWritten = review.createdAt;
                 
-//                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-//                    return YES;
-//                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                    return YES;
+                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
                 [self saveContext];
                 
                 [self dismissViewControllerAnimated:true completion:nil];

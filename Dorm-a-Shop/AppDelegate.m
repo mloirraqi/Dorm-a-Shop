@@ -42,7 +42,7 @@
             if (error) {
                 NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
             } else {
-//                [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
+                [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
                 UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                 self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
                 NSLog(@"");
@@ -53,7 +53,7 @@
             if (error) {
                 NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
             } else {
-//                [[CoreDataManager shared] enqueueDoneSavingUsers];
+                [[CoreDataManager shared] enqueueDoneSavingUsers];
             }
         }];
 
@@ -62,7 +62,7 @@
             if (error) {
                 NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
             } else {
-//                [[CoreDataManager shared] enqueueDoneSavingConversations];
+                [[CoreDataManager shared] enqueueDoneSavingConversations];
             }
         }];
 
@@ -70,7 +70,7 @@
             if (error) {
                 NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
             } else {
-//                [[CoreDataManager shared] enqueueDoneSavingReviews];
+                [[CoreDataManager shared] enqueueDoneSavingReviews];
             }
         }];
     } else {
@@ -183,9 +183,9 @@
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
-//    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-//        return YES;
-//    } withName:@""];
+    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+        return YES;
+    } withName:@""];
 }
 
 

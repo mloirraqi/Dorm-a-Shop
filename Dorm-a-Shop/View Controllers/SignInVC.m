@@ -48,7 +48,7 @@
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
             [self performSegueWithIdentifier:@"signIn" sender:nil];
-//            [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
+            [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
         }
     }];
     
@@ -56,7 +56,7 @@
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         } else {
-//            [[CoreDataManager shared] enqueueDoneSavingUsers];
+            [[CoreDataManager shared] enqueueDoneSavingUsers];
         }
     }];
     
@@ -65,7 +65,7 @@
         if (error) {
             NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
         } else {
-//            [[CoreDataManager shared] enqueueDoneSavingConversations];
+            [[CoreDataManager shared] enqueueDoneSavingConversations];
         }
     }];
     
@@ -73,7 +73,7 @@
         if (error) {
             NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
         } else {
-//            [[CoreDataManager shared] enqueueDoneSavingReviews];
+            [[CoreDataManager shared] enqueueDoneSavingReviews];
         }
     }];
 }

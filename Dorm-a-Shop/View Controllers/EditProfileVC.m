@@ -233,10 +233,10 @@
         currentUser.address = address;
         userCoreData.address = address;
         
-//        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-//            return YES;
-//        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
-        [self saveContext];
+        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+//        [self saveContext];
     }
     
     __weak EditProfileVC *weakSelf = self;
