@@ -11,7 +11,6 @@
 		470FB71722EF713F0088A3EC /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71322EF713F0088A3EC /* User.m */; };
 		470FB71A22EF71780088A3EC /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71922EF71780088A3EC /* Watches.m */; };
 		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
-		47185EBC22FCB55100674C81 /* UIButton+Expandable.m in Sources */ = {isa = PBXBuildFile; fileRef = 47185EBB22FCB55000674C81 /* UIButton+Expandable.m */; };
 		47415D0F22F956D700AF4C16 /* UILabel+Boldify.m in Sources */ = {isa = PBXBuildFile; fileRef = 47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */; };
 		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
@@ -33,6 +32,8 @@
 		90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */; };
 		DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFC22DE7BE900418DE3 /* UploadViewController.m */; };
 		DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFF22DFD20500418DE3 /* ProfileViewController.m */; };
+		DE4DE33022FCE168009B3A56 /* UIButton+Expandable.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4DE32E22FCE168009B3A56 /* UIButton+Expandable.m */; };
+		DE4DE33522FCE6D2009B3A56 /* MatchedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4DE33422FCE6D2009B3A56 /* MatchedViewController.m */; };
 		DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD322E66FE500B1311F /* InboxViewController.m */; };
 		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
 		DE4FCFDA22E686DF00B1311F /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD922E686DE00B1311F /* EditProfileVC.m */; };
@@ -47,7 +48,6 @@
 		DE877D7622FA3EB500C35587 /* chair_DIFFUSE.png in Resources */ = {isa = PBXBuildFile; fileRef = DE877D6E22FA3EB300C35587 /* chair_DIFFUSE.png */; };
 		DE877D7722FA3EB500C35587 /* chair_NORMAL.png in Resources */ = {isa = PBXBuildFile; fileRef = DE877D6F22FA3EB300C35587 /* chair_NORMAL.png */; };
 		DE877D7A22FA3F6100C35587 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DE877D7922FA3F6000C35587 /* NSNotificationCenter+MainThread.m */; };
-		DE877D8322FBA14E00C35587 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE877D8222FBA14D00C35587 /* Assets.xcassets */; };
 		DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */; };
 		DEA2B53922F4AE7800FC71DB /* ComposeReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
@@ -107,8 +107,6 @@
 		470FB72A22F0C09B0088A3EC /* Conversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Conversation.h; sourceTree = "<group>"; };
 		470FB72B22F0C09B0088A3EC /* Conversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		47185EBA22FCB55000674C81 /* UIButton+Expandable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIButton+Expandable.h"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Views/UIButton+Expandable.h"; sourceTree = "<absolute>"; };
-		47185EBB22FCB55000674C81 /* UIButton+Expandable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIButton+Expandable.m"; path = "/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Views/UIButton+Expandable.m"; sourceTree = "<absolute>"; };
 		47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+Boldify.h"; sourceTree = "<group>"; };
 		47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Boldify.m"; sourceTree = "<group>"; };
 		47486BA622F3626E00DE6D8E /* CoreDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
@@ -153,6 +151,10 @@
 		DE307FFC22DE7BE900418DE3 /* UploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadViewController.m; sourceTree = "<group>"; };
 		DE307FFE22DFD20500418DE3 /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		DE307FFF22DFD20500418DE3 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		DE4DE32E22FCE168009B3A56 /* UIButton+Expandable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Expandable.m"; sourceTree = "<group>"; };
+		DE4DE32F22FCE168009B3A56 /* UIButton+Expandable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Expandable.h"; sourceTree = "<group>"; };
+		DE4DE33322FCE6D2009B3A56 /* MatchedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatchedViewController.h; sourceTree = "<group>"; };
+		DE4DE33422FCE6D2009B3A56 /* MatchedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatchedViewController.m; sourceTree = "<group>"; };
 		DE4FCFD222E66FE500B1311F /* InboxViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InboxViewController.h; sourceTree = "<group>"; };
 		DE4FCFD322E66FE500B1311F /* InboxViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InboxViewController.m; sourceTree = "<group>"; };
 		DE4FCFD522E6744100B1311F /* MessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
@@ -171,7 +173,6 @@
 		DE877D6F22FA3EB300C35587 /* chair_NORMAL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chair_NORMAL.png; sourceTree = "<group>"; };
 		DE877D7822FA3F6000C35587 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
 		DE877D7922FA3F6000C35587 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
-		DE877D8222FBA14D00C35587 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Dorm-a-Shop/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
 		DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SellerReviewsViewController.m; sourceTree = "<group>"; };
 		DEA2B53522F4AE4D00FC71DB /* SellerReviewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SellerReviewsViewController.h; sourceTree = "<group>"; };
 		DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeReviewViewController.h; sourceTree = "<group>"; };
@@ -288,7 +289,6 @@
 		47A8A9A322DE3A30005D9520 /* Dorm-a-Shop */ = {
 			isa = PBXGroup;
 			children = (
-				DE877D8222FBA14D00C35587 /* Assets.xcassets */,
 				DE877D6522FA3EB300C35587 /* 3D Objects */,
 				EAEB722922E930BC00426226 /* Card */,
 				EA6732E422DF959A004E362F /* HelperFIles */,
@@ -397,6 +397,8 @@
 				477B581322FC069100003AAB /* ReviewDetailsViewController.h */,
 				477B581422FC069100003AAB /* ReviewDetailsViewController.m */,
 				EAB1A80622F8272B00C4AA25 /* Dorm-a-Shop-Bridging-Header.h */,
+				DE4DE33322FCE6D2009B3A56 /* MatchedViewController.h */,
+				DE4DE33422FCE6D2009B3A56 /* MatchedViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -418,8 +420,8 @@
 				DEFE7C8B22E64347006E3096 /* UserCell.m */,
 				EA0E3AFA22FAB11C003BE858 /* UserCollectionCell.h */,
 				EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */,
-				47185EBA22FCB55000674C81 /* UIButton+Expandable.h */,
-				47185EBB22FCB55000674C81 /* UIButton+Expandable.m */,
+				DE4DE32F22FCE168009B3A56 /* UIButton+Expandable.h */,
+				DE4DE32E22FCE168009B3A56 /* UIButton+Expandable.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -648,7 +650,6 @@
 				DE877D7322FA3EB500C35587 /* chair_METALLIC.png in Resources */,
 				DE877D7722FA3EB500C35587 /* chair_NORMAL.png in Resources */,
 				EA0E3B0122FBE265003BE858 /* Assets.xcassets in Resources */,
-				DE877D8322FBA14E00C35587 /* Assets.xcassets in Resources */,
 				DE877D7122FA3EB500C35587 /* ship.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -786,7 +787,6 @@
 				DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */,
 				EAEB723D22E9369900426226 /* Card.m in Sources */,
 				47A8A9B422DE3A32005D9520 /* main.m in Sources */,
-				47185EBC22FCB55100674C81 /* UIButton+Expandable.m in Sources */,
 				EA4315BA22F941A200CC853D /* MapsPopupVC.m in Sources */,
 				DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */,
 				DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */,
@@ -808,6 +808,7 @@
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
+				DE4DE33022FCE168009B3A56 /* UIButton+Expandable.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
 				470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
@@ -818,6 +819,7 @@
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				EA0E3B0722FC85B3003BE858 /* SwipePopupVC.m in Sources */,
+				DE4DE33522FCE6D2009B3A56 /* MatchedViewController.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				DE877D6422FA3CC900C35587 /* ARViewController.swift in Sources */,
 				EA0E3AFD22FAB11C003BE858 /* UserCollectionCell.m in Sources */,
@@ -1001,14 +1003,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A3A3BF55QH;
 				DEVELOPMENT_TEAM = 8DH593U6VL;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
 				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
@@ -1025,14 +1025,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A3A3BF55QH;
 				DEVELOPMENT_TEAM = 8DH593U6VL;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
 				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
