@@ -191,7 +191,7 @@
     CGRect collectionViewFrame = CGRectMake(2.5f, 2.5f, self.frame.size.width - 5, self.frame.size.height - 5);
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.itemSize = CGSizeMake(collectionViewFrame.size.width/3, collectionViewFrame.size.width/3);
+    flowLayout.itemSize = CGSizeMake(collectionViewFrame.size.width/2, collectionViewFrame.size.width/2);
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);

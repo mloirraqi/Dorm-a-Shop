@@ -11,7 +11,9 @@
 #import "Post.h"
 #import <Parse/Parse.h>
 #import "Card.h"
+#import "SwipePopupVC.h"
 #import "CoreDataManager.h"
+#import "AppDelegate.h"
 
 static const int MAX_BUFFER_SIZE = 2;
 
@@ -21,6 +23,8 @@ static const int MAX_BUFFER_SIZE = 2;
 @property (nonatomic, assign) NSInteger cardsLoadedIndex;
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, strong) NSMutableArray *loadedCards;
+@property (nonatomic, strong) NSManagedObjectContext *context;
+
 @end
 
 @implementation DraggableViewBackground
@@ -28,6 +32,9 @@ static const int MAX_BUFFER_SIZE = 2;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+        self.context = appDelegate.persistentContainer.viewContext;
+        
         self.loadedCards = [[NSMutableArray alloc] init];
         self.allCards = [[NSMutableArray alloc] init];
         self.cardArray = [[NSMutableArray alloc]init];
@@ -55,17 +62,18 @@ static const int MAX_BUFFER_SIZE = 2;
     self.userNameLabel = [[UILabel alloc] initWithFrame: frame];
     [self addSubview:self.userNameLabel];
     self.userNameLabel.textAlignment = NSTextAlignmentCenter;
-    self.userNameLabel.font = [UIFont systemFontOfSize:18];
+    self.userNameLabel.font = [UIFont boldSystemFontOfSize:24];
     Card *card = self.cardArray.firstObject;
     self.userNameLabel.text = card.author.username;
-    self.backgroundColor = [UIColor redColor];
-    self.backgroundColor = [UIColor colorWithRed:168/255.f green:225/255.f blue:255/255.f alpha:1];
+//    self.navigationItem.title = card.author.username;
+    self.backgroundColor = [UIColor blueColor];
+    self.backgroundColor = [UIColor colorWithRed:141.0f/255.0f green:81.0f/255.0f blue:144.0f/255 alpha:1.0f];
 }
 
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
     CGSize screenSize = UIScreen.mainScreen.bounds.size;
-    CGFloat cardWidth = screenSize.width - 80;
-    CGFloat cardHeight = screenSize.height - (screenSize.height - self.frame.size.height) - 140;
+    CGFloat cardWidth = screenSize.width - 20;
+    CGFloat cardHeight = screenSize.height - (screenSize.height - self.frame.size.height) - 120;
     
     CGRect frame = CGRectMake(((screenSize.width) - cardWidth)/2, ((screenSize.height - (screenSize.height - self.frame.size.height)) - cardHeight)/2, cardWidth, cardHeight);
     
@@ -165,8 +173,24 @@ static const int MAX_BUFFER_SIZE = 2;
     [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipeRecords, NSError * _Nullable error) {
         if (swipeRecords) {
             if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
-                NSLog(@"Found %lu records", (unsigned long)swipeRecords.count);
-                [self showAlertView:[NSString stringWithFormat:@"Congratulations! You matched with %@", acceptedUser.username]];
+                
+//                NSLog(@"Found %lu records", (unsigned long)swipeRecords.count);
+//                [self showAlertView:[NSString stringWithFormat:@"Congratulations! You matched with %@", acceptedUser.username]];
+                
+                UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                SwipePopupVC* controller = [storyboard instantiateViewControllerWithIdentifier:@"SwipePopupVC"];
+
+                // Loading user data to SwipePopUp
+                UserCoreData* user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:acceptedUser.objectId withContext:self.context];
+                controller.userCoreData = user;
+                
+                UIViewController *vc1 = [UIApplication sharedApplication].keyWindow.rootViewController;
+                
+                controller.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                [controller setModalTransitionStyle: UIModalTransitionStyleCrossDissolve];
+                
+                [vc1 presentViewController:controller animated:YES completion:nil];
+                
                 [[swipeRecords firstObject] setObject:@1 forKey:@"matched"];
                 [[swipeRecords firstObject] saveInBackground];
             } else {
@@ -219,21 +243,53 @@ static const int MAX_BUFFER_SIZE = 2;
         }
     }
     
-    for (PFUser *user in userArray) {
-        NSMutableArray *userPosts = [[NSMutableArray alloc] init];
-        Card *card = [[Card alloc]init];
-        card.author = user;
-        card.posts = userPosts;
-        for (Post *post in activePosts) {
-            if ([post.author.objectId isEqualToString:user.objectId]) {
-                [userPosts addObject:post];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(userId = %@)", [PFUser currentUser].objectId]; //my userId will exist only to SwipeRecords I added.
+    PFQuery *query = [PFQuery queryWithClassName:@"SwipeRecord" predicate:predicate];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipeRecords, NSError * _Nullable error) {
+        
+        NSMutableSet* matchedUsersId = [[NSMutableSet alloc] init];
+        
+        if (swipeRecords) {
+            if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
+                NSLog(@"😍 Found %lu records already swiped", (unsigned long)swipeRecords.count);
+                
+                for (PFObject *record in swipeRecords) {
+                    if (record[@"accepted"] != nil)
+                        [matchedUsersId addObject:record[@"accepted"]];
+                    if (record[@"rejected"] != nil)
+                        [matchedUsersId addObject:record[@"rejected"]];
+                }
+                
+                NSLog(@"%@", matchedUsersId);
+                
+            } else {
+                NSLog(@"😫😫😫 No such User Found");
+            }
+        } else {
+            NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
+        }
+        
+        for (PFUser *user in userArray) {
+            
+            if (![matchedUsersId containsObject:user.objectId]) {
+                
+                NSMutableArray *userPosts = [[NSMutableArray alloc] init];
+                Card *card = [[Card alloc]init];
+                card.author = user;
+                card.posts = userPosts;
+                for (Post *post in activePosts) {
+                    if ([post.author.objectId isEqualToString:user.objectId]) {
+                        [userPosts addObject:post];
+                    }
+                }
+                [self.cardArray addObject:card];
             }
         }
-        [self.cardArray addObject:card];
-    }
     
     [self loadCards];
     [self setupView];
+    }];
 }
 
 -(void)showAlertView:(NSString*)message{

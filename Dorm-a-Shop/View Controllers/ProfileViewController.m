@@ -19,6 +19,7 @@
 #import "ComposeReviewViewController.h"
 #import "SellerReviewsViewController.h"
 #import "UILabel+Boldify.h"
+
 #import "UserCollectionCell.h"
 @import Parse;
 
@@ -190,17 +191,18 @@
     } else {
         UserCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
         
-        NSString* objectId1 = self.matchedUsers[indexPath.row][@"accepted"];
-        NSString* objectId2 = self.matchedUsers[indexPath.row][@"userId"];
+        User* userCoreData = (User*)self.matchedUsers[indexPath.item];
         
-        NSString* objectId = [[PFUser currentUser].objectId isEqualToString:objectId1] ? objectId2 : objectId1;
+        PFFileObject *image = userCoreData.ProfilePic;
         
-        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData"
-                                                                                            withObjectId:objectId
-                                                                                             withContext:self.context];
-        cell.user = userCoreData;
-        [cell setUser];
+        [image getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError * _Nullable error) {
+            UIImage *originalImage = [UIImage imageWithData:data];
+            [cell.profilePic setImage:originalImage];
+        }];
         
+        cell.username.text = userCoreData.username;
+        cell.locationLabel.text = userCoreData.address;
+
         cell.username.textColor = [UIColor blackColor];
         cell.locationLabel.textColor = [UIColor blackColor];
         return cell;
@@ -210,7 +212,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([self.segmentControl selectedSegmentIndex] == 2) {
-        CGFloat width = collectionView.frame.size.width/3;
+        CGFloat width = (collectionView.frame.size.width/3) - 4; //(4 is interitempadding)
         return CGSizeMake(width, width + 70); //70 is size of two labels
     }
     
@@ -277,8 +279,20 @@
                 if (swipeRecords) {
                     if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
                         NSLog(@"😍 Found %lu records", (unsigned long)swipeRecords.count);
-                        weakSelf.matchedUsers = [swipeRecords mutableCopy];
-                        [weakSelf.collectionView reloadData];
+                        NSMutableArray* usersToQuery = [[NSMutableArray alloc] init];
+                        for (PFObject* record in swipeRecords) {
+                            NSString* objectId1 = record[@"accepted"];
+                            NSString* objectId2 = record[@"userId"];
+                            
+                            NSString* objectId = [weakSelf.user.objectId isEqualToString:objectId1] ? objectId2 : objectId1;
+                            
+                            [usersToQuery addObject:objectId];
+                        }
+                        
+                        [[ParseDatabaseManager shared] queryAllUsers:usersToQuery WithCompletion:^(NSArray* users, NSError* error) {
+                            weakSelf.matchedUsers = [users mutableCopy];
+                            [weakSelf.collectionView reloadData];
+                        }];
                     } else {
                         NSLog(@"😫😫😫 No such User Found");
                     }
