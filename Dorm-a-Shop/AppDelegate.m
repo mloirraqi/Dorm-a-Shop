@@ -38,7 +38,7 @@
     [Parse initializeWithConfiguration:config];
 
     if (PFUser.currentUser) {
-        [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+        [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
             } else {

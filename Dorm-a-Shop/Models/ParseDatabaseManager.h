@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray *conditionCounts;
 @property (nonatomic, strong) NSMutableArray *priceCounts;
 
-- (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;
+- (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSMutableArray *, NSError *))completion;
 - (void)queryWatchedPostsForUser:(PFUser * _Nullable)user withCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
 - (void)queryWatchCountForPost:(Post *)post withCompletion:(void (^)(int, NSError *))completion;
 - (void)queryAllUsersWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion;

@@ -91,8 +91,6 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"sold == %@", [NSNumber numberWithBool:NO]]];
-    [request setFetchLimit:10];
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
@@ -101,10 +99,14 @@
         abort();
     }
     
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *hotArray = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"hotness" ascending:NO];
-    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    return mutableResults;
+    [hotArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    if(hotArray.count > 10) {
+        hotArray = [NSMutableArray arrayWithArray:[hotArray subarrayWithRange:NSMakeRange(0, 10)]];
+    }
+    
+    return hotArray;
 }
 
 

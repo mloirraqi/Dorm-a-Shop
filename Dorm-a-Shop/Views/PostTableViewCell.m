@@ -43,6 +43,9 @@
     self.categoryLabel.text = post.category;
     self.titleLabel.text = post.title;
     self.priceLabel.text = [NSString stringWithFormat:@"$%.02f", post.price];
+    self.hotnessLabel.hidden = YES;
+    self.hotnessLabel.image = [self.hotnessLabel.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.hotnessLabel setTintColor:[UIColor colorWithRed:0.75 green:0.0 blue:0.0 alpha:1.0]];
 }
 
 - (IBAction)didTapWatch:(id)sender {

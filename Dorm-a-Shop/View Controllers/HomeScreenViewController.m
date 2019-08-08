@@ -124,11 +124,12 @@
 
 - (void)queryActivePostsFromParse {
     __weak HomeScreenViewController *weakSelf = self;
-    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             weakSelf.postsArray = activePosts;
+            weakSelf.hotArray = hotArray;
             [weakSelf filterPosts];
             [weakSelf.tableView reloadData];
             [weakSelf.refreshControl endRefreshing];
@@ -150,6 +151,9 @@
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
         PostCoreData *post = self.filteredPosts[indexPath.row];
         cell.post = post;
+        if([self.hotArray containsObject:post]) {
+            cell.hotnessLabel.hidden = NO;
+        }
         return cell;
     } else if (tableView == self.categoryTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
