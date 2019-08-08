@@ -31,7 +31,7 @@
 @property (strong, nonatomic) NSMutableArray *hotArray;
 
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @property (weak, nonatomic) IBOutlet UITableView *categoryTable;
 @property (weak, nonatomic) IBOutlet UITableView *conditionTable;
@@ -57,6 +57,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
+    self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     
     self.categories =@[@"All", @"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
     self.conditions = @[@"All", @"New", @"Nearly New", @"Used"];

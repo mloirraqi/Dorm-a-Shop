@@ -36,6 +36,8 @@
     }];
     
     [Parse initializeWithConfiguration:config];
+    
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
     if (PFUser.currentUser) {
         [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
