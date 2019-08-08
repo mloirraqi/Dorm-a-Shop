@@ -81,7 +81,7 @@ static const int MAX_BUFFER_SIZE = 2;
     for (UIView *subview in self.subviews) {
         [subview removeFromSuperview];
     }
-
+    
     if([self.cardArray count] > 0) {
         NSInteger numLoadedCardsCap =(([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
         
@@ -93,7 +93,7 @@ static const int MAX_BUFFER_SIZE = 2;
                 [self.loadedCards addObject:newCard];
             }
         }
-    
+        
         for (int i = 0; i<[self.loadedCards count]; i++) {
             if (i>0) {
                 [self insertSubview:[self.loadedCards objectAtIndex:i] belowSubview:[self.loadedCards objectAtIndex:i-1]];
@@ -132,27 +132,43 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 - (void)userAccepted:(Card *)card {
-    [[PFUser currentUser] addUniqueObjectsFromArray:@[card.author.objectId] forKey:@"accepted"];
-    [[PFUser currentUser] saveEventually];
+    
+    PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
+    swipeRecord[@"userId"] = [PFUser currentUser].objectId;
+    
+    PFUser* user1 = (PFUser*)card.author;
+    PFUser* user2 = [PFUser currentUser];
+    
+    NSLog(@"%@ - %@", user1, user2);
+    
+    NSString* author = card.author.objectId;
+    swipeRecord[@"accepted"] = author;
+    
+    [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+        if (succeeded) {
+            NSLog(@"The swipeRecord was saved!");
+        } else {
+            NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
+        }
+    }];
+    
     [self checkMatchwithUser:card.author];
     
 }
 
 - (void)checkMatchwithUser:(PFUser *)acceptedUser {
-    PFQuery *userQuery = [PFUser query];
-    [userQuery whereKey:@"objectId" equalTo:acceptedUser.objectId];
     
-    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFUser *> * _Nullable users, NSError * _Nullable error) {
-        if (users) {
-            if (users.count != 0) {
-                PFUser *currentUser = [PFUser currentUser];
-                PFUser *user = [users firstObject];
-                NSArray *acceptedUserList = user[@"accepted"];
-                if ([acceptedUserList containsObject:currentUser.objectId]) {
-                    [self showAlertView:[NSString stringWithFormat:@"Congratulations! You matched with %@",user.username]];
-                } else {
-                    NSLog(@"😫😫😫 users are not matched yet");
-                }
+    PFQuery *query = [PFQuery queryWithClassName:@"SwipeRecord"];
+    [query whereKey:@"userId" equalTo:acceptedUser.objectId];
+    [query whereKey:@"accepted" equalTo:[PFUser currentUser].objectId];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipeRecords, NSError * _Nullable error) {
+        if (swipeRecords) {
+            if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
+                NSLog(@"Found %lu records", (unsigned long)swipeRecords.count);
+                [self showAlertView:[NSString stringWithFormat:@"Congratulations! You matched with %@", acceptedUser.username]];
+                [[swipeRecords firstObject] setObject:@1 forKey:@"matched"];
+                [[swipeRecords firstObject] saveInBackground];
             } else {
                 NSLog(@"😫😫😫 No such User Found");
             }
@@ -163,9 +179,18 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 - (void)userRejected:(Card *)card {
-    [[PFUser currentUser] addUniqueObjectsFromArray:@[card.author.objectId] forKey:@"rejected"];
-    [[PFUser currentUser] saveEventually];
+    PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
+    swipeRecord[@"userId"] = [PFUser currentUser].objectId;
+    NSString* author = card.author.objectId;
+    swipeRecord[@"rejected"] = author;
     
+    [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+        if (succeeded) {
+            NSLog(@"The swipeRecord was saved!");
+        } else {
+            NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
+        }
+    }];
 }
 
 - (void)updateUsernameLabel {

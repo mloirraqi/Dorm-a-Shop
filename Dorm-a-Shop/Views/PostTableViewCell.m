@@ -28,6 +28,8 @@
     [self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
     if (post.image) {
         [self.postImageView setImage:[UIImage imageWithData:post.image]];
+        self.postImageView.layer.cornerRadius = 10;
+        self.postImageView.layer.masksToBounds = YES;
     }
 
     [self.watchButton setSelected:self.post.watched];

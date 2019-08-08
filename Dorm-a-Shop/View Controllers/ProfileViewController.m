@@ -19,13 +19,18 @@
 #import "ComposeReviewViewController.h"
 #import "SellerReviewsViewController.h"
 #import "UILabel+Boldify.h"
+#import "UserCollectionCell.h"
 @import Parse;
 
-@interface ProfileViewController () <EditProfileViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ProfileViewController () <EditProfileViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+{
+    CGSize itemSize;
+}
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *activeItems;
 @property (nonatomic, strong) NSMutableArray *soldItems;
+@property (nonatomic, strong) NSMutableArray *matchedUsers;
 @property (nonatomic, strong) NSNumber *selectedSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
@@ -68,7 +73,7 @@
     CGFloat posterPerLine = 2;
     CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
     CGFloat itemHeight = itemWidth;
-    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
+    itemSize = CGSizeMake(itemWidth, itemHeight);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidUploadNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
@@ -77,7 +82,7 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchProfileFromCoreData) forControlEvents:UIControlEventValueChanged];
     [self.scrollView addSubview:self.refreshControl];
-
+    
     [self fetchProfileFromCoreData];
 }
 
@@ -119,7 +124,7 @@
         UIImage *image = [UIImage imageWithData:imageData];
         [self.profilePic setImage:image];
     }
-
+    
     NSMutableArray *profilePostsArray = [[CoreDataManager shared] getProfilePostsFromCoreDataForUser:self.user];
     
     NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
@@ -153,7 +158,7 @@
         
         avgRating /= reviewsArray.count;
     }
-
+    
     self.user.rating = avgRating;
     [self saveContext];
     
@@ -164,15 +169,13 @@
     }
 }
 
-- (IBAction)changedSegment:(id)sender {
-    [self.collectionView reloadData];
-}
-
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if ([self.segmentControl selectedSegmentIndex] == 0) {
         return self.activeItems.count;
-    } else {
+    } else if ([self.segmentControl selectedSegmentIndex] == 1) {
         return self.soldItems.count;
+    } else {
+        return self.matchedUsers.count;
     }
 }
 
@@ -182,12 +185,39 @@
         PostCoreData *post = self.activeItems[indexPath.item];
         cell.post = post;
         return cell;
-    } else {
+    } else if ([self.segmentControl selectedSegmentIndex] == 1) {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
         PostCoreData *post = self.soldItems[indexPath.item];
         cell.post = post;
         return cell;
+    } else {
+        UserCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
+        
+        NSString* objectId1 = self.matchedUsers[indexPath.row][@"accepted"];
+        NSString* objectId2 = self.matchedUsers[indexPath.row][@"userId"];
+        
+        NSString* objectId = [[PFUser currentUser].objectId isEqualToString:objectId1] ? objectId2 : objectId1;
+        
+        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData"
+                                                                                            withObjectId:objectId
+                                                                                             withContext:self.context];
+        cell.user = userCoreData;
+        [cell setUser];
+        
+        cell.username.textColor = [UIColor blackColor];
+        cell.locationLabel.textColor = [UIColor blackColor];
+        return cell;
     }
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([self.segmentControl selectedSegmentIndex] == 2) {
+        CGFloat width = collectionView.frame.size.width/3;
+        return CGSizeMake(width, width + 70); //70 is size of two labels
+    }
+    
+    return itemSize;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -231,8 +261,41 @@
     }];
     
     SignInVC *signInVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInVC"];
-   
+    
     [self presentViewController:signInVC animated:YES completion:nil];
+}
+
+- (IBAction)changedSegment:(id)sender {
+    
+    if ([self.segmentControl selectedSegmentIndex] == 2) { //Matched Users
+        
+        if (self.matchedUsers.count <= 0) { //Fetch records if empty
+            
+            __weak ProfileViewController *weakSelf = self;
+            
+            NSString* userId = self.user.objectId;
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(userId = %@ OR accepted = %@) AND matched = 1", userId, userId];
+            PFQuery *query = [PFQuery queryWithClassName:@"SwipeRecord" predicate:predicate];
+            
+            [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipeRecords, NSError * _Nullable error) {
+                if (swipeRecords) {
+                    if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
+                        NSLog(@"😍 Found %lu records", (unsigned long)swipeRecords.count);
+                        weakSelf.matchedUsers = [swipeRecords mutableCopy];
+                        [weakSelf.collectionView reloadData];
+                    } else {
+                        NSLog(@"😫😫😫 No such User Found");
+                    }
+                } else {
+                    NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
+                }
+            }];
+            
+            return;
+        }
+    }
+    
+    [self.collectionView reloadData];
 }
 
 - (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
