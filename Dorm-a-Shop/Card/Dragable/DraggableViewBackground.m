@@ -85,15 +85,14 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 - (void)loadCards {
-    
     for (UIView *subview in self.subviews) {
         [subview removeFromSuperview];
     }
     
-    if([self.cardArray count] > 0) {
-        NSInteger numLoadedCardsCap =(([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
+    if ([self.cardArray count] > 0) {
+        NSInteger numLoadedCardsCap = (([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
         
-        for (int i = 0; i<[self.cardArray count]; i++) {
+        for (int i = 0; i < [self.cardArray count]; i++) {
             DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
             [self.allCards addObject:newCard];
             
@@ -102,7 +101,7 @@ static const int MAX_BUFFER_SIZE = 2;
             }
         }
         
-        for (int i = 0; i<[self.loadedCards count]; i++) {
+        for (int i = 0; i < [self.loadedCards count]; i++) {
             if (i>0) {
                 [self insertSubview:[self.loadedCards objectAtIndex:i] belowSubview:[self.loadedCards objectAtIndex:i-1]];
             } else {
@@ -140,7 +139,6 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 - (void)userAccepted:(Card *)card {
-    
     PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
     swipeRecord[@"userId"] = [PFUser currentUser].objectId;
     
@@ -161,11 +159,9 @@ static const int MAX_BUFFER_SIZE = 2;
     }];
     
     [self checkMatchwithUser:card.author];
-    
 }
 
 - (void)checkMatchwithUser:(PFUser *)acceptedUser {
-    
     PFQuery *query = [PFQuery queryWithClassName:@"SwipeRecord"];
     [query whereKey:@"userId" equalTo:acceptedUser.objectId];
     [query whereKey:@"accepted" equalTo:[PFUser currentUser].objectId];
@@ -292,7 +288,7 @@ static const int MAX_BUFFER_SIZE = 2;
     }];
 }
 
--(void)showAlertView:(NSString*)message{
+- (void)showAlertView:(NSString*)message{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
 }

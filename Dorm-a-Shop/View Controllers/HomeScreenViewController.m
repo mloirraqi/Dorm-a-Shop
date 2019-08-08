@@ -28,9 +28,10 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) NSMutableArray *postsArray;
+@property (strong, nonatomic) NSMutableArray *hotArray;
 
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @property (weak, nonatomic) IBOutlet UITableView *categoryTable;
 @property (weak, nonatomic) IBOutlet UITableView *conditionTable;
@@ -56,6 +57,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
+    self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     
     self.categories =@[@"All", @"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
     self.conditions = @[@"All", @"New", @"Nearly New", @"Used"];
@@ -123,11 +125,12 @@
 
 - (void)queryActivePostsFromParse {
     __weak HomeScreenViewController *weakSelf = self;
-    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull postsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
         if (postsArray) {
             NSPredicate *activePostsPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
             NSMutableArray *activePosts = [NSMutableArray arrayWithArray:[postsArray filteredArrayUsingPredicate:activePostsPredicate]];
             weakSelf.postsArray = activePosts;
+            weakSelf.hotArray = hotArray;
             [weakSelf filterPosts];
             [weakSelf.tableView reloadData];
             [weakSelf.refreshControl endRefreshing];
@@ -137,6 +140,7 @@
 }
 
 - (void)fetchActivePostsFromCoreData {
+    self.hotArray = [[CoreDataManager shared] getHotPostsFromCoreData];
     self.postsArray = [[CoreDataManager shared] getActivePostsFromCoreData];
     [self filterPosts];
     [self.tableView reloadData];
@@ -148,6 +152,9 @@
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
         PostCoreData *post = self.filteredPosts[indexPath.row];
         cell.post = post;
+        if([self.hotArray containsObject:post]) {
+            cell.hotnessLabel.hidden = NO;
+        }
         return cell;
     } else if (tableView == self.categoryTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
@@ -229,7 +236,11 @@
 }
 
 - (void)filterPosts {
-    self.filteredPosts = self.postsArray;
+    if([[self.hotnessButton currentTitle] isEqual: @"All Items"]) {
+        self.filteredPosts = self.postsArray;
+    } else {
+        self.filteredPosts = self.hotArray;
+    }
     if (self.searchBar.text.length != 0) {
         NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(PostCoreData *post, NSDictionary *bindings) {
             return ([post.title localizedCaseInsensitiveContainsString:self.searchBar.text] || [post.caption localizedCaseInsensitiveContainsString:self.searchBar.text]);

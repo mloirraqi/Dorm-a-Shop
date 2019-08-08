@@ -31,18 +31,52 @@
         self.postImageView.layer.cornerRadius = 10;
         self.postImageView.layer.masksToBounds = YES;
     }
-
+    
+    self.watchButton.layer.cornerRadius = 5;
     [self.watchButton setSelected:self.post.watched];
+    self.watchButton.titleLabel.numberOfLines = 1;
+    [self.watchButton sizeToFit];
     if (self.post.watched) {
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld)", self.post.watchCount] forState:UIControlStateSelected];
+//        self.watchButton.backgroundColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
+        CGSize stringSize = [self.watchButton.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: self.watchButton.titleLabel.font}];
+        CGRect frame = self.watchButton.frame;
+        frame.size.width = stringSize.width;
+        [self.watchButton setFrame:frame];
+        
+        self.watchButton.backgroundColor = [UIColor whiteColor];
+        self.watchButton.titleLabel.textColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
+        self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
+        self.watchButton.titleLabel.tintColor = [UIColor clearColor];
+        
+        self.watchButton.tintColor = [UIColor clearColor];
+        self.watchButton.layer.borderWidth = 1.0f;
+        self.watchButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
+        self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     } else {
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld)", self.post.watchCount] forState:UIControlStateNormal];
+        CGSize stringSize = [self.watchButton.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: self.watchButton.titleLabel.font}];
+        CGRect frame = self.watchButton.frame;
+        frame.size.width = stringSize.width;
+        [self.watchButton setFrame:frame];
+        
+        self.watchButton.backgroundColor = [UIColor whiteColor];
+        self.watchButton.titleLabel.textColor = [UIColor darkGrayColor];
+        self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
+        self.watchButton.titleLabel.tintColor = [UIColor whiteColor];
+        self.watchButton.tintColor = [UIColor clearColor];
+        self.watchButton.layer.borderWidth = 1.0f;
+        self.watchButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     }
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
     self.titleLabel.text = post.title;
     self.priceLabel.text = [NSString stringWithFormat:@"$%.02f", post.price];
+    self.hotnessLabel.hidden = YES;
+    self.hotnessLabel.image = [self.hotnessLabel.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.hotnessLabel setTintColor:[UIColor colorWithRed:0.75 green:0.0 blue:0.0 alpha:1.0]];
 }
 
 - (IBAction)didTapWatch:(id)sender {

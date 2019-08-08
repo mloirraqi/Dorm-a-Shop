@@ -87,6 +87,29 @@
     return mutableResults; //firstObject is nil if results has length 0
 }
 
+- (NSMutableArray *)getHotPostsFromCoreData {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
+    [request setEntity:entityDescription];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    NSMutableArray *hotArray = [NSMutableArray arrayWithArray:results];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"hotness" ascending:NO];
+    [hotArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    if(hotArray.count > 10) {
+        hotArray = [NSMutableArray arrayWithArray:[hotArray subarrayWithRange:NSMakeRange(0, 10)]];
+    }
+    
+    return hotArray;
+}
+
+
 - (NSMutableArray *)getActiveWatchedPostsForCurrentUserFromCoreData {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
@@ -211,6 +234,8 @@
         NSLog(@"Error fetching ReviewCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
+    
+    NSLog(@"%@", results);
     
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];

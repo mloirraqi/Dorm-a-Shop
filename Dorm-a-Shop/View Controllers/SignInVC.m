@@ -13,7 +13,7 @@
 #import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
 
-@interface SignInVC ()
+@interface SignInVC () <UITextFieldDelegate>
 
 @end
 
@@ -21,6 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.passwordField.delegate = self;
 }
 
 -(void)showAlertView:(NSString*)message {
@@ -42,7 +43,7 @@
 }
 
 - (void)setupCoreData {
-    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
@@ -76,5 +77,21 @@
         }
     }];
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailField) {
+        [textField resignFirstResponder];
+        return NO;
+    } else {
+        [self signIn:nil];
+    }
+    return YES;
+}
+
+- (IBAction)onTap:(id)sender {
+    [self.emailField endEditing:YES];
+    [self.passwordField endEditing:YES];
+}
+
 
 @end

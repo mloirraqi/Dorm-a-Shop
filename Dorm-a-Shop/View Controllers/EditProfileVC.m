@@ -17,7 +17,7 @@
 #import "CoreDataManager.h"
 #import "User.h"
 
-@interface EditProfileVC () <GMSPlacePickerViewControllerDelegate>
+@interface EditProfileVC () <GMSPlacePickerViewControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
@@ -134,19 +134,20 @@
             currentUser[@"ProfilePic"] = image;
         }
         
+        __weak EditProfileVC *weakSelf = self;
         [MBProgressHUD showHUDAddedTo:self.view animated:true];
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            [MBProgressHUD hideHUDForView:self.view animated:true];
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:true];
             if (!error) {
                 //Let users use app now
                 if (self->selectedLocationPoint != nil) {
-                    [self setLocationName];
+                    [weakSelf setLocationName];
                 }
                 else
                 {
                     UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
                     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                        [self.navigationController popViewControllerAnimated:YES];
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
                     }];
                     [successAlert addAction:okAction];
                     [self presentViewController:successAlert animated:YES completion:nil];
@@ -155,7 +156,6 @@
             } else {
                 NSString *errorString = [error userInfo][@"error"];
                 [self showAlertView:errorString];
-                // Show the errorString somewhere and let the user try again.
             }
         }];
     }
@@ -239,6 +239,7 @@
 //        [self saveContext];
     }
     
+    __weak EditProfileVC *weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:true];
     [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:true];
@@ -246,7 +247,7 @@
             
             UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                [weakSelf.navigationController popViewControllerAnimated:YES];
             }];
             [successAlert addAction:okAction];
             [self presentViewController:successAlert animated:YES completion:nil];
@@ -341,6 +342,19 @@
         abort();
     }
 }
+
+- (IBAction)onTap:(id)sender {
+    [self->nameTextField endEditing:YES];
+    [self->passwordTextField endEditing:YES];
+    [self->emailTextField endEditing:YES];
+    [self->confirmPasswordTextField endEditing:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
 
 @end
 

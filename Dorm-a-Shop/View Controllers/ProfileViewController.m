@@ -44,6 +44,9 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) AppDelegate *appDelegate;
+@property (weak, nonatomic) IBOutlet UIButton *messageBtn;
+@property (weak, nonatomic) IBOutlet UIButton *viewReviewBtn;
+@property (weak, nonatomic) IBOutlet UIButton *writeReviewBtn;
 
 @end
 
@@ -62,16 +65,23 @@
         self.navigationItem.leftItemsSupplementBackButton = true;
     }
     
+    self.messageBtn.layer.cornerRadius = 10;
+    self.messageBtn.layer.masksToBounds = YES;
+    self.viewReviewBtn.layer.cornerRadius = 10;
+    self.viewReviewBtn.layer.masksToBounds = YES;
+    self.writeReviewBtn.layer.cornerRadius = 10;
+    self.writeReviewBtn.layer.masksToBounds = YES;
+    
+    self.messageBtn.layer.borderWidth = 1.0f;
+    self.messageBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.viewReviewBtn.layer.borderWidth = 1.0f;
+    self.viewReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.writeReviewBtn.layer.borderWidth = 1.0f;
+    self.writeReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     self.selectedSegment = 0;
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
-    layout.minimumLineSpacing = 1;
-    layout.minimumInteritemSpacing = 1;
-    CGFloat posterPerLine = 2;
-    CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
-    CGFloat itemHeight = itemWidth;
-    itemSize = CGSizeMake(itemWidth, itemHeight);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidUploadNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
@@ -110,7 +120,7 @@
 - (void)fetchProfileFromCoreData {
     self.locationLabel.text = self.user.address;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
-    self.profilePic.layer.cornerRadius = 50;
+    self.profilePic.layer.cornerRadius = 45;
     self.profilePic.layer.masksToBounds = YES;
     self.usernameLabel.text = self.user.username;
     
@@ -214,6 +224,14 @@
     if ([self.segmentControl selectedSegmentIndex] == 2) {
         CGFloat width = (collectionView.frame.size.width/3) - 4; //(4 is interitempadding)
         return CGSizeMake(width, width + 70); //70 is size of two labels
+    } else {
+        UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
+        layout.minimumLineSpacing = 1;
+        layout.minimumInteritemSpacing = 1;
+        CGFloat posterPerLine = 2;
+        CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
+        CGFloat itemHeight = itemWidth;
+        return CGSizeMake(itemWidth, itemHeight);
     }
     
     return itemSize;
@@ -266,9 +284,7 @@
 - (IBAction)changedSegment:(id)sender {
     
     if ([self.segmentControl selectedSegmentIndex] == 2) { //Matched Users
-        
         if (self.matchedUsers.count <= 0) { //Fetch records if empty
-            
             __weak ProfileViewController *weakSelf = self;
             
             NSString* userId = self.user.objectId;
@@ -298,6 +314,8 @@
                     }
                 } else {
                     NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
+                    [weakSelf.matchedUsers removeAllObjects];
+                    [weakSelf.collectionView reloadData];
                 }
             }];
             

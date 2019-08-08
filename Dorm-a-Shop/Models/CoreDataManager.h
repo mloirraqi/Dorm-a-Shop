@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (id)shared;
 
 - (NSMutableArray *)getActivePostsFromCoreData;
+- (NSMutableArray *)getHotPostsFromCoreData;
 - (NSMutableArray *)getActiveWatchedPostsForCurrentUserFromCoreData;
 - (NSMutableArray *)getProfilePostsFromCoreDataForUser:(UserCoreData *)user;
 - (NSManagedObject *)getCoreDataEntityWithName:(NSString *)name withObjectId:(NSString *)postObjectId withContext:(NSManagedObjectContext *)context;

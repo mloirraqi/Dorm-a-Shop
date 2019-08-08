@@ -25,13 +25,34 @@
         attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
     }
     
-    [attributedText setAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:self.font.pointSize]} range:range];
+    [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.font.pointSize], NSForegroundColorAttributeName:[UIColor blackColor]} range:range];
     self.attributedText = attributedText;
 }
 
-- (void)boldSubstring:(NSString*)substring {
+- (void)greyBoldRange:(NSRange)range {
+    if (![self respondsToSelector:@selector(setAttributedText:)]) {
+        return;
+    }
+    
+    NSMutableAttributedString *attributedText;
+    if (!self.attributedText) {
+        attributedText = [[NSMutableAttributedString alloc] initWithString:self.text];
+    } else {
+        attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
+    }
+    
+    [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.font.pointSize weight:UIFontWeightMedium], NSForegroundColorAttributeName:[UIColor darkGrayColor]} range:range];
+    self.attributedText = attributedText;
+}
+
+- (void)boldSubstring:(NSString *)substring {
     NSRange range = [self.text rangeOfString:substring];
     [self boldRange:range];
+}
+
+- (void)greySubstring:(NSString *)substring {
+    NSRange range = [self.text rangeOfString:substring];
+    [self greyBoldRange:range];
 }
 
 @end

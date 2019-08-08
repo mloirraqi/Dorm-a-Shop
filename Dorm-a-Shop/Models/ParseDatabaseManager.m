@@ -51,11 +51,11 @@
     self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
     self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
     NSDate *now = [NSDate date];
-    self.oneDayAgo = [now dateByAddingTimeInterval:-24*60*60];
+    self.oneDayAgo = [now dateByAddingTimeInterval:-24*60*60*7];
     return self;
 }
 
-- (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+- (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSMutableArray *, NSError *))completion {
     self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
     self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
     self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
@@ -76,6 +76,7 @@
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable posts, NSError * _Nullable error) {
         if (posts) {
             NSMutableArray __block *allPostsArray = [[NSMutableArray alloc] init];
+            NSMutableArray __block *hotArray = [[NSMutableArray alloc] init];
             
             for (Post *post in posts) {
                 PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:weakSelf.context];
@@ -142,11 +143,11 @@
             
             [self queryWatchedPostsForUser:nil withCompletion:^(NSMutableArray<PostCoreData *> * _Nullable watchPosts, NSError * _Nullable error) {
                 if (error) {
-                    completion(nil, error);
+                    completion(nil, nil, error);
                 } else {
                     [self queryViewedPostswithCompletion:^(NSMutableArray<PostCoreData *> * _Nullable viewedPosts, NSError * _Nullable error) {
                         if (error) {
-                            completion(nil, error);
+                            completion(nil, nil, error);
                         } else {
                             for (PostCoreData *post in allPostsArray) {
                                 NSInteger categoryIndex = [weakSelf.categories indexOfObject:post.category];
@@ -190,15 +191,21 @@
                                 }];
                                 
                                 allPostsArray = [NSMutableArray arrayWithArray:sortedPosts];
+                                hotArray = allPostsArray;
+                                NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"hotness" ascending:NO];
+                                [hotArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                                if(hotArray.count > 10) {
+                                    hotArray = [NSMutableArray arrayWithArray:[hotArray subarrayWithRange:NSMakeRange(0, 10)]];
+                                }
                             }
-                            completion(allPostsArray, nil);
+                            completion(allPostsArray, hotArray, nil);
                         }
                     }];
                 }
             }];
         } else {
             NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
-            completion(nil, error);
+            completion(nil, nil, error);
         }
     }];
 }
@@ -254,6 +261,9 @@
                 if (postCoreData) {
                     postCoreData.watchObjectId = watch.objectId;
                     postCoreData.watchCount ++;
+                    if(watch.createdAt > weakSelf.oneDayAgo) {
+                        postCoreData.hotness += 3;
+                    }
                     
                     if ([PFUser.currentUser.objectId isEqualToString:watch.user.objectId]) {
                         postCoreData.watched = YES;
@@ -337,6 +347,9 @@
                 
                 if (postCoreData) {
                     postCoreData.viewed = YES;
+                    if(view.createdAt > weakSelf.oneDayAgo) {
+                        postCoreData.hotness += 1;
+                    }
                     
                     if (![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
                         NSInteger categoryIndex = [weakSelf.categories indexOfObject:postCoreData.category];

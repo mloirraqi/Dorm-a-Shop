@@ -18,7 +18,7 @@
 #import "CoreDataManager.h"
 #import "UserCoreData+CoreDataClass.h"
 
-@interface SignUpVC ()
+@interface SignUpVC () <UITextFieldDelegate>
 
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
 @property (nonatomic, strong) NSManagedObjectContext *context;
@@ -39,6 +39,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self->nameTextField.delegate = self;
+    self->passwordTextField.delegate = self;
+    self->emailTextField.delegate = self;
     
     self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = self.appDelegate.persistentContainer.viewContext;
@@ -88,7 +92,7 @@
     return true;
 }
 
-- (IBAction)signUpButtonTap:(UIButton *)sender {
+- (IBAction)signUpButtonTap:(id)sender {
     if ([self checkFields]){
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
         NSData *imageData = UIImagePNGRepresentation(selectedImage);
@@ -116,8 +120,7 @@
                     [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
                         return YES;
                     } withName:[NSString stringWithFormat:@"%@", newUser.objectId]];
-//                    [self saveContext];
-                    
+//                    [self saveContext];                    
                     [weakSelf setupCoreData];
                     
                     [weakSelf showAlertView:@"Welcome!"];
@@ -328,7 +331,7 @@
 }
 
 - (void)setupCoreData {
-    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSError * _Nonnull error) {
+    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
@@ -368,6 +371,24 @@
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self->nameTextField || textField == emailTextField) {
+        [textField resignFirstResponder];
+        return NO;
+    } else {
+        [self signUpButtonTap:nil];
+    }
+    return YES;
+}
+
+
+- (IBAction)onTap:(id)sender {
+    [self->nameTextField endEditing:YES];
+    [self->passwordTextField endEditing:YES];
+    [self->emailTextField endEditing:YES];
 }
 
 @end
