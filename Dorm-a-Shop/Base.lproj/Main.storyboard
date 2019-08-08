@@ -472,10 +472,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iAM-p9-Pa1">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tvg-N4-hTJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J0d-zI-pQn">
                                                 <rect key="frame" x="124" y="16" width="43.5" height="21"/>
@@ -509,6 +509,7 @@
                                                 <segments>
                                                     <segment title="Active Items"/>
                                                     <segment title="Sold Items"/>
+                                                    <segment title="Matched Users"/>
                                                 </segments>
                                                 <connections>
                                                     <action selector="changedSegment:" destination="ji6-xS-49q" eventType="valueChanged" id="Uil-Cs-3Tv"/>
@@ -522,7 +523,7 @@
                                                 </constraints>
                                             </imageView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="imT-sc-NpR">
-                                                <rect key="frame" x="16" y="192" width="382" height="533"/>
+                                                <rect key="frame" x="16" y="192" width="382" height="626"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="WC5-gc-nTG">
                                                     <size key="itemSize" width="50" height="50"/>
@@ -567,6 +568,53 @@
                                                         <connections>
                                                             <outlet property="itemImage" destination="zui-Zr-epz" id="miR-Ca-QWX"/>
                                                             <segue destination="rb3-Xc-85n" kind="show" identifier="segueToDetails" id="KLi-YY-IiH"/>
+                                                        </connections>
+                                                    </collectionViewCell>
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="UserCollectionCell" id="8Ff-z4-vmk" customClass="UserCollectionCell">
+                                                        <rect key="frame" x="0.0" y="195" width="152" height="185"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                            <rect key="frame" x="0.0" y="0.0" width="152" height="185"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <subviews>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pFm-46-B4W">
+                                                                    <rect key="frame" x="8" y="8" width="136" height="136"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="pFm-46-B4W" secondAttribute="height" multiplier="1:1" id="wpi-Mh-DDm"/>
+                                                                    </constraints>
+                                                                </imageView>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Boruto" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w5G-e5-Xq0">
+                                                                    <rect key="frame" x="16" y="152" width="120" height="17"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Boruto Boruto Boruto Boruto Boruto Boruto Boruto Boruto Boruto Boruto Boruto Boruto " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oYI-OT-dco">
+                                                                    <rect key="frame" x="8" y="171" width="136" height="6"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </view>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailingMargin" secondItem="oYI-OT-dco" secondAttribute="trailing" id="7fZ-SJ-5mv"/>
+                                                            <constraint firstAttribute="trailingMargin" secondItem="w5G-e5-Xq0" secondAttribute="trailing" constant="8" id="Hvf-CJ-PUj"/>
+                                                            <constraint firstAttribute="trailing" secondItem="pFm-46-B4W" secondAttribute="trailing" constant="8" id="OK4-xg-Nbx"/>
+                                                            <constraint firstItem="pFm-46-B4W" firstAttribute="top" secondItem="8Ff-z4-vmk" secondAttribute="top" constant="8" id="ZfK-Wr-doO"/>
+                                                            <constraint firstAttribute="bottom" secondItem="oYI-OT-dco" secondAttribute="bottom" constant="8" id="ace-NQ-EXI"/>
+                                                            <constraint firstItem="w5G-e5-Xq0" firstAttribute="top" secondItem="pFm-46-B4W" secondAttribute="bottom" constant="8" id="jv2-yI-FSr"/>
+                                                            <constraint firstItem="oYI-OT-dco" firstAttribute="leading" secondItem="8Ff-z4-vmk" secondAttribute="leadingMargin" id="oXb-2M-RtE"/>
+                                                            <constraint firstItem="pFm-46-B4W" firstAttribute="leading" secondItem="8Ff-z4-vmk" secondAttribute="leading" constant="8" id="p0G-uw-tRN"/>
+                                                            <constraint firstItem="w5G-e5-Xq0" firstAttribute="leading" secondItem="8Ff-z4-vmk" secondAttribute="leadingMargin" constant="8" id="vRv-49-uVg"/>
+                                                            <constraint firstItem="oYI-OT-dco" firstAttribute="top" secondItem="w5G-e5-Xq0" secondAttribute="bottom" constant="2" id="xSW-Zw-gdt"/>
+                                                        </constraints>
+                                                        <size key="customSize" width="152" height="185"/>
+                                                        <connections>
+                                                            <outlet property="locationLabel" destination="oYI-OT-dco" id="J3N-If-zuc"/>
+                                                            <outlet property="profilePic" destination="pFm-46-B4W" id="wOd-88-R4W"/>
+                                                            <outlet property="username" destination="w5G-e5-Xq0" id="EQ3-Gz-qxq"/>
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
@@ -826,7 +874,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xhi-mG-COY" customClass="QAButton">
-                                <rect key="frame" x="149" y="151" width="112" height="110"/>
+                                <rect key="frame" x="149" y="107" width="112" height="154"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="addLogo">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2575,7 +2623,7 @@
         <segue reference="MkK-t9-lSX"/>
         <segue reference="Bvx-1i-tFM"/>
         <segue reference="dnl-93-kbr"/>
-        <segue reference="cnV-vk-Wb5"/>
+        <segue reference="inK-qS-1By"/>
         <segue reference="iII-YD-ifK"/>
     </inferredMetricsTieBreakers>
 </document>
