@@ -36,7 +36,6 @@
 @property (nonatomic, strong) NSMutableArray *similarItems;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *sellerLabel;
-@property (weak, nonatomic) IBOutlet UIView *descriptionContentView;
 
 @end
 
@@ -64,13 +63,26 @@
         [self.watchButton setSelected:self.post.watched];
         if (self.post.watched) {
             [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
-            self.watchButton.backgroundColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
-            self.watchButton.titleLabel.textColor = [UIColor whiteColor];
+            
+            [self.watchButton setTitleColor:[UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8] forState:UIControlStateSelected];
+            self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
+            self.watchButton.titleLabel.tintColor = [UIColor clearColor];
+            self.watchButton.backgroundColor = [UIColor whiteColor];
+            self.watchButton.tintColor = [UIColor clearColor];
+            self.watchButton.layer.borderWidth = 1.0f;
+            self.watchButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
+            self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
         } else {
             [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+            
+            [self.watchButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+            self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
+            self.watchButton.titleLabel.tintColor = [UIColor clearColor];
             self.watchButton.backgroundColor = [UIColor whiteColor];
-            self.watchButton.titleLabel.textColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1];
-
+            self.watchButton.tintColor = [UIColor clearColor];
+            self.watchButton.layer.borderWidth = 1.0f;
+            self.watchButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+            self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
         }
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
         NSNumber *soldNumVal = [[notification userInfo] objectForKey:@"sold"];
@@ -107,15 +119,30 @@
         [self.postImageView setImage:[UIImage imageWithData:self.post.image]];
     }
     
+    self.watchButton.layer.cornerRadius = 5;
     [self.watchButton setSelected:self.post.watched];
     if (self.post.watched) {
         [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
-        self.watchButton.backgroundColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
-        self.watchButton.titleLabel.textColor = [UIColor whiteColor];
+        
+        [self.watchButton setTitleColor:[UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8] forState:UIControlStateSelected];
+        self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
+        self.watchButton.titleLabel.tintColor = [UIColor clearColor];
+        self.watchButton.backgroundColor = [UIColor whiteColor];
+        self.watchButton.tintColor = [UIColor clearColor];
+        self.watchButton.layer.borderWidth = 1.0f;
+        self.watchButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
+        self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     } else {
         [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+        
+        [self.watchButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
+        self.watchButton.titleLabel.tintColor = [UIColor clearColor];
         self.watchButton.backgroundColor = [UIColor whiteColor];
-        self.watchButton.titleLabel.textColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1];
+        self.watchButton.tintColor = [UIColor clearColor];
+        self.watchButton.layer.borderWidth = 1.0f;
+        self.watchButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     }
     
     self.profileImageView.layer.cornerRadius = 15;
@@ -127,19 +154,20 @@
     
     self.captionLabel.text = [NSString stringWithFormat:@"Description: %@", post.caption];
     [self.captionLabel greySubstring:@"Description:"];
-    self.captionLabel.layer.cornerRadius = 5.0;
-    self.descriptionContentView.layer.borderWidth = 1.0f;
-    self.descriptionContentView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-    self.descriptionContentView.layer.cornerRadius = 5;
     
     self.titleLabel.text = post.title;
     self.sellerLabel.text = post.author.username;
     self.priceLabel.text = [NSString stringWithFormat:@"$%.02f", post.price];
     
-    self.watchButton.layer.cornerRadius = 5;
     self.contactSellerButton.layer.cornerRadius = 5;
-    self.contactSellerButton.backgroundColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
-    self.contactSellerButton.titleLabel.textColor = [UIColor whiteColor];
+    [self.contactSellerButton setTitleColor:[UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8] forState:UIControlStateNormal];
+    self.contactSellerButton.titleLabel.backgroundColor = [UIColor whiteColor];
+    self.contactSellerButton.titleLabel.tintColor = [UIColor clearColor];
+    self.contactSellerButton.backgroundColor = [UIColor whiteColor];
+    self.contactSellerButton.tintColor = [UIColor clearColor];
+    self.contactSellerButton.layer.borderWidth = 1.0f;
+    self.contactSellerButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8].CGColor;
+    self.contactSellerButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
 }
 
 - (IBAction)didTapWatch:(id)sender {
