@@ -25,7 +25,7 @@
         attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
     }
     
-    [attributedText setAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:self.font.pointSize]} range:range];
+    [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.font.pointSize], NSForegroundColorAttributeName:[UIColor blackColor]} range:range];
     self.attributedText = attributedText;
 }
 

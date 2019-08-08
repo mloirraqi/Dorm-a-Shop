@@ -82,9 +82,9 @@ static const int MAX_BUFFER_SIZE = 2;
     }
     
     if ([self.cardArray count] > 0) {
-        NSInteger numLoadedCardsCap =(([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
+        NSInteger numLoadedCardsCap = (([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
         
-        for (int i = 0; i<[self.cardArray count]; i++) {
+        for (int i = 0; i < [self.cardArray count]; i++) {
             DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
             [self.allCards addObject:newCard];
             
@@ -93,7 +93,7 @@ static const int MAX_BUFFER_SIZE = 2;
             }
         }
         
-        for (int i = 0; i<[self.loadedCards count]; i++) {
+        for (int i = 0; i < [self.loadedCards count]; i++) {
             if (i>0) {
                 [self insertSubview:[self.loadedCards objectAtIndex:i] belowSubview:[self.loadedCards objectAtIndex:i-1]];
             } else {
