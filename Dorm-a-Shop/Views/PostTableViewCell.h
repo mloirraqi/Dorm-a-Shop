@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *conditionLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *hotnessLabel;
 
 @property (nonatomic, strong) PostCoreData *post;
 
