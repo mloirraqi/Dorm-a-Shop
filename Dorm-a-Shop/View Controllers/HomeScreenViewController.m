@@ -7,6 +7,7 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "QuartzCore/QuartzCore.h"
 #import "PostCoreData+CoreDataClass.h"
 #import "HomeScreenViewController.h"
 #import "PostTableViewCell.h"
@@ -30,7 +31,6 @@
 
 @property (strong, nonatomic) NSMutableArray *filteredPosts;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (strong, nonatomic) NSString *className;
 
 @property (weak, nonatomic) IBOutlet UITableView *categoryTable;
 @property (weak, nonatomic) IBOutlet UITableView *conditionTable;
@@ -53,28 +53,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.className = @"HomeScreenViewController";
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
-    self.categoryTable.dataSource = self;
-    self.categoryTable.delegate = self;
-    self.conditionTable.dataSource = self;
-    self.conditionTable.delegate = self;
-    self.pricesTable.dataSource = self;
-    self.pricesTable.delegate = self;
-    self.hotnessTable.dataSource = self;
-    self.hotnessTable.delegate = self;
+    
     self.categories =@[@"All", @"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
     self.conditions = @[@"All", @"New", @"Nearly New", @"Used"];
     self.prices = @[@"All", @"<$25", @"<$50", @"<$100"];
     self.pricesInt = @[@0, @25, @50, @100];
     self.hotNess = @[@"All Items", @"Hot Items"];
-    self.categoryTable.hidden = YES;
-    self.conditionTable.hidden = YES;
-    self.pricesTable.hidden = YES;
-    self.hotnessTable.hidden = YES;
+    
+    NSArray *tables = @[self.categoryTable, self.conditionTable, self.pricesTable, self.hotnessTable];
+    for (UITableView *table in tables) {
+        table.dataSource = self;
+        table.delegate = self;
+        table.layer.borderColor = [[UIColor grayColor] CGColor];
+        table.layer.borderWidth = 1.0;
+        table.hidden = YES;
+    }
+    
+    NSArray *buttons = @[self.categoryButton, self.conditionButton, self.pricesButton, self.hotnessButton];
+    for (UIButton *button in buttons) {
+        button.layer.borderWidth = 1.0f;
+        button.layer.borderColor = [UIColor grayColor].CGColor;
+        button.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedWatchNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
@@ -149,20 +152,26 @@
     } else if (tableView == self.categoryTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         cell.textLabel.text = self.categories[indexPath.row];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightThin]];
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
         return cell;
     } else if (tableView == self.conditionTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         cell.textLabel.text = self.conditions[indexPath.row];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightThin]];
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
         return cell;
     } else if (tableView == self.pricesTable) {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         cell.textLabel.text = self.prices[indexPath.row];
-        [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightThin]];
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
         return cell;
     } else {
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         cell.textLabel.text = self.hotNess[indexPath.row];
-        [cell.textLabel setFont:[UIFont systemFontOfSize:12]];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightThin]];
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
         return cell;
     }
 }
@@ -199,7 +208,6 @@
         PostCoreData *post = self.filteredPosts[indexPath.row];
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
-        detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
     }
 }
@@ -256,6 +264,9 @@
 - (IBAction)categoryChange:(id)sender {
     if (self.categoryTable.hidden) {
         self.categoryTable.hidden = NO;
+        self.hotnessTable.hidden = YES;
+        self.pricesTable.hidden = YES;
+        self.conditionTable.hidden = YES;
     } else {
         self.categoryTable.hidden = YES;
     }
@@ -264,6 +275,9 @@
 - (IBAction)conditionChange:(id)sender {
     if (self.conditionTable.hidden) {
         self.conditionTable.hidden = NO;
+        self.categoryTable.hidden = YES;
+        self.hotnessTable.hidden = YES;
+        self.pricesTable.hidden = YES;
     } else {
         self.conditionTable.hidden = YES;
     }
@@ -272,6 +286,9 @@
 - (IBAction)pricesChange:(id)sender {
     if (self.pricesTable.hidden) {
         self.pricesTable.hidden = NO;
+        self.conditionTable.hidden = YES;
+        self.categoryTable.hidden = YES;
+        self.hotnessTable.hidden = YES;
     } else {
         self.pricesTable.hidden = YES;
     }
@@ -280,6 +297,9 @@
 - (IBAction)hotnessChange:(id)sender {
     if (self.hotnessTable.hidden) {
         self.hotnessTable.hidden = NO;
+        self.pricesTable.hidden = YES;
+        self.conditionTable.hidden = YES;
+        self.categoryTable.hidden = YES;
     } else {
         self.hotnessTable.hidden = YES;
     }

@@ -41,7 +41,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *soldCountLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-@property (nonatomic, strong) NSString *className;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 
@@ -51,8 +50,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.className = @"ProfileViewController";
     
     if (!self.user) {
         self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
@@ -233,7 +230,6 @@
         }
         
         DetailsViewController *detailsViewController = [segue destinationViewController];
-        detailsViewController.senderClassName = self.className;
         detailsViewController.post = post;
     } else if ([segue.identifier isEqualToString:@"segueToEditProfile"]) {
         EditProfileVC *editProfileViewController = [segue destinationViewController];

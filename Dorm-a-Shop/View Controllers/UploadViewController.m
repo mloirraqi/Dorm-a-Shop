@@ -154,9 +154,9 @@
                 if (!newPost.objectId || !newPost.createdAt) {
                     newPost.objectId = post.objectId;
                     newPost.createdAt = post.createdAt;
-//                    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-//                        return YES;
-//                    } withName:[NSString stringWithFormat:@"%@", newPost.objectId]];
+                    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                        return YES;
+                    } withName:[NSString stringWithFormat:@"%@", newPost.objectId]];
                     [self saveContext];
                 }
                 
