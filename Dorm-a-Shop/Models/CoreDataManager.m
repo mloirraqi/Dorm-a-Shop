@@ -233,6 +233,8 @@
         abort();
     }
     
+    NSLog(@"%@", results);
+    
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];

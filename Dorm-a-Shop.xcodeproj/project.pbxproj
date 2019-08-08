@@ -16,6 +16,7 @@
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
 		47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */; };
 		47486BD222F566C200DE6D8E /* ParseDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BD122F566C200DE6D8E /* ParseDatabaseManager.m */; };
+		477B581522FC069100003AAB /* ReviewDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 477B581422FC069100003AAB /* ReviewDetailsViewController.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
 		47A8A9B122DE3A32005D9520 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */; };
@@ -113,6 +114,9 @@
 		47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReviewTableViewCell.m; sourceTree = "<group>"; };
 		47486BD022F566C200DE6D8E /* ParseDatabaseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseDatabaseManager.h; sourceTree = "<group>"; };
 		47486BD122F566C200DE6D8E /* ParseDatabaseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseDatabaseManager.m; sourceTree = "<group>"; };
+		477B580F22FB446500003AAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../../Dorm-a-Shop copy 2/Dorm-a-Shop/Assets.xcassets"; sourceTree = "<group>"; };
+		477B581322FC069100003AAB /* ReviewDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReviewDetailsViewController.h; sourceTree = "<group>"; };
+		477B581422FC069100003AAB /* ReviewDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReviewDetailsViewController.m; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A8A9A422DE3A30005D9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47A8A9A522DE3A30005D9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -380,6 +384,8 @@
 				DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */,
 				DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */,
 				DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */,
+				477B581322FC069100003AAB /* ReviewDetailsViewController.h */,
+				477B581422FC069100003AAB /* ReviewDetailsViewController.m */,
 				EAB1A80622F8272B00C4AA25 /* Dorm-a-Shop-Bridging-Header.h */,
 			);
 			path = "View Controllers";
@@ -794,6 +800,7 @@
 				EAEB723A22E9316200426226 /* OverlayView.m in Sources */,
 				47415D0F22F956D700AF4C16 /* UILabel+Boldify.m in Sources */,
 				EAEB724222E936CB00426226 /* CardItemCollectionViewCell.m in Sources */,
+				477B581522FC069100003AAB /* ReviewDetailsViewController.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
@@ -980,12 +987,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A3A3BF55QH;
+				DEVELOPMENT_TEAM = 8DH593U6VL;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1002,12 +1011,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A3A3BF55QH;
+				DEVELOPMENT_TEAM = 8DH593U6VL;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

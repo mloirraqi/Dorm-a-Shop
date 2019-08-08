@@ -11,6 +11,7 @@
 #import "ReviewTableViewCell.h"
 #import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
+#import "ReviewDetailsViewController.h"
 #import "User.h"
 
 @interface SellerReviewsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -65,6 +66,7 @@
         if (error) {
             NSLog(@"Error querying reviews! %@", error.localizedDescription);
         } else {
+            NSLog(@"%@", reviews);
             self.reviewsArray = reviews;
             [self.tableView reloadData];
         }
@@ -81,6 +83,22 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.reviewsArray.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 150;
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"segueToReviewDetails"]) {
+        ReviewTableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        ReviewCoreData *review = self.reviewsArray[indexPath.row];
+        ReviewDetailsViewController *reviewDetailsViewController = [segue destinationViewController];
+        reviewDetailsViewController.review = review;
+    }
 }
 
 @end

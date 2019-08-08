@@ -40,8 +40,6 @@
     
     NSString *priceString = [formatter stringFromNumber:[NSNumber numberWithFloat:post.price]];
     
-    NSLog(@" originial --> %f, converted --> %@", post.price, priceString);
-
 	self.priceLabel.text = [NSString stringWithFormat:@"$%@", priceString];
 }
 
