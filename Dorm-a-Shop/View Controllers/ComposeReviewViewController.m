@@ -35,17 +35,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.reviewTextView.layer.cornerRadius = 5;
-    self.reviewTextView.layer.borderWidth = 1.0f;
-    self.reviewTextView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    NSArray *textViews = @[self.reviewTextView, self.itemDescriptionTextView, self.titleTextView];
     
-    self.itemDescriptionTextView.layer.cornerRadius = 5;
-    self.itemDescriptionTextView.layer.borderWidth = 1.0f;
-    self.itemDescriptionTextView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    for (UITextView *textView in textViews) {
+        textView.layer.cornerRadius = 5;
+        textView.layer.borderWidth = 1.0f;
+        textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+        textView.delegate = self;
+    }
     
-    self.titleTextView.layer.cornerRadius = 5;
-    self.titleTextView.layer.borderWidth = 1.0f;
-    self.titleTextView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.reviewTextView.text = @"Write review here";
+    self.reviewTextView.textColor = [UIColor lightGrayColor];
+    
+    self.titleTextView.text = @"Give a short title for your review";
+    self.titleTextView.textColor = [UIColor lightGrayColor];
+    
+    self.itemDescriptionTextView.text = @"Write a short description of the item you're reviewing";
+    self.itemDescriptionTextView.textColor = [UIColor lightGrayColor];
     
     self.reviewEmptyAlert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Review empty" preferredStyle:(UIAlertControllerStyleAlert)];
 
@@ -55,10 +61,10 @@
     self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = self.appDelegate.persistentContainer.viewContext;
     
-    self.pickerViewToolbar.hidden = YES;
     self.ratingPickerView.delegate = self;
     self.ratingPickerView.dataSource = self;
     self.ratingPickerView.hidden = YES;
+    self.pickerViewToolbar.hidden = YES;
 }
 
 - (IBAction)didTapCancel:(id)sender {
@@ -135,21 +141,67 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    if ([self.reviewTextView.text isEqualToString:@"Write review here"]) {
-        self.reviewTextView.text = @"";
-        self.reviewTextView.textColor = [UIColor blackColor];
-    }
+    self.ratingPickerView.hidden = YES;
+    self.pickerViewToolbar.hidden = YES;
     
-    [self.reviewTextView becomeFirstResponder];
+    if ([textView isEqual:self.reviewTextView]) {
+        [self.titleTextView endEditing:YES];
+        [self.itemDescriptionTextView endEditing:YES];
+        
+        if ([self.reviewTextView.text isEqualToString:@"Write review here"]) {
+            self.reviewTextView.text = @"";
+            self.reviewTextView.textColor = [UIColor blackColor];
+        }
+        
+        [self.reviewTextView becomeFirstResponder];
+    } else if ([textView isEqual:self.itemDescriptionTextView]) {
+        [self.titleTextView endEditing:YES];
+        [self.reviewTextView endEditing:YES];
+        
+        if ([self.itemDescriptionTextView.text isEqualToString:@"Write a short description of the item you're reviewing"]) {
+            self.itemDescriptionTextView.text = @"";
+            self.itemDescriptionTextView.textColor = [UIColor blackColor];
+        }
+        
+        [self.itemDescriptionTextView becomeFirstResponder];
+    } else if ([textView isEqual:self.titleTextView]) {
+        [self.reviewTextView endEditing:YES];
+        [self.itemDescriptionTextView endEditing:YES];
+        
+        if ([self.titleTextView.text isEqualToString:@"Give a short title for your review"]) {
+            self.titleTextView.text = @"";
+            self.titleTextView.textColor = [UIColor blackColor];
+        }
+        
+        [self.titleTextView becomeFirstResponder];
+    }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
-    if ([self.reviewTextView.text isEqualToString:@""]) {
-        self.reviewTextView.text = @"Write review here";
-        self.reviewTextView.textColor = [UIColor lightGrayColor];
+    if ([textView isEqual:self.reviewTextView]) {
+        if ([textView.text isEqualToString:@""]) {
+            textView.text = @"Write review here";
+            textView.textColor = [UIColor lightGrayColor];
+        }
+        
+        [textView resignFirstResponder];
+    } else if ([textView isEqual:self.itemDescriptionTextView]) {
+        if ([textView.text isEqualToString:@""]) {
+            textView.text = @"Write a short description of the item you're reviewing";
+            textView.textColor = [UIColor lightGrayColor];
+        }
+        
+        [textView resignFirstResponder];
+    } else if ([textView isEqual:self.titleTextView]) {
+        if ([textView.text isEqualToString:@""]) {
+            textView.text = @"Give a short title for your review";
+            textView.textColor = [UIColor lightGrayColor];
+        }
+        
+        [textView resignFirstResponder];
     }
     
-    [self.reviewTextView resignFirstResponder];
+    
 }
 
 - (void)saveContext {
