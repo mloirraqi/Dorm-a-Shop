@@ -15,7 +15,6 @@
 
 @interface SearchViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
 @property (weak, nonatomic) IBOutlet UIButton *mapButton;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -33,13 +32,14 @@
 //View Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = self.view.bounds;
-    UIColor* gradient1 = [UIColor colorWithRed:58.0f/255.0f green:95.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
-    UIColor* gradient2 = [UIColor colorWithRed:141.0f/255.0f green:61.0f/255.0f blue:244.0f/255 alpha:1.0f];
-    gradient.colors = @[(id)gradient1.CGColor, (id)gradient2.CGColor];
-    [self.view.layer insertSublayer:gradient atIndex:0];
+
+// TO DO! Gradient needs changing
+//    CAGradientLayer *gradient = [CAGradientLayer layer];
+//    gradient.frame = self.view.bounds;
+//    UIColor* gradient1 = [UIColor colorWithRed:58.0f/255.0f green:95.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+//    UIColor* gradient2 = [UIColor colorWithRed:141.0f/255.0f green:61.0f/255.0f blue:244.0f/255 alpha:1.0f];
+//    gradient.colors = @[(id)gradient1.CGColor, (id)gradient2.CGColor];
+//    [self.view.layer insertSublayer:gradient atIndex:0];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -66,7 +66,6 @@
     
     self.searchField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-    self.closeButton.layer.cornerRadius = 20.0f;
     self.mapButton.layer.cornerRadius = 20.0f;
     
     [self fetchUsersFromCoreData];
@@ -178,10 +177,6 @@
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
         [self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
     }
-}
-
-- (IBAction)cancel:(id)sender {
-    [self dismissViewControllerAnimated:true completion:nil];
 }
 
 @end
