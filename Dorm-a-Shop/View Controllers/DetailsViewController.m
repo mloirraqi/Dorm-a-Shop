@@ -14,9 +14,11 @@
 #import "PostCollectionViewCell.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "ProfileViewController.h"
+#import "UILabel+Boldify.h"
+#import <QuartzCore/QuartzCore.h>
 @import Parse;
 
-@interface DetailsViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface DetailsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate>
 
 - (IBAction)didTapWatch:(id)sender;
 
@@ -34,6 +36,7 @@
 @property (nonatomic, strong) NSMutableArray *similarItems;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *sellerLabel;
+@property (weak, nonatomic) IBOutlet UIView *descriptionContentView;
 
 @end
 
@@ -61,8 +64,13 @@
         [self.watchButton setSelected:self.post.watched];
         if (self.post.watched) {
             [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+            self.watchButton.backgroundColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
+            self.watchButton.titleLabel.textColor = [UIColor whiteColor];
         } else {
             [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+            self.watchButton.backgroundColor = [UIColor whiteColor];
+            self.watchButton.titleLabel.textColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1];
+
         }
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
         NSNumber *soldNumVal = [[notification userInfo] objectForKey:@"sold"];
@@ -92,6 +100,9 @@
     }
     
     [self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapProfileImage:)];
+    [self.postImageView addGestureRecognizer:tapGestureRecognizer];
+    tapGestureRecognizer.delegate = self;
     if (self.post.image) {
         [self.postImageView setImage:[UIImage imageWithData:self.post.image]];
     }
@@ -99,8 +110,12 @@
     [self.watchButton setSelected:self.post.watched];
     if (self.post.watched) {
         [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+        self.watchButton.backgroundColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
+        self.watchButton.titleLabel.textColor = [UIColor whiteColor];
     } else {
         [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+        self.watchButton.backgroundColor = [UIColor whiteColor];
+        self.watchButton.titleLabel.textColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1];
     }
     
     self.profileImageView.layer.cornerRadius = 15;
@@ -109,10 +124,22 @@
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
-    self.captionLabel.text = post.caption;
+    
+    self.captionLabel.text = [NSString stringWithFormat:@"Description: %@", post.caption];
+    [self.captionLabel greySubstring:@"Description:"];
+    self.captionLabel.layer.cornerRadius = 5.0;
+    self.descriptionContentView.layer.borderWidth = 1.0f;
+    self.descriptionContentView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.descriptionContentView.layer.cornerRadius = 5;
+    
     self.titleLabel.text = post.title;
     self.sellerLabel.text = post.author.username;
     self.priceLabel.text = [NSString stringWithFormat:@"$%.02f", post.price];
+    
+    self.watchButton.layer.cornerRadius = 5;
+    self.contactSellerButton.layer.cornerRadius = 5;
+    self.contactSellerButton.backgroundColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8];
+    self.contactSellerButton.titleLabel.textColor = [UIColor whiteColor];
 }
 
 - (IBAction)didTapWatch:(id)sender {
@@ -178,6 +205,14 @@
     DetailsViewController *newDetailVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailsViewController"];
     newDetailVC.post = self.similarItems[indexPath.row];
     [self.navigationController pushViewController:newDetailVC animated:YES];
+}
+
+- (void)onTapProfileImage:(UITapGestureRecognizer *)recognizer {
+    [self performSegueWithIdentifier:@"segueToAR" sender:nil];
+}
+
+- (IBAction)onTapARButton:(id)sender {
+    [self performSegueWithIdentifier:@"segueToAR" sender:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

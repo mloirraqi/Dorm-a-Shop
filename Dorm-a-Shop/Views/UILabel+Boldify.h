@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) boldSubstring: (NSString*) substring;
 - (void) boldRange: (NSRange) range;
+- (void) greySubstring: (NSString*) substring;
+- (void) greyRange: (NSRange) range;
 
 @end
 
