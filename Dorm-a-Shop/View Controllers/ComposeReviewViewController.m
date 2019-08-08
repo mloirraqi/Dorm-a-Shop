@@ -44,6 +44,8 @@
         textView.delegate = self;
     }
     
+    self.chooseRatingButton.layer.cornerRadius = 5;
+    
     self.reviewTextView.text = @"Write review here";
     self.reviewTextView.textColor = [UIColor lightGrayColor];
     
@@ -124,6 +126,8 @@
 
 - (IBAction)onTap:(id)sender {
     [self.reviewTextView endEditing:YES];
+    [self.itemDescriptionTextView endEditing:YES];
+    [self.titleTextView endEditing:YES];
     self.ratingPickerView.hidden = YES;
     self.pickerViewToolbar.hidden = YES;
 }

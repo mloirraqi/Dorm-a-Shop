@@ -264,9 +264,7 @@
 - (IBAction)changedSegment:(id)sender {
     
     if ([self.segmentControl selectedSegmentIndex] == 2) { //Matched Users
-        
         if (self.matchedUsers.count <= 0) { //Fetch records if empty
-            
             __weak ProfileViewController *weakSelf = self;
             
             NSString* userId = self.user.objectId;
@@ -284,6 +282,8 @@
                     }
                 } else {
                     NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
+                    [weakSelf.matchedUsers removeAllObjects];
+                    [weakSelf.collectionView reloadData];
                 }
             }];
             

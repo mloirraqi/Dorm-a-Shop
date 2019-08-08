@@ -77,12 +77,11 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 - (void)loadCards {
-    
     for (UIView *subview in self.subviews) {
         [subview removeFromSuperview];
     }
     
-    if([self.cardArray count] > 0) {
+    if ([self.cardArray count] > 0) {
         NSInteger numLoadedCardsCap =(([self.cardArray count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.cardArray count]);
         
         for (int i = 0; i<[self.cardArray count]; i++) {
@@ -132,7 +131,6 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 - (void)userAccepted:(Card *)card {
-    
     PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
     swipeRecord[@"userId"] = [PFUser currentUser].objectId;
     
@@ -153,11 +151,9 @@ static const int MAX_BUFFER_SIZE = 2;
     }];
     
     [self checkMatchwithUser:card.author];
-    
 }
 
 - (void)checkMatchwithUser:(PFUser *)acceptedUser {
-    
     PFQuery *query = [PFQuery queryWithClassName:@"SwipeRecord"];
     [query whereKey:@"userId" equalTo:acceptedUser.objectId];
     [query whereKey:@"accepted" equalTo:[PFUser currentUser].objectId];
@@ -236,7 +232,7 @@ static const int MAX_BUFFER_SIZE = 2;
     [self setupView];
 }
 
--(void)showAlertView:(NSString*)message{
+- (void)showAlertView:(NSString*)message{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
 }
