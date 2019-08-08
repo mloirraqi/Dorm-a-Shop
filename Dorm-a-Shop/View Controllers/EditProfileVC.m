@@ -123,6 +123,8 @@
         currentUser.username = nameTextField.text;
         currentUser.email = emailTextField.text;
         
+        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:self.context];
+        
         if (passwordTextField.text.length != 0) {
             currentUser.password = passwordTextField.text;
         }
@@ -134,6 +136,12 @@
             currentUser[@"ProfilePic"] = image;
         }
         
+        
+        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+            return YES;
+        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+        //        [self saveContext];
+        
         __weak EditProfileVC *weakSelf = self;
         [MBProgressHUD showHUDAddedTo:self.view animated:true];
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
@@ -142,9 +150,7 @@
                 //Let users use app now
                 if (self->selectedLocationPoint != nil) {
                     [weakSelf setLocationName];
-                }
-                else
-                {
+                } else {
                     UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
                     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -152,7 +158,6 @@
                     [successAlert addAction:okAction];
                     [self presentViewController:successAlert animated:YES completion:nil];
                 }
-                
             } else {
                 NSString *errorString = [error userInfo][@"error"];
                 [self showAlertView:errorString];
@@ -228,15 +233,8 @@
     User *currentUser = (User *)[PFUser currentUser];
     currentUser.Location = selectedLocationPoint;
     
-    UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:self.context];
     if (address != nil) {
         currentUser.address = address;
-        userCoreData.address = address;
-        
-        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
-//        [self saveContext];
     }
     
     __weak EditProfileVC *weakSelf = self;

@@ -47,7 +47,6 @@
 		DE877D7622FA3EB500C35587 /* chair_DIFFUSE.png in Resources */ = {isa = PBXBuildFile; fileRef = DE877D6E22FA3EB300C35587 /* chair_DIFFUSE.png */; };
 		DE877D7722FA3EB500C35587 /* chair_NORMAL.png in Resources */ = {isa = PBXBuildFile; fileRef = DE877D6F22FA3EB300C35587 /* chair_NORMAL.png */; };
 		DE877D7A22FA3F6100C35587 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DE877D7922FA3F6000C35587 /* NSNotificationCenter+MainThread.m */; };
-		DE877D8322FBA14E00C35587 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE877D8222FBA14D00C35587 /* Assets.xcassets */; };
 		DEA2B53622F4AE4D00FC71DB /* SellerReviewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */; };
 		DEA2B53922F4AE7800FC71DB /* ComposeReviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA2B53822F4AE7800FC71DB /* ComposeReviewViewController.m */; };
 		DED744F822DFE0A400394748 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DED744F722DFE0A400394748 /* PostCollectionViewCell.m */; };
@@ -55,6 +54,8 @@
 		DEFE7C8C22E64347006E3096 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFE7C8B22E64347006E3096 /* UserCell.m */; };
 		EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03725D22E6501B00354DA2 /* ChatCell.m */; };
 		EA0E3AFD22FAB11C003BE858 /* UserCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */; };
+		EA0E3B0122FBE265003BE858 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA0E3B0022FBE265003BE858 /* Assets.xcassets */; };
+		EA0E3B0722FC85B3003BE858 /* SwipePopupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0E3B0622FC85B3003BE858 /* SwipePopupVC.m */; };
 		EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */; };
 		EA4315BA22F941A200CC853D /* MapsPopupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4315B722F941A200CC853D /* MapsPopupVC.m */; };
 		EA4315BB22F941A200CC853D /* MapsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4315B822F941A200CC853D /* MapsVC.m */; };
@@ -169,7 +170,6 @@
 		DE877D6F22FA3EB300C35587 /* chair_NORMAL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chair_NORMAL.png; sourceTree = "<group>"; };
 		DE877D7822FA3F6000C35587 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
 		DE877D7922FA3F6000C35587 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
-		DE877D8222FBA14D00C35587 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Dorm-a-Shop/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
 		DEA2B53422F4AE4C00FC71DB /* SellerReviewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SellerReviewsViewController.m; sourceTree = "<group>"; };
 		DEA2B53522F4AE4D00FC71DB /* SellerReviewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SellerReviewsViewController.h; sourceTree = "<group>"; };
 		DEA2B53722F4AE7800FC71DB /* ComposeReviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeReviewViewController.h; sourceTree = "<group>"; };
@@ -184,6 +184,9 @@
 		EA03725D22E6501B00354DA2 /* ChatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		EA0E3AFA22FAB11C003BE858 /* UserCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCollectionCell.h; sourceTree = "<group>"; };
 		EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCollectionCell.m; sourceTree = "<group>"; };
+		EA0E3B0022FBE265003BE858 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EA0E3B0522FC85B3003BE858 /* SwipePopupVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipePopupVC.h; sourceTree = "<group>"; };
+		EA0E3B0622FC85B3003BE858 /* SwipePopupVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwipePopupVC.m; sourceTree = "<group>"; };
 		EA4315AE22F93C4200CC853D /* CardItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		EA4315B622F941A200CC853D /* MapsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapsVC.h; sourceTree = "<group>"; };
 		EA4315B722F941A200CC853D /* MapsPopupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapsPopupVC.m; sourceTree = "<group>"; };
@@ -283,7 +286,6 @@
 		47A8A9A322DE3A30005D9520 /* Dorm-a-Shop */ = {
 			isa = PBXGroup;
 			children = (
-				DE877D8222FBA14D00C35587 /* Assets.xcassets */,
 				DE877D6522FA3EB300C35587 /* 3D Objects */,
 				EAEB722922E930BC00426226 /* Card */,
 				EA6732E422DF959A004E362F /* HelperFIles */,
@@ -304,6 +306,8 @@
 				47A8A9B322DE3A32005D9520 /* main.m */,
 				EA4315B922F941A200CC853D /* MapsPopupVC.h */,
 				EA4315B722F941A200CC853D /* MapsPopupVC.m */,
+				EA0E3B0522FC85B3003BE858 /* SwipePopupVC.h */,
+				EA0E3B0622FC85B3003BE858 /* SwipePopupVC.m */,
 				EA4315B622F941A200CC853D /* MapsVC.h */,
 				EA4315B822F941A200CC853D /* MapsVC.m */,
 			);
@@ -331,6 +335,7 @@
 		47A8A9DD22DE42F9005D9520 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EA0E3B0022FBE265003BE858 /* Assets.xcassets */,
 				EAEB723B22E9369900426226 /* Card.h */,
 				EAEB723C22E9369900426226 /* Card.m */,
 				47A8A9D922DE42E5005D9520 /* Post.h */,
@@ -639,7 +644,7 @@
 				EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */,
 				DE877D7322FA3EB500C35587 /* chair_METALLIC.png in Resources */,
 				DE877D7722FA3EB500C35587 /* chair_NORMAL.png in Resources */,
-				DE877D8322FBA14E00C35587 /* Assets.xcassets in Resources */,
+				EA0E3B0122FBE265003BE858 /* Assets.xcassets in Resources */,
 				DE877D7122FA3EB500C35587 /* ship.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -808,6 +813,7 @@
 				477B581522FC069100003AAB /* ReviewDetailsViewController.m in Sources */,
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
+				EA0E3B0722FC85B3003BE858 /* SwipePopupVC.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				DE877D6422FA3CC900C35587 /* ARViewController.swift in Sources */,
 				EA0E3AFD22FAB11C003BE858 /* UserCollectionCell.m in Sources */,

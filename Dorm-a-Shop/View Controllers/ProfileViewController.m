@@ -19,6 +19,7 @@
 #import "ComposeReviewViewController.h"
 #import "SellerReviewsViewController.h"
 #import "UILabel+Boldify.h"
+
 #import "UserCollectionCell.h"
 @import Parse;
 
@@ -43,6 +44,9 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) AppDelegate *appDelegate;
+@property (weak, nonatomic) IBOutlet UIButton *messageBtn;
+@property (weak, nonatomic) IBOutlet UIButton *viewReviewBtn;
+@property (weak, nonatomic) IBOutlet UIButton *writeReviewBtn;
 
 @end
 
@@ -61,16 +65,23 @@
         self.navigationItem.leftItemsSupplementBackButton = true;
     }
     
+    self.messageBtn.layer.cornerRadius = 10;
+    self.messageBtn.layer.masksToBounds = YES;
+    self.viewReviewBtn.layer.cornerRadius = 10;
+    self.viewReviewBtn.layer.masksToBounds = YES;
+    self.writeReviewBtn.layer.cornerRadius = 10;
+    self.writeReviewBtn.layer.masksToBounds = YES;
+    
+    self.messageBtn.layer.borderWidth = 1.0f;
+    self.messageBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.viewReviewBtn.layer.borderWidth = 1.0f;
+    self.viewReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.writeReviewBtn.layer.borderWidth = 1.0f;
+    self.writeReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     self.selectedSegment = 0;
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
-    layout.minimumLineSpacing = 1;
-    layout.minimumInteritemSpacing = 1;
-    CGFloat posterPerLine = 2;
-    CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
-    CGFloat itemHeight = itemWidth;
-    itemSize = CGSizeMake(itemWidth, itemHeight);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidUploadNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"ChangedSoldNotification" object:nil];
@@ -109,7 +120,7 @@
 - (void)fetchProfileFromCoreData {
     self.locationLabel.text = self.user.address;
     self.navigationItem.title = [@"@" stringByAppendingString:self.user.username];
-    self.profilePic.layer.cornerRadius = 50;
+    self.profilePic.layer.cornerRadius = 45;
     self.profilePic.layer.masksToBounds = YES;
     self.usernameLabel.text = self.user.username;
     
@@ -190,17 +201,18 @@
     } else {
         UserCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
         
-        NSString* objectId1 = self.matchedUsers[indexPath.row][@"accepted"];
-        NSString* objectId2 = self.matchedUsers[indexPath.row][@"userId"];
+        User* userCoreData = (User*)self.matchedUsers[indexPath.item];
         
-        NSString* objectId = [[PFUser currentUser].objectId isEqualToString:objectId1] ? objectId2 : objectId1;
+        PFFileObject *image = userCoreData.ProfilePic;
         
-        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData"
-                                                                                            withObjectId:objectId
-                                                                                             withContext:self.context];
-        cell.user = userCoreData;
-        [cell setUser];
+        [image getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError * _Nullable error) {
+            UIImage *originalImage = [UIImage imageWithData:data];
+            [cell.profilePic setImage:originalImage];
+        }];
         
+        cell.username.text = userCoreData.username;
+        cell.locationLabel.text = userCoreData.address;
+
         cell.username.textColor = [UIColor blackColor];
         cell.locationLabel.textColor = [UIColor blackColor];
         return cell;
@@ -210,8 +222,16 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([self.segmentControl selectedSegmentIndex] == 2) {
-        CGFloat width = collectionView.frame.size.width/3;
+        CGFloat width = (collectionView.frame.size.width/3) - 4; //(4 is interitempadding)
         return CGSizeMake(width, width + 70); //70 is size of two labels
+    } else {
+        UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
+        layout.minimumLineSpacing = 1;
+        layout.minimumInteritemSpacing = 1;
+        CGFloat posterPerLine = 2;
+        CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
+        CGFloat itemHeight = itemWidth;
+        return CGSizeMake(itemWidth, itemHeight);
     }
     
     return itemSize;
@@ -275,8 +295,20 @@
                 if (swipeRecords) {
                     if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
                         NSLog(@"😍 Found %lu records", (unsigned long)swipeRecords.count);
-                        weakSelf.matchedUsers = [swipeRecords mutableCopy];
-                        [weakSelf.collectionView reloadData];
+                        NSMutableArray* usersToQuery = [[NSMutableArray alloc] init];
+                        for (PFObject* record in swipeRecords) {
+                            NSString* objectId1 = record[@"accepted"];
+                            NSString* objectId2 = record[@"userId"];
+                            
+                            NSString* objectId = [weakSelf.user.objectId isEqualToString:objectId1] ? objectId2 : objectId1;
+                            
+                            [usersToQuery addObject:objectId];
+                        }
+                        
+                        [[ParseDatabaseManager shared] queryAllUsers:usersToQuery WithCompletion:^(NSArray* users, NSError* error) {
+                            weakSelf.matchedUsers = [users mutableCopy];
+                            [weakSelf.collectionView reloadData];
+                        }];
                     } else {
                         NSLog(@"😫😫😫 No such User Found");
                     }

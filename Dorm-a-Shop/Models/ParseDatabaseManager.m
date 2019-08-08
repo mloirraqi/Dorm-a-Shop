@@ -413,6 +413,21 @@
     }];
 }
 
+- (void)queryAllUsers:(NSArray*)objectIds WithCompletion:(void (^)(NSArray *, NSError *))completion {
+    
+    PFQuery *userQuery = [PFUser query];
+    [userQuery whereKey:@"objectId" containedIn:objectIds];
+    
+    [userQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable users, NSError * _Nullable error) {
+        if (users) {
+            completion(users, nil);
+        } else {
+            NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
+            completion(nil, error);
+        }
+    }];
+}
+
 - (void)queryAllUsersWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
     PFUser *currentUser = PFUser.currentUser;
     PFGeoPoint *location = currentUser[@"Location"];
