@@ -181,8 +181,4 @@
     }
 }
 
-- (IBAction)onTap:(id)sender {
-    [self.searchField endEditing:YES];
-}
-
 @end

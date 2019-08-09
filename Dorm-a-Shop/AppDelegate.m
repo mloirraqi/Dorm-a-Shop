@@ -77,7 +77,7 @@
         }];
     } else {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"SignUpVC"];
+        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"SignInVC"];
         NSLog(@"");
         
         NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];

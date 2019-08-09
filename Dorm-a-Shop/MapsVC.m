@@ -41,11 +41,11 @@
 - (void)setupMaps {
     
     User *currentUser = (User *)[PFUser currentUser];
-
+    
     CGFloat lat = currentUser.Location.latitude;
     CGFloat lng = currentUser.Location.longitude;
-
-    self.camera = [GMSCameraPosition cameraWithLatitude:lat longitude:lng zoom:12];
+    
+    self.camera = [GMSCameraPosition cameraWithLatitude:lat longitude:lng zoom:4];
     gmapView = [GMSMapView mapWithFrame:self.mapView.bounds camera:_camera];
     gmapView.myLocationEnabled = YES;
     gmapView.delegate = self;
@@ -61,7 +61,7 @@
     circ.strokeColor = [UIColor redColor];
     circ.strokeWidth = 2.6;
     circ.map = gmapView;
-
+    
 }
 
 - (void)fetchUsers {
@@ -81,7 +81,9 @@
     NSLog(@"users count: %lu", (unsigned long)self.users.count);
     
     NSCharacterSet* mySet = [NSCharacterSet characterSetWithCharactersInString:@",-.0123456789"];
-
+    
+    NSMutableArray *markers = [[NSMutableArray alloc] init];
+    
     for (UserCoreData* user in self.users) {
         
         NSString *latLongStr = [[user.location componentsSeparatedByCharactersInSet:[mySet invertedSet]] componentsJoinedByString:@""];
@@ -103,13 +105,22 @@
         [imgView setContentMode:UIViewContentModeScaleAspectFill];
         [imgView setClipsToBounds:YES];
         imgView.layer.cornerRadius = 20.0f;
-
+        
         GMSMarker *marker = [[GMSMarker alloc] init];
         marker.position = CLLocationCoordinate2DMake(lat, lng);
         marker.iconView = imgView;
         marker.map = gmapView;
         marker.userData = user;
+        
+        [markers addObject:marker];
     }
+    CLLocationCoordinate2D myLocation = ((GMSMarker *)markers.firstObject).position;
+    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
+    
+    for (GMSMarker *marker in markers)
+        bounds = [bounds includingCoordinate:marker.position];
+    
+    [gmapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:bounds withPadding:15.0f]];
 }
 
 

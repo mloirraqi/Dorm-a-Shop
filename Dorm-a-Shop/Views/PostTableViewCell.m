@@ -36,7 +36,7 @@
     self.watchButton.layer.cornerRadius = 5;
     [self.watchButton setSelected:self.post.watched];
     if (self.post.watched) {
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld)", self.post.watchCount] forState:UIControlStateSelected];
+        [self.watchButton setTitle:@"Unwatch" forState:UIControlStateSelected];
         
         [self.watchButton setTitleColor:[UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8] forState:UIControlStateSelected];
         self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
@@ -47,7 +47,7 @@
         self.watchButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
         self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     } else {
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld)", self.post.watchCount] forState:UIControlStateNormal];
+        [self.watchButton setTitle:@"Watch" forState:UIControlStateNormal];
         
         [self.watchButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
@@ -61,6 +61,7 @@
     
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
+    self.numberWatchingLabel.text = [NSString stringWithFormat:@"%lld Watching", post.watchCount];
     self.titleLabel.text = post.title;
     self.priceLabel.text = [NSString stringWithFormat:@"$%.02f", post.price];
     self.hotnessLabel.hidden = YES;

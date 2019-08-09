@@ -66,6 +66,7 @@
 		EA6732EE22DF95F5004E362F /* QAView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732EB22DF95F5004E362F /* QAView.m */; };
 		EA6732F422DF96DE004E362F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F322DF96DE004E362F /* Utils.m */; };
 		EA6732F722DFAB25004E362F /* SignInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F622DFAB25004E362F /* SignInVC.m */; };
+		EA99514E22FCDCF700BF65AE /* UIButton+Expandable.m in Sources */ = {isa = PBXBuildFile; fileRef = EA99514C22FCDCF700BF65AE /* UIButton+Expandable.m */; };
 		EAB1A80822F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB1A80722F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift */; };
 		EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723322E9315200426226 /* DraggableViewBackground.m */; };
 		EAEB723922E9316200426226 /* DraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723722E9316200426226 /* DraggableView.m */; };
@@ -207,6 +208,8 @@
 		EA6732F322DF96DE004E362F /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		EA6732F522DFAB25004E362F /* SignInVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInVC.h; sourceTree = "<group>"; };
 		EA6732F622DFAB25004E362F /* SignInVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInVC.m; sourceTree = "<group>"; };
+		EA99514C22FCDCF700BF65AE /* UIButton+Expandable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Expandable.m"; sourceTree = "<group>"; };
+		EA99514D22FCDCF700BF65AE /* UIButton+Expandable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Expandable.h"; sourceTree = "<group>"; };
 		EAB1A80622F8272B00C4AA25 /* Dorm-a-Shop-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Dorm-a-Shop-Bridging-Header.h"; sourceTree = "<group>"; };
 		EAB1A80722F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseLiveQueryObjCBridge.swift; sourceTree = "<group>"; };
 		EAEB723222E9315200426226 /* DraggableViewBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableViewBackground.h; sourceTree = "<group>"; };
@@ -367,8 +370,6 @@
 			isa = PBXGroup;
 			children = (
 				DE877D6322FA3CC900C35587 /* ARViewController.swift */,
-				DE4FCFD822E686DE00B1311F /* EditProfileVC.h */,
-				DE4FCFD922E686DE00B1311F /* EditProfileVC.m */,
 				EA6732DC22DF931C004E362F /* SignUpVC.h */,
 				EA6732DD22DF931C004E362F /* SignUpVC.m */,
 				EA6732F522DFAB25004E362F /* SignInVC.h */,
@@ -381,6 +382,8 @@
 				47A8A9EA22DE7B2B005D9520 /* DetailsViewController.m */,
 				DE307FFE22DFD20500418DE3 /* ProfileViewController.h */,
 				DE307FFF22DFD20500418DE3 /* ProfileViewController.m */,
+				DE4FCFD822E686DE00B1311F /* EditProfileVC.h */,
+				DE4FCFD922E686DE00B1311F /* EditProfileVC.m */,
 				47A8A9EF22E12528005D9520 /* WatchListViewController.h */,
 				47A8A9F022E12528005D9520 /* WatchListViewController.m */,
 				DEFE7C8722E640DF006E3096 /* SearchViewController.h */,
@@ -420,6 +423,8 @@
 				DEFE7C8B22E64347006E3096 /* UserCell.m */,
 				EA0E3AFA22FAB11C003BE858 /* UserCollectionCell.h */,
 				EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */,
+				EA99514D22FCDCF700BF65AE /* UIButton+Expandable.h */,
+				EA99514C22FCDCF700BF65AE /* UIButton+Expandable.m */,
 				DE4DE32F22FCE168009B3A56 /* UIButton+Expandable.h */,
 				DE4DE32E22FCE168009B3A56 /* UIButton+Expandable.m */,
 			);
@@ -649,6 +654,7 @@
 				EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */,
 				DE877D7322FA3EB500C35587 /* chair_METALLIC.png in Resources */,
 				DE877D7722FA3EB500C35587 /* chair_NORMAL.png in Resources */,
+				EA0E3B0122FBE265003BE858 /* Assets.xcassets in Resources */,
 				47185EBE22FCED8100674C81 /* Assets.xcassets in Resources */,
 				DE877D7122FA3EB500C35587 /* ship.png in Resources */,
 			);
@@ -808,6 +814,7 @@
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
+				EA99514E22FCDCF700BF65AE /* UIButton+Expandable.m in Sources */,
 				DE4DE33022FCE168009B3A56 /* UIButton+Expandable.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
 				470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */,
