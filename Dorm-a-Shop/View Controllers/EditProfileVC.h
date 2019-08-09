@@ -19,14 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EditProfileVC : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITextFieldDelegate>
 
-@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
-@property (nonatomic, weak) IBOutlet UITextField *nameTextField;
-@property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
-@property (nonatomic, weak) IBOutlet UITextField *confirmPasswordTextField;
-@property (nonatomic, weak) IBOutlet UIButton *addPictureButton;
-@property (weak, nonatomic) IBOutlet UIButton *updateLocationButton;
-@property (nonatomic, weak) IBOutlet UIButton *submitButton;
-
 @property (nonatomic, strong) UserCoreData *user;
 @property (nonatomic, strong) id<EditProfileViewControllerDelegate> delegate;
 @property (nonatomic, strong) UIImage *selectedImage;

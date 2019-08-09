@@ -414,7 +414,6 @@
 }
 
 - (void)queryAllUsers:(NSArray*)objectIds WithCompletion:(void (^)(NSArray *, NSError *))completion {
-    
     PFQuery *userQuery = [PFUser query];
     [userQuery whereKey:@"objectId" containedIn:objectIds];
     
@@ -620,6 +619,89 @@
                                         return YES;
                                     } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
 //                                    [self saveContext];
+                                }
+                            }
+                        } else {
+                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                        }
+                    }];
+                }
+                
+                if (!reviewCoreData) {
+                    reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:review.objectId withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[review.rating intValue] withReview:review.review withTitle:review.title withItemDescription:review.itemDescription withDate:review.createdAt withManagedObjectContext:weakSelf.context];
+                }
+                
+                NSLog(@"%@", reviewCoreData);
+                [reviewsCoreDataArray addObject:reviewCoreData];
+            }
+            NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:reviewsCoreDataArray];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
+            [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            completion(mutableResults, nil);
+        } else {
+            NSLog(@"😫😫😫 Error querying reviews from parse: %@", error.localizedDescription);
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)querySwipeMatchesForSeller:(User *)seller withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
+    NSMutableArray *reviewsCoreDataArray = [[NSMutableArray alloc] init];
+    PFQuery *reviewsQuery = [Review query];
+    
+    //query all reviews if seller is nil
+    if (seller) {
+        [reviewsQuery whereKey:@"seller" equalTo:seller];
+    }
+    
+    [reviewsQuery orderByDescending:@"updatedAt"];
+    [reviewsQuery includeKey:@"seller"];
+    [reviewsQuery includeKey:@"seller.Location"];
+    [reviewsQuery includeKey:@"reviewer"];
+    
+    __weak ParseDatabaseManager *weakSelf = self;
+    [reviewsQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable reviews, NSError * _Nullable error) {
+        if (reviews) {
+            for (Review *review in reviews) {
+                NSLog(@"%@", review);
+                UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
+                UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
+                ReviewCoreData *reviewCoreData = (ReviewCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:review.objectId withContext:weakSelf.context];
+                
+                if (!sellerCoreData) {
+                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.seller.Location.latitude, review.seller.Location.longitude];
+                    sellerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.seller.objectId withUsername:review.seller.username withEmail:review.seller.email withLocation:location withAddress:review.seller.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
+                    
+                    [review.seller.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        if (data) {
+                            if (!sellerCoreData.profilePic) {
+                                sellerCoreData.profilePic = data;
+                                
+                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+                                    return YES;
+                                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                                //                                [self saveContext];
+                            }
+                        } else {
+                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
+                        }
+                    }];
+                }
+                
+                if (!reviewerCoreData) {
+                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.reviewer.Location.latitude, review.reviewer.Location.longitude];
+                    reviewerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.reviewer.objectId withUsername:review.reviewer.username withEmail:review.reviewer.email withLocation:location withAddress:review.reviewer.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
+                    
+                    [review.reviewer.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+                        if (data) {
+                            if (!sellerCoreData.profilePic) {
+                                if (!sellerCoreData.profilePic) {
+                                    sellerCoreData.profilePic = data;
+                                    
+                                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+                                        return YES;
+                                    } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                                    //                                    [self saveContext];
                                 }
                             }
                         } else {

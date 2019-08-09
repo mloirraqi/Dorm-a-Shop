@@ -19,6 +19,15 @@
 
 @interface EditProfileVC () <GMSPlacePickerViewControllerDelegate, UITextFieldDelegate>
 
+@property (nonatomic, weak) IBOutlet UITextField *nameTextField;
+@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
+@property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
+@property (nonatomic, weak) IBOutlet UITextField *confirmPasswordTextField;
+@property (nonatomic, weak) IBOutlet UIButton *addPictureButton;
+@property (weak, nonatomic) IBOutlet UIButton *updateLocationButton;
+@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (nonatomic, weak) IBOutlet UIButton *submitButton;
+
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) User *currentPFUser;
 
@@ -38,12 +47,19 @@
     
     self.nameTextField.text = self.currentPFUser.username;
     self.emailTextField.text = self.currentPFUser.email;
-    self.passwordTextField.text = self.currentPFUser.password;
+    self.locationLabel.text = self.currentPFUser.address;
+    self.passwordTextField.placeholder = @"New password";
+    self.confirmPasswordTextField.placeholder = @"Confirm new password";
     
     self.nameTextField.delegate = self;
     self.emailTextField.delegate = self;
     self.passwordTextField.delegate = self;
     self.confirmPasswordTextField.delegate = self;
+
+    self.submitButton.layer.cornerRadius = 5;
+    self.submitButton.layer.borderWidth = 1.0f;
+    self.submitButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
+    self.submitButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     
     NSData *imageData = self.user.profilePic;
     [self.addPictureButton setImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
@@ -299,7 +315,7 @@
     // Dismiss the place picker, as it cannot dismiss itself.
     [viewController dismissViewControllerAnimated:YES completion:nil];
     
-    [self.updateLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
+    self.locationLabel.text = place.formattedAddress;
     self.locationSelected = YES;
     self.selectedLocationPoint = [PFGeoPoint geoPointWithLatitude:place.coordinate.latitude longitude:place.coordinate.longitude];
     [self submitButtonUpdateVisibility];
