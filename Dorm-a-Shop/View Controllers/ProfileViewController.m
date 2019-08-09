@@ -19,7 +19,6 @@
 #import "ComposeReviewViewController.h"
 #import "SellerReviewsViewController.h"
 #import "UILabel+Boldify.h"
-
 #import "UserCollectionCell.h"
 @import Parse;
 
@@ -31,7 +30,6 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *activeItems;
 @property (nonatomic, strong) NSMutableArray *soldItems;
-@property (nonatomic, strong) NSMutableArray *matchedUsers;
 @property (nonatomic, strong) NSNumber *selectedSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
@@ -180,10 +178,8 @@
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if ([self.segmentControl selectedSegmentIndex] == 0) {
         return self.activeItems.count;
-    } else if ([self.segmentControl selectedSegmentIndex] == 1) {
-        return self.soldItems.count;
     } else {
-        return self.matchedUsers.count;
+        return self.soldItems.count;
     }
 }
 
@@ -193,48 +189,22 @@
         PostCoreData *post = self.activeItems[indexPath.item];
         cell.post = post;
         return cell;
-    } else if ([self.segmentControl selectedSegmentIndex] == 1) {
+    } else {
         PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"sold" forIndexPath:indexPath];
         PostCoreData *post = self.soldItems[indexPath.item];
         cell.post = post;
-        return cell;
-    } else {
-        UserCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
-        
-        User* userCoreData = (User*)self.matchedUsers[indexPath.item];
-        
-        PFFileObject *image = userCoreData.ProfilePic;
-        
-        [image getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError * _Nullable error) {
-            UIImage *originalImage = [UIImage imageWithData:data];
-            [cell.profilePic setImage:originalImage];
-        }];
-        
-        cell.username.text = userCoreData.username;
-        cell.locationLabel.text = userCoreData.address;
-
-        cell.username.textColor = [UIColor blackColor];
-        cell.locationLabel.textColor = [UIColor blackColor];
         return cell;
     }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if ([self.segmentControl selectedSegmentIndex] == 2) {
-        CGFloat width = (collectionView.frame.size.width/3) - 4; //(4 is interitempadding)
-        return CGSizeMake(width, width + 70); //70 is size of two labels
-    } else {
-        UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
-        layout.minimumLineSpacing = 1;
-        layout.minimumInteritemSpacing = 1;
-        CGFloat posterPerLine = 2;
-        CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
-        CGFloat itemHeight = itemWidth;
-        return CGSizeMake(itemWidth, itemHeight);
-    }
-    
-    return itemSize;
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*) self.collectionView.collectionViewLayout;
+    layout.minimumLineSpacing = 1;
+    layout.minimumInteritemSpacing = 1;
+    CGFloat posterPerLine = 2;
+    CGFloat itemWidth = (self.collectionView.frame.size.width - layout.minimumInteritemSpacing * (posterPerLine - 1)) / posterPerLine;
+    CGFloat itemHeight = itemWidth;
+    return CGSizeMake(itemWidth, itemHeight);
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -282,47 +252,6 @@
 }
 
 - (IBAction)changedSegment:(id)sender {
-    
-    if ([self.segmentControl selectedSegmentIndex] == 2) { //Matched Users
-        if (self.matchedUsers.count <= 0) { //Fetch records if empty
-            __weak ProfileViewController *weakSelf = self;
-            
-            NSString* userId = self.user.objectId;
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(userId = %@ OR accepted = %@) AND matched = 1", userId, userId];
-            PFQuery *query = [PFQuery queryWithClassName:@"SwipeRecord" predicate:predicate];
-            
-            [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipeRecords, NSError * _Nullable error) {
-                if (swipeRecords) {
-                    if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
-                        NSLog(@"😍 Found %lu records", (unsigned long)swipeRecords.count);
-                        NSMutableArray* usersToQuery = [[NSMutableArray alloc] init];
-                        for (PFObject* record in swipeRecords) {
-                            NSString* objectId1 = record[@"accepted"];
-                            NSString* objectId2 = record[@"userId"];
-                            
-                            NSString* objectId = [weakSelf.user.objectId isEqualToString:objectId1] ? objectId2 : objectId1;
-                            
-                            [usersToQuery addObject:objectId];
-                        }
-                        
-                        [[ParseDatabaseManager shared] queryAllUsers:usersToQuery WithCompletion:^(NSArray* users, NSError* error) {
-                            weakSelf.matchedUsers = [users mutableCopy];
-                            [weakSelf.collectionView reloadData];
-                        }];
-                    } else {
-                        NSLog(@"😫😫😫 No such User Found");
-                    }
-                } else {
-                    NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
-                    [weakSelf.matchedUsers removeAllObjects];
-                    [weakSelf.collectionView reloadData];
-                }
-            }];
-            
-            return;
-        }
-    }
-    
     [self.collectionView reloadData];
 }
 

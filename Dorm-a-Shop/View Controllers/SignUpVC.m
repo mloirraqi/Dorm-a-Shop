@@ -220,9 +220,9 @@
     }
 }
 
-- (IBAction)signInTap:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
+//- (IBAction)signInTap:(UIButton *)sender {
+//    [self.navigationController popViewControllerAnimated:YES];
+//}
 
 - (IBAction)pictureButtonTap:(UIButton *)sender {
     UIAlertController *alertController=[UIAlertController alertControllerWithTitle:@"" message:@"Choose image" preferredStyle:UIAlertControllerStyleActionSheet];

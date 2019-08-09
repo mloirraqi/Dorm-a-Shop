@@ -248,9 +248,9 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
     if([post.condition isEqualToString:@"Other"]) {
-         [request setPredicate:[NSPredicate predicateWithFormat:@"((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) AND (objectId != %@)", post.title, post.title, post.objectId]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) AND (objectId != %@)", post.title, post.title, post.objectId]];
     } else {
-         [request setPredicate:[NSPredicate predicateWithFormat:@"(((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) OR (category == %@)) AND (objectId != %@)", post.title, post.title, post.category, post.objectId]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) OR (category == %@)) AND (objectId != %@)", post.title, post.title, post.category, post.objectId]];
     }
     [request setEntity:entityDescription];
     
@@ -304,19 +304,19 @@
         [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
             PostCoreData *postData;
             BOOL operationAlreadyExists = NO;
-
+            
             if (postObjectId) {
                 postData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:postObjectId withContext:context];
                 operationAlreadyExists = [self queueContainsOperationWithName:postObjectId];
             }
-
+            
             if (postData || operationAlreadyExists) {
                 return NO;
             }
-
+            
             return YES;
         } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
-//        [self saveContext];
+        //        [self saveContext];
     }
     
     return postCoreData;
@@ -344,19 +344,19 @@
         [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
             UserCoreData *userData;
             BOOL operationAlreadyExists = NO;
-
+            
             if (userObjectId) {
                 userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
                 operationAlreadyExists = YES;
             }
-
+            
             if (userData || operationAlreadyExists) {
                 return NO;
             }
-
+            
             return YES;
         } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
-//        [self saveContext];
+        //        [self saveContext];
     }
     
     return userCoreData;
