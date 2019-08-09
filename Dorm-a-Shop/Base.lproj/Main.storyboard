@@ -290,10 +290,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="DormAShop" id="avF-9v-k1C" colorLabel="IBBuiltInLabel-Blue">
                         <barButtonItem key="rightBarButtonItem" title="add" style="plain" id="D1h-A7-BLP" userLabel="Post New Item">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MxR-xl-vgc">
-                                <rect key="frame" x="294" y="7" width="100" height="30"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="MxR-xl-vgc">
+                                <rect key="frame" x="374" y="11" width="20" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Post New Item"/>
+                                <state key="normal" image="compose"/>
                                 <connections>
                                     <segue destination="kwu-0C-ckm" kind="show" identifier="segueToUpload" id="whM-wh-Yb4"/>
                                 </connections>
@@ -1505,11 +1505,13 @@
             </objects>
             <point key="canvasLocation" x="-226" y="625"/>
         </scene>
-        <!--Profile-->
+        <!--Navigation Controller-->
         <scene sceneID="G09-fm-Fzb">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oXO-JU-K28" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" id="aY2-WZ-2Eh"/>
+                    <tabBarItem key="tabBarItem" title="" image="user" id="aY2-WZ-2Eh">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KIy-Ae-kEI">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -1844,11 +1846,13 @@
             </objects>
             <point key="canvasLocation" x="-706" y="-238"/>
         </scene>
-        <!--Home-->
+        <!--Navigation Controller-->
         <scene sceneID="Gq8-LG-Ao0">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="huz-Vy-fBK" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" id="igw-ze-ls9"/>
+                    <tabBarItem key="tabBarItem" title="" image="home" id="igw-ze-ls9">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="puE-jX-bGA">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -1863,11 +1867,13 @@
             </objects>
             <point key="canvasLocation" x="1203" y="160"/>
         </scene>
-        <!--Watch-->
+        <!--Navigation Controller-->
         <scene sceneID="Xkh-sc-Hft">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DJx-3h-Trp" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Watch" id="9bd-m5-VtR"/>
+                    <tabBarItem key="tabBarItem" title="" image="eye" id="9bd-m5-VtR">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kxo-sf-HsY">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -2302,11 +2308,13 @@
             </objects>
             <point key="canvasLocation" x="1773.913043478261" y="2320.9821428571427"/>
         </scene>
-        <!--Connect-->
+        <!--Navigation Controller-->
         <scene sceneID="9c5-hY-tiv">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="O11-22-vap" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Connect" id="t0n-hf-uts"/>
+                    <tabBarItem key="tabBarItem" title="" image="search" id="t0n-hf-uts">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="y9g-O3-MpM">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -2347,17 +2355,17 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="b2n-kb-YFn">
                                 <rect key="frame" x="20" y="6" width="68" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="search_map"/>
+                                <state key="normal" image="location"/>
                                 <connections>
                                     <segue destination="ttj-4c-Ud3" kind="show" id="UV4-Ot-IYd"/>
                                 </connections>
                             </button>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="U6T-a0-18K">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Mgd-pt-TLJ">
-                                <rect key="frame" x="290" y="7" width="104" height="30"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="U6T-a0-18K">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Mgd-pt-TLJ">
+                                <rect key="frame" x="362" y="6" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Matched Users"/>
+                                <state key="normal" image="user-check"/>
                                 <connections>
                                     <segue destination="fsC-on-5ml" kind="show" id="OcD-20-zSF"/>
                                 </connections>
@@ -2369,11 +2377,13 @@
             </objects>
             <point key="canvasLocation" x="866.66666666666674" y="3112.5"/>
         </scene>
-        <!--Swipe-->
+        <!--Navigation Controller-->
         <scene sceneID="UUs-gY-9tM">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dDI-Qk-IoB" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Swipe" id="Suv-aU-L6Q"/>
+                    <tabBarItem key="tabBarItem" title="" image="earth" id="Suv-aU-L6Q">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5hs-FR-cFC">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -2852,14 +2862,21 @@
     <resources>
         <image name="addLogo" width="187" height="187"/>
         <image name="add_pic" width="980" height="980"/>
+        <image name="compose" width="20" height="20"/>
+        <image name="earth" width="32" height="32"/>
+        <image name="eye" width="32" height="32"/>
         <image name="fire" width="32" height="32"/>
+        <image name="home" width="32" height="32"/>
         <image name="inbox" width="32" height="32"/>
         <image name="item_placeholder" width="848" height="660"/>
-        <image name="search_map" width="32" height="32"/>
+        <image name="location" width="32" height="32"/>
+        <image name="search" width="32" height="32"/>
+        <image name="user" width="32" height="32"/>
+        <image name="user-check" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="uHt-QB-VG6"/>
-        <segue reference="oCN-lU-gXW"/>
+        <segue reference="Bvx-1i-tFM"/>
         <segue reference="dnl-93-kbr"/>
         <segue reference="T5c-ri-LSw"/>
         <segue reference="iII-YD-ifK"/>
