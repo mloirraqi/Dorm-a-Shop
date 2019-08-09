@@ -55,15 +55,6 @@
     
     NSMutableArray __block *mutableResults = [NSMutableArray arrayWithArray:results];
     if (results.count > 1) {
-        double initialRank = ((PostCoreData *)results[0]).rank;
-        double rank = initialRank;
-        
-        for (PostCoreData *result in results) {
-            if (rank != result.rank) {
-                break;
-            }
-        }
-        
         NSArray *sortedPosts = [mutableResults sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
             PostCoreData *firstPost = (PostCoreData *)firstObj;
             PostCoreData *secondPost = (PostCoreData *)secondObj;

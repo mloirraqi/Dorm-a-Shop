@@ -15,7 +15,8 @@
 
 @interface MatchedViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, strong) NSMutableArray *matchedUsers;
+@property (nonatomic, strong) NSMutableArray *matchedUsersArray;
+@property (weak, nonatomic) IBOutlet UIView *noMatchesView;
 
 @end
 
@@ -31,7 +32,7 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UserCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
         
-    User* userCoreData = (User*)self.matchedUsers[indexPath.item];
+    User* userCoreData = (User*)self.matchedUsersArray[indexPath.item];
     
     PFFileObject *image = userCoreData.ProfilePic;
     
@@ -49,7 +50,7 @@
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.matchedUsers.count;
+    return self.matchedUsersArray.count;
 }
 
 - (void)fetchMatchedFromParse {
@@ -74,16 +75,22 @@
                 }
                 
                 [[ParseDatabaseManager shared] queryAllUsers:usersToQuery WithCompletion:^(NSArray* users, NSError* error) {
-                    weakSelf.matchedUsers = [users mutableCopy];
-                    [weakSelf.collectionView reloadData];
+                    weakSelf.matchedUsersArray = [users mutableCopy];
+                    
+                    if (weakSelf.matchedUsersArray.count == 0) {
+                        [self.noMatchesView setHidden:NO];
+                    } else {
+                        [self.noMatchesView setHidden:YES];
+                        [weakSelf.collectionView reloadData];
+                    }
                 }];
             } else {
                 NSLog(@"😫😫😫 No such User Found");
             }
         } else {
             NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
-            [weakSelf.matchedUsers removeAllObjects];
-            [weakSelf.collectionView reloadData];
+            [weakSelf.matchedUsersArray removeAllObjects];
+            [self.noMatchesView setHidden:NO];
         }
     }];
 }
