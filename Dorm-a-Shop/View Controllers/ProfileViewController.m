@@ -227,6 +227,7 @@
     } else if ([segue.identifier isEqualToString:@"segueToEditProfile"]) {
         EditProfileVC *editProfileViewController = [segue destinationViewController];
         editProfileViewController.delegate = self;
+        editProfileViewController.user = self.user;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
         msgViewController.user = self.user;
@@ -258,8 +259,10 @@
     [self.collectionView reloadData];
 }
 
-- (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
-    [self fetchProfileFromCoreData];
+- (void)updateEditProfileData:(nonnull UIViewController *)viewController {
+    EditProfileVC *editProfileViewController = (EditProfileVC *)viewController;
+    self.usernameLabel.text = editProfileViewController.user.username;
+    self.locationLabel.text = editProfileViewController.user.address;
 }
 
 - (void)deleteAllCoreData {

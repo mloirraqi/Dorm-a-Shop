@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-
+#import "UserCoreData+CoreDataClass.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol EditProfileViewControllerDelegate <NSObject>
@@ -17,21 +17,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface EditProfileVC : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITextFieldDelegate> {
-    __weak IBOutlet UITextField *emailTextField;
-    __weak IBOutlet UITextField *nameTextField;
-    __weak IBOutlet UITextField *passwordTextField;
-    __weak IBOutlet UITextField *confirmPasswordTextField;
-    __weak IBOutlet UIButton *addPictureButton;
-    __weak IBOutlet UIButton *updateLocationButton;
-    __weak IBOutlet UIButton *submitButton;
-    
-    UIImage * selectedImage;
-    BOOL locationSelected;
-    PFGeoPoint *selectedLocationPoint;
-}
+@interface EditProfileVC : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITextFieldDelegate>
 
+@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
+@property (nonatomic, weak) IBOutlet UITextField *nameTextField;
+@property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
+@property (nonatomic, weak) IBOutlet UITextField *confirmPasswordTextField;
+@property (nonatomic, weak) IBOutlet UIButton *addPictureButton;
+@property (weak, nonatomic) IBOutlet UIButton *updateLocationButton;
+@property (nonatomic, weak) IBOutlet UIButton *submitButton;
+
+@property (nonatomic, strong) UserCoreData *user;
 @property (nonatomic, strong) id<EditProfileViewControllerDelegate> delegate;
+@property (nonatomic, strong) UIImage *selectedImage;
+@property (nonatomic) BOOL locationSelected;
+@property (nonatomic, strong) PFGeoPoint *selectedLocationPoint;
 
 @end
 

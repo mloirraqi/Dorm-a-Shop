@@ -1023,7 +1023,7 @@
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <connections>
-                                    <action selector="editProfileButtonAction:" destination="cUB-Zh-w6I" eventType="touchUpInside" id="tb8-2i-JWD"/>
+                                    <action selector="submitButtonAction:" destination="cUB-Zh-w6I" eventType="touchUpInside" id="BwQ-gE-G8p"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1073,13 +1073,13 @@
                         </connections>
                     </view>
                     <connections>
-                        <outlet property="addPictureButton" destination="Xhi-mG-COY" id="r2u-Ni-tqP"/>
-                        <outlet property="confirmPasswordTextField" destination="9ux-eA-T1h" id="EdZ-ZX-jJp"/>
-                        <outlet property="emailTextField" destination="PJX-nI-wG2" id="KSg-mi-8M7"/>
-                        <outlet property="nameTextField" destination="kvp-UD-rPp" id="Kzz-uR-adt"/>
-                        <outlet property="passwordTextField" destination="bn5-cJ-uhn" id="HSr-ys-SuT"/>
-                        <outlet property="submitButton" destination="S9f-PL-NYK" id="Glv-sh-zCd"/>
-                        <outlet property="updateLocationButton" destination="jpv-Op-MyP" id="4yT-cu-gai"/>
+                        <outlet property="addPictureButton" destination="Xhi-mG-COY" id="aMC-ho-bum"/>
+                        <outlet property="confirmPasswordTextField" destination="9ux-eA-T1h" id="EJG-LP-Wsg"/>
+                        <outlet property="emailTextField" destination="PJX-nI-wG2" id="pH1-2g-fEg"/>
+                        <outlet property="nameTextField" destination="kvp-UD-rPp" id="1lC-Vy-ZB4"/>
+                        <outlet property="passwordTextField" destination="bn5-cJ-uhn" id="MTG-Q1-aq7"/>
+                        <outlet property="submitButton" destination="S9f-PL-NYK" id="1pe-zp-s8H"/>
+                        <outlet property="updateLocationButton" destination="jpv-Op-MyP" id="mhE-Nr-Hka"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JME-qJ-rWa" userLabel="First Responder" sceneMemberID="firstResponder"/>
