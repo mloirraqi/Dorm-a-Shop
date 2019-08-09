@@ -66,7 +66,6 @@
         if (error) {
             NSLog(@"Error querying reviews! %@", error.localizedDescription);
         } else {
-            NSLog(@"%@", reviews);
             self.reviewsArray = reviews;
             [self.tableView reloadData];
         }

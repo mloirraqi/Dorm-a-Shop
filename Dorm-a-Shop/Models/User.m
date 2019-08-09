@@ -12,6 +12,8 @@
 @dynamic address;
 @dynamic ProfilePic;
 @dynamic Location;
+@dynamic username;
+@dynamic email;
 
 + (nonnull NSString *)parseClassName {
     return [super parseClassName];

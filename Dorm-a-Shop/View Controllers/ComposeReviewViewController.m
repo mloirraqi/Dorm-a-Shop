@@ -187,25 +187,20 @@
             textView.text = @"Write review here";
             textView.textColor = [UIColor lightGrayColor];
         }
-        
         [textView resignFirstResponder];
     } else if ([textView isEqual:self.itemDescriptionTextView]) {
         if ([textView.text isEqualToString:@""]) {
             textView.text = @"Write a short description of the item you're reviewing";
             textView.textColor = [UIColor lightGrayColor];
         }
-        
         [textView resignFirstResponder];
     } else if ([textView isEqual:self.titleTextView]) {
         if ([textView.text isEqualToString:@""]) {
             textView.text = @"Give a short title for your review";
             textView.textColor = [UIColor lightGrayColor];
         }
-        
         [textView resignFirstResponder];
     }
-    
-    
 }
 
 - (void)saveContext {

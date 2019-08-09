@@ -276,6 +276,7 @@
     NSError *deleteUsersError = nil;
     [self.context executeRequest:deleteUsers error:&deleteUsersError];
     
+    UserCoreData *user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
     NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
     NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
     NSError *deletePostsError = nil;

@@ -235,8 +235,6 @@
         abort();
     }
     
-    NSLog(@"%@", results);
-    
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -322,7 +320,7 @@
     return postCoreData;
 }
 
-- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     UserCoreData *userCoreData;
     if (userObjectId) {
         userCoreData = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
@@ -334,7 +332,12 @@
         
         userCoreData.objectId = userObjectId;
         userCoreData.profilePic = imageData;
-        userCoreData.email = email;
+        
+        if ([userObjectId isEqualToString:PFUser.currentUser.objectId]) {
+            [PFUser.currentUser fetch];
+            userCoreData.email = PFUser.currentUser.email;
+        }
+        
         userCoreData.location = location;
         userCoreData.username = username;
         userCoreData.address = address;
@@ -347,7 +350,7 @@
             
             if (userObjectId) {
                 userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
-                operationAlreadyExists = YES;
+                operationAlreadyExists = [weakSelf queueContainsOperationWithName:userObjectId];
             }
             
             if (userData || operationAlreadyExists) {

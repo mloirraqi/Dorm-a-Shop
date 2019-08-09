@@ -16,6 +16,7 @@
 #import "User.h"
 #import "LocationManager.h"
 @import Parse;
+@import IQKeyboardManager;
 
 @interface AppDelegate ()
 
@@ -101,6 +102,8 @@
         [self.persistentContainer.viewContext executeRequest:deleteReviews error:&deleteReviewsError];
     }
     
+    [IQKeyboardManager sharedManager].enable = YES;
+    
     return YES;
 }
 
@@ -156,25 +159,6 @@
     _persistentContainer.viewContext.mergePolicy = NSMergePolicy.overwriteMergePolicy;
     return _persistentContainer;
 }
-
-//- (NSManagedObjectContext *)managedObjectContext {
-//    NSThread *thisThread = [NSThread currentThread];
-//    if (thisThread == [NSThread mainThread])
-//    {
-//        //For the Main thread just return default context iVar
-//        return _managedObjectContext;
-//    } else {
-//        //Return separate MOC for each new thread
-//        NSManagedObjectContext *threadManagedObjectContext = [[thisThread threadDictionary] objectForKey:@"MOC_KEY"];
-//        if (threadManagedObjectContext == nil) {
-//            threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-//              [threadManagedObjectContext setPersistentStoreCoordinator: self.persistentContainer.persistentStoreCoordinator];
-//              [[thisThread threadDictionary] setObject:threadManagedObjectContext forKey:@"MOC_KEY"];
-//        }
-//        
-//        return threadManagedObjectContext;
-//    }
-//}
 
 #pragma mark - Core Data Saving support
 

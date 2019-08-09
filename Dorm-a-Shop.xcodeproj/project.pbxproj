@@ -12,6 +12,7 @@
 		470FB71A22EF71780088A3EC /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71922EF71780088A3EC /* Watches.m */; };
 		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
 		47185EBE22FCED8100674C81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47185EBD22FCED8100674C81 /* Assets.xcassets */; };
+		47185EC122FD4BDD00674C81 /* SwipeRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 47185EC022FD4BDD00674C81 /* SwipeRecord.m */; };
 		47415D0F22F956D700AF4C16 /* UILabel+Boldify.m in Sources */ = {isa = PBXBuildFile; fileRef = 47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */; };
 		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
@@ -109,6 +110,8 @@
 		470FB72B22F0C09B0088A3EC /* Conversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		47185EBD22FCED8100674C81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		47185EBF22FD4BDD00674C81 /* SwipeRecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipeRecord.h; sourceTree = "<group>"; };
+		47185EC022FD4BDD00674C81 /* SwipeRecord.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwipeRecord.m; sourceTree = "<group>"; };
 		47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+Boldify.h"; sourceTree = "<group>"; };
 		47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Boldify.m"; sourceTree = "<group>"; };
 		47486BA622F3626E00DE6D8E /* CoreDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
@@ -354,6 +357,8 @@
 				470FB72B22F0C09B0088A3EC /* Conversation.m */,
 				47486BB822F3D65500DE6D8E /* Review.h */,
 				47486BB922F3D65500DE6D8E /* Review.m */,
+				47185EBF22FD4BDD00674C81 /* SwipeRecord.h */,
+				47185EC022FD4BDD00674C81 /* SwipeRecord.m */,
 				47486BD022F566C200DE6D8E /* ParseDatabaseManager.h */,
 				47486BD122F566C200DE6D8E /* ParseDatabaseManager.m */,
 				47486BA622F3626E00DE6D8E /* CoreDataManager.h */,
@@ -826,6 +831,7 @@
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				EA0E3B0722FC85B3003BE858 /* SwipePopupVC.m in Sources */,
+				47185EC122FD4BDD00674C81 /* SwipeRecord.m in Sources */,
 				DE4DE33522FCE6D2009B3A56 /* MatchedViewController.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				DE877D6422FA3CC900C35587 /* ARViewController.swift in Sources */,

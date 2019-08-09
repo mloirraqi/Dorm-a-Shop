@@ -16,6 +16,7 @@ target 'Dorm-a-Shop' do
   pod 'GooglePlaces'
   pod 'TwilioChatClient', '2.2.0'
   pod 'SDWebImage'
+  pod 'IQKeyboardManager'
   
   target 'Dorm-a-ShopTests' do
     inherit! :search_paths
