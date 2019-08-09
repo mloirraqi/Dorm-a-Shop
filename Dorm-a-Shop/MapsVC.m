@@ -21,6 +21,7 @@
 @implementation MapsVC {
     GMSMapView *gmapView;
     NSMutableSet* addedMarkers;
+    GMSCircle *circ;
 }
 
 - (void)viewDidLoad {
@@ -56,7 +57,7 @@
     
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake(lat, lng);
     
-    GMSCircle *circ = [GMSCircle circleWithPosition:center radius:2.5 * 1000]; //5km
+    circ = [GMSCircle circleWithPosition:center radius:2.5 * 1000]; //5km
     circ.fillColor = [UIColor clearColor];
     circ.strokeColor = [UIColor redColor];
     circ.strokeWidth = 2.6;
@@ -81,8 +82,6 @@
     NSLog(@"users count: %lu", (unsigned long)self.users.count);
     
     NSCharacterSet* mySet = [NSCharacterSet characterSetWithCharactersInString:@",-.0123456789"];
-    
-    NSMutableArray *markers = [[NSMutableArray alloc] init];
     
     for (UserCoreData* user in self.users) {
         
@@ -111,18 +110,27 @@
         marker.iconView = imgView;
         marker.map = gmapView;
         marker.userData = user;
-        
-        [markers addObject:marker];
     }
-    CLLocationCoordinate2D myLocation = ((GMSMarker *)markers.firstObject).position;
-    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
-    
-    for (GMSMarker *marker in markers)
-        bounds = [bounds includingCoordinate:marker.position];
-    
-    [gmapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:bounds withPadding:15.0f]];
+
+[gmapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:[self boundsOfCircle] withPadding:0.0f]];}
+
+- (GMSCoordinateBounds*)boundsOfCircle {
+    CLLocationCoordinate2D c1 = [self coordinatesMaxMin:YES];
+    CLLocationCoordinate2D c2 = [self coordinatesMaxMin:NO];
+    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc]
+                                   initWithCoordinate:c1
+                                   coordinate:c2];
+    return bounds;
 }
 
+- (CLLocationCoordinate2D)coordinatesMaxMin:(BOOL)flag {
+    CGFloat radius = circ.radius;
+    CGFloat sign = flag ? 1 : -1;
+    CGFloat dx = sign * radius / 6378000 * (180/M_PI); //6378000 is the radius of circle with string around Earth
+    CGFloat lat = circ.position.latitude + dx;
+    CGFloat lng = circ.position.longitude + dx / cos(circ.position.latitude * M_PI/180);
+    return CLLocationCoordinate2DMake(lat, lng);
+}
 
 //Delegates
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
