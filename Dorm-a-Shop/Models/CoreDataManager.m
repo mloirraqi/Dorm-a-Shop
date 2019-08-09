@@ -235,8 +235,6 @@
         abort();
     }
     
-    NSLog(@"%@", results);
-    
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -248,9 +246,9 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
     if([post.condition isEqualToString:@"Other"]) {
-         [request setPredicate:[NSPredicate predicateWithFormat:@"((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) AND (objectId != %@)", post.title, post.title, post.objectId]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) AND (objectId != %@)", post.title, post.title, post.objectId]];
     } else {
-         [request setPredicate:[NSPredicate predicateWithFormat:@"(((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) OR (category == %@)) AND (objectId != %@)", post.title, post.title, post.category, post.objectId]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) OR (category == %@)) AND (objectId != %@)", post.title, post.title, post.category, post.objectId]];
     }
     [request setEntity:entityDescription];
     
@@ -304,25 +302,25 @@
         [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
             PostCoreData *postData;
             BOOL operationAlreadyExists = NO;
-
+            
             if (postObjectId) {
                 postData = (PostCoreData *)[weakSelf getCoreDataEntityWithName:@"PostCoreData" withObjectId:postObjectId withContext:context];
                 operationAlreadyExists = [self queueContainsOperationWithName:postObjectId];
             }
-
+            
             if (postData || operationAlreadyExists) {
                 return NO;
             }
-
+            
             return YES;
         } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
-//        [self saveContext];
+        //        [self saveContext];
     }
     
     return postCoreData;
 }
 
-- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     UserCoreData *userCoreData;
     if (userObjectId) {
         userCoreData = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
@@ -334,7 +332,12 @@
         
         userCoreData.objectId = userObjectId;
         userCoreData.profilePic = imageData;
-        userCoreData.email = email;
+        
+        if ([userObjectId isEqualToString:PFUser.currentUser.objectId]) {
+            [PFUser.currentUser fetch];
+            userCoreData.email = PFUser.currentUser.email;
+        }
+        
         userCoreData.location = location;
         userCoreData.username = username;
         userCoreData.address = address;
@@ -344,19 +347,19 @@
         [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
             UserCoreData *userData;
             BOOL operationAlreadyExists = NO;
-
+            
             if (userObjectId) {
                 userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
-                operationAlreadyExists = YES;
+                operationAlreadyExists = [weakSelf queueContainsOperationWithName:userObjectId];
             }
-
+            
             if (userData || operationAlreadyExists) {
                 return NO;
             }
-
+            
             return YES;
         } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
-//        [self saveContext];
+        //        [self saveContext];
     }
     
     return userCoreData;

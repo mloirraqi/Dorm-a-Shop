@@ -111,7 +111,7 @@
         __weak SignUpVC *weakSelf = self;
         [self setLocationNameForUser:user withCompletion:^(NSError *error) {
             NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:weakSelf.context];
+            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:weakSelf.context];
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 [hud hideAnimated:YES];
@@ -220,9 +220,9 @@
     }
 }
 
-- (IBAction)signInTap:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
+//- (IBAction)signInTap:(UIButton *)sender {
+//    [self.navigationController popViewControllerAnimated:YES];
+//}
 
 - (IBAction)pictureButtonTap:(UIButton *)sender {
     UIAlertController *alertController=[UIAlertController alertControllerWithTitle:@"" message:@"Choose image" preferredStyle:UIAlertControllerStyleActionSheet];

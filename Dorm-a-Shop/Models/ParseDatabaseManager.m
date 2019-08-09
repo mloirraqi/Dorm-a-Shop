@@ -64,12 +64,12 @@
     PFGeoPoint *location = currentUser[@"Location"];
     
     PFQuery *userQuery = [PFUser query];
-    [userQuery includeKey:@"Location"];
     [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:kilometers];
     
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
+    [userQuery includeKey:@"author.Location"];
     [postQuery whereKey:@"author" matchesQuery:userQuery];
     
     __weak ParseDatabaseManager *weakSelf = self;
@@ -85,7 +85,7 @@
                 if (!userCoreData) {
                     User *user = (User *)post.author;
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
-                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
+                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                     
                     [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -238,7 +238,7 @@
                     //this really shouldn't ever execute if posts/users were previoiusly saved to core data properly, it's just a failsafe
                     User *user = (User *)watchedPost.author;
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
-                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
+                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                     
                     [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         //set image later
@@ -353,7 +353,6 @@
                     
                     if (![postCoreData.author.objectId isEqualToString:[PFUser currentUser].objectId]) {
                         NSInteger categoryIndex = [weakSelf.categories indexOfObject:postCoreData.category];
-                        NSLog(@"%@", postCoreData);
                         NSNumber *count = weakSelf.categoryCounts[categoryIndex];
                         NSNumber *newCount = [NSNumber numberWithInt:count.intValue + 1];
                         [weakSelf.categoryCounts replaceObjectAtIndex:categoryIndex withObject:newCount];
@@ -429,9 +428,10 @@
 
 - (void)queryAllUsersWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
     PFUser *currentUser = PFUser.currentUser;
+    [currentUser fetch];
     PFGeoPoint *location = currentUser[@"Location"];
     
-    PFQuery *userQuery = [PFUser query];
+    PFQuery *userQuery = [User query];
     [userQuery includeKey:@"Location"];
     [userQuery whereKey:@"Location" nearGeoPoint:location withinKilometers:5.0];
     
@@ -444,12 +444,11 @@
                 UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:user.objectId withContext:weakSelf.context];
                 NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                 if (!userCoreData) {
-                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withEmail:user.email withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
+                    userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                 } else {
-                    //update any properties a user could have changed, except image, which is handled below
+                    //update any properties a user could have changed, except image, which is handled below. Note email needs to be handled separately for the current user
                     userCoreData.location = location;
                     userCoreData.username = user.username;
-                    userCoreData.email = user.email;
                     
                     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                         return YES;
@@ -518,7 +517,7 @@
                 
                 if (!senderCoreData) {
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", otherUser.Location.latitude, otherUser.Location.longitude];
-                    senderCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withEmail:otherUser.email withLocation:location withAddress:otherUser.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
+                    senderCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withLocation:location withAddress:otherUser.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
                     [otherUser.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         if (data) {
@@ -575,19 +574,19 @@
     [reviewsQuery includeKey:@"seller"];
     [reviewsQuery includeKey:@"seller.Location"];
     [reviewsQuery includeKey:@"reviewer"];
+    [reviewsQuery includeKey:@"seller.Location"];
     
     __weak ParseDatabaseManager *weakSelf = self;
     [reviewsQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable reviews, NSError * _Nullable error) {
         if (reviews) {
             for (Review *review in reviews) {
-                NSLog(@"%@", review);
                 UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
                 UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
                 ReviewCoreData *reviewCoreData = (ReviewCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:review.objectId withContext:weakSelf.context];
                 
                 if (!sellerCoreData) {
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.seller.Location.latitude, review.seller.Location.longitude];
-                    sellerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.seller.objectId withUsername:review.seller.username withEmail:review.seller.email withLocation:location withAddress:review.seller.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
+                    sellerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.seller.objectId withUsername:review.seller.username withLocation:location withAddress:review.seller.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
                     [review.seller.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         if (data) {
@@ -607,7 +606,7 @@
                 
                 if (!reviewerCoreData) {
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.reviewer.Location.latitude, review.reviewer.Location.longitude];
-                    reviewerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.reviewer.objectId withUsername:review.reviewer.username withEmail:review.reviewer.email withLocation:location withAddress:review.reviewer.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
+                    reviewerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.reviewer.objectId withUsername:review.reviewer.username withLocation:location withAddress:review.reviewer.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
                     [review.reviewer.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
                         if (data) {
@@ -631,90 +630,6 @@
                     reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:review.objectId withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[review.rating intValue] withReview:review.review withTitle:review.title withItemDescription:review.itemDescription withDate:review.createdAt withManagedObjectContext:weakSelf.context];
                 }
                 
-                NSLog(@"%@", reviewCoreData);
-                [reviewsCoreDataArray addObject:reviewCoreData];
-            }
-            NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:reviewsCoreDataArray];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
-            [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            completion(mutableResults, nil);
-        } else {
-            NSLog(@"😫😫😫 Error querying reviews from parse: %@", error.localizedDescription);
-            completion(nil, error);
-        }
-    }];
-}
-
-- (void)querySwipeMatchesForSeller:(User *)seller withCompletion:(void (^)(NSMutableArray *, NSError *))completion {
-    NSMutableArray *reviewsCoreDataArray = [[NSMutableArray alloc] init];
-    PFQuery *reviewsQuery = [Review query];
-    
-    //query all reviews if seller is nil
-    if (seller) {
-        [reviewsQuery whereKey:@"seller" equalTo:seller];
-    }
-    
-    [reviewsQuery orderByDescending:@"updatedAt"];
-    [reviewsQuery includeKey:@"seller"];
-    [reviewsQuery includeKey:@"seller.Location"];
-    [reviewsQuery includeKey:@"reviewer"];
-    
-    __weak ParseDatabaseManager *weakSelf = self;
-    [reviewsQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable reviews, NSError * _Nullable error) {
-        if (reviews) {
-            for (Review *review in reviews) {
-                NSLog(@"%@", review);
-                UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
-                UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
-                ReviewCoreData *reviewCoreData = (ReviewCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:review.objectId withContext:weakSelf.context];
-                
-                if (!sellerCoreData) {
-                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.seller.Location.latitude, review.seller.Location.longitude];
-                    sellerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.seller.objectId withUsername:review.seller.username withEmail:review.seller.email withLocation:location withAddress:review.seller.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
-                    
-                    [review.seller.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-                        if (data) {
-                            if (!sellerCoreData.profilePic) {
-                                sellerCoreData.profilePic = data;
-                                
-                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                    return YES;
-                                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
-                                //                                [self saveContext];
-                            }
-                        } else {
-                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
-                        }
-                    }];
-                }
-                
-                if (!reviewerCoreData) {
-                    NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.reviewer.Location.latitude, review.reviewer.Location.longitude];
-                    reviewerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.reviewer.objectId withUsername:review.reviewer.username withEmail:review.reviewer.email withLocation:location withAddress:review.reviewer.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
-                    
-                    [review.reviewer.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-                        if (data) {
-                            if (!sellerCoreData.profilePic) {
-                                if (!sellerCoreData.profilePic) {
-                                    sellerCoreData.profilePic = data;
-                                    
-                                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                        return YES;
-                                    } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
-                                    //                                    [self saveContext];
-                                }
-                            }
-                        } else {
-                            NSLog(@"error updating userCoreData image! %@", error.localizedDescription);
-                        }
-                    }];
-                }
-                
-                if (!reviewCoreData) {
-                    reviewCoreData = [[CoreDataManager shared] saveReviewToCoreDataWithObjectId:review.objectId withSeller:sellerCoreData withReviewer:reviewerCoreData withRating:[review.rating intValue] withReview:review.review withTitle:review.title withItemDescription:review.itemDescription withDate:review.createdAt withManagedObjectContext:weakSelf.context];
-                }
-                
-                NSLog(@"%@", reviewCoreData);
                 [reviewsCoreDataArray addObject:reviewCoreData];
             }
             NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:reviewsCoreDataArray];

@@ -29,7 +29,7 @@
 @property (nonatomic, weak) IBOutlet UIButton *submitButton;
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
-@property (nonatomic, strong) User *currentPFUser;
+@property (nonatomic, strong) PFUser *currentPFUser;
 
 @end
 
@@ -43,11 +43,10 @@
 - (void)setUpView {
     self.submitButton.hidden = true;
     
-    self.currentPFUser = (User *)PFUser.currentUser;
-    
-    self.nameTextField.text = self.currentPFUser.username;
-    self.emailTextField.text = self.currentPFUser.email;
-    self.locationLabel.text = self.currentPFUser.address;
+    self.currentPFUser = PFUser.currentUser;
+    self.nameTextField.text = self.user.username;
+    self.emailTextField.text = self.user.email;
+    self.locationLabel.text = self.user.address;
     self.passwordTextField.placeholder = @"New password";
     self.confirmPasswordTextField.placeholder = @"Confirm new password";
     
@@ -147,7 +146,7 @@
                     NSLog(@"Error saving new profile pic to parse! %@", error.localizedDescription);
                 }
             }];
-            self.currentPFUser.ProfilePic = image;
+            self.currentPFUser[@"ProfilePic"] = image;
             self.user.profilePic = imageData;
         }
         
@@ -243,11 +242,11 @@
         }
         
         if (strAdd != nil) {
-            self.currentPFUser.address = strAdd;
+            self.currentPFUser[@"address"] = strAdd;
             self.user.address = strAdd;
         }
         
-        self.currentPFUser.Location = weakSelf.selectedLocationPoint;
+        self.currentPFUser[@"Location"] = weakSelf.selectedLocationPoint;
     }];
 }
 

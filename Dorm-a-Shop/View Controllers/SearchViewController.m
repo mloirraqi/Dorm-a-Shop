@@ -55,6 +55,8 @@
     self.searchField.layer.cornerRadius = 20.0f;
     self.searchField.layer.masksToBounds = YES;
     self.searchField.delegate = self;
+    self.searchField.layer.borderWidth = 1.0f;
+    self.searchField.layer.borderColor = [[UIColor lightGrayColor] CGColor];
     
     self.searchField.leftViewMode = UITextFieldViewModeAlways;
     UIView* searchRightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 28, 40)];
