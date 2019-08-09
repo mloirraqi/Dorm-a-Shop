@@ -124,6 +124,7 @@
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
         detailsViewController.post = postCoreData;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 
