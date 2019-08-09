@@ -20,6 +20,7 @@
 @interface EditProfileVC () <GMSPlacePickerViewControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) User *currentPFUser;
 
 @end
 
@@ -31,52 +32,48 @@
 }
 
 - (void)setUpView {
-    submitButton.hidden = true;
+    self.submitButton.hidden = true;
     
-    PFUser *currentUser = [PFUser currentUser];
-    [currentUser fetch];
+    self.currentPFUser = (User *)PFUser.currentUser;
     
-    nameTextField.text = currentUser.username;
-    emailTextField.text = currentUser.email;
-    passwordTextField.text = currentUser.password;
+    self.nameTextField.text = self.currentPFUser.username;
+    self.emailTextField.text = self.currentPFUser.email;
+    self.passwordTextField.text = self.currentPFUser.password;
     
-    nameTextField.delegate = self;
-    emailTextField.delegate = self;
-    passwordTextField.delegate = self;
-    confirmPasswordTextField.delegate = self;
+    self.nameTextField.delegate = self;
+    self.emailTextField.delegate = self;
+    self.passwordTextField.delegate = self;
+    self.confirmPasswordTextField.delegate = self;
     
-    PFFileObject *image = currentUser[@"ProfilePic"];
+    NSData *imageData = self.user.profilePic;
+    [self.addPictureButton setImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
     
     AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = appDelegate.persistentContainer.viewContext;
-    
-    [image getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError * _Nullable error) {
-        UIImage *originalImage = [UIImage imageWithData:data];
-        [self->addPictureButton setImage:originalImage forState:UIControlStateNormal];
-    }];
 }
 
 - (BOOL)checkFields {
-    if (!nameTextField.text || nameTextField.text.length == 0) {
+    if (!self.nameTextField.text || self.nameTextField.text.length == 0) {
         [self showAlertView:@"Please add Name First"];
         return false;
     }
-    if (!emailTextField.text || emailTextField.text.length == 0) {
+    
+    if (!self.emailTextField.text || self.emailTextField.text.length == 0) {
         [self showAlertView:@"Please add Email First"];
         return false;
     }
     
-    if (passwordTextField.text != confirmPasswordTextField.text) {
+    if (self.passwordTextField.text != self.confirmPasswordTextField.text) {
         [self showAlertView:@"Passwords Don't Match"];
         return false;
     }
     
-    if (![[Utils sharedInstance] isAnEmail:emailTextField.text]) {
+    if (![[Utils sharedInstance] isAnEmail:self.emailTextField.text]) {
         [self showAlertView:@"Please add correct Email"];
         return false;
     }
     
-    if (![[Utils sharedInstance] isValidEmail:emailTextField.text]) {
+    if (![[Utils sharedInstance] isValidEmail:self.emailTextField.text]) {
         [self showAlertView:@"Please add correct Email"];
         return false;
     }
@@ -95,69 +92,71 @@
 }
 
 - (IBAction)textValuesChanged:(id)sender {
-    [self submitButtonUpdate];
+    [self submitButtonUpdateVisibility];
 }
 
-- (void)submitButtonUpdate {
-    PFUser *currentUser = [PFUser currentUser];
-    
-    if (nameTextField.text.length != 0 && nameTextField.text != currentUser.username){
-        submitButton.hidden = false;
-    } else if (emailTextField.text.length != 0 && emailTextField.text != currentUser.email){
-        submitButton.hidden = false;
-    } else if (passwordTextField.text.length != 0 && confirmPasswordTextField.text != 0){
-        submitButton.hidden = false;
-    } else if (selectedImage != nil) {
-        submitButton.hidden = false;
-    } else if (selectedLocationPoint != nil) {
-        submitButton.hidden = false;
+- (void)submitButtonUpdateVisibility {
+    if (self.nameTextField.text.length != 0 && self.nameTextField.text != self.self.user.username){
+        self.submitButton.hidden = false;
+    } else if (self.emailTextField.text.length != 0 && self.emailTextField.text != self.user.email){
+        self.submitButton.hidden = false;
+    } else if (self.passwordTextField.text.length != 0 && self.confirmPasswordTextField.text != 0){
+        self.submitButton.hidden = false;
+    } else if (self.selectedImage != nil) {
+        self.submitButton.hidden = false;
+    } else if (self.selectedLocationPoint != nil) {
+        self.submitButton.hidden = false;
     } else {
-        submitButton.hidden = true;
+        self.submitButton.hidden = true;
     }
 }
 
-
-- (IBAction)editProfileButtonAction:(UIButton *)sender {
+- (IBAction)submitButtonAction:(UIButton *)sender {
     if ([self checkFields]){
-        PFUser *currentUser = [PFUser currentUser];
-        currentUser.username = nameTextField.text;
-        currentUser.email = emailTextField.text;
+        self.user.username = self.nameTextField.text;
+        self.user.email = self.emailTextField.text;
         
-        UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:self.context];
+        self.currentPFUser.username = self.nameTextField.text;
+        self.currentPFUser.email = self.emailTextField.text;
         
-        if (passwordTextField.text.length != 0) {
-            currentUser.password = passwordTextField.text;
+        if (self.passwordTextField.text.length != 0) {
+            self.currentPFUser.password = self.passwordTextField.text;
         }
         
-        if (selectedImage != nil) {
-            NSData *imageData = UIImagePNGRepresentation(selectedImage);
+        if (self.selectedImage != nil) {
+            NSData *imageData = UIImagePNGRepresentation(self.selectedImage);
             PFFileObject *image = [PFFileObject fileObjectWithName:@"Profileimage.png" data:imageData];
-            [image saveInBackground];
-            currentUser[@"ProfilePic"] = image;
+            [image saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"Error saving new profile pic to parse! %@", error.localizedDescription);
+                }
+            }];
+            self.currentPFUser.ProfilePic = image;
+            self.user.profilePic = imageData;
         }
         
-        
-        [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-            return YES;
-        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
-        //        [self saveContext];
+        if (self.selectedLocationPoint != nil) {
+            [self setLocationName];
+        }
         
         __weak EditProfileVC *weakSelf = self;
         [MBProgressHUD showHUDAddedTo:self.view animated:true];
-        [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             [MBProgressHUD hideHUDForView:weakSelf.view animated:true];
             if (!error) {
-                //Let users use app now
-                if (self->selectedLocationPoint != nil) {
-                    [weakSelf setLocationName];
-                } else {
-                    UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
-                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                        [weakSelf.navigationController popViewControllerAnimated:YES];
-                    }];
-                    [successAlert addAction:okAction];
-                    [self presentViewController:successAlert animated:YES completion:nil];
-                }
+                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                    return YES;
+                } withName:[NSString stringWithFormat:@"%@", weakSelf.user.objectId]];
+                //        [self saveContext];
+                
+                [weakSelf.delegate updateEditProfileData:weakSelf];
+                
+                UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }];
+                [successAlert addAction:okAction];
+                [self presentViewController:successAlert animated:YES completion:nil];
             } else {
                 NSString *errorString = [error userInfo][@"error"];
                 [self showAlertView:errorString];
@@ -167,8 +166,10 @@
 }
 
 - (void)setLocationName {
-    CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:selectedLocationPoint.latitude longitude:selectedLocationPoint.longitude];
+    CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:self.selectedLocationPoint.latitude longitude:self.selectedLocationPoint.longitude];
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    
+    __weak EditProfileVC *weakSelf = self;
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
         
@@ -197,7 +198,7 @@
                     strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
                 } else {
                     strAdd = placemark.postalCode;
-            }
+                }
             }
             
             if ([placemark.locality length] != 0) {
@@ -225,35 +226,12 @@
             }
         }
         
-        [self updateLocationWith:strAdd];
-    }];
-}
-
-- (void)updateLocationWith:(NSString *)address {
-    User *currentUser = (User *)[PFUser currentUser];
-    currentUser.Location = selectedLocationPoint;
-    
-    if (address != nil) {
-        currentUser.address = address;
-    }
-    
-    __weak EditProfileVC *weakSelf = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:true];
-    [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        [MBProgressHUD hideHUDForView:self.view animated:true];
-        if (!error) {
-            
-            UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf.navigationController popViewControllerAnimated:YES];
-            }];
-            [successAlert addAction:okAction];
-            [self presentViewController:successAlert animated:YES completion:nil];
-            
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-            [self showAlertView:errorString];
+        if (strAdd != nil) {
+            self.currentPFUser.address = strAdd;
+            self.user.address = strAdd;
         }
+        
+        self.currentPFUser.Location = weakSelf.selectedLocationPoint;
     }];
 }
 
@@ -305,10 +283,10 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    selectedImage = info[UIImagePickerControllerEditedImage];
-    [addPictureButton setImage:selectedImage forState:UIControlStateNormal];
+    self.selectedImage = info[UIImagePickerControllerEditedImage];
+    [self.addPictureButton setImage:self.selectedImage forState:UIControlStateNormal];
     [picker dismissViewControllerAnimated:YES completion:NULL];
-    [self submitButtonUpdate];
+    [self submitButtonUpdateVisibility];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -321,10 +299,10 @@
     // Dismiss the place picker, as it cannot dismiss itself.
     [viewController dismissViewControllerAnimated:YES completion:nil];
     
-    [updateLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
-    locationSelected = YES;
-    selectedLocationPoint = [PFGeoPoint geoPointWithLatitude:place.coordinate.latitude longitude:place.coordinate.longitude];
-    [self submitButtonUpdate];
+    [self.updateLocationButton setTitle:place.formattedAddress forState:UIControlStateNormal];
+    self.locationSelected = YES;
+    self.selectedLocationPoint = [PFGeoPoint geoPointWithLatitude:place.coordinate.latitude longitude:place.coordinate.longitude];
+    [self submitButtonUpdateVisibility];
 }
 
 - (void)placePickerDidCancel:(GMSPlacePickerViewController *)viewController {
@@ -342,10 +320,10 @@
 }
 
 - (IBAction)onTap:(id)sender {
-    [self->nameTextField endEditing:YES];
-    [self->passwordTextField endEditing:YES];
-    [self->emailTextField endEditing:YES];
-    [self->confirmPasswordTextField endEditing:YES];
+    [self.nameTextField endEditing:YES];
+    [self.passwordTextField endEditing:YES];
+    [self.emailTextField endEditing:YES];
+    [self.confirmPasswordTextField endEditing:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

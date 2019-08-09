@@ -375,9 +375,9 @@
                         }
                     }
                     
-                                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
-                                        return YES;
-                                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+                        return YES;
+                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
 //                    [self saveContext];
                     
                     [watchedPostsArray addObject:postCoreData];
@@ -450,7 +450,12 @@
                     //update any properties a user could have changed, except image, which is handled below
                     userCoreData.location = location;
                     userCoreData.username = user.username;
-                    userCoreData.email = userCoreData.email;
+                    userCoreData.email = user.email;
+                    
+                    [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+                        return YES;
+                    } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                    //                            [self saveContext];
                 }
                 //in either case, either create the profile image or make sure it's up to date
                 [user.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {

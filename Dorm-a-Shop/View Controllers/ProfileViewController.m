@@ -71,11 +71,14 @@
     self.writeReviewBtn.layer.masksToBounds = YES;
     
     self.messageBtn.layer.borderWidth = 1.0f;
-    self.messageBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.messageBtn.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    [self.messageBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.viewReviewBtn.layer.borderWidth = 1.0f;
-    self.viewReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.viewReviewBtn.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    [self.viewReviewBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.writeReviewBtn.layer.borderWidth = 1.0f;
-    self.writeReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.writeReviewBtn.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    [self.writeReviewBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -224,6 +227,7 @@
     } else if ([segue.identifier isEqualToString:@"segueToEditProfile"]) {
         EditProfileVC *editProfileViewController = [segue destinationViewController];
         editProfileViewController.delegate = self;
+        editProfileViewController.user = self.user;
     } else if ([segue.identifier isEqualToString:@"sendMsg"]) {
         MessageViewController *msgViewController = [segue destinationViewController];
         msgViewController.user = self.user;
@@ -255,8 +259,10 @@
     [self.collectionView reloadData];
 }
 
-- (void)updateEditProfileData:(nonnull UIViewController *)editProfileViewController {
-    [self fetchProfileFromCoreData];
+- (void)updateEditProfileData:(nonnull UIViewController *)viewController {
+    EditProfileVC *editProfileViewController = (EditProfileVC *)viewController;
+    self.usernameLabel.text = editProfileViewController.user.username;
+    self.locationLabel.text = editProfileViewController.user.address;
 }
 
 - (void)deleteAllCoreData {

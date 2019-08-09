@@ -370,8 +370,6 @@
 			isa = PBXGroup;
 			children = (
 				DE877D6322FA3CC900C35587 /* ARViewController.swift */,
-				DE4FCFD822E686DE00B1311F /* EditProfileVC.h */,
-				DE4FCFD922E686DE00B1311F /* EditProfileVC.m */,
 				EA6732DC22DF931C004E362F /* SignUpVC.h */,
 				EA6732DD22DF931C004E362F /* SignUpVC.m */,
 				EA6732F522DFAB25004E362F /* SignInVC.h */,
@@ -384,6 +382,8 @@
 				47A8A9EA22DE7B2B005D9520 /* DetailsViewController.m */,
 				DE307FFE22DFD20500418DE3 /* ProfileViewController.h */,
 				DE307FFF22DFD20500418DE3 /* ProfileViewController.m */,
+				DE4FCFD822E686DE00B1311F /* EditProfileVC.h */,
+				DE4FCFD922E686DE00B1311F /* EditProfileVC.m */,
 				47A8A9EF22E12528005D9520 /* WatchListViewController.h */,
 				47A8A9F022E12528005D9520 /* WatchListViewController.m */,
 				DEFE7C8722E640DF006E3096 /* SearchViewController.h */,
