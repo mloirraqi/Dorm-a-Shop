@@ -449,7 +449,7 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wm9-rD-dd6">
                                 <rect key="frame" x="302" y="7" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Add"/>
+                                <state key="normal" title="Post"/>
                                 <connections>
                                     <action selector="uploadPost:" destination="taT-74-9c7" eventType="touchUpInside" id="5Fy-WZ-Mcx"/>
                                 </connections>
@@ -487,10 +487,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAM-p9-Pa1">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tvg-N4-hTJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="769"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J0d-zI-pQn">
                                                 <rect key="frame" x="114" y="20" width="55" height="26.5"/>
@@ -526,7 +526,7 @@
                                                 </constraints>
                                             </imageView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="imT-sc-NpR">
-                                                <rect key="frame" x="16" y="208" width="382" height="610"/>
+                                                <rect key="frame" x="16" y="208" width="382" height="561"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="WC5-gc-nTG">
                                                     <size key="itemSize" width="50" height="50"/>
@@ -1524,7 +1524,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oXO-JU-K28" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="user" id="aY2-WZ-2Eh">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="-10"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KIy-Ae-kEI">
@@ -1864,7 +1864,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="huz-Vy-fBK" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="home" id="igw-ze-ls9">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="-10"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="puE-jX-bGA">
@@ -1885,7 +1885,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DJx-3h-Trp" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="eye" id="9bd-m5-VtR">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="-10"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kxo-sf-HsY">
@@ -2341,7 +2341,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="O11-22-vap" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="search" id="t0n-hf-uts">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="-10"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="y9g-O3-MpM">
@@ -2357,7 +2357,7 @@
             </objects>
             <point key="canvasLocation" x="2926" y="2416"/>
         </scene>
-        <!--View Controller-->
+        <!--Explore-->
         <scene sceneID="Aak-Ou-3dg">
             <objects>
                 <viewController id="Zrr-Xs-mmg" customClass="ViewController" sceneMemberID="viewController">
@@ -2378,7 +2378,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="8JK-Jg-teA"/>
                     </view>
-                    <navigationItem key="navigationItem" id="hf3-jJ-sa4">
+                    <navigationItem key="navigationItem" title="Explore" id="hf3-jJ-sa4">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="Pja-Dg-Qjw">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="b2n-kb-YFn">
                                 <rect key="frame" x="20" y="6" width="68" height="32"/>
@@ -2410,7 +2410,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dDI-Qk-IoB" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="earth" id="Suv-aU-L6Q">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="-10"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5hs-FR-cFC">
@@ -2589,7 +2589,7 @@
                                 </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4dl-Fb-u1B">
-                                <rect key="frame" x="8" y="144" width="398" height="752"/>
+                                <rect key="frame" x="8" y="151" width="398" height="745"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Rbw-of-wDs">
                                     <size key="itemSize" width="300" height="370"/>
@@ -2641,7 +2641,7 @@
                                             <outlet property="locationLabel" destination="bez-II-ECt" id="gl2-iS-cGn"/>
                                             <outlet property="profilePic" destination="4th-09-DLA" id="DPf-9t-izn"/>
                                             <outlet property="username" destination="NQ5-GX-anj" id="Lie-vE-hEr"/>
-                                            <segue destination="ji6-xS-49q" kind="show" identifier="userDeets" id="rkD-bm-Mae"/>
+                                            <segue destination="ji6-xS-49q" kind="show" identifier="userDeets" id="rxy-xI-dIM"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -2663,6 +2663,7 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="D6Q-Fd-vSl" firstAttribute="top" secondItem="Ui2-aO-Ntf" secondAttribute="top" constant="4" id="4ra-Gd-fTH"/>
                             <constraint firstItem="4dl-Fb-u1B" firstAttribute="leading" secondItem="Ui2-aO-Ntf" secondAttribute="leading" constant="8" id="5hg-ov-A1y"/>
@@ -2670,7 +2671,7 @@
                             <constraint firstItem="thR-Qz-4aH" firstAttribute="centerY" secondItem="DlJ-AF-XEM" secondAttribute="centerY" id="Ig7-8f-96b"/>
                             <constraint firstItem="Ui2-aO-Ntf" firstAttribute="trailing" secondItem="DlJ-AF-XEM" secondAttribute="trailing" constant="36" id="Jl3-09-1ag"/>
                             <constraint firstItem="DlJ-AF-XEM" firstAttribute="leading" secondItem="Ui2-aO-Ntf" secondAttribute="leading" constant="36" id="RA0-re-Tnt"/>
-                            <constraint firstItem="4dl-Fb-u1B" firstAttribute="top" secondItem="DlJ-AF-XEM" secondAttribute="bottom" constant="8" id="RKa-kR-tgR"/>
+                            <constraint firstItem="4dl-Fb-u1B" firstAttribute="top" secondItem="DlJ-AF-XEM" secondAttribute="bottom" constant="15" id="RKa-kR-tgR"/>
                             <constraint firstItem="DlJ-AF-XEM" firstAttribute="top" secondItem="D6Q-Fd-vSl" secondAttribute="bottom" constant="8" id="a74-QQ-UBO"/>
                             <constraint firstItem="Ui2-aO-Ntf" firstAttribute="trailing" secondItem="4dl-Fb-u1B" secondAttribute="trailing" constant="8" id="cM8-tS-MyW"/>
                             <constraint firstItem="Ui2-aO-Ntf" firstAttribute="trailing" secondItem="D6Q-Fd-vSl" secondAttribute="trailing" constant="16" id="dka-Ky-6jP"/>
@@ -2907,6 +2908,6 @@
         <segue reference="oCN-lU-gXW"/>
         <segue reference="dnl-93-kbr"/>
         <segue reference="inK-qS-1By"/>
-        <segue reference="iII-YD-ifK"/>
+        <segue reference="rxy-xI-dIM"/>
     </inferredMetricsTieBreakers>
 </document>
