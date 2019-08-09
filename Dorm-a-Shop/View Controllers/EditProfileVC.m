@@ -28,7 +28,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (nonatomic, weak) IBOutlet UIButton *submitButton;
 
-@property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) PFUser *currentPFUser;
 
 @end
@@ -62,9 +61,6 @@
     
     NSData *imageData = self.user.profilePic;
     [self.addPictureButton setImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
-    
-    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-    self.context = appDelegate.persistentContainer.viewContext;
 }
 
 - (BOOL)checkFields {
@@ -327,8 +323,10 @@
 }
 
 - (void)saveContext {
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
     NSError *error = nil;
-    if ([self.context hasChanges] && ![self.context save:&error]) {
+    if ([context hasChanges] && ![context save:&error]) {
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
@@ -345,7 +343,6 @@
     [textField resignFirstResponder];
     return NO;
 }
-
 
 @end
 

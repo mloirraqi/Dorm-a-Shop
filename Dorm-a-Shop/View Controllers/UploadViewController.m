@@ -252,7 +252,6 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    [self.view setFrame:CGRectMake(0,-150,self.view.frame.size.width,self.view.frame.size.height)];
     if ([textView.text isEqualToString:@"add a description for the item here"]) {
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
@@ -262,7 +261,6 @@
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
-    [self.view setFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)];
     if ([textView.text isEqualToString:@""]) {
         textView.text = @"add a description for the item here";
         textView.textColor = [UIColor lightGrayColor];
