@@ -67,7 +67,7 @@ static const int MAX_BUFFER_SIZE = 2;
     self.userNameLabel.text = card.author.username;
 //    self.navigationItem.title = card.author.username;
     self.backgroundColor = [UIColor blueColor];
-    self.backgroundColor = [UIColor colorWithRed:141.0f/255.0f green:81.0f/255.0f blue:144.0f/255 alpha:1.0f];
+    self.backgroundColor = [UIColor colorWithRed:.0f/255.0f green:228.0f/255.0f blue:232.0f/255 alpha:1.0f];
 }
 
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
@@ -169,9 +169,6 @@ static const int MAX_BUFFER_SIZE = 2;
     [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipeRecords, NSError * _Nullable error) {
         if (swipeRecords) {
             if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
-                
-//                NSLog(@"Found %lu records", (unsigned long)swipeRecords.count);
-//                [self showAlertView:[NSString stringWithFormat:@"Congratulations! You matched with %@", acceptedUser.username]];
                 
                 UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                 SwipePopupVC* controller = [storyboard instantiateViewControllerWithIdentifier:@"SwipePopupVC"];

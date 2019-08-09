@@ -29,7 +29,6 @@
     if ([senderObject.objectId isEqualToString:PFUser.currentUser.objectId]) {
         [self.messageLabel setTextAlignment:NSTextAlignmentRight];
         self.profilePic.hidden = YES;
-        [self.profilePic removeConstraints:[self.profilePic constraints]];
     }
     
     if ([[senderObject allKeys] containsObject:@"ProfilePic"]) {

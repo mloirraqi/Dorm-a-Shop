@@ -75,24 +75,48 @@
     }];
 }
 
+-(void) addMessageToChatWithObject:(PFObject *) object {
+    __weak MessageViewController *weakSelf = self;
+    
+    [self.messages addObject:object];
+    
+    if(!self.conversationCoreData) {
+        self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
+        
+        if (self.conversationCoreData) {
+            self.convo = [PFObject objectWithoutDataWithClassName:@"Convos"
+                                                         objectId:weakSelf.conversationCoreData.objectId];
+            self.conversationCoreData.lastText = object[@"text"];
+        }
+    }
+    
+    [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:self.convo.objectId
+                                                            withDate:self.convo.updatedAt
+                                                          withSender:self.user
+                                                        withLastText:object[@"text"]
+                                            withManagedObjectContext:self.context];
+    [self saveContext];
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:weakSelf.messages.count-1 inSection:0];
+        
+        [weakSelf.tableView beginUpdates];
+        [weakSelf.tableView insertRowsAtIndexPaths:@[lastIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        [weakSelf.tableView endUpdates];
+        [weakSelf.tableView scrollToRowAtIndexPath:lastIndexPath
+                                  atScrollPosition:UITableViewScrollPositionBottom
+                                          animated:NO];
+    });
+}
+
 - (void)subscribe {
     self.bridge = [ParseLiveQueryObjCBridge new];
     
     __weak MessageViewController *weakSelf = self;
     void (^completion)(PFObject* object) = ^(PFObject* object) {
-        [weakSelf.messages addObject:object];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:weakSelf.messages.count-1 inSection:0];
-            
-            [weakSelf.tableView beginUpdates];
-            [weakSelf.tableView insertRowsAtIndexPaths:@[lastIndexPath]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-            [weakSelf.tableView endUpdates];
-            [weakSelf.tableView scrollToRowAtIndexPath:lastIndexPath
-                                      atScrollPosition:UITableViewScrollPositionBottom
-                                              animated:NO];
-        });
+        [weakSelf addMessageToChatWithObject:object];
     };
     
     PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
@@ -110,13 +134,6 @@
     if(![self.msgInput.text isEqualToString:@""]) {
         __weak MessageViewController *weakSelf = self;
         
-        if(!self.conversationCoreData) {
-            self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
-            if(self.conversationCoreData) {
-                self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
-            }
-        }
-        
         if (!self.convo) {
             PFObject *convo = [PFObject objectWithClassName:@"Convos"];
             convo[@"sender"] = [PFUser currentUser];
@@ -125,10 +142,7 @@
             
             [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
-                    [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:convo.objectId withDate:convo.updatedAt withSender:weakSelf.user withLastText:convo[@"lastText"] withManagedObjectContext:weakSelf.context];
-                    [weakSelf saveContext];
                     weakSelf.convo = convo;
-                    
                 } else {
                     NSLog(@"%@", error.localizedDescription);
                 }
@@ -146,13 +160,12 @@
         message[@"sender"] = [PFUser currentUser];
         message[@"receiver"] = self.receiver;
         message[@"text"] = self.msgInput.text;
-        weakSelf.conversationCoreData.updatedAt = [NSDate date];
+        self.conversationCoreData.updatedAt = [NSDate date];
         
         [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (succeeded) {
-                weakSelf.conversationCoreData.lastText = self.msgInput.text;
-                [weakSelf saveContext];
                 weakSelf.msgInput.text = @"";
+                [weakSelf addMessageToChatWithObject:message];
             } else {
                 NSLog(@"Problem saving message: %@", error.localizedDescription);
             }
