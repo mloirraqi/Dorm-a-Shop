@@ -71,11 +71,14 @@
     self.writeReviewBtn.layer.masksToBounds = YES;
     
     self.messageBtn.layer.borderWidth = 1.0f;
-    self.messageBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.messageBtn.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    [self.messageBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.viewReviewBtn.layer.borderWidth = 1.0f;
-    self.viewReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.viewReviewBtn.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    [self.viewReviewBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.writeReviewBtn.layer.borderWidth = 1.0f;
-    self.writeReviewBtn.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.writeReviewBtn.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+    [self.writeReviewBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;

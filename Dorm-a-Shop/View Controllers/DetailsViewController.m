@@ -36,6 +36,8 @@
 @property (nonatomic, strong) NSMutableArray *similarItems;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *sellerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *conditionCategoryWatchesLabel;
+
 
 @end
 
@@ -62,7 +64,7 @@
     if ([[notification name] isEqualToString:@"ChangedWatchNotification"]) {
         [self.watchButton setSelected:self.post.watched];
         if (self.post.watched) {
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+            [self.watchButton setTitle:@"Unwatch" forState:UIControlStateSelected];
             
             [self.watchButton setTitleColor:[UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8] forState:UIControlStateSelected];
             self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
@@ -73,7 +75,7 @@
             self.watchButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
             self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
         } else {
-            [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+            [self.watchButton setTitle:@"Watch" forState:UIControlStateNormal];
             
             [self.watchButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
             self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
@@ -89,10 +91,10 @@
         BOOL sold = [soldNumVal boolValue];
        
         if (sold) {
-            [self.statusButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [self.statusButton setTitleColor:[UIColor colorWithRed:214/255.0 green:17/255.0 blue:17/255.0 alpha:0.85] forState:UIControlStateNormal];
             [self.statusButton setTitle:@"sold" forState:UIControlStateNormal];
         } else {
-            [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+            [self.statusButton setTitleColor:[UIColor colorWithRed:49/255.0 green:179/255.0 blue:25/255.0 alpha:0.85] forState:UIControlStateNormal];
             [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
         }
     }
@@ -102,12 +104,13 @@
     _post = post;
     
     if ([post.author.objectId isEqualToString:PFUser.currentUser.objectId] && post.sold == NO) {
-        [self.statusButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        [self.statusButton setTitleColor:[UIColor colorWithRed:40/255.0 green:156/255.0 blue:19/255.0 alpha:0.85] forState:UIControlStateNormal];
         [self.statusButton setTitle:@"active" forState:UIControlStateNormal];
         self.statusButton.hidden = NO;
     }
     
     if (post.sold == YES) {
+        [self.statusButton setTitleColor:[UIColor colorWithRed:214/255.0 green:17/255.0 blue:17/255.0 alpha:0.85] forState:UIControlStateNormal];
         self.statusButton.hidden = NO;
     }
     
@@ -122,7 +125,7 @@
     self.watchButton.layer.cornerRadius = 5;
     [self.watchButton setSelected:self.post.watched];
     if (self.post.watched) {
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Unwatch (%lld watching)", self.post.watchCount] forState:UIControlStateSelected];
+        [self.watchButton setTitle:@"Unwatch" forState:UIControlStateSelected];
         
         [self.watchButton setTitleColor:[UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:0.8] forState:UIControlStateSelected];
         self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
@@ -133,7 +136,7 @@
         self.watchButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
         self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     } else {
-        [self.watchButton setTitle:[NSString stringWithFormat:@"Watch (%lld watching)", self.post.watchCount] forState:UIControlStateNormal];
+        [self.watchButton setTitle:@"Watch" forState:UIControlStateNormal];
         
         [self.watchButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         self.watchButton.titleLabel.backgroundColor = [UIColor whiteColor];
@@ -149,6 +152,7 @@
     self.profileImageView.layer.masksToBounds = YES;
     [self.profileImageView setImage:[UIImage imageWithData:self.post.author.profilePic]];
     
+    self.conditionCategoryWatchesLabel.text = [NSString stringWithFormat:@"%@ · %@ · %lld Watching", post.condition, post.category, post.watchCount];
     self.conditionLabel.text = post.condition;
     self.categoryLabel.text = post.category;
     
