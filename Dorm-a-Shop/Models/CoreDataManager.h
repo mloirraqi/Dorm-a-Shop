@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSManagedObject *)getConvoFromCoreData:(NSString *)senderId;
 - (NSMutableArray *)getSimilarPostsFromCoreData:(PostCoreData *)post;
 - (NSMutableArray *)getReviewsFromCoreDataForSeller:(UserCoreData *)seller;
+- (NSMutableArray *)getAllMatchedUsersFromCoreData;
+- (NSMutableArray *)getAllAvailabeUsersFromCoreData;
 
 - (PostCoreData *)savePostToCoreDataWithObjectId:(NSString * _Nullable)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString * _Nullable)watchObjectId withWatchCount:(long long)watchCount withHotness:(double)hotness withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;
 - (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context;

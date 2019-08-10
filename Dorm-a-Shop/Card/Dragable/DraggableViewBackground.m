@@ -170,7 +170,7 @@ static const int MAX_BUFFER_SIZE = 2;
                 }];
             } else {
                 PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
-                swipeRecord[@"initiated"] = [PFUser currentUser];
+                swipeRecord[@"initiator"] = [PFUser currentUser];
                 swipeRecord[@"recipient"] = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:card.author.objectId];
                 swipeRecord[@"match"] = @1;
                 [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
@@ -206,7 +206,7 @@ static const int MAX_BUFFER_SIZE = 2;
                 }];
             } else {
                 PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
-                swipeRecord[@"initiated"] = [PFUser currentUser];
+                swipeRecord[@"initiator"] = [PFUser currentUser];
                 swipeRecord[@"recipient"] = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:card.author.objectId];
                 swipeRecord[@"match"] = @0;
                 [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {

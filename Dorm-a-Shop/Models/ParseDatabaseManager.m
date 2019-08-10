@@ -477,7 +477,13 @@
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
             [usersArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
             
-            completion(usersArray, nil);
+            [weakSelf querySwipesFromParseWithCompletion:^(NSMutableArray<UserCoreData *> *swipedUsers, NSError * error) {
+                if(error) {
+                    NSLog(@"😫😫😫 Error querying all swipe records: %@", error.localizedDescription);
+                } else {
+                    completion(usersArray, nil);
+                }
+            }];
         } else {
             NSLog(@"😫😫😫 Error getting posts from database: %@", error.localizedDescription);
             completion(nil, error);
@@ -765,6 +771,49 @@
             completion(nil, error);
         } else {
             completion(newReview, nil);
+        }
+    }];
+}
+
+- (void)querySwipesFromParseWithCompletion:(void (^)(NSMutableArray<UserCoreData *> *, NSError *))completion {
+    NSMutableArray *swipesUserCoreDataArray = [[NSMutableArray alloc] init];
+    PFQuery *initiatedQuery = [PFQuery queryWithClassName:@"SwipeRecord"];
+    [initiatedQuery whereKey:@"initiator" equalTo:[PFUser currentUser]];
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"SwipeRecord"];
+    [recQuery whereKey:@"recipient" equalTo:[PFUser currentUser]];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[initiatedQuery, recQuery]];
+    [query includeKey:@"initiator"];
+    [query includeKey:@"recipient"];
+    
+    __weak ParseDatabaseManager *weakSelf = self;
+    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipes, NSError * _Nullable error) {
+        if (swipes) {
+            for (PFObject *swipe in swipes) {
+                User *initiator = (User *) swipe[@"initiator"];
+                User *recipient = (User *) swipe[@"recipient"];
+                UserCoreData *otherUser;
+                if(![initiator.objectId isEqualToString:PFUser.currentUser.objectId]) {
+                    otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:initiator.objectId withContext:weakSelf.context];
+                } else {
+                    otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:recipient.objectId withContext:weakSelf.context];
+                }
+                if([swipe[@"matched"] isEqual:@0]) {
+                    otherUser.available = NO;
+                } else if ([swipe[@"matched"] isEqual:@2]) {
+                    otherUser.available = NO;
+                    otherUser.matchedToCurrentUser = YES;
+                }
+                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                    return YES;
+                } withName:initiator.objectId];
+                [swipesUserCoreDataArray addObject:otherUser];
+            }
+            completion(swipesUserCoreDataArray, error);
+        } else {
+            NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
+            completion(nil, error);
         }
     }];
 }

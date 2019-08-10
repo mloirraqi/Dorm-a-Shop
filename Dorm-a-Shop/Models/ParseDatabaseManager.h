@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewPost:(PostCoreData *)postCoreData;
 - (void)queryViewedPostswithCompletion:(void (^)(NSMutableArray<PostCoreData *> * _Nullable, NSError * _Nullable))completion;
 - (void)queryAllUsers:(NSArray*)objectIds WithCompletion:(void (^)(NSArray *, NSError *))completion;
+- (void)querySwipesFromParseWithCompletion:(void (^)(NSMutableArray<UserCoreData *> *, NSError *))completion;
 
 @end
 
