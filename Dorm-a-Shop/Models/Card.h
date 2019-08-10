@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UserCoreData *author;
 @property (nonatomic, strong) NSMutableArray *posts;
 
+- (instancetype)initWithUser:(UserCoreData *)user postsArray:(NSMutableArray *)postsArray;
+
 @end
 
 NS_ASSUME_NONNULL_END

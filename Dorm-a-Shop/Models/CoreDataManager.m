@@ -78,6 +78,28 @@
     return mutableResults; //firstObject is nil if results has length 0
 }
 
+- (NSMutableArray *)getActivePostsFromCoreDataForUser:(UserCoreData *)user {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
+    [request setEntity:entityDescription];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"sold == %@ AND author.objectId == %@", [NSNumber numberWithBool:NO], user.objectId]];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+    [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    NSLog(@"%@, %@", user, mutableResults);
+    
+    return mutableResults;
+}
+
 - (NSMutableArray *)getHotPostsFromCoreData {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
@@ -99,7 +121,6 @@
     
     return hotArray;
 }
-
 
 - (NSMutableArray *)getActiveWatchedPostsForCurrentUserFromCoreData {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];

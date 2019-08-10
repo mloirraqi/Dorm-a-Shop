@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *postImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
+
 @end
 
 @implementation CardItemCollectionViewCell
@@ -28,7 +29,10 @@
 	_post = post;
     
 	[self.postImageView setImage:[UIImage imageNamed:@"item_placeholder"]];
-    self.postImageView.image = [UIImage imageWithData:self.post.image];
+    
+    if (self.post.image) {
+        self.postImageView.image = [UIImage imageWithData:self.post.image];
+    }
 	
 	self.titleLabel.text = post.title;
     

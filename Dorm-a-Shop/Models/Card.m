@@ -10,4 +10,11 @@
 
 @implementation Card
 
+- (instancetype)initWithUser:(UserCoreData *)user postsArray:(NSMutableArray *)postsArray {
+    self = [super init];
+    self.author = user;
+    self.posts = postsArray;
+    return self;
+}
+
 @end
