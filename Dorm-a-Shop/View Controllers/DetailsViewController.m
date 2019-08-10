@@ -16,6 +16,7 @@
 #import "ProfileViewController.h"
 #import "UILabel+Boldify.h"
 #import <QuartzCore/QuartzCore.h>
+#import "AKStencilButton.h"
 @import Parse;
 
 @interface DetailsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate>
@@ -25,8 +26,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *postImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
-@property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
-@property (weak, nonatomic) IBOutlet UILabel *conditionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sellerButton;
 @property (weak, nonatomic) IBOutlet UIButton *watchButton;
@@ -37,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *sellerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *conditionCategoryWatchesLabel;
+@property (weak, nonatomic) IBOutlet AKStencilButton *ARButton;
 
 
 @end
@@ -153,8 +153,6 @@
     [self.profileImageView setImage:[UIImage imageWithData:self.post.author.profilePic]];
     
     self.conditionCategoryWatchesLabel.text = [NSString stringWithFormat:@"%@ · %@ · %lld Watching", post.condition, post.category, post.watchCount];
-    self.conditionLabel.text = post.condition;
-    self.categoryLabel.text = post.category;
     
     self.captionLabel.text = [NSString stringWithFormat:@"Description: %@", post.caption];
     [self.captionLabel greySubstring:@"Description:"];

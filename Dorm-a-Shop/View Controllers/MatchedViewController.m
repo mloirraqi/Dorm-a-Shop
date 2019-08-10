@@ -17,8 +17,9 @@
 
 @interface MatchedViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, strong) NSMutableArray *matchedUsers;
+@property (nonatomic, strong) NSMutableArray *matchedUsersArray;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UIView *noMatchesView;
 
 @end
 
@@ -40,18 +41,18 @@
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UserCollectionCell* cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
-    UserCoreData *user = self.matchedUsers[indexPath.item];
+    UserCoreData *user = self.matchedUsersArray[indexPath.item];
     cell.user = user;
     [cell setUser];
     return cell;
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.matchedUsers.count;
+    return self.matchedUsersArray.count;
 }
 
 - (void)fetchMatchedFromCoreData {
-    self.matchedUsers = [[CoreDataManager shared] getAllMatchedUsersFromCoreData];
+    self.matchedUsersArray = [[CoreDataManager shared] getAllMatchedUsersFromCoreData];
     [self.collectionView reloadData];
     [self.refreshControl endRefreshing];
 }
