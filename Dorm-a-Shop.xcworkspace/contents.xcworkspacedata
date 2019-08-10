@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Views/UIButton+AKStencilButton.h">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/ilanashapiro/Desktop/Dorm-a-Shop/Dorm-a-Shop/Views/UIButton+AKStencilButton.m">
-   </FileRef>
-   <FileRef
       location = "group:Dorm-a-Shop.xcodeproj">
    </FileRef>
    <FileRef

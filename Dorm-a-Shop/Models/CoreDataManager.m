@@ -275,6 +275,36 @@
     return [NSMutableArray arrayWithArray:results];
 }
 
+- (NSMutableArray *)getAllAvailabeUsersFromCoreData {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:self.context];
+    [request setEntity:entityDescription];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"available == YES"]];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    return [NSMutableArray arrayWithArray:results];
+}
+
+- (NSMutableArray *)getAllMatchedUsersFromCoreData {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:self.context];
+    [request setEntity:entityDescription];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"matchedToCurrentUser == YES"]];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    return [NSMutableArray arrayWithArray:results];
+}
+
 - (PostCoreData *)savePostToCoreDataWithObjectId:(NSString * _Nullable)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString * _Nullable)watchObjectId withWatchCount:(long long)watchCount withHotness:(double)hotness withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     PostCoreData *postCoreData;
     
@@ -354,6 +384,8 @@
         userCoreData.username = username;
         userCoreData.address = address;
         userCoreData.inRadius = inRadius;
+        userCoreData.available = YES;
+        userCoreData.matchedToCurrentUser = NO;
         
         __weak CoreDataManager *weakSelf = self;
         [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
