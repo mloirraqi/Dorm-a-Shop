@@ -125,6 +125,7 @@
             [convo saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
                     weakSelf.convo = convo;
+                    weakSelf.conversationCoreData = [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:convo.objectId withDate:convo.updatedAt withSender:weakSelf.user withLastText:convo[@"lastText"] withManagedObjectContext:weakSelf.context];
                 } else {
                     NSLog(@"%@", error.localizedDescription);
                 }
@@ -143,6 +144,7 @@
         message[@"receiver"] = self.receiver;
         message[@"text"] = self.msgInput.text;
         self.conversationCoreData.updatedAt = [NSDate date];
+        self.conversationCoreData.lastText = self.msgInput.text;
         
         [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (succeeded) {

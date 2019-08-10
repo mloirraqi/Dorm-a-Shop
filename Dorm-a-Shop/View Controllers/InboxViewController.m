@@ -37,6 +37,8 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchConvos) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
+    [self subscribe];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -60,23 +62,15 @@
 - (void)subscribe {
     self.bridge = [ParseLiveQueryObjCBridge new];
     
+     __weak InboxViewController *weakSelf = self;
     void (^completion)(PFObject* object) = ^(PFObject* object) {
         NSLog(@"received something!");
-//        [weakSelf performSelectorOnMainThread:@selector(addMessageToChatWithObject:) withObject:object waitUntilDone:NO];
+        [weakSelf performSelectorOnMainThread:@selector(fetchConvos) withObject:nil waitUntilDone:NO];
     };
-    
-    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
-    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
     
     PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
     [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
-    
-    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentQuery, recQuery]];
-    [self.bridge subscribeToQuery:query handler:completion];
-}
-
-- (void)addMessageToChatWithObject:(PFObject *) object {
-    NSLog(@"hello!");
+    [self.bridge subscribeToQuery:recQuery handler:completion];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
