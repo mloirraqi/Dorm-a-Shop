@@ -26,6 +26,7 @@
     [super viewDidLoad];
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
+    self.navigationItem.title = @"Matched Users";
     [self fetchMatchedFromParse];
 }
 

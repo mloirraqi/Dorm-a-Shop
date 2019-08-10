@@ -263,6 +263,7 @@
     EditProfileVC *editProfileViewController = (EditProfileVC *)viewController;
     self.usernameLabel.text = editProfileViewController.user.username;
     self.locationLabel.text = editProfileViewController.user.address;
+    self.navigationItem.title = [@"@" stringByAppendingString:editProfileViewController.user.username];
 }
 
 - (void)deleteAllCoreData {

@@ -1,8 +1,8 @@
 //
-//  SignInVC.h
+//  UIButton+AKStencilButton.h
 //  Dorm-a-Shop
 //
-//  Created by mloirraqi on 7/17/19.
+//  Created by ilanashapiro on 8/9/19.
 //  Copyright © 2019 ilanashapiro. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SignInVC : UIViewController
+@interface UIButton (AKStencilButton)
 
 @end
 

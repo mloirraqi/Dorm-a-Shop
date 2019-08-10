@@ -110,6 +110,7 @@
         ReviewCoreData *review = self.reviewsArray[indexPath.row];
         ReviewDetailsViewController *reviewDetailsViewController = [segue destinationViewController];
         reviewDetailsViewController.review = review;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 

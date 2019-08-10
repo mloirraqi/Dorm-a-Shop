@@ -13,21 +13,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SignUpVC : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITextFieldDelegate>
-{
-    __weak IBOutlet UITextField *emailTextField;
-    __weak IBOutlet UITextField *passwordTextField;
-    __weak IBOutlet UITextField *nameTextField;
-    __weak IBOutlet UIButton *addPictureButton;
-    
-    PFGeoPoint *selectedLocationPoint;
-    UIImage *selectedImage;
-    LocationManager *locationManager;
-}
-@property (nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
-
-- (IBAction)signUpButtonTap:(UIButton *)sender;
-- (IBAction)signIntap:(UIButton *)sender;
-- (IBAction)pictureButtonTap:(UIButton *)sender;
 
 @end
 

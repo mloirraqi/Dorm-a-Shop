@@ -234,6 +234,7 @@
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.post = post;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 

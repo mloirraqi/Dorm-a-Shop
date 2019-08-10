@@ -45,6 +45,9 @@
     }
     
     self.chooseRatingButton.layer.cornerRadius = 5;
+    self.chooseRatingButton.layer.borderWidth = 1.0f;
+    self.chooseRatingButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
+    self.chooseRatingButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     
     self.reviewTextView.text = @"Write review here";
     self.reviewTextView.textColor = [UIColor lightGrayColor];
