@@ -90,7 +90,7 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat width = (collectionView.frame.size.width/3) - 4; //(4 is interitempadding)
+    CGFloat width = (collectionView.frame.size.width/2) - 4; //(4 is interitempadding)
     return CGSizeMake(width, width + 70); //70 is size of two labels
 
 }
