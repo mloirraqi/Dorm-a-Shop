@@ -118,16 +118,6 @@
     void (^completion)(PFObject* object) = ^(PFObject* object) {
         [weakSelf addMessageToChatWithObject:object];
     };
-    
-    PFQuery *sentQuery = [PFQuery queryWithClassName:@"Messages"];
-    [sentQuery whereKey:@"receiver" equalTo:self.receiver];
-    [sentQuery whereKey:@"sender" equalTo:[PFUser currentUser]];
-    [self.bridge subscribeToQuery:sentQuery handler:completion];
-    
-    PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
-    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
-    [recQuery whereKey:@"sender" equalTo:self.receiver];
-    [self.bridge subscribeToQuery:recQuery handler:completion];
 }
 
 - (IBAction)sendMsg:(id)sender {
