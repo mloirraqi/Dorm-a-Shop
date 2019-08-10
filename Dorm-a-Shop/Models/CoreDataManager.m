@@ -55,15 +55,6 @@
     
     NSMutableArray __block *mutableResults = [NSMutableArray arrayWithArray:results];
     if (results.count > 1) {
-        double initialRank = ((PostCoreData *)results[0]).rank;
-        double rank = initialRank;
-        
-        for (PostCoreData *result in results) {
-            if (rank != result.rank) {
-                break;
-            }
-        }
-        
         NSArray *sortedPosts = [mutableResults sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
             PostCoreData *firstPost = (PostCoreData *)firstObj;
             PostCoreData *secondPost = (PostCoreData *)secondObj;
@@ -235,8 +226,6 @@
         abort();
     }
     
-    NSLog(@"%@", results);
-    
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -262,6 +251,36 @@
         abort();
     }
     
+    return [NSMutableArray arrayWithArray:results];
+}
+
+- (NSMutableArray *)getAllAvailabeUsersFromCoreData {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:self.context];
+    [request setEntity:entityDescription];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"available == YES"]];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    return [NSMutableArray arrayWithArray:results];
+}
+
+- (NSMutableArray *)getAllMatchedUsersFromCoreData {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:self.context];
+    [request setEntity:entityDescription];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"matchedToCurrentUser == YES"]];
+    
+    NSError *error = nil;
+    NSArray *results = [self.context executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
     return [NSMutableArray arrayWithArray:results];
 }
 
@@ -322,7 +341,7 @@
     return postCoreData;
 }
 
-- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withEmail:(NSString * _Nullable)email withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
+- (UserCoreData *)saveUserToCoreDataWithObjectId:(NSString * _Nullable)userObjectId withUsername:(NSString * _Nullable)username withLocation:(NSString * _Nullable)location withAddress:(NSString * _Nullable)address withProfilePic:(NSData * _Nullable)imageData inRadius:(BOOL)inRadius withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
     UserCoreData *userCoreData;
     if (userObjectId) {
         userCoreData = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
@@ -334,11 +353,18 @@
         
         userCoreData.objectId = userObjectId;
         userCoreData.profilePic = imageData;
-        userCoreData.email = email;
+        
+        if ([userObjectId isEqualToString:PFUser.currentUser.objectId]) {
+            [PFUser.currentUser fetch];
+            userCoreData.email = PFUser.currentUser.email;
+        }
+        
         userCoreData.location = location;
         userCoreData.username = username;
         userCoreData.address = address;
         userCoreData.inRadius = inRadius;
+        userCoreData.available = YES;
+        userCoreData.matchedToCurrentUser = NO;
         
         __weak CoreDataManager *weakSelf = self;
         [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
@@ -347,7 +373,7 @@
             
             if (userObjectId) {
                 userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
-                operationAlreadyExists = YES;
+                operationAlreadyExists = [weakSelf queueContainsOperationWithName:userObjectId];
             }
             
             if (userData || operationAlreadyExists) {

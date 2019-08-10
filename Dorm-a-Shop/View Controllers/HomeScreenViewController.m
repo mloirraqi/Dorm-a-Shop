@@ -105,7 +105,25 @@
             [self.tableView reloadData];
         } else {
             [self.postsArray addObject:notificationPost];
-            self.postsArray = [self sortPostsArray:self.postsArray];
+            
+            NSArray *sortedPosts = [self.postsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
+                PostCoreData *firstPost = (PostCoreData *)firstObj;
+                PostCoreData *secondPost = (PostCoreData *)secondObj;
+                
+                if (firstPost.rank > secondPost.rank) {
+                    return NSOrderedAscending;
+                } else if (firstPost.rank > secondPost.rank) {
+                    return NSOrderedDescending;
+                } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
+                    return NSOrderedDescending;
+                } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
+                    return NSOrderedAscending;
+                }
+                
+                return NSOrderedSame;
+            }];
+            
+            self.postsArray = [NSMutableArray arrayWithArray:sortedPosts];
             [self.tableView reloadData];
         }
     } else if ([[notification name] isEqualToString:@"DidUploadNotification"]) {
@@ -152,7 +170,7 @@
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
         PostCoreData *post = self.filteredPosts[indexPath.row];
         cell.post = post;
-        if([self.hotArray containsObject:post]) {
+        if ([self.hotArray containsObject:post]) {
             cell.hotnessLabel.hidden = NO;
         }
         return cell;
@@ -216,6 +234,7 @@
         DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.indexPath = indexPath;
         detailsViewController.post = post;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 
@@ -347,25 +366,5 @@
     [self filterPosts];
 }
 
-- (NSMutableArray *)sortPostsArray:(NSMutableArray *)postsArray {
-    NSArray *sortedResults = [postsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
-        PostCoreData *firstPost = (PostCoreData *)firstObj;
-        PostCoreData *secondPost = (PostCoreData *)secondObj;
-        
-        if (firstPost.rank > secondPost.rank) {
-            return NSOrderedAscending;
-        } else if (firstPost.rank > secondPost.rank) {
-            return NSOrderedDescending;
-        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedDescending) {
-            return NSOrderedDescending;
-        } else if ([firstPost.createdAt compare:secondPost.createdAt] == NSOrderedAscending) {
-            return NSOrderedAscending;
-        }
-        
-        return NSOrderedSame;
-    }];
-    
-    return [NSMutableArray arrayWithArray:sortedResults];
-}
 
 @end

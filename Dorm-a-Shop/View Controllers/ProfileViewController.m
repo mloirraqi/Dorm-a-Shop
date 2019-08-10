@@ -263,6 +263,7 @@
     EditProfileVC *editProfileViewController = (EditProfileVC *)viewController;
     self.usernameLabel.text = editProfileViewController.user.username;
     self.locationLabel.text = editProfileViewController.user.address;
+    self.navigationItem.title = [@"@" stringByAppendingString:editProfileViewController.user.username];
 }
 
 - (void)deleteAllCoreData {
@@ -276,6 +277,7 @@
     NSError *deleteUsersError = nil;
     [self.context executeRequest:deleteUsers error:&deleteUsersError];
     
+    UserCoreData *user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
     NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
     NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
     NSError *deletePostsError = nil;

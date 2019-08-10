@@ -17,8 +17,6 @@
     self.profilePic.clipsToBounds = YES;
     self.profilePic.layer.masksToBounds = YES;
     self.profilePic.contentMode = UIViewContentModeScaleAspectFill;
-    self.profilePic.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.profilePic.layer.borderWidth = 4.0f;
 }
 
 -(void)drawRect:(CGRect)rect {

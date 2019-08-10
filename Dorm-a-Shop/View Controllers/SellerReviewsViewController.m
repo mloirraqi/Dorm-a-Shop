@@ -17,6 +17,7 @@
 @interface SellerReviewsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *noReviewsView;
 @property (strong, nonatomic) NSManagedObjectContext *context;
 @property (strong, nonatomic) NSMutableArray *reviewsArray;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
@@ -42,6 +43,7 @@
     if ([[notification name] isEqualToString:@"DidReviewNotification"]) {
         ReviewCoreData *notificationReview = [[notification userInfo] objectForKey:@"review"];
         [self.reviewsArray insertObject:notificationReview atIndex:0];
+        [self.noReviewsView setHidden:YES];
         [self.tableView reloadData];
     } else if ([[notification name] isEqualToString:@"DoneSavingReviews"]) {
         [self fetchReviewsFromCoreData];
@@ -50,7 +52,12 @@
 
 - (void)fetchReviewsFromCoreData {
     self.reviewsArray = [[CoreDataManager shared] getReviewsFromCoreDataForSeller:self.sellerCoreData];
-    [self.tableView reloadData];
+    if (self.reviewsArray.count == 0) {
+        [self.noReviewsView setHidden:NO];
+    } else {
+        [self.noReviewsView setHidden:YES];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)createRefreshControl {
@@ -66,9 +73,14 @@
         if (error) {
             NSLog(@"Error querying reviews! %@", error.localizedDescription);
         } else {
-            NSLog(@"%@", reviews);
             self.reviewsArray = reviews;
-            [self.tableView reloadData];
+            
+            if (self.reviewsArray.count == 0) {
+                [self.noReviewsView setHidden:NO];
+            } else {
+                [self.noReviewsView setHidden:YES];
+                [self.tableView reloadData];
+            }
         }
         [self.refreshControl endRefreshing];
     }];
@@ -98,6 +110,7 @@
         ReviewCoreData *review = self.reviewsArray[indexPath.row];
         ReviewDetailsViewController *reviewDetailsViewController = [segue destinationViewController];
         reviewDetailsViewController.review = review;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 

@@ -12,11 +12,13 @@
 		470FB71A22EF71780088A3EC /* Watches.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB71922EF71780088A3EC /* Watches.m */; };
 		470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470FB72B22F0C09B0088A3EC /* Conversation.m */; };
 		47185EBE22FCED8100674C81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47185EBD22FCED8100674C81 /* Assets.xcassets */; };
+		47185EC122FD4BDD00674C81 /* SwipeRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 47185EC022FD4BDD00674C81 /* SwipeRecord.m */; };
 		47415D0F22F956D700AF4C16 /* UILabel+Boldify.m in Sources */ = {isa = PBXBuildFile; fileRef = 47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */; };
 		47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BA722F3626E00DE6D8E /* CoreDataManager.m */; };
 		47486BBA22F3D65500DE6D8E /* Review.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BB922F3D65500DE6D8E /* Review.m */; };
 		47486BCF22F4ECEA00DE6D8E /* ReviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */; };
 		47486BD222F566C200DE6D8E /* ParseDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47486BD122F566C200DE6D8E /* ParseDatabaseManager.m */; };
+		4775F35C22FE640C009E45A1 /* AKStencilButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4775F35B22FE640C009E45A1 /* AKStencilButton.m */; };
 		477B581522FC069100003AAB /* ReviewDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 477B581422FC069100003AAB /* ReviewDetailsViewController.m */; };
 		47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47A8A9A522DE3A30005D9520 /* AppDelegate.m */; };
 		47A8A9AC22DE3A30005D9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47A8A9AA22DE3A30005D9520 /* Main.storyboard */; };
@@ -33,7 +35,6 @@
 		90D753A1636A3A9534074E8F /* Pods_Dorm_a_ShopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F27A5835AC43FFDCD492CA /* Pods_Dorm_a_ShopTests.framework */; };
 		DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFC22DE7BE900418DE3 /* UploadViewController.m */; };
 		DE30800022DFD20500418DE3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE307FFF22DFD20500418DE3 /* ProfileViewController.m */; };
-		DE4DE33022FCE168009B3A56 /* UIButton+Expandable.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4DE32E22FCE168009B3A56 /* UIButton+Expandable.m */; };
 		DE4DE33522FCE6D2009B3A56 /* MatchedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4DE33422FCE6D2009B3A56 /* MatchedViewController.m */; };
 		DE4FCFD422E66FE500B1311F /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD322E66FE500B1311F /* InboxViewController.m */; };
 		DE4FCFD722E6744100B1311F /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4FCFD622E6744100B1311F /* MessageViewController.m */; };
@@ -66,7 +67,6 @@
 		EA6732EE22DF95F5004E362F /* QAView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732EB22DF95F5004E362F /* QAView.m */; };
 		EA6732F422DF96DE004E362F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F322DF96DE004E362F /* Utils.m */; };
 		EA6732F722DFAB25004E362F /* SignInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6732F622DFAB25004E362F /* SignInVC.m */; };
-		EA99514E22FCDCF700BF65AE /* UIButton+Expandable.m in Sources */ = {isa = PBXBuildFile; fileRef = EA99514C22FCDCF700BF65AE /* UIButton+Expandable.m */; };
 		EAB1A80822F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB1A80722F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift */; };
 		EAEB723422E9315200426226 /* DraggableViewBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723322E9315200426226 /* DraggableViewBackground.m */; };
 		EAEB723922E9316200426226 /* DraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB723722E9316200426226 /* DraggableView.m */; };
@@ -109,6 +109,8 @@
 		470FB72B22F0C09B0088A3EC /* Conversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
 		4715CD9322E7914800E2E916 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		47185EBD22FCED8100674C81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		47185EBF22FD4BDD00674C81 /* SwipeRecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipeRecord.h; sourceTree = "<group>"; };
+		47185EC022FD4BDD00674C81 /* SwipeRecord.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwipeRecord.m; sourceTree = "<group>"; };
 		47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+Boldify.h"; sourceTree = "<group>"; };
 		47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Boldify.m"; sourceTree = "<group>"; };
 		47486BA622F3626E00DE6D8E /* CoreDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
@@ -119,6 +121,8 @@
 		47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReviewTableViewCell.m; sourceTree = "<group>"; };
 		47486BD022F566C200DE6D8E /* ParseDatabaseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseDatabaseManager.h; sourceTree = "<group>"; };
 		47486BD122F566C200DE6D8E /* ParseDatabaseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseDatabaseManager.m; sourceTree = "<group>"; };
+		4775F35A22FE640C009E45A1 /* AKStencilButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AKStencilButton.h; sourceTree = "<group>"; };
+		4775F35B22FE640C009E45A1 /* AKStencilButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AKStencilButton.m; sourceTree = "<group>"; };
 		477B581322FC069100003AAB /* ReviewDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReviewDetailsViewController.h; sourceTree = "<group>"; };
 		477B581422FC069100003AAB /* ReviewDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReviewDetailsViewController.m; sourceTree = "<group>"; };
 		47A8A9A122DE3A30005D9520 /* Dorm-a-Shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dorm-a-Shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,8 +157,6 @@
 		DE307FFC22DE7BE900418DE3 /* UploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadViewController.m; sourceTree = "<group>"; };
 		DE307FFE22DFD20500418DE3 /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		DE307FFF22DFD20500418DE3 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		DE4DE32E22FCE168009B3A56 /* UIButton+Expandable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Expandable.m"; sourceTree = "<group>"; };
-		DE4DE32F22FCE168009B3A56 /* UIButton+Expandable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Expandable.h"; sourceTree = "<group>"; };
 		DE4DE33322FCE6D2009B3A56 /* MatchedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatchedViewController.h; sourceTree = "<group>"; };
 		DE4DE33422FCE6D2009B3A56 /* MatchedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatchedViewController.m; sourceTree = "<group>"; };
 		DE4FCFD222E66FE500B1311F /* InboxViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InboxViewController.h; sourceTree = "<group>"; };
@@ -208,8 +210,6 @@
 		EA6732F322DF96DE004E362F /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		EA6732F522DFAB25004E362F /* SignInVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignInVC.h; sourceTree = "<group>"; };
 		EA6732F622DFAB25004E362F /* SignInVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignInVC.m; sourceTree = "<group>"; };
-		EA99514C22FCDCF700BF65AE /* UIButton+Expandable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Expandable.m"; sourceTree = "<group>"; };
-		EA99514D22FCDCF700BF65AE /* UIButton+Expandable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Expandable.h"; sourceTree = "<group>"; };
 		EAB1A80622F8272B00C4AA25 /* Dorm-a-Shop-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Dorm-a-Shop-Bridging-Header.h"; sourceTree = "<group>"; };
 		EAB1A80722F8272B00C4AA25 /* ParseLiveQueryObjCBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseLiveQueryObjCBridge.swift; sourceTree = "<group>"; };
 		EAEB723222E9315200426226 /* DraggableViewBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableViewBackground.h; sourceTree = "<group>"; };
@@ -354,6 +354,8 @@
 				470FB72B22F0C09B0088A3EC /* Conversation.m */,
 				47486BB822F3D65500DE6D8E /* Review.h */,
 				47486BB922F3D65500DE6D8E /* Review.m */,
+				47185EBF22FD4BDD00674C81 /* SwipeRecord.h */,
+				47185EC022FD4BDD00674C81 /* SwipeRecord.m */,
 				47486BD022F566C200DE6D8E /* ParseDatabaseManager.h */,
 				47486BD122F566C200DE6D8E /* ParseDatabaseManager.m */,
 				47486BA622F3626E00DE6D8E /* CoreDataManager.h */,
@@ -417,16 +419,14 @@
 				DED744F722DFE0A400394748 /* PostCollectionViewCell.m */,
 				47486BCD22F4ECEA00DE6D8E /* ReviewTableViewCell.h */,
 				47486BCE22F4ECEA00DE6D8E /* ReviewTableViewCell.m */,
-				47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */,
-				47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */,
 				DEFE7C8A22E64347006E3096 /* UserCell.h */,
 				DEFE7C8B22E64347006E3096 /* UserCell.m */,
 				EA0E3AFA22FAB11C003BE858 /* UserCollectionCell.h */,
 				EA0E3AFB22FAB11C003BE858 /* UserCollectionCell.m */,
-				EA99514D22FCDCF700BF65AE /* UIButton+Expandable.h */,
-				EA99514C22FCDCF700BF65AE /* UIButton+Expandable.m */,
-				DE4DE32F22FCE168009B3A56 /* UIButton+Expandable.h */,
-				DE4DE32E22FCE168009B3A56 /* UIButton+Expandable.m */,
+				47415D0D22F956D700AF4C16 /* UILabel+Boldify.h */,
+				47415D0E22F956D700AF4C16 /* UILabel+Boldify.m */,
+				4775F35A22FE640C009E45A1 /* AKStencilButton.h */,
+				4775F35B22FE640C009E45A1 /* AKStencilButton.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -654,7 +654,6 @@
 				EA4315AF22F93C4200CC853D /* CardItemCollectionViewCell.xib in Resources */,
 				DE877D7322FA3EB500C35587 /* chair_METALLIC.png in Resources */,
 				DE877D7722FA3EB500C35587 /* chair_NORMAL.png in Resources */,
-				EA0E3B0122FBE265003BE858 /* Assets.xcassets in Resources */,
 				47185EBE22FCED8100674C81 /* Assets.xcassets in Resources */,
 				DE877D7122FA3EB500C35587 /* ship.png in Resources */,
 			);
@@ -801,6 +800,7 @@
 				47486BD222F566C200DE6D8E /* ParseDatabaseManager.m in Sources */,
 				47486BA822F3626E00DE6D8E /* CoreDataManager.m in Sources */,
 				47A8A9A622DE3A30005D9520 /* AppDelegate.m in Sources */,
+				4775F35C22FE640C009E45A1 /* AKStencilButton.m in Sources */,
 				EA4315BB22F941A200CC853D /* MapsVC.m in Sources */,
 				EA03725E22E6501B00354DA2 /* ChatCell.m in Sources */,
 				470FB6F922EF70240088A3EC /* LocationManager.m in Sources */,
@@ -814,8 +814,6 @@
 				DE307FFD22DE7BE900418DE3 /* UploadViewController.m in Sources */,
 				EA6732EE22DF95F5004E362F /* QAView.m in Sources */,
 				EA6732DE22DF931C004E362F /* SignUpVC.m in Sources */,
-				EA99514E22FCDCF700BF65AE /* UIButton+Expandable.m in Sources */,
-				DE4DE33022FCE168009B3A56 /* UIButton+Expandable.m in Sources */,
 				EA6732ED22DF95F5004E362F /* QAButton.m in Sources */,
 				470FB72C22F0C09B0088A3EC /* Conversation.m in Sources */,
 				47A8A9EB22DE7B2B005D9520 /* DetailsViewController.m in Sources */,
@@ -826,6 +824,7 @@
 				47A8A9DB22DE42E5005D9520 /* Post.m in Sources */,
 				DE4FD01122EA3D1100B1311F /* DormAShop.xcdatamodeld in Sources */,
 				EA0E3B0722FC85B3003BE858 /* SwipePopupVC.m in Sources */,
+				47185EC122FD4BDD00674C81 /* SwipeRecord.m in Sources */,
 				DE4DE33522FCE6D2009B3A56 /* MatchedViewController.m in Sources */,
 				47A8A9E522DE45EF005D9520 /* PostTableViewCell.m in Sources */,
 				DE877D6422FA3CC900C35587 /* ARViewController.swift in Sources */,

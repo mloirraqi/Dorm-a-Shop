@@ -45,6 +45,9 @@
     }
     
     self.chooseRatingButton.layer.cornerRadius = 5;
+    self.chooseRatingButton.layer.borderWidth = 1.0f;
+    self.chooseRatingButton.layer.borderColor = [UIColor colorWithRed:0.0 green:122/255.0 blue:1.0 alpha:1].CGColor;
+    self.chooseRatingButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     
     self.reviewTextView.text = @"Write review here";
     self.reviewTextView.textColor = [UIColor lightGrayColor];
@@ -187,25 +190,20 @@
             textView.text = @"Write review here";
             textView.textColor = [UIColor lightGrayColor];
         }
-        
         [textView resignFirstResponder];
     } else if ([textView isEqual:self.itemDescriptionTextView]) {
         if ([textView.text isEqualToString:@""]) {
             textView.text = @"Write a short description of the item you're reviewing";
             textView.textColor = [UIColor lightGrayColor];
         }
-        
         [textView resignFirstResponder];
     } else if ([textView isEqual:self.titleTextView]) {
         if ([textView.text isEqualToString:@""]) {
             textView.text = @"Give a short title for your review";
             textView.textColor = [UIColor lightGrayColor];
         }
-        
         [textView resignFirstResponder];
     }
-    
-    
 }
 
 - (void)saveContext {

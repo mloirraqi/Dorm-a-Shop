@@ -38,6 +38,9 @@
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
+@property (weak, nonatomic) IBOutlet UILabel *descriptionCharCount;
+@property (weak, nonatomic) IBOutlet UILabel *titleCharCount;
+
 @end
 
 @implementation UploadViewController
@@ -48,12 +51,6 @@
     AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = appDelegate.persistentContainer.viewContext;
     
-    self.itemDescription.layer.borderWidth = 1.0f;
-    self.itemDescription.layer.borderColor = [[UIColor blueColor] CGColor];
-    self.itemDescription.delegate = self;
-    self.itemDescription.text = @"add a description for the item here";
-    self.itemDescription.textColor = [UIColor lightGrayColor];
-    
     self.pickerviewToolbar.hidden = YES;
     self.categoryPickerView.delegate = self;
     self.categoryPickerView.dataSource = self;
@@ -61,6 +58,7 @@
     self.conditionPickerView.delegate = self;
     self.conditionPickerView.dataSource = self;
     self.conditionPickerView.hidden = YES;
+    self.itemTitle.delegate = self;
     
     self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
     self.conditions = @[@"New", @"Nearly New", @"Used"];
@@ -74,6 +72,26 @@
     [self.titleEmpty addAction:okAction];
     [self.priceEmpty addAction:okAction];
     [self.descriptionEmpty addAction:okAction];
+    
+    [self.itemTitle addTarget:self
+                  action:@selector(textFieldDidChange:)
+        forControlEvents:UIControlEventEditingChanged];
+    
+    self.conditionShown.layer.cornerRadius = 5;
+    self.conditionShown.layer.borderWidth = 1.0f;
+    self.conditionShown.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    self.conditionShown.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    
+    self.categoryShown.layer.cornerRadius = 5;
+    self.categoryShown.layer.borderWidth = 1.0f;
+    self.categoryShown.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    self.categoryShown.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+
+    self.itemDescription.layer.borderWidth = 1.0f;
+    self.itemDescription.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.itemDescription.delegate = self;
+    self.itemDescription.text = @"add a description for the item here";
+    self.itemDescription.textColor = [UIColor lightGrayColor];
 }
 
 - (IBAction)addPicture:(id)sender {
@@ -221,6 +239,7 @@
 - (IBAction)onTap:(id)sender {
     [self.itemPrice endEditing:YES];
     [self.itemDescription endEditing:YES];
+    [self.itemTitle endEditing:YES];
     self.conditionPickerView.hidden = YES;
     self.categoryPickerView.hidden = YES;
     self.pickerviewToolbar.hidden = YES;
@@ -256,6 +275,32 @@
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    int characterLimit = 500;
+    NSString *newText = [self.itemDescription.text stringByReplacingCharactersInRange:range withString:text];
+    return newText.length < characterLimit;
+};
+
+- (void)textViewDidChange:(UITextView *)textView {
+    NSUInteger textlength = 500 - [self.itemDescription text].length;
+    self.descriptionCharCount.text = [NSString stringWithFormat:@"%lu", textlength];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if(range.length + range.location > textField.text.length)
+    {
+        return NO;
+    }
+    
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return newLength <= 20;
+}
+
+- (void)textFieldDidChange:(UITextField *)textField {
+    NSUInteger textlength = 20 - [textField text].length;
+    self.titleCharCount.text = [NSString stringWithFormat:@"%lu", textlength];
 }
 
 @end

@@ -43,7 +43,8 @@
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
-    
+    self.collectionView.alwaysBounceVertical = YES;
+
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(queryUsersFromParse) forControlEvents:UIControlEventValueChanged];
     [self.collectionView insertSubview:self.refreshControl atIndex:0];
@@ -108,7 +109,7 @@
             weakSelf.users = [NSMutableArray arrayWithArray:users];
             [weakSelf filterUsers];
             [weakSelf.collectionView reloadData];
-            [self.refreshControl endRefreshing];
+            [weakSelf.refreshControl endRefreshing];
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }

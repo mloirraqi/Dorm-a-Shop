@@ -20,37 +20,40 @@
 
 @interface SignUpVC () <UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
+@property (weak, nonatomic) IBOutlet UIButton *addPictureButton;
+
+@property (strong, nonatomic) PFGeoPoint *selectedLocationPoint;
+@property (strong, nonatomic) UIImage *selectedImage;
+@property (strong, nonatomic) LocationManager *locationManager;
+
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
-@property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) AppDelegate *appDelegate;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
 @implementation SignUpVC
 
-- (IBAction)tapScreen:(id)sender {
-    [self->nameTextField endEditing:YES];
-    [self->emailTextField endEditing:YES];
-}
-
-- (NJOPasswordValidator *)validator {
-    return self.lenientValidator;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self->nameTextField.delegate = self;
-    self->passwordTextField.delegate = self;
-    self->emailTextField.delegate = self;
+    self.nameTextField.delegate = self;
+    self.passwordTextField.delegate = self;
+    self.emailTextField.delegate = self;
+    
+    self.selectedImage = [UIImage imageNamed:@"profile-default"];
     
     self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = self.appDelegate.persistentContainer.viewContext;
     
-    locationManager = [[LocationManager alloc] init];
+    self.locationManager = [[LocationManager alloc] init];
     
     self.lenientValidator = [NJOPasswordValidator standardValidator];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:passwordTextField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self.passwordTextField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self updatePasswordStrength:note.object];
     }];
     
@@ -58,32 +61,27 @@
 }
 
 - (BOOL)checkFields {
-    if (!nameTextField.text || nameTextField.text.length == 0) {
+    if (!self.nameTextField.text || self.nameTextField.text.length == 0) {
         [self showAlertView:@"Please Add a Name"];
         return false;
     }
     
-    if (!emailTextField.text || emailTextField.text.length == 0) {
+    if (!self.emailTextField.text || self.emailTextField.text.length == 0) {
         [self showAlertView:@"Please Add an Email"];
         return false;
     }
     
-    if (!passwordTextField.text || passwordTextField.text.length == 0) {
+    if (!self.passwordTextField.text || self.passwordTextField.text.length == 0) {
         [self showAlertView:@"Please Add a Passsword"];
         return false;
     }
     
-    if (!selectedImage || selectedImage == nil) {
-        [self showAlertView:@"Please Add an Image"];
-        return false;
-    }
-    
-    if (![[Utils sharedInstance] isAnEmail:emailTextField.text]) {
+    if (![[Utils sharedInstance] isAnEmail:self.emailTextField.text]) {
         [self showAlertView:@"Please Add a Valid .edu Email"];
         return false;
     }
     
-    CLLocation *currentLocation = [locationManager currentLocation];
+    CLLocation *currentLocation = [self.locationManager currentLocation];
     if (currentLocation == nil) {
         [self showAlertView:@"Please Enable Location From Settings"];
         return false;
@@ -95,23 +93,23 @@
 - (IBAction)signUpButtonTap:(id)sender {
     if ([self checkFields]){
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
-        NSData *imageData = UIImagePNGRepresentation(selectedImage);
+        NSData *imageData = UIImagePNGRepresentation(self.selectedImage);
         PFFileObject *image = [PFFileObject fileObjectWithName:@"Profileimage.png" data:imageData];
         
         CLLocation *currentLocation = [[LocationManager sharedInstance] currentLocation];
         PFGeoPoint *location = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
         
         User *user = [User new];
-        user.username = self->nameTextField.text;
-        user.password = self->passwordTextField.text;
-        user.email = self->emailTextField.text;
+        user.username = self.nameTextField.text;
+        user.password = self.passwordTextField.text;
+        user.email = self.emailTextField.text;
         user.ProfilePic = image;
         user.Location = location;
         
         __weak SignUpVC *weakSelf = self;
         [self setLocationNameForUser:user withCompletion:^(NSError *error) {
             NSString *coreDataLocation = [NSString stringWithFormat:@"(%f, %f)", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude];
-            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withEmail:user.email withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:weakSelf.context];
+            UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:weakSelf.context];
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 [hud hideAnimated:YES];
@@ -205,7 +203,7 @@
 
 - (void)updateLocationWith:(NSString *)address location:(PFGeoPoint *)location {
     User *currentUser = (User *)[PFUser currentUser];
-    currentUser.Location = selectedLocationPoint;
+    currentUser.Location = self.selectedLocationPoint;
     
     __weak SignUpVC *weakSelf = self;
     UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:currentUser.objectId withContext:weakSelf.context];
@@ -219,10 +217,6 @@
 //        [self saveContext];
     }
 }
-
-//- (IBAction)signInTap:(UIButton *)sender {
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
 
 - (IBAction)pictureButtonTap:(UIButton *)sender {
     UIAlertController *alertController=[UIAlertController alertControllerWithTitle:@"" message:@"Choose image" preferredStyle:UIAlertControllerStyleActionSheet];
@@ -265,8 +259,8 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    selectedImage = info[UIImagePickerControllerEditedImage];
-    [addPictureButton setImage:selectedImage forState:UIControlStateNormal];
+    self.selectedImage = info[UIImagePickerControllerEditedImage];
+    [self.addPictureButton setImage:self.selectedImage forState:UIControlStateNormal];
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -284,10 +278,8 @@
     
 }
 
-#pragma mark -
-
 - (void)updatePasswordStrength:(id)sender {
-    NSString *password = passwordTextField.text;
+    NSString *password = self.passwordTextField.text;
     
     if ([password length] == 0) {
         self.passwordStrengthMeterView.progress = 0.0f;
@@ -295,7 +287,7 @@
         NJOPasswordStrength strength = [NJOPasswordStrengthEvaluator strengthOfPassword:password];
         
         NSArray *failingRules = nil;
-        if ([self.validator validatePassword:password failingRules:&failingRules]) {
+        if ([self.lenientValidator validatePassword:password failingRules:&failingRules]) {
             switch (strength) {
                 case NJOVeryWeakPasswordStrength:
                     self.passwordStrengthMeterView.progress = 0.15f;
@@ -375,7 +367,7 @@
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField == self->nameTextField || textField == emailTextField) {
+    if (textField == self.nameTextField || textField == self.emailTextField) {
         [textField resignFirstResponder];
         return NO;
     } else {
@@ -386,9 +378,15 @@
 
 
 - (IBAction)onTap:(id)sender {
-    [self->nameTextField endEditing:YES];
-    [self->passwordTextField endEditing:YES];
-    [self->emailTextField endEditing:YES];
+    [self.nameTextField endEditing:YES];
+    [self.passwordTextField endEditing:YES];
+    [self.emailTextField endEditing:YES];
 }
+
+- (IBAction)backtoSignin:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 
 @end

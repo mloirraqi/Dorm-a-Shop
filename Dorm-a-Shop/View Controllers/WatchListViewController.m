@@ -19,6 +19,7 @@
 @interface WatchListViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *nothingWatchedView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSMutableArray *postsArray;
 
@@ -37,7 +38,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DoneSavingPostsWatches" object:nil];
     
     [self fetchPostsFromCoreData];
-    self.postsArray = [self sortPostsArray:self.postsArray];
     [self createRefreshControl];
 }
 
@@ -50,17 +50,31 @@
         } else if (!notificationPost.sold) {
             [self.postsArray addObject:notificationPost];
         }
-        self.postsArray = [self sortPostsArray:self.postsArray];
-        [self.tableView reloadData];
+        
+        if (self.postsArray.count == 0) {
+            [self.nothingWatchedView setHidden:NO];
+        } else {
+            [self.nothingWatchedView setHidden:YES];
+            self.postsArray = [self sortPostsArray:self.postsArray];
+            [self.tableView reloadData];
+        }
     } else if ([[notification name] isEqualToString:@"DoneSavingPostsWatches"]) {
         [self fetchPostsFromCoreData];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
         PostCoreData *notificationPost = [[notification userInfo] objectForKey:@"post"];
         if (notificationPost.sold) {
             [self.postsArray removeObject:notificationPost];
-            [self.tableView reloadData];
+            
+            if (self.postsArray.count == 0) {
+                [self.nothingWatchedView setHidden:NO];
+            } else {
+                [self.nothingWatchedView setHidden:YES];
+                self.postsArray = [self sortPostsArray:self.postsArray];
+                [self.tableView reloadData];
+            }
         } else {
             [self.postsArray addObject:notificationPost];
+            [self.nothingWatchedView setHidden:YES];
             self.postsArray = [self sortPostsArray:self.postsArray];
             [self.tableView reloadData];
         }
@@ -76,7 +90,15 @@
 - (void)fetchPostsFromCoreData {
     NSMutableArray *activeWatchPosts = [[CoreDataManager shared] getActiveWatchedPostsForCurrentUserFromCoreData];
     self.postsArray = activeWatchPosts;
-    [self.tableView reloadData];
+    
+    if (self.postsArray.count == 0) {
+        [self.nothingWatchedView setHidden:NO];
+    } else {
+        [self.nothingWatchedView setHidden:YES];
+        //(sorting is done in singleton when only doing a simple fetch)
+        [self.tableView reloadData];
+    }
+    
     [self.refreshControl endRefreshing];
 }
 
@@ -84,6 +106,12 @@
     PostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostTableViewCell"];
     PostCoreData *post = self.postsArray[indexPath.row];
     cell.post = post;
+    
+    NSMutableArray *hotArray = [[CoreDataManager shared] getHotPostsFromCoreData];
+    if ([hotArray containsObject:post]) {
+        cell.hotnessLabel.hidden = NO;
+    }
+    
     return cell;
 }
 
@@ -124,6 +152,7 @@
         NSManagedObjectContext *context = appDelegate.persistentContainer.viewContext;
         PostCoreData *postCoreData = (PostCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"PostCoreData" withObjectId:post.objectId withContext:context];
         detailsViewController.post = postCoreData;
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 

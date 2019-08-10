@@ -14,6 +14,8 @@
 #import "CoreDataManager.h"
 
 @interface SignInVC () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
 
 @end
 
@@ -22,6 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.passwordField.delegate = self;
+    self.emailField.delegate = self;
 }
 
 -(void)showAlertView:(NSString*)message {
@@ -92,6 +95,5 @@
     [self.emailField endEditing:YES];
     [self.passwordField endEditing:YES];
 }
-
 
 @end
