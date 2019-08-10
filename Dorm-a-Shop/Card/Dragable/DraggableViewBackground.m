@@ -139,42 +139,20 @@ static const int MAX_BUFFER_SIZE = 2;
 }
 
 - (void)userAccepted:(Card *)card {
-    PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
-    swipeRecord[@"userId"] = [PFUser currentUser].objectId;
+    __weak DraggableViewBackground *weakSelf = self;
+    PFQuery *matchQuery = [PFQuery queryWithClassName:@"SwipeRecord"];
+    [matchQuery whereKey:@"initiator" equalTo:(PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:card.author.objectId]];
+    [matchQuery whereKey:@"recipient" equalTo:[PFUser currentUser]];
     
-    PFUser* user1 = (PFUser*)card.author;
-    PFUser* user2 = [PFUser currentUser];
-    
-    NSLog(@"%@ - %@", user1, user2);
-    
-    NSString* author = card.author.objectId;
-    swipeRecord[@"accepted"] = author;
-    
-    [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-        if (succeeded) {
-            NSLog(@"The swipeRecord was saved!");
-        } else {
-            NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
-        }
-    }];
-    
-    [self checkMatchwithUser:card.author];
-}
-
-- (void)checkMatchwithUser:(PFUser *)acceptedUser {
-    PFQuery *query = [PFQuery queryWithClassName:@"SwipeRecord"];
-    [query whereKey:@"userId" equalTo:acceptedUser.objectId];
-    [query whereKey:@"accepted" equalTo:[PFUser currentUser].objectId];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipeRecords, NSError * _Nullable error) {
-        if (swipeRecords) {
-            if (swipeRecords.count != 0) { //We will have > 0 count if accepted user and userid matches where clause.
-                
+    [matchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable matchArray, NSError * _Nullable error) {
+        if(!error) {
+            if(matchArray.count > 0) {
+                PFObject *swipeRecord = matchArray[0];
+                swipeRecord[@"match"] = @2;
                 UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                 SwipePopupVC* controller = [storyboard instantiateViewControllerWithIdentifier:@"SwipePopupVC"];
-
-                // Loading user data to SwipePopUp
-                UserCoreData* user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:acceptedUser.objectId withContext:self.context];
+                
+                UserCoreData* user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:card.author.objectId withContext:weakSelf.context];
                 controller.userCoreData = user;
                 
                 UIViewController *vc1 = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -183,31 +161,67 @@ static const int MAX_BUFFER_SIZE = 2;
                 [controller setModalTransitionStyle: UIModalTransitionStyleCrossDissolve];
                 
                 [vc1 presentViewController:controller animated:YES completion:nil];
-                
-                [[swipeRecords firstObject] setObject:@1 forKey:@"matched"];
-                [[swipeRecords firstObject] saveInBackground];
+                [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    if(succeeded) {
+                        NSLog(@"The swipeRecord was updated!");
+                    } else {
+                        NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
+                    }
+                }];
             } else {
-                NSLog(@"😫😫😫 No such User Found");
+                PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
+                swipeRecord[@"initiated"] = [PFUser currentUser];
+                swipeRecord[@"recipient"] = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:card.author.objectId];
+                swipeRecord[@"match"] = @1;
+                [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+                    if (succeeded) {
+                        NSLog(@"The swipeRecord was saved!");
+                    } else {
+                        NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
+                    }
+                }];
             }
         } else {
-            NSLog(@"😫😫😫 Error getting User to CheckMatch: %@", error.localizedDescription);
+            NSLog(@"Problem querying swipeRecord: %@", error.localizedDescription);
         }
     }];
 }
 
 - (void)userRejected:(Card *)card {
-    PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
-    swipeRecord[@"userId"] = [PFUser currentUser].objectId;
-    NSString* author = card.author.objectId;
-    swipeRecord[@"rejected"] = author;
+    PFQuery *matchQuery = [PFQuery queryWithClassName:@"SwipeRecord"];
+    [matchQuery whereKey:@"initiator" equalTo:(PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:card.author.objectId]];
+    [matchQuery whereKey:@"recipient" equalTo:[PFUser currentUser]];
     
-    [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-        if (succeeded) {
-            NSLog(@"The swipeRecord was saved!");
+    [matchQuery findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable matchArray, NSError * _Nullable error) {
+        if(!error) {
+            if(matchArray.count > 0) {
+                PFObject *swipeRecord = matchArray[0];
+                swipeRecord[@"match"] = @0;
+                [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    if(succeeded) {
+                        NSLog(@"The swipeRecord was updated!");
+                    } else {
+                        NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
+                    }
+                }];
+            } else {
+                PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
+                swipeRecord[@"initiated"] = [PFUser currentUser];
+                swipeRecord[@"recipient"] = (PFUser *) [PFObject objectWithoutDataWithClassName:@"_User" objectId:card.author.objectId];
+                swipeRecord[@"match"] = @0;
+                [swipeRecord saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+                    if (succeeded) {
+                        NSLog(@"The swipeRecord was saved!");
+                    } else {
+                        NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
+                    }
+                }];
+            }
         } else {
-            NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
+            NSLog(@"Problem querying swipeRecord: %@", error.localizedDescription);
         }
     }];
+
 }
 
 - (void)updateUsernameLabel {

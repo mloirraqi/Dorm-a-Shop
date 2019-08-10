@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "Post.h"
+#import "UserCoreData+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Card : NSObject
 
-@property (nonatomic, strong) PFUser *author;
+@property (nonatomic, strong) UserCoreData *author;
 @property (nonatomic, strong) NSMutableArray *posts;
 
 @end
