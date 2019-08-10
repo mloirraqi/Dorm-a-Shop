@@ -77,16 +77,13 @@
     for (UIView *subview in self.subviews) {
         [subview removeFromSuperview];
     }
-    
-    if ([self.usersArray count] > 0) {
-        DraggableView *newCardView = [self createDraggableViewWithDataForCard:self.currentCard];
-        DraggableView *previousCardView = [self createDraggableViewWithDataForCard:self.previousCard];
-        
-        if (self.usersArray.count > 0) {
-            [self insertSubview:newCardView belowSubview:previousCardView];
-        } else {
-            [self addSubview:previousCardView];
-        }
+
+    DraggableView *newCardView = [self createDraggableViewWithDataForCard:self.currentCard];
+    DraggableView *previousCardView = [self createDraggableViewWithDataForCard:self.previousCard];
+    if ([self.usersArray count] > 0 && self.previousCard) {
+        [self insertSubview:newCardView belowSubview:previousCardView];
+    } else {
+        [self addSubview:newCardView];
     }
 }
 
@@ -154,6 +151,11 @@
                         NSLog(@"Problem saving swipeRecord: %@", error.localizedDescription);
                     }
                 }];
+                
+                card.author.matchedToCurrentUser = YES;
+                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                    return YES;
+                } withName:card.author.objectId];
             } else {
                 PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
                 swipeRecord[@"initiator"] = [PFUser currentUser];
@@ -203,6 +205,11 @@
                     }
                 }];
             }
+            
+            card.author.available = NO;
+            [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                return YES;
+            } withName:card.author.objectId];
         } else {
             NSLog(@"Problem querying swipeRecord: %@", error.localizedDescription);
         }
@@ -219,7 +226,9 @@
 }
 
 -(void)setupCards {
-    self.usersArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
+    self.usersArray = [[CoreDataManager shared] getAllAvailabeUsersFromCoreData];
+    NSMutableArray *postsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
+    self.currentCard = [[Card alloc] initWithUser:self.usersArray.firstObject postsArray:postsArray];
     [self loadCards];
     [self setupView];
 }

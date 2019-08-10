@@ -799,7 +799,7 @@
                 } else {
                     otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:recipient.objectId withContext:weakSelf.context];
                 }
-                if([swipe[@"matched"] isEqual:@0]) {
+                if ([swipe[@"matched"] isEqual:@0]) {
                     otherUser.available = NO;
                 } else if ([swipe[@"matched"] isEqual:@2]) {
                     otherUser.available = NO;
