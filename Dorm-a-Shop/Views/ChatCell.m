@@ -24,8 +24,11 @@
 - (void)showMsg {
     self.messageLabel.text = self.chat[@"text"];
     PFObject *senderObject = self.chat[@"sender"];
+    self.profilePic.layer.cornerRadius = 20;
+    self.profilePic.layer.masksToBounds = YES;
     
     if ([senderObject.objectId isEqualToString:PFUser.currentUser.objectId]) {
+        [self.profilePic removeConstraints:[self.profilePic constraints]];
         [self.messageLabel setTextAlignment:NSTextAlignmentRight];
         self.profilePic.hidden = YES;
     } else {
