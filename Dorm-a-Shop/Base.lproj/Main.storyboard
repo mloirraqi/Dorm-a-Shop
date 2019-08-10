@@ -2109,7 +2109,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ggr-T9-IcF">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ggr-T9-IcF">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Choose rating:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hzp-sM-Gvn">
@@ -2146,15 +2146,8 @@
                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oQf-cF-3jP">
-                                        <rect key="frame" x="0.0" y="634" width="414" height="140"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="140" id="jv1-7m-4h8"/>
-                                        </constraints>
-                                    </pickerView>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y4c-Wt-rZr">
-                                        <rect key="frame" x="0.0" y="590" width="414" height="44"/>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y4c-Wt-rZr">
+                                        <rect key="frame" x="0.0" y="608" width="414" height="44"/>
                                         <items>
                                             <barButtonItem title="Done" id="Fql-Yj-Yzr">
                                                 <connections>
@@ -2172,29 +2165,35 @@
                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
+                                    <pickerView contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oQf-cF-3jP">
+                                        <rect key="frame" x="0.0" y="608" width="414" height="250"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="250" id="jv1-7m-4h8"/>
+                                        </constraints>
+                                    </pickerView>
                                 </subviews>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="trailing" secondItem="Y4c-Wt-rZr" secondAttribute="trailing" id="0PJ-7R-NEH"/>
                                     <constraint firstAttribute="trailing" secondItem="g7a-kN-HFb" secondAttribute="trailing" constant="16" id="18V-Jb-ilO"/>
-                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="leading" secondItem="Y4c-Wt-rZr" secondAttribute="leading" id="3Kd-kt-lIr"/>
+                                    <constraint firstAttribute="trailing" secondItem="oQf-cF-3jP" secondAttribute="trailing" id="4sE-pw-IMk"/>
                                     <constraint firstItem="pwP-lj-R1p" firstAttribute="leading" secondItem="Ggr-T9-IcF" secondAttribute="leading" constant="16" id="6dp-Qf-3LT"/>
-                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="top" secondItem="Ggr-T9-IcF" secondAttribute="top" constant="634" id="DQs-HC-5kd"/>
-                                    <constraint firstAttribute="bottom" secondItem="oQf-cF-3jP" secondAttribute="bottom" id="Haf-Q3-q6v"/>
+                                    <constraint firstItem="Y4c-Wt-rZr" firstAttribute="top" secondItem="oQf-cF-3jP" secondAttribute="top" id="8IM-PP-S1m"/>
+                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="trailing" secondItem="Y4c-Wt-rZr" secondAttribute="trailing" id="CgB-Zb-3bA"/>
+                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="leading" secondItem="Y4c-Wt-rZr" secondAttribute="leading" id="GuQ-w7-9R1"/>
                                     <constraint firstItem="DI2-Cq-cQB" firstAttribute="leading" secondItem="hzp-sM-Gvn" secondAttribute="trailing" constant="8" id="HlJ-K2-DDM"/>
+                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="leading" secondItem="Ggr-T9-IcF" secondAttribute="leading" id="J7Q-UW-nKP"/>
                                     <constraint firstAttribute="trailing" secondItem="DI2-Cq-cQB" secondAttribute="trailing" constant="16" id="OAR-TH-gvD"/>
                                     <constraint firstItem="DI2-Cq-cQB" firstAttribute="centerY" secondItem="hzp-sM-Gvn" secondAttribute="centerY" id="OgK-JJ-0AT"/>
-                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="leading" secondItem="Ggr-T9-IcF" secondAttribute="leading" id="Tef-0e-hUc"/>
+                                    <constraint firstAttribute="bottom" secondItem="oQf-cF-3jP" secondAttribute="bottom" id="P5v-vH-8cD"/>
                                     <constraint firstAttribute="trailing" secondItem="pwP-lj-R1p" secondAttribute="trailing" constant="16" id="Tqk-4r-c5C"/>
                                     <constraint firstItem="Sn4-A3-vTy" firstAttribute="top" secondItem="pwP-lj-R1p" secondAttribute="bottom" constant="8" id="URB-tw-guc"/>
                                     <constraint firstAttribute="trailing" secondItem="Sn4-A3-vTy" secondAttribute="trailing" constant="16" id="X9T-o5-YJZ"/>
                                     <constraint firstItem="hzp-sM-Gvn" firstAttribute="leading" secondItem="Ggr-T9-IcF" secondAttribute="leading" constant="16" id="cba-Ir-e0k"/>
                                     <constraint firstItem="pwP-lj-R1p" firstAttribute="centerX" secondItem="Ggr-T9-IcF" secondAttribute="centerX" id="eM8-gg-ctE"/>
-                                    <constraint firstItem="oQf-cF-3jP" firstAttribute="top" secondItem="Y4c-Wt-rZr" secondAttribute="bottom" id="jQO-Xr-I0Q"/>
                                     <constraint firstItem="Sn4-A3-vTy" firstAttribute="leading" secondItem="Ggr-T9-IcF" secondAttribute="leading" constant="16" id="kFL-ho-1Vc"/>
                                     <constraint firstItem="g7a-kN-HFb" firstAttribute="leading" secondItem="Ggr-T9-IcF" secondAttribute="leading" constant="16" id="kbr-0b-gvC"/>
                                     <constraint firstItem="g7a-kN-HFb" firstAttribute="top" secondItem="Sn4-A3-vTy" secondAttribute="bottom" constant="8" id="ox5-Iy-Drx"/>
-                                    <constraint firstAttribute="trailing" secondItem="oQf-cF-3jP" secondAttribute="trailing" id="wji-TF-9qN"/>
                                     <constraint firstItem="pwP-lj-R1p" firstAttribute="top" secondItem="hzp-sM-Gvn" secondAttribute="bottom" constant="8" id="wp4-9f-waV"/>
                                     <constraint firstItem="hzp-sM-Gvn" firstAttribute="top" secondItem="Ggr-T9-IcF" secondAttribute="top" constant="16" id="ytZ-Sr-4K1"/>
                                 </constraints>

@@ -23,3 +23,17 @@ import ParseLiveQuery
         }
     }
 }
+
+
+//func subscribeToQuery(sender: PFUser, handler: @escaping (PFObject?) -> Void) {
+//    guard let client = client else { handler(nil); return }
+//
+//    let query:PFQuery = PFQuery(className: "Messages")
+//    query.whereKey("receiver", equalTo: PFUser.current())
+//    query.whereKey("sender", equalTo: sender)
+//
+//    subscription = client.subscribe(query).handle(Event.created) { _, object in
+//        handler(object)
+//    }
+//}
+//}
