@@ -59,6 +59,12 @@
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         } else {
+            for (UserCoreData *userc in users) {
+                NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
+            }
+            
+            NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
+            NSLog(@"after fetch: %@", userArray);
             [[CoreDataManager shared] enqueueDoneSavingUsers];
         }
     }];

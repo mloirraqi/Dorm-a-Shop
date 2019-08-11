@@ -157,7 +157,7 @@
             if (!error) {
                 [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
                     return YES;
-                } withName:[NSString stringWithFormat:@"%@", weakSelf.user.objectId]];
+                } withName:weakSelf.user.objectId];
                 //        [self saveContext];
                 
                 [weakSelf.delegate updateEditProfileData:weakSelf];

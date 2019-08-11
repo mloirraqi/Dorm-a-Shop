@@ -95,8 +95,6 @@
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
-    NSLog(@"%@, %@", user, mutableResults);
-    
     return mutableResults;
 }
 
@@ -150,7 +148,8 @@
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
-    [request setReturnsObjectsAsFaults:NO];
+//    [request setReturnsObjectsAsFaults:NO];
+    
     if (!results) {
         NSLog(@"Error fetching PostCoreData objects for current user: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
@@ -167,7 +166,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:name];
     [request setPredicate:[NSPredicate predicateWithFormat:@"objectId == %@", postObjectId]];
     [request setFetchLimit:1];
-    [request setReturnsObjectsAsFaults:NO];
+//    [request setReturnsObjectsAsFaults:NO];
     
     NSError *error = nil;
     NSArray *results = [context executeFetchRequest:request error:&error];
@@ -195,7 +194,7 @@
     NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    
+    NSLog(@"all users in radius: %@", mutableResults);
     return mutableResults;
 }
 
@@ -206,7 +205,8 @@
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
-    [request setReturnsObjectsAsFaults:NO];
+//    [request setReturnsObjectsAsFaults:NO];
+    
     if (!results) {
         NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
@@ -223,7 +223,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ConversationCoreData" ];
     [request setPredicate:[NSPredicate predicateWithFormat:@"sender.objectId == %@", senderId]];
     [request setFetchLimit:1];
-    [request setReturnsObjectsAsFaults:NO];
+//    [request setReturnsObjectsAsFaults:NO];
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
@@ -238,7 +238,7 @@
 - (NSMutableArray *)getReviewsFromCoreDataForSeller:(UserCoreData *)seller {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ReviewCoreData"];
     [request setPredicate:[NSPredicate predicateWithFormat:@"seller.objectId == %@", seller.objectId]];
-    [request setReturnsObjectsAsFaults:NO];
+//    [request setReturnsObjectsAsFaults:NO];
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
@@ -266,7 +266,8 @@
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
-    [request setReturnsObjectsAsFaults:NO];
+//    [request setReturnsObjectsAsFaults:NO];
+    
     if (!results) {
         NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
@@ -279,7 +280,8 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:self.context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"available == YES"]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"available == %@ AND objectId != %@ AND inRadius == %@", [NSNumber numberWithBool:YES], PFUser.currentUser.objectId, [NSNumber numberWithBool:YES]]];
+    [request setReturnsObjectsAsFaults:NO];
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
@@ -287,6 +289,9 @@
         NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
+    
+    NSLog(@"available users: %@", results);
+    
     return [NSMutableArray arrayWithArray:results];
 }
 
@@ -294,7 +299,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UserCoreData" inManagedObjectContext:self.context];
     [request setEntity:entityDescription];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"matchedToCurrentUser == YES"]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"matchedToCurrentUser == %@", [NSNumber numberWithBool:YES]]];
     
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
@@ -302,6 +307,9 @@
         NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
+    
+    NSLog(@"%@", results);
+    NSLog(@"");
     return [NSMutableArray arrayWithArray:results];
 }
 
@@ -355,7 +363,7 @@
             }
             
             return YES;
-        } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+        } withName:postCoreData.objectId];
         //        [self saveContext];
     }
     
@@ -368,8 +376,13 @@
         userCoreData = (UserCoreData *)[self getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
     }
     
+    NSLog(@"username: %@, objectId: %@", userCoreData.username, userCoreData.objectId);
+    
+    
     //if post doesn't already exist in core data, then create it
-    if (!userCoreData) {
+    BOOL saveOperationExists = [self queueContainsOperationWithName:userObjectId];
+    NSLog(@"usercoredata: %@, saveOperationExists: %d, oktosave: %d", userCoreData, saveOperationExists, !userCoreData && !saveOperationExists);
+    if (!userCoreData && !saveOperationExists) {
         userCoreData = (UserCoreData *)[NSEntityDescription insertNewObjectForEntityForName:@"UserCoreData" inManagedObjectContext:context];
         
         userCoreData.objectId = userObjectId;
@@ -391,18 +404,18 @@
         [self enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
             UserCoreData *userData;
             BOOL operationAlreadyExists = NO;
-            
+
             if (userObjectId) {
                 userData = (UserCoreData *)[weakSelf getCoreDataEntityWithName:@"UserCoreData" withObjectId:userObjectId withContext:context];
                 operationAlreadyExists = [weakSelf queueContainsOperationWithName:userObjectId];
             }
-            
+
             if (userData || operationAlreadyExists) {
                 return NO;
             }
-            
+            NSLog(@"saving new user with username: %@", userCoreData.username);
             return YES;
-        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+        } withName:userCoreData.objectId];
         //        [self saveContext];
     }
     
@@ -437,7 +450,7 @@
             }
 
             return YES;
-        } withName:[NSString stringWithFormat:@"%@", conversationCoreData.objectId]];
+        } withName:conversationCoreData.objectId];
     }
 //    [self saveContext];
     
@@ -475,7 +488,7 @@
             }
 
             return YES;
-        } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+        } withName:reviewCoreData.objectId];
 //        [self saveContext];
     }
     return reviewCoreData;

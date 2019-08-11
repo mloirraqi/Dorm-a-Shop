@@ -36,11 +36,22 @@
     [self.refreshControl addTarget:self action:@selector(fetchMatchedFromCoreData) forControlEvents:UIControlEventValueChanged];
     [self.collectionView insertSubview:self.refreshControl atIndex:0];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"DidMatchWithUserNotification" object:nil];
+    
     [self fetchMatchedFromCoreData];
 }
 
+- (void)receiveNotification:(NSNotification *)notification {
+    if ([[notification name] isEqualToString:@"DidMatchWithUserNotification"]) {
+        UserCoreData *matchedUser = [[notification userInfo] objectForKey:@"matchedUser"];
+        [self.matchedUsersArray addObject:matchedUser];
+        self.noMatchesView.hidden = YES;
+        [self.collectionView reloadData];
+    }
+}
+
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UserCollectionCell* cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
+    UserCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
     UserCoreData *user = self.matchedUsersArray[indexPath.item];
     cell.user = user;
     [cell setUser];
@@ -61,7 +72,5 @@
     CGFloat width = (collectionView.frame.size.width/2) - 4; //(4 is interitempadding)
     return CGSizeMake(width, width + 70); //70 is size of two labels
 }
-
-
 
 @end

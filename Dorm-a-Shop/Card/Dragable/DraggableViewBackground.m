@@ -15,6 +15,7 @@
 #import "SwipePopupVC.h"
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface DraggableViewBackground ()
 
@@ -82,7 +83,7 @@
     DraggableView *previousCardView = [self createDraggableViewWithDataForCard:self.previousCard];
     if ([self.usersArray count] > 0 && self.previousCard) {
         [self insertSubview:newCardView belowSubview:previousCardView];
-    } else {
+    } else if ([self.usersArray count] > 0) {
         [self addSubview:newCardView];
     }
 }
@@ -90,10 +91,11 @@
 - (void)cardSwipedLeft:(UIView *)card {
     Card *swipedCard = self.currentCard;
     [self.usersArray removeObjectAtIndex:0];
-    
+    NSLog(@"self.usersArray: %@", self.usersArray);
     if (self.usersArray.count > 0) {
         self.previousCard = self.currentCard;
         NSMutableArray *postsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
+        NSLog(@"%@", self.usersArray.firstObject);
         self.currentCard = [[Card alloc] initWithUser:self.usersArray.firstObject postsArray:postsArray];
         DraggableView *newCardView = [self createDraggableViewWithDataForCard:self.currentCard];
         DraggableView *previousCardView = [self createDraggableViewWithDataForCard:self.previousCard];
@@ -107,6 +109,7 @@
 - (void)cardSwipedRight:(UIView *)card {
     Card *swipedCard = self.currentCard;
     [self.usersArray removeObjectAtIndex:0];
+    NSLog(@"self.usersArray: %@", self.usersArray);
     
     if (self.usersArray.count > 0) {
         self.previousCard = self.currentCard;
@@ -152,10 +155,11 @@
                     }
                 }];
                 
+                NSLog(@"card.author: %@", card.author);
                 card.author.matchedToCurrentUser = YES;
-                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-                    return YES;
-                } withName:card.author.objectId];
+                
+                NSDictionary *matchedInfoDict = [NSDictionary dictionaryWithObjectsAndKeys:card.author, @"matchedUser", nil];
+                [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadName:@"DidMatchWithUserNotification" object:weakSelf userInfo:matchedInfoDict];
             } else {
                 PFObject *swipeRecord = [PFObject objectWithClassName:@"SwipeRecord"];
                 swipeRecord[@"initiator"] = [PFUser currentUser];
@@ -169,6 +173,11 @@
                     }
                 }];
             }
+            
+            card.author.available = NO;
+            [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                return YES;
+            } withName:card.author.objectId];
         } else {
             NSLog(@"Problem querying swipeRecord: %@", error.localizedDescription);
         }
@@ -228,14 +237,10 @@
 -(void)setupCards {
     self.usersArray = [[CoreDataManager shared] getAllAvailabeUsersFromCoreData];
     NSMutableArray *postsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
+    NSLog(@"self.usersArray: %@", self.usersArray);
     self.currentCard = [[Card alloc] initWithUser:self.usersArray.firstObject postsArray:postsArray];
     [self loadCards];
     [self setupView];
-}
-
-- (void)showAlertView:(NSString*)message{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
 }
 
 @end

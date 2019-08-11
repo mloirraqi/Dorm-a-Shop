@@ -15,7 +15,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Cards";
+    //self.title = @"Cards";
 }
 
 @end

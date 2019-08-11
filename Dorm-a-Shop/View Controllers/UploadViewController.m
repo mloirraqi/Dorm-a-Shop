@@ -174,7 +174,7 @@
                     newPost.createdAt = post.createdAt;
                     [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
                         return YES;
-                    } withName:[NSString stringWithFormat:@"%@", newPost.objectId]];
+                    } withName:newPost.objectId];
                     [self saveContext];
                 }
                 

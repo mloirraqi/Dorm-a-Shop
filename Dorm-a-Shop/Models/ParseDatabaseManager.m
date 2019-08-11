@@ -95,7 +95,7 @@
                                 
                                 [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                                     return YES;
-                                } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                                } withName:userCoreData.objectId];
 //                                [self saveContext];
                             }
                         } else {
@@ -116,7 +116,7 @@
                                 
                                 [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                                     return YES;
-                                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                                } withName:postCoreData.objectId];
 //                                [self saveContext];
                             }
                         } else {
@@ -134,7 +134,7 @@
                     
                     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                         return YES;
-                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                    } withName:postCoreData.objectId];
 //                    [self saveContext];
                 }
                 
@@ -248,7 +248,7 @@
                                 
                                 [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                                     return YES;
-                                } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                                } withName:userCoreData.objectId];
 //                                [self saveContext];
                             }
                         } else {
@@ -294,7 +294,7 @@
                     
                     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                         return YES;
-                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                    } withName:postCoreData.objectId];
 //                    [self saveContext];
                     
                     //if the user is not specified (e.g. the query is for all watched posts), BEWARE -- THERE WILL PROBABLY BE DUPLICATES IN THIS ARRAY!!!!
@@ -314,7 +314,7 @@
         
                 [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                     return YES;
-                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                } withName:postCoreData.objectId];
 //        [self saveContext];
         
         PFObject *view = [PFObject objectWithClassName:@"Views"];
@@ -376,7 +376,7 @@
                     
                     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                         return YES;
-                    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                    } withName:postCoreData.objectId];
 //                    [self saveContext];
                     
                     [watchedPostsArray addObject:postCoreData];
@@ -402,7 +402,7 @@
                 
                 [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                     return YES;
-                } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+                } withName:postCoreData.objectId];
 //                [self saveContext];
             }
             completion(count, nil);
@@ -449,10 +449,10 @@
                     //update any properties a user could have changed, except image, which is handled below. Note email needs to be handled separately for the current user
                     userCoreData.location = location;
                     userCoreData.username = user.username;
-                    
+
                     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                         return YES;
-                    } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                    } withName:userCoreData.objectId];
                     //                            [self saveContext];
                 }
                 //in either case, either create the profile image or make sure it's up to date
@@ -461,10 +461,10 @@
                     if (data) {
                         if (!userCoreData.profilePic) {
                             userCoreData.profilePic = data;
-                            
+
                             [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                                 return YES;
-                            } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+                            } withName:userCoreData.objectId];
 //                            [self saveContext];
                         }
                     } else {
@@ -473,7 +473,7 @@
                 }];
                 [usersArray addObject:userCoreData];
             }
-            
+            completion(usersArray, nil);///////////////////////////////////
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
             [usersArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
             
@@ -532,7 +532,7 @@
                                 
                                 [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                                     return YES;
-                                } withName:[NSString stringWithFormat:@"%@", senderCoreData.objectId]];
+                                } withName:senderCoreData.objectId];
 //                                [self saveContext];
                             }
                         } else {
@@ -548,7 +548,7 @@
                     
                     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                         return YES;
-                    } withName:[NSString stringWithFormat:@"%@", conversationCoreData.objectId]];
+                    } withName:conversationCoreData.objectId];
 //                    [self saveContext];
                 } else {
                     conversationCoreData = [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:conversation.objectId withDate:conversation.updatedAt withSender:senderCoreData withLastText:conversation.lastText withManagedObjectContext:weakSelf.context];
@@ -601,7 +601,7 @@
                                 
                                 [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                                     return YES;
-                                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                                } withName:reviewCoreData.objectId];
 //                                [self saveContext];
                             }
                         } else {
@@ -622,7 +622,7 @@
                                     
                                     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                                         return YES;
-                                    } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                                    } withName:reviewCoreData.objectId];
 //                                    [self saveContext];
                                 }
                             }
@@ -655,7 +655,7 @@
     
     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
         return YES;
-    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+    } withName:postCoreData.objectId];
 //    [self saveContext];
     
     Watches *watch = (Watches *)[Watches new];
@@ -670,7 +670,7 @@
             
             [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
                 return YES;
-            } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+            } withName:postCoreData.objectId];
 //            [self saveContext];
             
             completion(nil);
@@ -687,7 +687,7 @@
     
     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
         return YES;
-    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+    } withName:postCoreData.objectId];
 //    [self saveContext];
     
     [watch deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
@@ -705,7 +705,7 @@
     
     [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
         return YES;
-    } withName:[NSString stringWithFormat:@"%@", postCoreData.objectId]];
+    } withName:postCoreData.objectId];
 //    [self saveContext];
     
     Post *post = (Post *)[PFObject objectWithoutDataWithClassName:@"Post" objectId:postCoreData.objectId];
@@ -790,24 +790,36 @@
     __weak ParseDatabaseManager *weakSelf = self;
     [query findObjectsInBackgroundWithBlock:^(NSArray<PFObject *> * _Nullable swipes, NSError * _Nullable error) {
         if (swipes) {
+            NSLog(@"swipes: %@", swipes);
             for (PFObject *swipe in swipes) {
-                User *initiator = (User *) swipe[@"initiator"];
-                User *recipient = (User *) swipe[@"recipient"];
+                User *initiator = (User *)swipe[@"initiator"];
+                User *recipient = (User *)swipe[@"recipient"];
                 UserCoreData *otherUser;
                 if(![initiator.objectId isEqualToString:PFUser.currentUser.objectId]) {
                     otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:initiator.objectId withContext:weakSelf.context];
                 } else {
                     otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:recipient.objectId withContext:weakSelf.context];
                 }
-                if ([swipe[@"matched"] isEqual:@0]) {
+                
+                if ([swipe[@"match"] isEqual:@0]) {
                     otherUser.available = NO;
-                } else if ([swipe[@"matched"] isEqual:@2]) {
+                    otherUser.matchedToCurrentUser = NO;
+                } else if ([swipe[@"match"] isEqual:@2]) {
                     otherUser.available = NO;
                     otherUser.matchedToCurrentUser = YES;
+                } else if ([initiator.objectId isEqualToString:PFUser.currentUser.objectId]){
+                    otherUser.available = NO;
+                    otherUser.matchedToCurrentUser = NO;
+                } else {
+                    otherUser.available = YES;
+                    otherUser.matchedToCurrentUser = NO;
                 }
+                
+                NSLog(@"other user: %@", otherUser);
+                
                 [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
                     return YES;
-                } withName:initiator.objectId];
+                } withName:otherUser.objectId];
                 [swipesUserCoreDataArray addObject:otherUser];
             }
             completion(swipesUserCoreDataArray, error);
@@ -815,7 +827,7 @@
             NSLog(@"😫😫😫 Error getting inbox: %@", error.localizedDescription);
             completion(nil, error);
         }
-    }];
+     }];
 }
 
 - (void)saveContext {

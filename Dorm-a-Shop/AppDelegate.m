@@ -41,6 +41,7 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
     if (PFUser.currentUser) {
+        [self deleteAllCoreData];
         [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
@@ -56,10 +57,15 @@
             if (error) {
                 NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
             } else {
+                for (UserCoreData *userc in users) {
+                    NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
+                }
+                
+                NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
+                NSLog(@"after fetch: %@", userArray);
                 [[CoreDataManager shared] enqueueDoneSavingUsers];
             }
         }];
-
         
         [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
             if (error) {
@@ -77,34 +83,36 @@
             }
         }];
     } else {
+        [self deleteAllCoreData];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"SignInVC"];
-        NSLog(@"");
-        
-        NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
-        NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
-        NSError *deleteConversationsError = nil;
-        [self.persistentContainer.viewContext executeRequest:deleteConversations error:&deleteConversationsError];
-        
-        NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
-        NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
-        NSError *deleteUsersError = nil;
-        [self.persistentContainer.viewContext executeRequest:deleteUsers error:&deleteUsersError];
-        
-        NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
-        NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
-        NSError *deletePostsError = nil;
-        [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
-        
-        NSFetchRequest *requestReviews = [[NSFetchRequest alloc] initWithEntityName:@"ReviewCoreData"];
-        NSBatchDeleteRequest *deleteReviews = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestReviews];
-        NSError *deleteReviewsError = nil;
-        [self.persistentContainer.viewContext executeRequest:deleteReviews error:&deleteReviewsError];
     }
     
     [IQKeyboardManager sharedManager].enable = YES;
     
     return YES;
+}
+
+- (void)deleteAllCoreData {
+    NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+    NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+    NSError *deleteConversationsError = nil;
+    [self.persistentContainer.viewContext executeRequest:deleteConversations error:&deleteConversationsError];
+    
+    NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+    NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+    NSError *deleteUsersError = nil;
+    [self.persistentContainer.viewContext executeRequest:deleteUsers error:&deleteUsersError];
+    
+    NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+    NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+    NSError *deletePostsError = nil;
+    [self.persistentContainer.viewContext executeRequest:deletePosts error:&deletePostsError];
+    
+    NSFetchRequest *requestReviews = [[NSFetchRequest alloc] initWithEntityName:@"ReviewCoreData"];
+    NSBatchDeleteRequest *deleteReviews = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestReviews];
+    NSError *deleteReviewsError = nil;
+    [self.persistentContainer.viewContext executeRequest:deleteReviews error:&deleteReviewsError];
 }
 
 

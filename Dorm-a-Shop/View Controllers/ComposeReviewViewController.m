@@ -99,7 +99,7 @@
                 
                 [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
                     return YES;
-                } withName:[NSString stringWithFormat:@"%@", reviewCoreData.objectId]];
+                } withName:reviewCoreData.objectId];
                 [self saveContext];
                 
                 [self dismissViewControllerAnimated:true completion:nil];

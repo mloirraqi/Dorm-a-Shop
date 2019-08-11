@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DetailsViewController : UIViewController
 
 @property (nonatomic, strong) PostCoreData *post;
-
 @property (nonatomic, strong) NSIndexPath *indexPath;
 
 @end

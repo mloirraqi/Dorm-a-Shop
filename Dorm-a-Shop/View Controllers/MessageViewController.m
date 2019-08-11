@@ -75,40 +75,44 @@
     }];
 }
 
--(void) addMessageToChatWithObject:(PFObject *) object {
-    __weak MessageViewController *weakSelf = self;
-    
+
+- (void)addMessageToChatWithObject:(PFObject *) object {
     [self.messages addObject:object];
+    [self.tableView reloadData];
+    //    __weak MessageViewController *weakSelf = self;
+    //
+    //    [weakSelf.messages addObject:object];
+    //    [weakSelf.tableView reloadData];
     
-    if(!self.conversationCoreData) {
-        self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
-        
-        if (self.conversationCoreData) {
-            self.convo = [PFObject objectWithoutDataWithClassName:@"Convos"
-                                                         objectId:weakSelf.conversationCoreData.objectId];
-            self.conversationCoreData.lastText = object[@"text"];
-        }
-    }
-    
-    [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:self.convo.objectId
-                                                            withDate:self.convo.updatedAt
-                                                          withSender:self.user
-                                                        withLastText:object[@"text"]
-                                            withManagedObjectContext:self.context];
-    [self saveContext];
-    
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:weakSelf.messages.count-1 inSection:0];
-        
-        [weakSelf.tableView beginUpdates];
-        [weakSelf.tableView insertRowsAtIndexPaths:@[lastIndexPath]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-        [weakSelf.tableView endUpdates];
-        [weakSelf.tableView scrollToRowAtIndexPath:lastIndexPath
-                                  atScrollPosition:UITableViewScrollPositionBottom
-                                          animated:NO];
-    });
+    //    if(!self.conversationCoreData) {
+    //        self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
+    //
+    //        if (self.conversationCoreData) {
+    //            self.convo = [PFObject objectWithoutDataWithClassName:@"Convos"
+    //                                                         objectId:weakSelf.conversationCoreData.objectId];
+    //            self.conversationCoreData.lastText = object[@"text"];
+    //        }
+    //    }
+    //
+    //    [[CoreDataManager shared] saveConversationToCoreDataWithObjectId:self.convo.objectId
+    //                                                            withDate:self.convo.updatedAt
+    //                                                          withSender:self.user
+    //                                                        withLastText:object[@"text"]
+    //                                            withManagedObjectContext:self.context];
+    //    [self saveContext];
+    //
+    //
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    //        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:weakSelf.messages.count-1 inSection:0];
+    //
+    //        [weakSelf.tableView beginUpdates];
+    //        [weakSelf.tableView insertRowsAtIndexPaths:@[lastIndexPath]
+    //                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+    //        [weakSelf.tableView endUpdates];
+    //        [weakSelf.tableView scrollToRowAtIndexPath:lastIndexPath
+    //                                  atScrollPosition:UITableViewScrollPositionBottom
+    //                                          animated:NO];
+    //    });
 }
 
 - (void)subscribe {
@@ -116,13 +120,26 @@
     
     __weak MessageViewController *weakSelf = self;
     void (^completion)(PFObject* object) = ^(PFObject* object) {
-        [weakSelf addMessageToChatWithObject:object];
+        NSLog(@"received something!");
+        [weakSelf performSelectorOnMainThread:@selector(addMessageToChatWithObject:) withObject:object waitUntilDone:NO];
     };
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+    [recQuery whereKey:@"sender" equalTo:self.receiver];
+    [self.bridge subscribeToQuery:recQuery handler:completion];
 }
 
 - (IBAction)sendMsg:(id)sender {
     if(![self.msgInput.text isEqualToString:@""]) {
         __weak MessageViewController *weakSelf = self;
+        
+        if (!self.conversationCoreData) {
+            self.conversationCoreData = (ConversationCoreData *) [[CoreDataManager shared] getConvoFromCoreData:self.user.objectId];
+            if(self.conversationCoreData) {
+                self.convo = [PFObject objectWithoutDataWithClassName:@"Convos" objectId:self.conversationCoreData.objectId];
+            }
+        }
         
         if (!self.convo) {
             PFObject *convo = [PFObject objectWithClassName:@"Convos"];
@@ -167,6 +184,7 @@
     ChatCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChatCell"];
     PFObject *chat = self.messages[indexPath.row];
     cell.chat = chat;
+    cell.imageFile = self.user.profilePic;
     [cell showMsg];
     return cell;
 }

@@ -12,12 +12,12 @@ import ParseLiveQuery
 
 @objc public final class ParseLiveQueryObjCBridge: NSObject {
     
-    private let client = Client.shared
+    private let client = ParseLiveQuery.Client()
     private var subscription: Subscription<PFObject>?
     
     @objc(subscribeToQuery:handler:)
     func subscribeToQuery(query: PFQuery<PFObject>, handler: @escaping (PFObject?) -> Void) {
-        guard let client = client else { handler(nil); return }        
+        //        guard let client = client else { handler(nil); return }
         subscription = client.subscribe(query).handle(Event.created) { _, object in
             handler(object)
         }

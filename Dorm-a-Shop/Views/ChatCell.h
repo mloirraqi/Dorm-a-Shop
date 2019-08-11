@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *profilePic;
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (strong, nonatomic) PFObject *chat;
+@property (strong, nonatomic) NSData *imageFile;
 
 - (void)showMsg;
 

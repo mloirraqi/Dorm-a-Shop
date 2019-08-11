@@ -117,7 +117,7 @@
                     newUser.objectId = user.objectId;
                     [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
                         return YES;
-                    } withName:[NSString stringWithFormat:@"%@", newUser.objectId]];
+                    } withName:newUser.objectId];
 //                    [self saveContext];                    
                     [weakSelf setupCoreData];
                     
@@ -213,7 +213,7 @@
         
         [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
             return YES;
-        } withName:[NSString stringWithFormat:@"%@", userCoreData.objectId]];
+        } withName:userCoreData.objectId];
 //        [self saveContext];
     }
 }
