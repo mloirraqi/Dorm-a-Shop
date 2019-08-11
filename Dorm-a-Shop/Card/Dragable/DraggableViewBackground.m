@@ -56,8 +56,6 @@
     self.userNameLabel.textAlignment = NSTextAlignmentCenter;
     self.userNameLabel.font = [UIFont boldSystemFontOfSize:24];
     self.userNameLabel.text = self.currentCard.author.username;
-    self.backgroundColor = [UIColor blueColor];
-    self.backgroundColor = [UIColor colorWithRed:.0f/255.0f green:228.0f/255.0f blue:232.0f/255 alpha:1.0f];
 }
 
 - (DraggableView *)createDraggableViewWithDataForCard:(Card *)card {

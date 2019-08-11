@@ -12,10 +12,12 @@
 #import "User.h"
 #import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 
 @interface SignInVC () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (strong, nonatomic) MBProgressHUD *hud;
 
 @end
 
@@ -33,12 +35,16 @@
 }
 
 - (IBAction)signIn:(id)sender {
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.hud.label.text = @"Signing in ...";
+    
     NSString *email = self.emailField.text;
     NSString *password = self.passwordField.text;
     
     [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser *pfUser, NSError *error) {
         if (error != nil) {
             [self showAlertView:@"Unable to Sign in"];
+            [self.hud hideAnimated:YES];
         } else {
             [self setupCoreData];
         }
@@ -51,6 +57,7 @@
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
             [self performSegueWithIdentifier:@"signIn" sender:nil];
+            [self.hud hideAnimated:YES];
             [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
         }
     }];

@@ -124,6 +124,7 @@
 
 - (IBAction)submitButtonAction:(UIButton *)sender {
     if ([self checkFields]){
+        [MBProgressHUD showHUDAddedTo:self.view animated:true];
         self.user.username = self.nameTextField.text;
         self.user.email = self.emailTextField.text;
         
@@ -151,7 +152,6 @@
         }
         
         __weak EditProfileVC *weakSelf = self;
-        [MBProgressHUD showHUDAddedTo:self.view animated:true];
         [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             [MBProgressHUD hideHUDForView:weakSelf.view animated:true];
             if (!error) {

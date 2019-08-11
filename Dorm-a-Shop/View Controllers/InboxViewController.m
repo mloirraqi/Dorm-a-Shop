@@ -13,13 +13,17 @@
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
 #import "ConversationCoreData+CoreDataClass.h"
+#import "Dorm_a_Shop-Swift.h"
 @import Parse;
+@import ParseLiveQuery;
 
 @interface InboxViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *convos;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
+@property (strong, nonatomic) ParseLiveQueryObjCBridge *bridge;
 
 @end
 
@@ -33,6 +37,8 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchConvos) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
+    [self subscribe];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -51,6 +57,20 @@
         [weakSelf.tableView reloadData];
         [weakSelf.refreshControl endRefreshing];
     }];
+}
+
+- (void)subscribe {
+    self.bridge = [ParseLiveQueryObjCBridge new];
+    
+     __weak InboxViewController *weakSelf = self;
+    void (^completion)(PFObject* object) = ^(PFObject* object) {
+        NSLog(@"received something!");
+        [weakSelf performSelectorOnMainThread:@selector(fetchConvos) withObject:nil waitUntilDone:NO];
+    };
+    
+    PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
+    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
+    [self.bridge subscribeToQuery:recQuery handler:completion];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
