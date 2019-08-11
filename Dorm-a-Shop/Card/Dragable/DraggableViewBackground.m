@@ -232,7 +232,7 @@
     }
 }
 
--(void)setupCards {
+- (void)setupCards {
     self.usersArray = [[CoreDataManager shared] getAllAvailabeUsersFromCoreData];
     NSMutableArray *postsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
     NSLog(@"self.usersArray: %@", self.usersArray);

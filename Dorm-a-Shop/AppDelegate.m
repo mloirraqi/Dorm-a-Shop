@@ -60,13 +60,13 @@
                 for (UserCoreData *userc in users) {
                     NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
                 }
-                
+
                 NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
                 NSLog(@"after fetch: %@", userArray);
                 [[CoreDataManager shared] enqueueDoneSavingUsers];
             }
         }];
-        
+
         [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
             if (error) {
                 NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);

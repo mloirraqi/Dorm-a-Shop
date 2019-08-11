@@ -501,10 +501,11 @@
         [weakSelf.context performBlockAndWait:^{
             BOOL okToSave = blockCopy(weakSelf.context);
             if (okToSave) {
-                NSError *error = nil;
-                if ([weakSelf.context save:&error] == NO) {
-                    NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-                }
+                [self performSelectorOnMainThread:@selector(saveContext) withObject:nil waitUntilDone:YES];
+//                NSError *error = nil;
+//                if ([weakSelf.context save:&error] == NO) {
+//                    NSAssert(NO, @"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+//                }
             }
         }];
     }];
