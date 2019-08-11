@@ -57,12 +57,12 @@
     self.containerView.layer.cornerRadius = 8;
     self.containerView.layer.masksToBounds = NO;
     self.containerView.layer.borderWidth = 1.0;
-    self.containerView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.containerView.layer.borderColor = [[UIColor blackColor] CGColor];
     self.containerView.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.containerView.layer.shadowOffset = CGSizeMake(0, 0);
     self.containerView.layer.shadowOpacity = 0.4;
     self.containerView.layer.shadowRadius = 4;
-    self.backgroundView.layer.backgroundColor = [[UIColor blueColor]CGColor];
+    self.backgroundView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
