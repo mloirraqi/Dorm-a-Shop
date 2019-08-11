@@ -46,15 +46,9 @@
     [request setEntity:entityDescription];
     [request setPredicate:[NSPredicate predicateWithFormat:@"sold == %@", [NSNumber numberWithBool:NO]]];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
+    NSMutableArray __block *mutableResults = [self fetchCoreDataWithRequest:request];
     
-    NSMutableArray __block *mutableResults = [NSMutableArray arrayWithArray:results];
-    if (results.count > 1) {
+    if (mutableResults.count > 1) {
         NSArray *sortedPosts = [mutableResults sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
             PostCoreData *firstPost = (PostCoreData *)firstObj;
             PostCoreData *secondPost = (PostCoreData *)secondObj;
@@ -84,14 +78,7 @@
     [request setEntity:entityDescription];
     [request setPredicate:[NSPredicate predicateWithFormat:@"sold == %@ AND author.objectId == %@", [NSNumber numberWithBool:NO], user.objectId]];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *mutableResults = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
@@ -103,14 +90,7 @@
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"PostCoreData" inManagedObjectContext:self.context];
     [request setEntity:entityDescription];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *hotArray = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *hotArray = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"hotness" ascending:NO];
     [hotArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     if(hotArray.count > 10) {
@@ -126,14 +106,7 @@
     [request setEntity:entityDescription];
     [request setPredicate:[NSPredicate predicateWithFormat:@"(watched == %@) AND (sold == %@)", [NSNumber numberWithBool:YES], [NSNumber numberWithBool:NO]]];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *mutableResults = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
@@ -146,16 +119,7 @@
     [request setEntity:entityDescription];
     [request setPredicate:[NSPredicate predicateWithFormat:@"author.objectId == %@", user.objectId]];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-//    [request setReturnsObjectsAsFaults:NO];
-    
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects for current user: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *mutableResults = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
@@ -163,17 +127,13 @@
 }
 
 - (NSManagedObject *)getCoreDataEntityWithName:(NSString *)name withObjectId:(NSString *)postObjectId withContext:(NSManagedObjectContext *)context {
+    
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:name];
     [request setPredicate:[NSPredicate predicateWithFormat:@"objectId == %@", postObjectId]];
     [request setFetchLimit:1];
 //    [request setReturnsObjectsAsFaults:NO];
     
-    NSError *error = nil;
-    NSArray *results = [context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
+    NSMutableArray *results = [self fetchCoreDataWithRequest:request];
     
     return [results firstObject]; //firstObject is nil if results has length 0
 }
@@ -184,14 +144,7 @@
     [request setEntity:entityDescription];
     [request setPredicate:[NSPredicate predicateWithFormat:@"inRadius == YES"]];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *mutableResults = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"username" ascending:YES];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     NSLog(@"all users in radius: %@", mutableResults);
@@ -203,16 +156,7 @@
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ConversationCoreData" inManagedObjectContext:self.context];
     [request setEntity:entityDescription];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-//    [request setReturnsObjectsAsFaults:NO];
-    
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *mutableResults = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
@@ -225,12 +169,7 @@
     [request setFetchLimit:1];
 //    [request setReturnsObjectsAsFaults:NO];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching ConversationCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
+    NSMutableArray *results = [self fetchCoreDataWithRequest:request];
     
     return [results firstObject];
 }
@@ -240,14 +179,7 @@
     [request setPredicate:[NSPredicate predicateWithFormat:@"seller.objectId == %@", seller.objectId]];
 //    [request setReturnsObjectsAsFaults:NO];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching ReviewCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    NSMutableArray *mutableResults = [NSMutableArray arrayWithArray:results];
+    NSMutableArray *mutableResults = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateWritten" ascending:NO];
     [mutableResults sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
@@ -264,16 +196,7 @@
     }
     [request setEntity:entityDescription];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-//    [request setReturnsObjectsAsFaults:NO];
-    
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    
-    return [NSMutableArray arrayWithArray:results];
+    return [self fetchCoreDataWithRequest:request];
 }
 
 - (NSMutableArray *)getAllAvailabeUsersFromCoreData {
@@ -283,16 +206,11 @@
     [request setPredicate:[NSPredicate predicateWithFormat:@"available == %@ AND objectId != %@ AND inRadius == %@", [NSNumber numberWithBool:YES], PFUser.currentUser.objectId, [NSNumber numberWithBool:YES]]];
     [request setReturnsObjectsAsFaults:NO];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
+    NSMutableArray *results = [self fetchCoreDataWithRequest:request];
     
     NSLog(@"available users: %@", results);
     
-    return [NSMutableArray arrayWithArray:results];
+    return results;
 }
 
 - (NSMutableArray *)getAllMatchedUsersFromCoreData {
@@ -301,16 +219,12 @@
     [request setEntity:entityDescription];
     [request setPredicate:[NSPredicate predicateWithFormat:@"matchedToCurrentUser == %@", [NSNumber numberWithBool:YES]]];
     
-    NSError *error = nil;
-    NSArray *results = [self.context executeFetchRequest:request error:&error];
-    if (!results) {
-        NSLog(@"Error fetching PostCoreData objects: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
+    NSMutableArray *results = [self fetchCoreDataWithRequest:request];
     
     NSLog(@"%@", results);
     NSLog(@"");
-    return [NSMutableArray arrayWithArray:results];
+    
+    return results;
 }
 
 - (PostCoreData *)savePostToCoreDataWithObjectId:(NSString * _Nullable)postObjectId withImageData:(NSData * _Nullable)imageData withCaption:(NSString * _Nullable)caption withPrice:(double)price withCondition:(NSString * _Nullable)condition withCategory:(NSString * _Nullable)category withTitle:(NSString * _Nullable)title withCreatedDate:(NSDate * _Nullable)createdAt withSoldStatus:(BOOL)sold withWatchStatus:(BOOL)watched withWatchObjectId:(NSString * _Nullable)watchObjectId withWatchCount:(long long)watchCount withHotness:(double)hotness withAuthor:(UserCoreData * _Nullable)author withManagedObjectContext:(NSManagedObjectContext * _Nullable)context {
@@ -553,6 +467,22 @@
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
+}
+
+- (NSMutableArray *)fetchCoreDataWithRequest:(NSFetchRequest *)request {
+    __block NSArray *results = nil;
+    __block NSError *error = nil;
+    [self.context performBlockAndWait:^{
+        results = [self.context executeFetchRequest:request error:&error];
+        
+    }];
+    
+    if (!results) {
+        NSLog(@"Error fetching core data objects: %@\n%@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    return [[NSMutableArray alloc] initWithArray:results];
 }
 
 @end

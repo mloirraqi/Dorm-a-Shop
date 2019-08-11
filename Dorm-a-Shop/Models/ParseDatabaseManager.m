@@ -795,7 +795,8 @@
                 User *initiator = (User *)swipe[@"initiator"];
                 User *recipient = (User *)swipe[@"recipient"];
                 UserCoreData *otherUser;
-                if(![initiator.objectId isEqualToString:PFUser.currentUser.objectId]) {
+                
+                if (![initiator.objectId isEqualToString:PFUser.currentUser.objectId]) {
                     otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:initiator.objectId withContext:weakSelf.context];
                 } else {
                     otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:recipient.objectId withContext:weakSelf.context];

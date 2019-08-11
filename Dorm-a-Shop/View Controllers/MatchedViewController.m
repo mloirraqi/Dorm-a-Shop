@@ -64,13 +64,24 @@
 
 - (void)fetchMatchedFromCoreData {
     self.matchedUsersArray = [[CoreDataManager shared] getAllMatchedUsersFromCoreData];
-    [self.collectionView reloadData];
+    
+    if (self.matchedUsersArray.count > 0) {
+        [self.noMatchesView setHidden:YES];
+        [self.collectionView reloadData];
+    } else {
+        [self.noMatchesView setHidden:NO];
+    }
+    
     [self.refreshControl endRefreshing];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat width = (collectionView.frame.size.width/2) - 4; //(4 is interitempadding)
+    CGFloat width = collectionView.frame.size.width/2; //(4 is interitempadding)
     return CGSizeMake(width, width + 70); //70 is size of two labels
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionView *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
 }
 
 @end
