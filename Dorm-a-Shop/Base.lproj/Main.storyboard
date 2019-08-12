@@ -2576,13 +2576,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tTF-Ow-gFr" customClass="DraggableViewBackground">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tTF-Ow-gFr" customClass="DraggableViewBackground">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="tTF-Ow-gFr" firstAttribute="top" secondItem="wdZ-nN-YjR" secondAttribute="bottom" id="EJx-ny-Fkb"/>
+                            <constraint firstItem="YAr-ZI-iiZ" firstAttribute="top" secondItem="tTF-Ow-gFr" secondAttribute="bottom" id="RJM-MK-R5V"/>
+                            <constraint firstItem="tTF-Ow-gFr" firstAttribute="leading" secondItem="9Ye-HT-BOH" secondAttribute="leading" id="fRA-vi-YRs"/>
+                            <constraint firstAttribute="trailing" secondItem="tTF-Ow-gFr" secondAttribute="trailing" id="zAR-x8-VYk"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="8JK-Jg-teA"/>
                     </view>
                     <navigationItem key="navigationItem" title="Explore" id="hf3-jJ-sa4">

@@ -59,7 +59,7 @@
     self.searchBar.delegate = self;
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     
-    self.categories =@[@"All", @"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
+    self.categories =@[@"All", @"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories", @"Beauty"];
     self.conditions = @[@"All", @"New", @"Nearly New", @"Used"];
     self.prices = @[@"All", @"<$25", @"<$50", @"<$100"];
     self.pricesInt = @[@0, @25, @50, @100];

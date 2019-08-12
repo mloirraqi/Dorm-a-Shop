@@ -45,7 +45,7 @@
     self = [super init];
     self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     self.context = self.appDelegate.persistentContainer.viewContext;
-    self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
+    self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories", @"Beauty"];
     self.conditions = @[@"New", @"Nearly New", @"Used"];
     self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
     self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];

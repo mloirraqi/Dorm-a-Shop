@@ -60,7 +60,7 @@
     self.conditionPickerView.hidden = YES;
     self.itemTitle.delegate = self;
     
-    self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories"];
+    self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories", @"Beauty"];
     self.conditions = @[@"New", @"Nearly New", @"Used"];
     
     [self.itemTitle addTarget:self.itemTitle action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
