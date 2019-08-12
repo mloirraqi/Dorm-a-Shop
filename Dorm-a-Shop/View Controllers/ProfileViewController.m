@@ -105,11 +105,19 @@
         if (notificationPost.sold) {
             [self.activeItems removeObject:notificationPost];
             [self.soldItems addObject:notificationPost];
+            
+            [self updateActiveItemsLabel];
+            [self updateSoldItemsLabel];
+            
             self.soldItems = [self sortPostsArray:self.soldItems];
             [self.collectionView reloadData];
         } else {
             [self.soldItems removeObject:notificationPost];
             [self.activeItems addObject:notificationPost];
+            
+            [self updateActiveItemsLabel];
+            [self updateSoldItemsLabel];
+            
             self.activeItems = [self sortPostsArray:self.activeItems];
             [self.collectionView reloadData];
         }
@@ -138,19 +146,11 @@
     
     NSPredicate *aPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: NO]];
     self.activeItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:aPredicate]];
-    if (self.activeItems.count == 1) {
-        self.activeCountLabel.text = [NSString stringWithFormat:@"%lu Active Item", self.activeItems.count];
-    } else {
-        self.activeCountLabel.text = [NSString stringWithFormat:@"%lu Active Items", self.activeItems.count];
-    }
+    [self updateActiveItemsLabel];
     
     NSPredicate *sPredicate = [NSPredicate predicateWithFormat:@"SELF.sold == %@", [NSNumber numberWithBool: YES]];
     self.soldItems = [NSMutableArray arrayWithArray:[profilePostsArray filteredArrayUsingPredicate:sPredicate]];
-    if (self.soldItems.count == 1) {
-        self.soldCountLabel.text = [NSString stringWithFormat:@"%lu Sold Item", self.soldItems.count];
-    } else {
-        self.soldCountLabel.text = [NSString stringWithFormat:@"%lu Sold Items", self.soldItems.count];
-    }
+    [self updateSoldItemsLabel];
     
     [self.collectionView reloadData];
     [self.refreshControl endRefreshing];
@@ -312,6 +312,22 @@
     }];
     
     return [NSMutableArray arrayWithArray:sortedResults];
+}
+
+- (void)updateActiveItemsLabel {
+    if (self.activeItems.count == 1) {
+        self.activeCountLabel.text = [NSString stringWithFormat:@"%lu Active Item", self.activeItems.count];
+    } else {
+        self.activeCountLabel.text = [NSString stringWithFormat:@"%lu Active Items", self.activeItems.count];
+    }
+}
+
+- (void)updateSoldItemsLabel {
+    if (self.soldItems.count == 1) {
+        self.soldCountLabel.text = [NSString stringWithFormat:@"%lu Sold Item", self.soldItems.count];
+    } else {
+        self.soldCountLabel.text = [NSString stringWithFormat:@"%lu Sold Items", self.soldItems.count];
+    }
 }
 
 @end
