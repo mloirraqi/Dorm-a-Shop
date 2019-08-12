@@ -32,7 +32,7 @@
 }
 -(void)setupDefaults
 {
-    self.backgroundColor = [UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.75];
+    self.backgroundColor = [UIColor colorWithRed:180/255.0 green:180/255.0 blue:180/255.0 alpha:1];
     self.layer.cornerRadius = 15;
     self.clipsToBounds = YES;
 }
