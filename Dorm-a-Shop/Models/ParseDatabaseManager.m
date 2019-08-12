@@ -162,21 +162,16 @@
                                 NSNumber *conditionCount = self.conditionCounts[conditionIndex];
                                 NSNumber *priceCount = self.priceCounts[priceIndex];
                                 post.rank = categoryCount.doubleValue * 0.4 + conditionCount.doubleValue * 0.3 + priceCount.doubleValue * 0.3;
+                                [[CoreDataManager shared] enqueueCoreDataBlock:^(NSManagedObjectContext *context) {
+                                    return YES;
+                                } withName:post.objectId];
                             }
                             
                             if (allPostsArray.count > 1) {
-                                double initialRank = ((PostCoreData *)allPostsArray[0]).rank;
-                               
-                                for (PostCoreData *post in allPostsArray) {
-                                    if (initialRank != post.rank) {
-                                        break;
-                                    }
-                                }
-                                
                                 NSArray *sortedPosts = [allPostsArray sortedArrayUsingComparator:^NSComparisonResult(id firstObj, id secondObj) {
                                     PostCoreData *firstPost = (PostCoreData *)firstObj;
                                     PostCoreData *secondPost = (PostCoreData *)secondObj;
-                                    
+                                    NSLog(@"parse %f %f", firstPost.rank, secondPost.rank);
                                     if (firstPost.rank > secondPost.rank) {
                                         return NSOrderedAscending;
                                     } else if (firstPost.rank > secondPost.rank) {

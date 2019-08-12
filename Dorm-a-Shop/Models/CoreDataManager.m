@@ -53,6 +53,7 @@
             PostCoreData *firstPost = (PostCoreData *)firstObj;
             PostCoreData *secondPost = (PostCoreData *)secondObj;
             
+            NSLog(@"%f %f", firstPost.rank, secondPost.rank);
             if (firstPost.rank > secondPost.rank) {
                 return NSOrderedAscending;
             } else if (firstPost.rank > secondPost.rank) {

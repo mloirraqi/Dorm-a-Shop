@@ -29,5 +29,6 @@
 
 -(void)leftClickAction;
 -(void)rightClickAction;
+- (id)initWithFrame:(CGRect)frame card:(Card *)card;
 
 @end

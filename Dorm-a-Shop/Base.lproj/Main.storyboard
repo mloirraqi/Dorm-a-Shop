@@ -2572,7 +2572,7 @@
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tTF-Ow-gFr" customClass="DraggableViewBackground">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.71074976146933" green="0.86178321972222838" blue="0.95680861398963735" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2953,19 +2953,16 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0x3-Mm-7X4">
-                                        <rect key="frame" x="15" y="233" width="101" height="30"/>
-                                        <state key="normal" title="Send Message">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3HP-0X-BSY">
-                                        <rect key="frame" x="161" y="233" width="124" height="30"/>
+                                        <rect key="frame" x="15" y="233" width="124" height="30"/>
                                         <state key="normal" title="View Seller Profile">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didSelectViewProfile:" destination="aPq-Ey-zyT" eventType="touchUpInside" id="Ibm-8h-UGc"/>
+                                        </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.24987256172836467" green="0.49611843739783218" blue="0.91350254663531638" alpha="0.84341989436619713" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="0.84341989436619713" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstItem="jvP-yi-VK2" firstAttribute="top" secondItem="vPu-xf-ffv" secondAttribute="top" constant="59" id="1UF-65-vnv"/>
                                     <constraint firstAttribute="height" constant="300" id="1vV-pe-1qf"/>
@@ -2977,12 +2974,10 @@
                                     <constraint firstItem="ajs-OP-hdx" firstAttribute="leading" secondItem="vPu-xf-ffv" secondAttribute="leading" constant="16" id="Oyp-9c-ehx"/>
                                     <constraint firstItem="ajs-OP-hdx" firstAttribute="top" secondItem="Tek-8X-ieH" secondAttribute="bottom" constant="8" symbolic="YES" id="SKL-55-VpD"/>
                                     <constraint firstItem="g1e-Hl-IFf" firstAttribute="top" secondItem="ajs-OP-hdx" secondAttribute="bottom" constant="11" id="Xgs-22-5LV"/>
-                                    <constraint firstAttribute="trailing" secondItem="3HP-0X-BSY" secondAttribute="trailing" constant="15" id="Zom-u4-m7V"/>
                                     <constraint firstItem="g1e-Hl-IFf" firstAttribute="firstBaseline" secondItem="MV6-Ob-sTn" secondAttribute="firstBaseline" constant="-30.5" id="a4o-ow-G8Q"/>
                                     <constraint firstItem="0x3-Mm-7X4" firstAttribute="top" secondItem="MV6-Ob-sTn" secondAttribute="bottom" constant="30" id="aR7-dH-fkX"/>
                                     <constraint firstItem="ajs-OP-hdx" firstAttribute="leading" secondItem="g1e-Hl-IFf" secondAttribute="leading" id="dZu-Tq-XvR"/>
                                     <constraint firstItem="g1e-Hl-IFf" firstAttribute="baseline" secondItem="MV6-Ob-sTn" secondAttribute="baseline" constant="-30.5" id="eR4-ub-l9q"/>
-                                    <constraint firstItem="3HP-0X-BSY" firstAttribute="top" secondItem="MV6-Ob-sTn" secondAttribute="bottom" constant="30" id="hyg-o4-NUC"/>
                                     <constraint firstItem="Tek-8X-ieH" firstAttribute="leading" secondItem="vPu-xf-ffv" secondAttribute="leading" constant="16" id="iqG-ZQ-aKd"/>
                                     <constraint firstItem="Tek-8X-ieH" firstAttribute="top" secondItem="vPu-xf-ffv" secondAttribute="top" constant="22" id="nbN-gG-ME3"/>
                                     <constraint firstItem="MV6-Ob-sTn" firstAttribute="top" secondItem="jvP-yi-VK2" secondAttribute="bottom" constant="103" id="ngE-nX-boT"/>
@@ -3006,7 +3001,6 @@
                         <outlet property="profilePicture" destination="ajs-OP-hdx" id="Gyv-Pn-6Vw"/>
                         <outlet property="subtitleLabel" destination="MV6-Ob-sTn" id="ofQ-zq-32z"/>
                         <outlet property="titleLabel" destination="jvP-yi-VK2" id="t7t-Zp-bII"/>
-                        <outlet property="viewProfileButton" destination="3HP-0X-BSY" id="b68-He-PbW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J1N-7T-e12" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3141,7 +3135,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="oCN-lU-gXW"/>
         <segue reference="dnl-93-kbr"/>
-        <segue reference="T5c-ri-LSw"/>
-        <segue reference="iII-YD-ifK"/>
+        <segue reference="KLi-YY-IiH"/>
+        <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>
 </document>

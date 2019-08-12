@@ -8,6 +8,7 @@
 
 #import "SwipePopupVC.h"
 #import "CardItemCollectionViewCell.h"
+#import "AppDelegate.h"
 
 @interface SwipePopupVC ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -31,11 +32,14 @@
     postsArray = [self.userCoreData.post allObjects];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+- (void)tapped:(UITapGestureRecognizer *)recognizer {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)tapped:(UITapGestureRecognizer *)recognizer {
+- (IBAction)didSelectViewProfile:(id)sender {
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    UITabBarController *rootTabBarController = (UITabBarController *)appDelegate.window.rootViewController;
+    [rootTabBarController setSelectedIndex:4];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -19,6 +19,7 @@
 
 @interface DraggableView () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UILabel *noPostsLabel;
 @end
 
 @implementation DraggableView {
@@ -32,10 +33,11 @@
 
 @synthesize overlayView;
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame card:(Card *)card
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.card = card;
         [self setupView];
         self.backgroundColor = [UIColor whiteColor];
         
@@ -57,7 +59,20 @@
     self.layer.shadowOpacity = 0.1;
     self.layer.shadowOffset = CGSizeMake(1, 1);
     
-    [self setupCollectionView];
+    if (self.card.posts.count > 0) {
+        [self setupCollectionView];
+    } else {
+        self.noPostsLabel = [[UILabel alloc] initWithFrame: self.frame];
+        self.noPostsLabel.font = [UIFont systemFontOfSize:24 weight:UIFontWeightThin];
+        self.noPostsLabel.text = @"No Posts Yet";
+        self.noPostsLabel.textColor = [UIColor darkGrayColor];
+        [self addSubview:self.noPostsLabel];
+        
+        self.noPostsLabel.center = CGPointMake(5 * self.bounds.size.width / 6, self.bounds.size.height/2);
+        
+        [self.noPostsLabel.superview bringSubviewToFront:self.noPostsLabel];
+        [self.noPostsLabel setHidden:NO];
+    }
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

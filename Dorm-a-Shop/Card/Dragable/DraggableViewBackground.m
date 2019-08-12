@@ -27,6 +27,8 @@
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) Card *currentCard;
 @property (nonatomic, strong) Card *previousCard;
+@property (nonatomic, strong) Card *nextCard;
+@property (nonatomic, strong) DraggableView *nextCardView;
 
 @end
 
@@ -48,16 +50,6 @@
     [self setupCards];
 }
 
-- (void)setupView {
-    CGSize screenSize = UIScreen.mainScreen.bounds.size;
-    CGRect frame = CGRectMake(0, 24, screenSize.width, 24);
-    self.userNameLabel = [[UILabel alloc] initWithFrame: frame];
-    [self addSubview:self.userNameLabel];
-    self.userNameLabel.textAlignment = NSTextAlignmentCenter;
-    self.userNameLabel.font = [UIFont boldSystemFontOfSize:24];
-    self.userNameLabel.text = self.currentCard.author.username;
-}
-
 - (DraggableView *)createDraggableViewWithDataForCard:(Card *)card {
     CGSize screenSize = UIScreen.mainScreen.bounds.size;
     CGFloat cardWidth = screenSize.width - 20;
@@ -65,59 +57,22 @@
     
     CGRect frame = CGRectMake(((screenSize.width) - cardWidth)/2, ((screenSize.height - (screenSize.height - self.frame.size.height)) - cardHeight)/2, cardWidth, cardHeight);
     
-    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:frame];
-    draggableView.card = card;
+    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:frame card:card];
     draggableView.delegate = self;
     
     return draggableView;
 }
 
-- (void)loadCards {
-    for (UIView *subview in self.subviews) {
-        [subview removeFromSuperview];
-    }
-
-    DraggableView *newCardView = [self createDraggableViewWithDataForCard:self.currentCard];
-    DraggableView *previousCardView = [self createDraggableViewWithDataForCard:self.previousCard];
-    if ([self.usersArray count] > 0 && self.previousCard) {
-        [self insertSubview:newCardView belowSubview:previousCardView];
-    } else if ([self.usersArray count] > 0) {
-        [self addSubview:newCardView];
-    }
-}
-
 - (void)cardSwipedLeft:(UIView *)card {
     Card *swipedCard = self.currentCard;
-    [self.usersArray removeObjectAtIndex:0];
-    NSLog(@"self.usersArray: %@", self.usersArray);
-    if (self.usersArray.count > 0) {
-        self.previousCard = self.currentCard;
-        NSMutableArray *postsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
-        NSLog(@"%@", self.usersArray.firstObject);
-        self.currentCard = [[Card alloc] initWithUser:self.usersArray.firstObject postsArray:postsArray];
-        DraggableView *newCardView = [self createDraggableViewWithDataForCard:self.currentCard];
-        DraggableView *previousCardView = [self createDraggableViewWithDataForCard:self.previousCard];
-        [self insertSubview:newCardView belowSubview:previousCardView];
-    }
-    
+    [self updateCardViews];
     [self userRejected:swipedCard];
     [self updateUsernameLabel];
 }
 
 - (void)cardSwipedRight:(UIView *)card {
     Card *swipedCard = self.currentCard;
-    [self.usersArray removeObjectAtIndex:0];
-    NSLog(@"self.usersArray: %@", self.usersArray);
-    
-    if (self.usersArray.count > 0) {
-        self.previousCard = self.currentCard;
-        NSMutableArray *postsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
-        self.currentCard = [[Card alloc] initWithUser:self.usersArray.firstObject postsArray:postsArray];
-        DraggableView *newCardView = [self createDraggableViewWithDataForCard:self.currentCard];
-        DraggableView *previousCardView = [self createDraggableViewWithDataForCard:self.previousCard];
-        [self insertSubview:newCardView belowSubview:previousCardView];
-    }
-    
+    [self updateCardViews];
     [self userAccepted:swipedCard];
     [self updateUsernameLabel];
 }
@@ -234,11 +189,61 @@
 
 - (void)setupCards {
     self.usersArray = [[CoreDataManager shared] getAllAvailabeUsersFromCoreData];
-    NSMutableArray *postsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
+    NSMutableArray *currentCardPostsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray.firstObject];
     NSLog(@"self.usersArray: %@", self.usersArray);
-    self.currentCard = [[Card alloc] initWithUser:self.usersArray.firstObject postsArray:postsArray];
+    self.currentCard = [[Card alloc] initWithUser:self.usersArray.firstObject postsArray:currentCardPostsArray];
+    
+    if (self.usersArray.count > 1) {
+        NSMutableArray *nextCardPostsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray[1]];
+        self.nextCard = [[Card alloc] initWithUser:self.usersArray[1] postsArray:nextCardPostsArray];
+    }
+    
     [self loadCards];
     [self setupView];
+}
+
+- (void)setupView {
+    CGSize screenSize = UIScreen.mainScreen.bounds.size;
+    CGRect frame = CGRectMake(0, 24, screenSize.width, 24);
+    self.userNameLabel = [[UILabel alloc] initWithFrame: frame];
+    [self addSubview:self.userNameLabel];
+    self.userNameLabel.textAlignment = NSTextAlignmentCenter;
+    self.userNameLabel.font = [UIFont systemFontOfSize:24 weight:UIFontWeightBold];
+    self.userNameLabel.text = self.currentCard.author.username;
+    self.userNameLabel.textColor = [UIColor blackColor];
+}
+
+- (void)loadCards {
+    for (UIView *subview in self.subviews) {
+        [subview removeFromSuperview];
+    }
+    
+    if ([self.usersArray count] > 0 && self.nextCard) {
+        DraggableView *nextCardView = [self createDraggableViewWithDataForCard:self.nextCard];
+        DraggableView *currentCard = [self createDraggableViewWithDataForCard:self.currentCard];
+        self.nextCardView = nextCardView;
+        [self addSubview:currentCard];
+        [self insertSubview:nextCardView belowSubview:currentCard];
+    } else if ([self.usersArray count] > 0) {
+        DraggableView *currentCard = [self createDraggableViewWithDataForCard:self.currentCard];
+        [self addSubview:currentCard];
+    }
+}
+
+- (void)updateCardViews {
+    [self.usersArray removeObjectAtIndex:0];
+    if (self.usersArray.count > 1) {
+        self.currentCard = self.nextCard;
+        
+        NSMutableArray *nextCardPostsArray = [[CoreDataManager shared] getActivePostsFromCoreDataForUser:self.usersArray[1]];
+        self.nextCard = [[Card alloc] initWithUser:self.usersArray[1] postsArray:nextCardPostsArray];
+        
+        DraggableView *nextCardView = [self createDraggableViewWithDataForCard:self.nextCard];
+        [self insertSubview:nextCardView belowSubview:self.nextCardView];
+        self.nextCardView = nextCardView;
+    } else if (self.usersArray.count == 1) {
+        self.currentCard = self.nextCard;
+    }
 }
 
 @end
