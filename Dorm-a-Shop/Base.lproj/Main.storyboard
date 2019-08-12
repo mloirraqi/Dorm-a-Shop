@@ -1947,7 +1947,7 @@
                         <outlet property="nameTextField" destination="J6B-un-uOQ" id="3ag-Gz-BYK"/>
                         <outlet property="passwordStrengthMeterView" destination="bYS-Yk-txu" id="Inh-w4-xs0"/>
                         <outlet property="passwordTextField" destination="tiX-Vf-TtQ" id="SNq-Lg-QWC"/>
-                        <segue destination="gS1-Y9-nOT" kind="show" identifier="homeScreen" id="Ob4-g7-kRL"/>
+                        <segue destination="gS1-Y9-nOT" kind="show" identifier="signUp" id="Ob4-g7-kRL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RL0-5t-oAk" sceneMemberID="firstResponder"/>
@@ -3141,7 +3141,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="oCN-lU-gXW"/>
-        <segue reference="dnl-93-kbr"/>
+        <segue reference="Ob4-g7-kRL"/>
         <segue reference="KLi-YY-IiH"/>
         <segue reference="ufI-em-euD"/>
     </inferredMetricsTieBreakers>

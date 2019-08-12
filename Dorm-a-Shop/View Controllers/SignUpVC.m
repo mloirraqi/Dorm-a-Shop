@@ -29,6 +29,7 @@
 @property (strong, nonatomic) PFGeoPoint *selectedLocationPoint;
 @property (strong, nonatomic) UIImage *selectedImage;
 @property (strong, nonatomic) LocationManager *locationManager;
+@property (strong, nonatomic) MBProgressHUD *hud;
 
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
 @property (nonatomic, strong) AppDelegate *appDelegate;
@@ -92,7 +93,8 @@
 
 - (IBAction)signUpButtonTap:(id)sender {
     if ([self checkFields]){
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
+        self.hud.label.text = @"Signing up ...";
         NSData *imageData = UIImagePNGRepresentation(self.selectedImage);
         PFFileObject *image = [PFFileObject fileObjectWithName:@"Profileimage.png" data:imageData];
         
@@ -112,7 +114,7 @@
             UserCoreData *newUser = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:nil withUsername:user.username withLocation:coreDataLocation withAddress:user.address withProfilePic:imageData inRadius:YES withManagedObjectContext:weakSelf.context];
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                [hud hideAnimated:YES];
+                [weakSelf.hud hideAnimated:YES];
                 if (!error) {
                     newUser.objectId = user.objectId;
                     [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
@@ -120,12 +122,9 @@
                     } withName:newUser.objectId];
 //                    [self saveContext];                    
                     [weakSelf setupCoreData];
-                    
-                    [weakSelf showAlertView:@"Welcome!"];
-                    [weakSelf performSegueWithIdentifier:@"homeScreen" sender:nil];
                 } else {
-                    [hud hideAnimated:YES];
-                    [weakSelf showAlertView:@"Someything went wrong, please try again"];
+                    [weakSelf.hud hideAnimated:YES];
+                    [weakSelf showAlertView:[NSString stringWithFormat:@"Something went wrong: %@. Please try again.", error.localizedDescription]];
                     NSLog(@"😫😫😫, error: %@", error.localizedDescription);
                 }
             }];
@@ -323,12 +322,14 @@
 }
 
 - (void)setupCoreData {
+    __weak SignUpVC *weakSelf = self;
     [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
-            [self performSegueWithIdentifier:@"signIn" sender:nil];
-            [self.hud hideAnimated:YES];
+            [weakSelf showAlertView:@"Welcome!"];
+            [weakSelf performSegueWithIdentifier:@"signUp" sender:nil];
+            [weakSelf.hud hideAnimated:YES];
             [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
         }
     }];
@@ -337,12 +338,12 @@
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         } else {
-            for (UserCoreData *userc in users) {
-                NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
-            }
-            
-            NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
-            NSLog(@"after fetch: %@", userArray);
+//            for (UserCoreData *userc in users) {
+//                NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
+//            }
+//
+//            NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
+//            NSLog(@"after fetch: %@", userArray);
             [[CoreDataManager shared] enqueueDoneSavingUsers];
         }
     }];

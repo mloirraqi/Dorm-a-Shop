@@ -41,23 +41,26 @@
     NSString *email = self.emailField.text;
     NSString *password = self.passwordField.text;
     
+    __weak SignInVC *weakSelf = self;
     [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser *pfUser, NSError *error) {
         if (error != nil) {
-            [self showAlertView:@"Unable to Sign in"];
-            [self.hud hideAnimated:YES];
+            [weakSelf showAlertView:[NSString stringWithFormat:@"Unable to sign in: %@", error.localizedDescription]];
+            [weakSelf.hud hideAnimated:YES];
+            NSLog(@"%@", error.localizedDescription);
         } else {
-            [self setupCoreData];
+            [weakSelf setupCoreData];
         }
     }];
 }
 
 - (void)setupCoreData {
+    __weak SignInVC *weakSelf = self;
     [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
         if (error) {
             NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
         } else {
-            [self performSegueWithIdentifier:@"signIn" sender:nil];
-            [self.hud hideAnimated:YES];
+            [weakSelf performSegueWithIdentifier:@"signIn" sender:nil];
+            [weakSelf.hud hideAnimated:YES];
             [[CoreDataManager shared] enqueueDoneSavingPostsWatches];
         }
     }];
@@ -66,12 +69,12 @@
         if (error) {
             NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
         } else {
-            for (UserCoreData *userc in users) {
-                NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
-            }
-            
-            NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
-            NSLog(@"after fetch: %@", userArray);
+//            for (UserCoreData *userc in users) {
+//                NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
+//            }
+//
+//            NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
+//            NSLog(@"after fetch: %@", userArray);
             [[CoreDataManager shared] enqueueDoneSavingUsers];
         }
     }];
