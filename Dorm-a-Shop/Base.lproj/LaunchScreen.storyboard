@@ -19,17 +19,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="ekr-aB-XBq">
-                                <rect key="frame" x="62" y="363" width="290" height="180"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="290" id="fOF-8W-02q"/>
-                                    <constraint firstAttribute="height" constant="180" id="p6k-aa-XIB"/>
-                                </constraints>
+                                <rect key="frame" x="0.0" y="-47" width="414" height="1000"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="ekr-aB-XBq" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Yb7-RG-abJ"/>
-                            <constraint firstItem="ekr-aB-XBq" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="xcl-o3-Z6Z"/>
+                            <constraint firstItem="ekr-aB-XBq" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="6cv-3A-xix"/>
+                            <constraint firstAttribute="trailing" secondItem="ekr-aB-XBq" secondAttribute="trailing" id="D88-rm-KNJ"/>
+                            <constraint firstItem="ekr-aB-XBq" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="i3C-GN-CMH"/>
+                            <constraint firstItem="ekr-aB-XBq" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="obf-31-sIe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -40,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo" width="832" height="450"/>
+        <image name="logo" width="1000" height="1000"/>
     </resources>
 </document>

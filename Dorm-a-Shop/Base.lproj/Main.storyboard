@@ -1774,17 +1774,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="0Ad-w4-WVX">
-                                <rect key="frame" x="62" y="363" width="290" height="180"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="290" id="Y3g-eg-7TE"/>
-                                    <constraint firstAttribute="height" constant="180" id="vRr-Ea-cOV"/>
-                                </constraints>
+                                <rect key="frame" x="0.0" y="-47" width="414" height="1000"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="0Ad-w4-WVX" firstAttribute="leading" secondItem="2w5-5o-5W2" secondAttribute="leading" id="Tkt-uG-zlE"/>
                             <constraint firstItem="0Ad-w4-WVX" firstAttribute="centerY" secondItem="vHL-zt-Ns0" secondAttribute="centerY" id="c9Y-QR-o2V"/>
                             <constraint firstItem="0Ad-w4-WVX" firstAttribute="centerX" secondItem="vHL-zt-Ns0" secondAttribute="centerX" id="eGo-tL-TX8"/>
+                            <constraint firstAttribute="trailing" secondItem="0Ad-w4-WVX" secondAttribute="trailing" id="zWQ-XK-l9d"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="vHL-zt-Ns0"/>
                     </view>
@@ -3130,7 +3128,7 @@
         <image name="inbox" width="32" height="32"/>
         <image name="item_placeholder" width="848" height="660"/>
         <image name="location" width="32" height="32"/>
-        <image name="logo" width="832" height="450"/>
+        <image name="logo" width="1000" height="1000"/>
         <image name="profile-default" width="160" height="160"/>
         <image name="search" width="32" height="32"/>
         <image name="user" width="32" height="32"/>
