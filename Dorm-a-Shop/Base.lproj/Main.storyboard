@@ -1698,10 +1698,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </arscnView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jas-HS-mSq">
-                                <rect key="frame" x="284" y="791" width="100" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jas-HS-mSq" customClass="AKStencilButton">
+                                <rect key="frame" x="294" y="763" width="100" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="2vj-gs-ttE"/>
+                                    <constraint firstAttribute="height" constant="50" id="oqX-DM-SkT"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="  Reset  ">
                                     <color key="titleColor" red="0.43529412150000002" green="0.4431372583" blue="0.47450980539999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1712,6 +1715,10 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Jas-HS-mSq" firstAttribute="bottom" secondItem="BR9-8i-zpA" secondAttribute="bottom" id="Gq1-pE-tiV"/>
+                            <constraint firstAttribute="trailing" secondItem="Jas-HS-mSq" secondAttribute="trailing" constant="20" id="yEb-Lo-xG9"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="BR9-8i-zpA"/>
                     </view>
                     <connections>
