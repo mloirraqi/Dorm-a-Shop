@@ -47,7 +47,7 @@
     self.context = self.appDelegate.persistentContainer.viewContext;
     self.categories = @[@"Other", @"Furniture", @"Books", @"Stationary", @"Clothes", @"Electronics", @"Accessories", @"Beauty"];
     self.conditions = @[@"New", @"Nearly New", @"Used"];
-    self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
+    self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,@0,nil];
     self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
     self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
     NSDate *now = [NSDate date];
@@ -56,7 +56,7 @@
 }
 
 - (void)queryAllPostsWithinKilometers:(int)kilometers withCompletion:(void (^)(NSMutableArray *, NSMutableArray *, NSError *))completion {
-    self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,nil];
+    self.categoryCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,@0,@0,@0,nil];
     self.priceCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,@0,@0,nil];
     self.conditionCounts = [NSMutableArray arrayWithObjects:@0,@0,@0,nil];
     
@@ -153,7 +153,7 @@
                                 NSInteger categoryIndex = [weakSelf.categories indexOfObject:post.category];
                                 NSInteger conditionIndex = [weakSelf.conditions indexOfObject:post.condition];
                                 NSInteger priceIndex;
-                                if(post.price > 100) {
+                                if (post.price > 100) {
                                     priceIndex = 4;
                                 } else {
                                     priceIndex = (int)(post.price/25);
