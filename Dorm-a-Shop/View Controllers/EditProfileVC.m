@@ -92,7 +92,6 @@
     return true;
 }
 
-
 - (void)showAlertView:(NSString*)message {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dorm-a-Shop"
                                                     message:message
