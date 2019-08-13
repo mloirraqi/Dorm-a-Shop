@@ -13,6 +13,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
+#import "ConversationCoreData+CoreDataClass.h"
 #import "User.h"
 #import "LocationManager.h"
 @import Parse;
@@ -51,36 +52,36 @@
                 self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
             }
         }];
-//
-//        [[ParseDatabaseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
-//            if (error) {
-//                NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
-//            } else {
+
+        [[ParseDatabaseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+            } else {
 //                for (UserCoreData *userc in users) {
 //                    NSLog(@"before fetch, from completion: %@ %@", userc.username, userc.objectId);
 //                }
 //
 //                NSMutableArray *userArray = [[CoreDataManager shared] getAllUsersInRadiusFromCoreData];
 //                NSLog(@"after fetch: %@", userArray);
-//                [[CoreDataManager shared] enqueueDoneSavingUsers];
-//            }
-//        }];
-//
-//        [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
-//            if (error) {
-//                NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
-//            } else {
-//                [[CoreDataManager shared] enqueueDoneSavingConversations];
-//            }
-//        }];
-//
-//        [[ParseDatabaseManager shared] queryReviewsForSeller:nil withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
-//            if (error) {
-//                NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
-//            } else {
-//                [[CoreDataManager shared] enqueueDoneSavingReviews];
-//            }
-//        }];
+                [[CoreDataManager shared] enqueueDoneSavingUsers];
+            }
+        }];
+
+        [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+            } else {
+                [[CoreDataManager shared] enqueueDoneSavingConversations];
+            }
+        }];
+
+        [[ParseDatabaseManager shared] queryReviewsForSeller:nil withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
+            } else {
+                [[CoreDataManager shared] enqueueDoneSavingReviews];
+            }
+        }];
     } else {
         [self deleteAllCoreData];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

@@ -84,6 +84,7 @@
                 
                 if (!userCoreData) {
                     User *user = (User *)post.author;
+                    NSLog(@"%@", user);
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                     userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                     
@@ -232,6 +233,7 @@
                 if (!userCoreData && postCoreData) {
                     //this really shouldn't ever execute if posts/users were previoiusly saved to core data properly, it's just a failsafe
                     User *user = (User *)watchedPost.author;
+                    NSLog(@"%@", user);
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                     userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                     
@@ -439,6 +441,7 @@
                 UserCoreData *userCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:user.objectId withContext:weakSelf.context];
                 NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                 if (!userCoreData) {
+                    NSLog(@"%@", user);
                     userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                 } else {
                     //update any properties a user could have changed, except image, which is handled below. Note email needs to be handled separately for the current user
@@ -517,6 +520,7 @@
                 }
                 
                 if (!senderCoreData) {
+                    NSLog(@"%@", otherUser);
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", otherUser.Location.latitude, otherUser.Location.longitude];
                     senderCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:otherUser.objectId withUsername:otherUser.username withLocation:location withAddress:otherUser.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
@@ -586,6 +590,7 @@
                 ReviewCoreData *reviewCoreData = (ReviewCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:review.objectId withContext:weakSelf.context];
                 
                 if (!sellerCoreData) {
+                    NSLog(@"review: %@, review.seller: %@", review, review.seller);
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.seller.Location.latitude, review.seller.Location.longitude];
                     sellerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.seller.objectId withUsername:review.seller.username withLocation:location withAddress:review.seller.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
@@ -607,6 +612,7 @@
                 
                 if (!reviewerCoreData) {
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.reviewer.Location.latitude, review.reviewer.Location.longitude];
+                    NSLog(@"review: %@, review.seller: %@", review, review.reviewer);
                     reviewerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.reviewer.objectId withUsername:review.reviewer.username withLocation:location withAddress:review.reviewer.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
                     [review.reviewer.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
@@ -790,13 +796,14 @@
                 User *initiator = (User *)swipe[@"initiator"];
                 User *recipient = (User *)swipe[@"recipient"];
                 UserCoreData *otherUser;
-                
+                NSLog(@"initiator: %@, recipient: %@", initiator, recipient);
                 if (![initiator.objectId isEqualToString:PFUser.currentUser.objectId]) {
                     otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:initiator.objectId withContext:weakSelf.context];
                 } else {
                     otherUser = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:recipient.objectId withContext:weakSelf.context];
                 }
                 
+                NSLog(@"%@", otherUser);
                 if ([swipe[@"match"] isEqual:@0]) {
                     otherUser.available = NO;
                     otherUser.matchedToCurrentUser = NO;
