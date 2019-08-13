@@ -147,101 +147,93 @@
         }
         
         if (self.selectedLocationPoint != nil) {
-            [self setLocationName];
+            __weak EditProfileVC *weakSelf = self;
+            [self setLocationNameWithCompletion:^(NSError *error) {
+                if (error) {
+                    NSLog(@"Error setting new location for logged in user! %@", error.localizedDescription);
+                } else {
+                    [weakSelf updateUserInParse];
+                }
+            }];
+        } else {
+            [self updateUserInParse];
         }
         
-        __weak EditProfileVC *weakSelf = self;
-        [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            [MBProgressHUD hideHUDForView:weakSelf.view animated:true];
-            if (!error) {
-                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-                    return YES;
-                } withName:weakSelf.user.objectId];
-                //        [self saveContext];
-                
-                [weakSelf.delegate updateEditProfileData:weakSelf];
-                
-                UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
-                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                }];
-                [successAlert addAction:okAction];
-                [self presentViewController:successAlert animated:YES completion:nil];
-            } else {
-                NSString *errorString = [error userInfo][@"error"];
-                [self showAlertView:errorString];
-            }
-        }];
     }
 }
 
-- (void)setLocationName {
+- (void)setLocationNameWithCompletion:(void (^)(NSError *))completion {
     CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:self.selectedLocationPoint.latitude longitude:self.selectedLocationPoint.longitude];
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     
     __weak EditProfileVC *weakSelf = self;
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
+        if (error) {
+            completion(error);
+        } else {
+            NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
         
-        NSString *strAdd = nil;
+            NSString *strAdd = nil;
         
-        if (error == nil && [placemarks count] > 0) {
-            CLPlacemark *placemark = [placemarks lastObject];
-            
-            // strAdd -> take bydefault value nil
-            if ([placemark.subThoroughfare length] != 0) {
-                strAdd = placemark.subThoroughfare;
-            }
-            
-            if ([placemark.thoroughfare length] != 0) {
-                // strAdd -> store value of current location
-                if ([strAdd length] != 0) {
-                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark thoroughfare]];
-                } else {
-                    // strAdd -> store only this value,which is not null
-                    strAdd = placemark.thoroughfare;
+            if (error == nil && [placemarks count] > 0) {
+                CLPlacemark *placemark = [placemarks lastObject];
+                
+                // strAdd -> take bydefault value nil
+                if ([placemark.subThoroughfare length] != 0) {
+                    strAdd = placemark.subThoroughfare;
+                }
+                
+                if ([placemark.thoroughfare length] != 0) {
+                    // strAdd -> store value of current location
+                    if ([strAdd length] != 0) {
+                        strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark thoroughfare]];
+                    } else {
+                        // strAdd -> store only this value,which is not null
+                        strAdd = placemark.thoroughfare;
+                    }
+                }
+                
+                if ([placemark.postalCode length] != 0) {
+                    if ([strAdd length] != 0) {
+                        strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
+                    } else {
+                        strAdd = placemark.postalCode;
+                    }
+                }
+                
+                if ([placemark.locality length] != 0) {
+                    if ([strAdd length] != 0) {
+                        strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
+                    } else {
+                        strAdd = placemark.locality;
+                    }
+                }
+                
+                if ([placemark.administrativeArea length] != 0) {
+                    if ([strAdd length] != 0) {
+                        strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
+                    } else {
+                        strAdd = placemark.administrativeArea;
+                    }
+                }
+                
+                if ([placemark.country length] != 0) {
+                    if ([strAdd length] != 0) {
+                        strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
+                    } else {
+                        strAdd = placemark.country;
+                    }
                 }
             }
-            
-            if ([placemark.postalCode length] != 0) {
-                if ([strAdd length] != 0) {
-                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
-                } else {
-                    strAdd = placemark.postalCode;
-                }
+        
+            if (strAdd != nil) {
+                weakSelf.currentPFUser[@"address"] = strAdd;
+                weakSelf.user.address = strAdd;
             }
-            
-            if ([placemark.locality length] != 0) {
-                if ([strAdd length] != 0) {
-                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
-                } else {
-                    strAdd = placemark.locality;
-                }
-            }
-            
-            if ([placemark.administrativeArea length] != 0) {
-                if ([strAdd length] != 0) {
-                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
-                } else {
-                    strAdd = placemark.administrativeArea;
-                }
-            }
-            
-            if ([placemark.country length] != 0) {
-                if ([strAdd length] != 0) {
-                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
-                } else {
-                    strAdd = placemark.country;
-                }
-            }
+        
+            weakSelf.currentPFUser[@"Location"] = weakSelf.selectedLocationPoint;
+            completion(nil);
         }
-        
-        if (strAdd != nil) {
-            self.currentPFUser[@"address"] = strAdd;
-            self.user.address = strAdd;
-        }
-        
-        self.currentPFUser[@"Location"] = weakSelf.selectedLocationPoint;
     }];
 }
 
@@ -319,6 +311,31 @@
     // Dismiss the place picker, as it cannot dismiss itself.
     [viewController dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"No place selected");
+}
+
+- (void)updateUserInParse {
+    __weak EditProfileVC *weakSelf = self;
+    [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:true];
+        if (!error) {
+            [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                return YES;
+            } withName:weakSelf.user.objectId];
+            //        [self saveContext];
+            
+            [weakSelf.delegate updateEditProfileData:weakSelf];
+            
+            UIAlertController *successAlert = [UIAlertController alertControllerWithTitle:@"Success" message:@"Your update of the profile is successful!" preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            }];
+            [successAlert addAction:okAction];
+            [weakSelf presentViewController:successAlert animated:YES completion:nil];
+        } else {
+            NSString *errorString = [error userInfo][@"error"];
+            [weakSelf showAlertView:errorString];
+        }
+    }];
 }
 
 - (void)saveContext {
