@@ -2490,7 +2490,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IT6-ky-gDE">
-                                                    <rect key="frame" x="70" y="24" width="314" height="39"/>
+                                                    <rect key="frame" x="70" y="24" width="42" height="39"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2499,7 +2499,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="bottomMargin" secondItem="IT6-ky-gDE" secondAttribute="bottom" constant="5" id="28O-4S-4kb"/>
                                                 <constraint firstItem="IT6-ky-gDE" firstAttribute="leading" secondItem="eSd-hI-OCX" secondAttribute="trailing" constant="10" id="PYk-HH-AKC"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="IT6-ky-gDE" secondAttribute="trailing" constant="10" id="aHC-K4-wsO"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="IT6-ky-gDE" secondAttribute="trailing" priority="250" constant="10" id="aHC-K4-wsO"/>
                                                 <constraint firstItem="eSd-hI-OCX" firstAttribute="top" secondItem="73D-0v-sU9" secondAttribute="top" constant="15" id="f7c-Zf-BJc"/>
                                                 <constraint firstItem="IT6-ky-gDE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="73D-0v-sU9" secondAttribute="topMargin" constant="10" id="hv4-Q0-kYh"/>
                                                 <constraint firstItem="IT6-ky-gDE" firstAttribute="top" secondItem="eSd-hI-OCX" secondAttribute="top" constant="9" id="iaH-q4-JRf"/>
