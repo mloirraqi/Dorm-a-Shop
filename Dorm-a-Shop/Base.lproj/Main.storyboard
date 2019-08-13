@@ -1484,11 +1484,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="waw-ru-lGU">
-                                                <rect key="frame" x="16" y="710" width="150" height="219"/>
+                                                <rect key="frame" x="16" y="710" width="382" height="219"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="219" id="tAB-Jz-00G"/>
-                                                    <constraint firstAttribute="width" constant="150" id="z7C-FF-bhE"/>
                                                 </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nKq-C9-cZ0">
                                                     <size key="itemSize" width="144" height="204"/>
@@ -1642,6 +1641,7 @@
                                             <constraint firstAttribute="trailing" secondItem="jct-hS-uqG" secondAttribute="trailing" id="ZGG-pY-xjO"/>
                                             <constraint firstItem="5dg-cr-FXR" firstAttribute="top" secondItem="3ah-He-aSB" secondAttribute="bottom" constant="4" id="ZN9-tH-GXT"/>
                                             <constraint firstItem="R3b-ET-Tji" firstAttribute="leading" secondItem="9Zk-mJ-PK2" secondAttribute="trailing" constant="4" id="aSX-FM-iJY"/>
+                                            <constraint firstAttribute="trailing" secondItem="waw-ru-lGU" secondAttribute="trailing" constant="16" id="c8Z-dY-QMy"/>
                                             <constraint firstItem="RXI-vr-Zjq" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="S1V-iB-oBF" secondAttribute="trailing" constant="30" id="dIV-pa-yod"/>
                                             <constraint firstItem="waw-ru-lGU" firstAttribute="leading" secondItem="wB9-cq-KwV" secondAttribute="leading" constant="16" id="fhh-W3-eki"/>
                                             <constraint firstItem="rL4-ZU-J3i" firstAttribute="bottom" secondItem="jct-hS-uqG" secondAttribute="bottom" id="hHV-Vn-8Gm"/>

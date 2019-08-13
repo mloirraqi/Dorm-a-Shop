@@ -94,8 +94,8 @@
     NSMutableArray *hotArray = [self fetchCoreDataWithRequest:request];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"hotness" ascending:NO];
     [hotArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    if(hotArray.count > 10) {
-        hotArray = [NSMutableArray arrayWithArray:[hotArray subarrayWithRange:NSMakeRange(0, 10)]];
+    if(hotArray.count > 5) {
+        hotArray = [NSMutableArray arrayWithArray:[hotArray subarrayWithRange:NSMakeRange(0, 5)]];
     }
     
     return hotArray;
@@ -193,7 +193,7 @@
     if([post.condition isEqualToString:@"Other"]) {
         [request setPredicate:[NSPredicate predicateWithFormat:@"((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) AND (objectId != %@)", post.title, post.title, post.objectId]];
     } else {
-        [request setPredicate:[NSPredicate predicateWithFormat:@"(((caption CONTAINS[cd] %@) OR (title CONTAINS[cd] %@)) OR (category == %@)) AND (objectId != %@)", post.title, post.title, post.category, post.objectId]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(category == %@) AND (objectId != %@)", post.category, post.objectId]];
     }
     [request setEntity:entityDescription];
     
