@@ -804,26 +804,29 @@
                 }
                 
                 NSLog(@"%@", otherUser);
-                if ([swipe[@"match"] isEqual:@0]) {
-                    otherUser.available = NO;
-                    otherUser.matchedToCurrentUser = NO;
-                } else if ([swipe[@"match"] isEqual:@2]) {
-                    otherUser.available = NO;
-                    otherUser.matchedToCurrentUser = YES;
-                } else if ([initiator.objectId isEqualToString:PFUser.currentUser.objectId]){
-                    otherUser.available = NO;
-                    otherUser.matchedToCurrentUser = NO;
-                } else {
-                    otherUser.available = YES;
-                    otherUser.matchedToCurrentUser = NO;
+                if (otherUser) {
+                    // otherUser is null if currently out of radius
+                    if ([swipe[@"match"] isEqual:@0]) {
+                        otherUser.available = NO;
+                        otherUser.matchedToCurrentUser = NO;
+                    } else if ([swipe[@"match"] isEqual:@2]) {
+                        otherUser.available = NO;
+                        otherUser.matchedToCurrentUser = YES;
+                    } else if ([initiator.objectId isEqualToString:PFUser.currentUser.objectId]){
+                        otherUser.available = NO;
+                        otherUser.matchedToCurrentUser = NO;
+                    } else {
+                        otherUser.available = YES;
+                        otherUser.matchedToCurrentUser = NO;
+                    }
+                
+                    NSLog(@"other user: %@", otherUser);
+                
+                    [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
+                        return YES;
+                    } withName:otherUser.objectId];
+                    [swipesUserCoreDataArray addObject:otherUser];
                 }
-                
-                NSLog(@"other user: %@", otherUser);
-                
-                [[CoreDataManager shared] enqueueCoreDataBlock:^BOOL(NSManagedObjectContext * _Nonnull context) {
-                    return YES;
-                } withName:otherUser.objectId];
-                [swipesUserCoreDataArray addObject:otherUser];
             }
             completion(swipesUserCoreDataArray, error);
         } else {
