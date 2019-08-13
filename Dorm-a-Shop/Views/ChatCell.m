@@ -28,12 +28,10 @@
     self.profilePic.layer.masksToBounds = YES;
     
     if ([senderObject.objectId isEqualToString:PFUser.currentUser.objectId]) {
-//        [self.profilePic removeConstraints:[self.profilePic constraints]];
+        [self.profilePic removeConstraints:[self.profilePic constraints]];
         [self.messageLabel setTextAlignment:NSTextAlignmentRight];
-        self.profilePicWidth.constant = 0;
         self.profilePic.hidden = YES;
     } else {
-        self.profilePicWidth.constant = 40;
         self.profilePic.image = [UIImage imageWithData:self.imageFile];
         self.profilePic.hidden = NO;
         [self.messageLabel setTextAlignment:NSTextAlignmentLeft];
