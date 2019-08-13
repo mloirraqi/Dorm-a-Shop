@@ -1258,6 +1258,7 @@
                             <constraint firstItem="fUU-11-rAF" firstAttribute="top" secondItem="ube-gD-AHc" secondAttribute="bottom" constant="1" id="rfF-7M-DWn"/>
                             <constraint firstItem="bc2-QG-uNB" firstAttribute="top" secondItem="9ux-eA-T1h" secondAttribute="bottom" constant="1" id="sKx-l4-2oS"/>
                             <constraint firstItem="10J-rV-AK7" firstAttribute="leading" secondItem="kvp-UD-rPp" secondAttribute="leading" id="uH1-Qw-crq"/>
+                            <constraint firstItem="MUA-mx-1Jf" firstAttribute="bottom" secondItem="S9f-PL-NYK" secondAttribute="bottom" constant="118.5" id="uyE-QD-PmR"/>
                             <constraint firstItem="QCc-zY-1Nr" firstAttribute="leading" secondItem="ktW-3x-CzJ" secondAttribute="leading" id="xna-oH-BVB"/>
                             <constraint firstItem="1R6-ax-5lN" firstAttribute="centerX" secondItem="Xhi-mG-COY" secondAttribute="centerX" id="yx5-Ct-caK"/>
                         </constraints>
@@ -2937,8 +2938,8 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MV6-Ob-sTn">
-                                        <rect key="frame" x="16" y="183" width="269" height="20"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MV6-Ob-sTn">
+                                        <rect key="frame" x="16" y="183" width="269" height="52"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -2965,7 +2966,7 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0x3-Mm-7X4">
-                                        <rect key="frame" x="15" y="233" width="124" height="30"/>
+                                        <rect key="frame" x="16" y="262" width="124" height="30"/>
                                         <state key="normal" title="View Seller Profile">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
@@ -2987,13 +2988,13 @@
                                     <constraint firstItem="ajs-OP-hdx" firstAttribute="top" secondItem="Tek-8X-ieH" secondAttribute="bottom" constant="8" symbolic="YES" id="SKL-55-VpD"/>
                                     <constraint firstItem="g1e-Hl-IFf" firstAttribute="top" secondItem="ajs-OP-hdx" secondAttribute="bottom" constant="11" id="Xgs-22-5LV"/>
                                     <constraint firstItem="g1e-Hl-IFf" firstAttribute="firstBaseline" secondItem="MV6-Ob-sTn" secondAttribute="firstBaseline" constant="-30.5" id="a4o-ow-G8Q"/>
-                                    <constraint firstItem="0x3-Mm-7X4" firstAttribute="top" secondItem="MV6-Ob-sTn" secondAttribute="bottom" constant="30" id="aR7-dH-fkX"/>
+                                    <constraint firstItem="0x3-Mm-7X4" firstAttribute="top" secondItem="MV6-Ob-sTn" secondAttribute="bottom" constant="27" id="aR7-dH-fkX"/>
                                     <constraint firstItem="ajs-OP-hdx" firstAttribute="leading" secondItem="g1e-Hl-IFf" secondAttribute="leading" id="dZu-Tq-XvR"/>
-                                    <constraint firstItem="g1e-Hl-IFf" firstAttribute="baseline" secondItem="MV6-Ob-sTn" secondAttribute="baseline" constant="-30.5" id="eR4-ub-l9q"/>
+                                    <constraint firstItem="g1e-Hl-IFf" firstAttribute="baseline" secondItem="MV6-Ob-sTn" secondAttribute="baseline" constant="-62.5" id="eR4-ub-l9q"/>
                                     <constraint firstItem="Tek-8X-ieH" firstAttribute="leading" secondItem="vPu-xf-ffv" secondAttribute="leading" constant="16" id="iqG-ZQ-aKd"/>
                                     <constraint firstItem="Tek-8X-ieH" firstAttribute="top" secondItem="vPu-xf-ffv" secondAttribute="top" constant="22" id="nbN-gG-ME3"/>
                                     <constraint firstItem="MV6-Ob-sTn" firstAttribute="top" secondItem="jvP-yi-VK2" secondAttribute="bottom" constant="103" id="ngE-nX-boT"/>
-                                    <constraint firstItem="0x3-Mm-7X4" firstAttribute="leading" secondItem="vPu-xf-ffv" secondAttribute="leading" constant="15" id="pr3-5T-8Va"/>
+                                    <constraint firstItem="0x3-Mm-7X4" firstAttribute="leading" secondItem="vPu-xf-ffv" secondAttribute="leading" constant="16" id="pr3-5T-8Va"/>
                                     <constraint firstItem="ajs-OP-hdx" firstAttribute="top" secondItem="jvP-yi-VK2" secondAttribute="top" constant="-8" id="s1I-2y-tsx"/>
                                     <constraint firstItem="MV6-Ob-sTn" firstAttribute="leading" secondItem="vPu-xf-ffv" secondAttribute="leading" constant="16" id="xXh-rP-l9L"/>
                                     <constraint firstAttribute="trailing" secondItem="jvP-yi-VK2" secondAttribute="trailing" constant="15" id="yYy-21-95e"/>
@@ -3017,7 +3018,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J1N-7T-e12" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1677" y="3113"/>
+            <point key="canvasLocation" x="1676.8115942028987" y="3112.5"/>
         </scene>
         <!--Matched View Controller-->
         <scene sceneID="Nde-7l-bEQ">

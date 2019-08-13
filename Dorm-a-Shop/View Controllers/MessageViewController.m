@@ -101,8 +101,8 @@
     };
     
     PFQuery *recQuery = [PFQuery queryWithClassName:@"Messages"];
-    [recQuery whereKey:@"receiver" equalTo:[PFUser currentUser]];
-    [recQuery whereKey:@"sender" equalTo:self.receiver];
+    [recQuery whereKey:@"receiver.objectId" containedIn:@[[PFUser currentUser].objectId, self.receiver.objectId]];
+    [recQuery whereKey:@"sender.objectId" containedIn:@[self.receiver.objectId, [PFUser currentUser].objectId]];
     [self.bridge subscribeToQuery:recQuery handler:completion];
 }
 
@@ -150,7 +150,7 @@
         [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
             if (succeeded) {
                 weakSelf.msgInput.text = @"";
-                [weakSelf addMessageToChatWithObject:message];
+//                [weakSelf addMessageToChatWithObject:message];
             } else {
                 NSLog(@"Problem saving message: %@", error.localizedDescription);
             }
