@@ -189,8 +189,8 @@
                                 hotArray = allPostsArray;
                                 NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"hotness" ascending:NO];
                                 [hotArray sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-                                if(hotArray.count > 10) {
-                                    hotArray = [NSMutableArray arrayWithArray:[hotArray subarrayWithRange:NSMakeRange(0, 10)]];
+                                if(hotArray.count > 5) {
+                                    hotArray = [NSMutableArray arrayWithArray:[hotArray subarrayWithRange:NSMakeRange(0, 5)]];
                                 }
                             }
                             completion(allPostsArray, hotArray, nil);
