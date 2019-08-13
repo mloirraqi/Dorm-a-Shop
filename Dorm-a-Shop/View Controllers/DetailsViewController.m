@@ -35,7 +35,8 @@
 @property (nonatomic, strong) NSMutableArray *similarItems;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *sellerLabel;
-@property (weak, nonatomic) IBOutlet UILabel *conditionCategoryWatchesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *conditionCategoryLabel;
+@property (weak, nonatomic) IBOutlet UILabel *watchesLabel;
 @property (weak, nonatomic) IBOutlet AKStencilButton *ARButton;
 
 
@@ -86,6 +87,8 @@
             self.watchButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
             self.watchButton.titleEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
         }
+        
+        self.watchesLabel.text = [NSString stringWithFormat:@"%lld", self.post.watchCount];
     } else if ([[notification name] isEqualToString:@"ChangedSoldNotification"]) {
         NSNumber *soldNumVal = [[notification userInfo] objectForKey:@"sold"];
         BOOL sold = [soldNumVal boolValue];
@@ -152,7 +155,8 @@
     self.profileImageView.layer.masksToBounds = YES;
     [self.profileImageView setImage:[UIImage imageWithData:self.post.author.profilePic]];
     
-    self.conditionCategoryWatchesLabel.text = [NSString stringWithFormat:@"%@ · %@ · %lld Watching", post.condition, post.category, post.watchCount];
+    self.conditionCategoryLabel.text = [NSString stringWithFormat:@"%@ · %@", post.condition, post.category];
+    self.watchesLabel.text = [NSString stringWithFormat:@"%lld Watching", post.watchCount];
     
     self.captionLabel.text = [NSString stringWithFormat:@"Description: %@", post.caption];
     [self.captionLabel greySubstring:@"Description:"];
