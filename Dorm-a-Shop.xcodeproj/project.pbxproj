@@ -307,8 +307,8 @@
 				47A8A9AA22DE3A30005D9520 /* Main.storyboard */,
 				47A8A9A422DE3A30005D9520 /* AppDelegate.h */,
 				47A8A9A522DE3A30005D9520 /* AppDelegate.m */,
-				DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */,
 				47A8A9AF22DE3A32005D9520 /* LaunchScreen.storyboard */,
+				DE4FD00F22EA3D1100B1311F /* DormAShop.xcdatamodeld */,
 				47A8A9B222DE3A32005D9520 /* Info.plist */,
 				47A8A9B322DE3A32005D9520 /* main.m */,
 				EA4315B922F941A200CC853D /* MapsPopupVC.h */,
@@ -1010,12 +1010,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8DH593U6VL;
+				DEVELOPMENT_TEAM = A3A3BF55QH;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1032,12 +1034,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8DH593U6VL;
+				DEVELOPMENT_TEAM = A3A3BF55QH;
 				INFOPLIST_FILE = "Dorm-a-Shop/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ishapiro00-gmail.com-Dorm-a-Shop";
+				PRODUCT_BUNDLE_IDENTIFIER = "addisonzxy-gmail.com-Dorm-a-Shop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Dorm-a-Shop/View Controllers/Dorm-a-Shop-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
