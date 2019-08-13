@@ -35,6 +35,8 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView setEstimatedRowHeight:60.0];
+    [self.tableView setRowHeight:UITableViewAutomaticDimension];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.context = appDelegate.persistentContainer.viewContext;

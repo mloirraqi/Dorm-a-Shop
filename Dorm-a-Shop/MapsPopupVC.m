@@ -8,6 +8,7 @@
 
 #import "MapsPopupVC.h"
 #import "CardItemCollectionViewCell.h"
+#import "ProfileViewController.h"
 
 @interface MapsPopupVC ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -35,6 +36,15 @@
 
 - (void)tapped:(UITapGestureRecognizer *)recognizer {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)titleLabelTapped:(UITapGestureRecognizer *)sender {
+    NSLog(@"tit tapped");
+    
+    UINavigationController* profileViewNavController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"profilePageNav"];
+    ProfileViewController* profileViewController = [[profileViewNavController viewControllers] firstObject];
+    profileViewController.user = _userCoreData;
+    [self presentViewController:profileViewNavController animated:YES completion:nil];
 }
 
 //Labels & Views

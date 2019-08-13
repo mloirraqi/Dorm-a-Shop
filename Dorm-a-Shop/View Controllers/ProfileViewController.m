@@ -57,7 +57,11 @@
         self.appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
         self.context = self.appDelegate.persistentContainer.viewContext;
         self.user = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:PFUser.currentUser.objectId withContext:self.context];
-    } else {
+    }
+    else if ([self isModal]) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+    }
+    else {
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
         self.navigationItem.leftItemsSupplementBackButton = true;
@@ -93,6 +97,12 @@
     [self.scrollView addSubview:self.refreshControl];
     
     [self fetchProfileFromCoreData];
+}
+
+- (BOOL)isModal {
+    return self.presentingViewController.presentedViewController == self
+    || (self.navigationController != nil && self.navigationController.presentingViewController.presentedViewController == self.navigationController)
+    || [self.tabBarController.presentingViewController isKindOfClass:[UITabBarController class]];
 }
 
 - (void)receiveNotification:(NSNotification *)notification {
@@ -328,6 +338,10 @@
     } else {
         self.soldCountLabel.text = [NSString stringWithFormat:@"%lu Sold Items", self.soldItems.count];
     }
+}
+
+- (void)dismiss {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

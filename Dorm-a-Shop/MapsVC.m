@@ -28,10 +28,6 @@
     [super viewDidLoad];
     addedMarkers = [[NSMutableSet alloc] init];
     self.navigationItem.title = @"Nearby Users";
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     [self setupMaps];
 }
 
