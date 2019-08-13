@@ -13,6 +13,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "ParseDatabaseManager.h"
 #import "CoreDataManager.h"
+#import "ConversationCoreData+CoreDataClass.h"
 #import "User.h"
 #import "LocationManager.h"
 @import Parse;
