@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *updateLocationButton;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (nonatomic, weak) IBOutlet UIButton *submitButton;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @property (nonatomic, strong) PFUser *currentPFUser;
 
@@ -37,6 +38,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUpView];
+    
+    AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    self.context = appDelegate.persistentContainer.viewContext;
 }
 
 - (void)setUpView {
@@ -153,6 +157,8 @@
                     NSLog(@"Error setting new location for logged in user! %@", error.localizedDescription);
                 } else {
                     [weakSelf updateUserInParse];
+                    [weakSelf deleteAllCoreData];
+                    [weakSelf setupNewLocationData];
                 }
             }];
         } else {
@@ -358,6 +364,61 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
+}
+
+- (void)deleteAllCoreData {
+    NSFetchRequest *requestConversations = [[NSFetchRequest alloc] initWithEntityName:@"ConversationCoreData"];
+    NSBatchDeleteRequest *deleteConversations = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestConversations];
+    NSError *deleteConversationsError = nil;
+    [self.context executeRequest:deleteConversations error:&deleteConversationsError];
+    
+    NSFetchRequest *requestUsers = [[NSFetchRequest alloc] initWithEntityName:@"UserCoreData"];
+    NSBatchDeleteRequest *deleteUsers = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestUsers];
+    NSError *deleteUsersError = nil;
+    [self.context executeRequest:deleteUsers error:&deleteUsersError];
+    
+    NSFetchRequest *requestPosts = [[NSFetchRequest alloc] initWithEntityName:@"PostCoreData"];
+    NSBatchDeleteRequest *deletePosts = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestPosts];
+    NSError *deletePostsError = nil;
+    [self.context executeRequest:deletePosts error:&deletePostsError];
+    
+    NSFetchRequest *requestReviews = [[NSFetchRequest alloc] initWithEntityName:@"ReviewCoreData"];
+    NSBatchDeleteRequest *deleteReviews = [[NSBatchDeleteRequest alloc] initWithFetchRequest:requestReviews];
+    NSError *deleteReviewsError = nil;
+    [self.context executeRequest:deleteReviews error:&deleteReviewsError];
+}
+
+- (void)setupNewLocationData {
+    [[ParseDatabaseManager shared] queryAllPostsWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull allPostsArray, NSMutableArray * _Nonnull hotArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error querying all posts/updating core data upon app startup! %@", error.localizedDescription);
+        }
+    }];
+    
+    [[ParseDatabaseManager shared] queryAllUsersWithinKilometers:5 withCompletion:^(NSMutableArray * _Nonnull users, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all users from Parse! %@", error.localizedDescription);
+        } else {
+            [[CoreDataManager shared] enqueueDoneSavingUsers];
+        }
+    }];
+    
+    
+    [[ParseDatabaseManager shared] queryConversationsFromParseWithCompletion:^(NSMutableArray<ConversationCoreData *> * _Nonnull conversations, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all conversations from Parse! %@", error.localizedDescription);
+        } else {
+            [[CoreDataManager shared] enqueueDoneSavingConversations];
+        }
+    }];
+    
+    [[ParseDatabaseManager shared] queryReviewsForSeller:nil withCompletion:^(NSMutableArray * _Nonnull reviewsArray, NSError * _Nonnull error) {
+        if (error) {
+            NSLog(@"Error: failed to query all reviews for user from Parse! %@", error.localizedDescription);
+        } else {
+            [[CoreDataManager shared] enqueueDoneSavingReviews];
+        }
+    }];
 }
 
 @end
