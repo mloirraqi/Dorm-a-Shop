@@ -84,7 +84,6 @@
                 
                 if (!userCoreData) {
                     User *user = (User *)post.author;
-                    NSLog(@"%@", user);
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", user.Location.latitude, user.Location.longitude];
                     userCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:user.objectId withUsername:user.username withLocation:location withAddress:user.address withProfilePic:nil inRadius:YES withManagedObjectContext:weakSelf.context];
                     
@@ -586,11 +585,10 @@
         if (reviews) {
             for (Review *review in reviews) {
                 UserCoreData *sellerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
-                UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.seller.objectId withContext:weakSelf.context];
+                UserCoreData *reviewerCoreData = (UserCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"UserCoreData" withObjectId:review.reviewer.objectId withContext:weakSelf.context];
                 ReviewCoreData *reviewCoreData = (ReviewCoreData *)[[CoreDataManager shared] getCoreDataEntityWithName:@"ReviewCoreData" withObjectId:review.objectId withContext:weakSelf.context];
                 
                 if (!sellerCoreData) {
-                    NSLog(@"review: %@, review.seller: %@", review, review.seller);
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.seller.Location.latitude, review.seller.Location.longitude];
                     sellerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.seller.objectId withUsername:review.seller.username withLocation:location withAddress:review.seller.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
@@ -612,7 +610,7 @@
                 
                 if (!reviewerCoreData) {
                     NSString *location = [NSString stringWithFormat:@"(%f, %f)", review.reviewer.Location.latitude, review.reviewer.Location.longitude];
-                    NSLog(@"review: %@, review.seller: %@", review, review.reviewer);
+                    //NSLog(@"review: %@, review.seller: %@", review, review.reviewer);
                     reviewerCoreData = [[CoreDataManager shared] saveUserToCoreDataWithObjectId:review.reviewer.objectId withUsername:review.reviewer.username withLocation:location withAddress:review.reviewer.address withProfilePic:nil inRadius:NO withManagedObjectContext:weakSelf.context];
                     
                     [review.reviewer.ProfilePic getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {

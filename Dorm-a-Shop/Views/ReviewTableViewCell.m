@@ -26,7 +26,6 @@
 
 - (void)setReview:(ReviewCoreData *)review {
     _review = review;
-    
     self.reviewDateLabel.text = [NSString stringWithFormat:@"%@", [review.dateWritten shortTimeAgoSinceNow]];
     self.reviewerLabel.text = review.reviewer.username;
     self.reviewLabel.text = review.review;
